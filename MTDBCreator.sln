@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTDBCreator", "MTDBCreator\MTDBCreator.csproj", "{5F099595-D69F-43A4-843D-7CAD673B98AA}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Regressor", "MSMSAligner\UMCCreation.vcproj", "{8A102398-56CC-4AEE-A09C-B98741CB6ECA}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MTDBCreatorInstall", "MTDBCreatorInstall\MTDBCreatorInstall.vdproj", "{2BFD2C02-8E61-4323-802B-479159022EB9}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Debug.ActiveCfg = Debug|.NET
+		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Debug.Build.0 = Debug|.NET
+		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Release.ActiveCfg = Release|.NET
+		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Release.Build.0 = Release|.NET
+		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Debug.ActiveCfg = Debug|Win32
+		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Debug.Build.0 = Debug|Win32
+		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Release.ActiveCfg = Release|Win32
+		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Release.Build.0 = Release|Win32
+		{2BFD2C02-8E61-4323-802B-479159022EB9}.Debug.ActiveCfg = Debug
+		{2BFD2C02-8E61-4323-802B-479159022EB9}.Debug.Build.0 = Debug
+		{2BFD2C02-8E61-4323-802B-479159022EB9}.Release.ActiveCfg = Release
+		{2BFD2C02-8E61-4323-802B-479159022EB9}.Release.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
