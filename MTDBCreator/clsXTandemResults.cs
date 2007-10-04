@@ -27,6 +27,7 @@ namespace MTDBCreator
 		public short mshort_num_b_ions ; 
 		public double mdbl_delta_mass ; 
 		public double mdbl_log_intensity ; 
+		public short mshort_tryptic_state ; 
 
 		private static string mstrHeader_result_id= "" ;
 		private static string mstrHeader_group_id= "" ; 
@@ -149,9 +150,10 @@ namespace MTDBCreator
 			mshort_num_b_ions = Convert.ToInt16(column[mshortColNum_num_b_ions]) ;  
 			mdbl_delta_mass = Convert.ToDouble(column[mshortColNum_delta_mass]) ;  
 			mdbl_log_intensity = Convert.ToDouble(column[mshortColNum_log_intensity]) ;  
+			mshort_tryptic_state = CalculateTrypticState(mstr_peptide_sequence) ; 
 		}
 
-		private string CleanPeptide(string peptide)
+		private static string CleanPeptide(string peptide)
 		{
 			char [] peptideChar = peptide.ToCharArray() ; 
 			int startIndex = 2 ; 
@@ -181,6 +183,65 @@ namespace MTDBCreator
 
 			string cleanPeptide = new string(peptideChar, startIndex, copyToIndex-startIndex) ; 
 			return cleanPeptide ; 
+		}
+		private static short CalculateTrypticState(string peptide)
+		{
+			short trypticState = 0 ; 
+			char [] peptideChar = peptide.ToCharArray() ; 
+			int startIndex = 2 ; 
+			int stopIndex = peptideChar.Length - 3 ; 
+
+			if (peptideChar[1] != '.')
+			{
+				startIndex = 0 ;
+				throw new ApplicationException("Peptide " + peptide + " does not have a . in the second position") ; 
+			}
+
+			if (peptideChar[stopIndex+1] != '.')
+			{
+				stopIndex = peptideChar.Length-1 ; 
+				throw new ApplicationException("Peptide " + peptide + " does not have a . in the second last position") ; 
+			}
+
+			if (peptideChar[stopIndex] == 'R' || peptideChar[stopIndex] == 'K')
+			{
+				trypticState++ ; 
+				if (peptideChar[peptideChar.Length-1] == 'P')
+				{
+					trypticState-- ; 
+				}
+			}
+			else if (!Char.IsLetter(peptideChar[stopIndex]))
+			{
+				if (peptideChar[stopIndex-1] == 'R' || peptideChar[stopIndex-1] == 'K')
+				{
+					trypticState++ ; 
+					if (peptideChar[peptideChar.Length-1] == 'P')
+					{
+						trypticState-- ; 
+					}
+				}
+			}
+
+			if (peptideChar[peptideChar.Length-1] == '-' && trypticState == 0)
+			{
+				trypticState++ ; 
+			}
+
+			if (peptideChar[0] == 'R' || peptideChar[0] == 'K')
+			{
+				trypticState++ ; 
+				if (peptideChar[startIndex] == 'P')
+				{
+					trypticState-- ; 
+				}
+			}
+			else if (peptideChar[0]=='-')
+			{
+				trypticState++ ; 
+			}
+
+			return trypticState ; 
 		}
 
 	}

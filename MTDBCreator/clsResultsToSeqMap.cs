@@ -56,7 +56,6 @@ namespace MTDBCreator
 		private int mintPercentRead ; 
 		private frmStatus.dlgSetPercentComplete mevntPercentComplete ; 
 		private frmStatus.dlgSetStatusMessage mevntStatusMessage ; 
-		
 
 		public clsResultsToSeqMapReader(frmStatus statusForm)
 		{

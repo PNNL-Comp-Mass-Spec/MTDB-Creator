@@ -76,7 +76,7 @@
 				AdditionalOptions="/Zl"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				MinimalRebuild="FALSE"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"/>
@@ -129,19 +129,10 @@
 				RelativePath=".\AssemblyInfo.cpp">
 			</File>
 			<File
-				RelativePath=".\clsCentralRegression.cpp">
-			</File>
-			<File
-				RelativePath=".\clsCombinedRegression.cpp">
-			</File>
-			<File
 				RelativePath=".\clsLinearModelEM.cpp">
 			</File>
 			<File
-				RelativePath=".\clsNaturalCubicSplineRegression.cpp">
-			</File>
-			<File
-				RelativePath=".\clsNormUnifEM.cpp">
+				RelativePath=".\clsMixtureModelRegressionEM.cpp">
 			</File>
 			<File
 				RelativePath=".\clsRegressor.cpp">
@@ -155,19 +146,10 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\clsCentralRegression.h">
-			</File>
-			<File
-				RelativePath=".\clsCombinedRegression.h">
-			</File>
-			<File
 				RelativePath=".\clsLinearModelEM.h">
 			</File>
 			<File
-				RelativePath=".\clsNaturalCubicSplineRegression.h">
-			</File>
-			<File
-				RelativePath=".\clsNormUnifEM.h">
+				RelativePath=".\clsMixtureModelRegressionEM.h">
 			</File>
 			<File
 				RelativePath=".\clsRegressionPts.h">

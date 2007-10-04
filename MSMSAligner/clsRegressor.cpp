@@ -9,20 +9,28 @@ namespace Regressor
 	clsRegressor::clsRegressor()
 	{
 		mobjLinearRegressionEM = new RegressionEngine::clsLinearModelEM() ; 
+		mobjMixtureRegressionEM = new RegressionEngine::clsMixtureModelRegressionEM() ; 
 		mptrVectRegressionPoints = new std::vector<RegressionEngine::clsRegressionPts> () ;
-		mobjCombinedRegression = new RegressionEngine::clsCombinedRegression() ; 
-		mobjNatCubicRegression = new RegressionEngine::clsNaturalCubicSplineRegression (); 
-		mobjCentralRegression = new RegressionEngine::clsCentralRegression() ; 
-		mobjCentralRegression->SetOptions(8, 50, 30, 3) ; 
-		mobjCentralRegression->SetOutlierZScore(3) ; 
-		mobjNatCubicRegression->SetOptions(8) ; 
-		mobjCombinedRegression->SetCentralRegressionOptions(8,50, 30, 3, RegressionEngine::HYBRID) ; 
-		mobjCombinedRegression->SetLSQOptions(8, 2.5) ; 
-		menmRegressionType = RegressionType::LINEAR_EM ; 
+		menmRegressionType = RegressionType::MIXTURE_REGRESSION ; 
 	}
 
 	clsRegressor::~clsRegressor()
 	{
+		if (mobjLinearRegressionEM != NULL)
+		{
+			delete mobjLinearRegressionEM ; 
+			mobjLinearRegressionEM = NULL ; 
+		}
+		if (mobjMixtureRegressionEM != NULL)
+		{
+			delete mobjMixtureRegressionEM ; 
+			mobjMixtureRegressionEM = NULL ; 
+		}
+		if (mptrVectRegressionPoints != NULL)
+		{
+			delete mptrVectRegressionPoints ; 
+			mptrVectRegressionPoints = NULL ; 
+		}
 	}
 
 	void clsRegressor::SetPoints(float (&x) __gc[], float (&y) __gc[])
@@ -55,23 +63,27 @@ namespace Regressor
 
 	void clsRegressor::PerformRegression(RegressionType type)
 	{
+		if (!mptrVectRegressionPoints || mptrVectRegressionPoints->size() <2)
+		{
+			mobjLinearRegressionEM->mdbl_slope = 0 ; 
+			mobjLinearRegressionEM->mdbl_intercept = 0 ; 
+			return ; 
+		}
+		
+
 		menmRegressionType = type ; 
 		int numIterations = 40 ; 
+		bool checkDiff = false ; 
+
 		switch (menmRegressionType)
 		{
-			case Regressor::CENTRAL:
-				mobjCentralRegression->CalculateRegressionFunction(*mptrVectRegressionPoints);
-				break ; 
-			case Regressor::LINEAR_EM:
+			case RegressionType::LINEAR_EM:
 				mobjLinearRegressionEM->CalculateRegressionFunction(*mptrVectRegressionPoints);
 				break ; 
-			case Regressor::CUBIC_SPLINE:
-				mobjNatCubicRegression->CalculateLSQRegressionCoefficients(*mptrVectRegressionPoints, numIterations);
-				break ; 
-			case Regressor::HYBRID:
-				mobjCombinedRegression->CalculateRegressionFunction(*mptrVectRegressionPoints);
-				break ; 
 			default:
+			case RegressionType::MIXTURE_REGRESSION:
+				mobjMixtureRegressionEM->CalculateRegressionFunction(*mptrVectRegressionPoints);
+				break ; 
 				break ; 
 
 		}
@@ -81,22 +93,17 @@ namespace Regressor
 	{
 		switch (menmRegressionType)
 		{
-			case Regressor::CENTRAL:
-				return mobjCentralRegression->GetPredictedValue(scan);
+			case RegressionType::LINEAR_EM:
+				return (float) mobjLinearRegressionEM->GetPredictedValue(scan);
 				break ; 
-			case Regressor::LINEAR_EM:
-				return mobjLinearRegressionEM->GetPredictedValue(scan);
-				break ; 
-			case Regressor::CUBIC_SPLINE:
-				return mobjNatCubicRegression->GetPredictedValue(scan);
-				break ; 
-			case Regressor::HYBRID:
-				return mobjCombinedRegression->GetPredictedValue(scan);
+			case RegressionType::MIXTURE_REGRESSION:
+				return (float) mobjMixtureRegressionEM->GetPredictedValue(scan);
 				break ; 
 			default:
 				break ; 
 
 		}
+		return 0 ; 
 	}
 
 

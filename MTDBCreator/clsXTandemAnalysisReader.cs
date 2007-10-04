@@ -62,7 +62,7 @@ namespace MTDBCreator
 
 			string seqToProteinMapFile = "" ;
 			if (path != null)
-				seqToProteinMapFile = path + "\\" + name + mstrSeqToProteinMapExt ; 
+				seqToProteinMapFile = System.IO.Path.Combine(path , name + mstrSeqToProteinMapExt) ; 
 			else
 				seqToProteinMapFile = name + mstrSeqToProteinMapExt ; 
 			mobjSeqToProteinMapReader = new clsSeqToProteinMapReader(statusForm) ; 
@@ -71,7 +71,7 @@ namespace MTDBCreator
 
 			string xtandemResultsFile = "" ;
 			if (path != null)
-				xtandemResultsFile = path + "\\" + name + mstrXTandemResultsExt ; 
+				xtandemResultsFile = System.IO.Path.Combine(path, name + mstrXTandemResultsExt) ; 
 			else
 				xtandemResultsFile = name + mstrXTandemResultsExt ; 
 			mobjXTandemReader = new clsXTandemResultsReader(statusForm) ; 
@@ -80,7 +80,7 @@ namespace MTDBCreator
 
 			string resultsToSeqMapFile = "" ;
 			if (path != null)
-				resultsToSeqMapFile = path + "\\" + name + mstrResultToSeqMapExt ; 
+				resultsToSeqMapFile = System.IO.Path.Combine(path, name + mstrResultToSeqMapExt) ; 
 			else
 				resultsToSeqMapFile = name + mstrXTandemResultsExt ; 
 			mobjResultsToSeqMapReader = new clsResultsToSeqMapReader(statusForm) ; 
@@ -89,7 +89,7 @@ namespace MTDBCreator
 
 			string seqInfoFile = "" ;
 			if (path != null)
-				seqInfoFile = path + "\\" + name + mstrSeqInfoExt ; 
+				seqInfoFile = System.IO.Path.Combine(path, name + mstrSeqInfoExt) ; 
 			else
 				seqInfoFile = name + mstrSeqInfoExt ; 
 

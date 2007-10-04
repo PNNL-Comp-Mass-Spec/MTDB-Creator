@@ -54,6 +54,7 @@ namespace MTDBCreator
 		public double mdbl_scan_net_rsquared ; 
 		public double mdbl_scan_net_fit ; 
 		public int mint_num_scans ; 
+		public int mint_num_unique_mass_tags ; 
 
 		private static short mshortColNumDMSJobNum = -1  ; // maps to mshortColNumHeaderJobNum
 		private static short mshortColNumAnalysisTool = -1; //maps to mshortColNumHeaderTool 
@@ -77,12 +78,33 @@ namespace MTDBCreator
 		}
 		public clsAnalysisDescription(string line, char [] delimiters)
 		{
+			string xTandemExtension = "_xt.txt" ; 
+			bool removeXTandemExtension = false ; 
+			bool firstProblem = true ; 
 			//
 			// TODO: Add constructor logic here
 			//
 			string [] items = line.Split(delimiters) ; 
 			if (mshortColNumDataset != -1)
+			{
 				mstrDataset = items[mshortColNumDataset]; 
+				if (mstrDataset.LastIndexOf(xTandemExtension) == mstrDataset.Length - xTandemExtension.Length)
+				{
+					if (firstProblem)
+					{
+						System.Windows.Forms.DialogResult rs = System.Windows.Forms.MessageBox.Show("Datasetname has xtandem extension. Program requires that no extensions be added. Remove ?", "Dataset Name with Extension", System.Windows.Forms.MessageBoxButtons.YesNo) ; 
+						if (rs == System.Windows.Forms.DialogResult.Yes)
+						{
+							removeXTandemExtension = true ; 
+						}
+						firstProblem = false ; 
+					}
+					if (!firstProblem && removeXTandemExtension)
+					{
+						mstrDataset = mstrDataset.Substring(0,mstrDataset.LastIndexOf(xTandemExtension)) ; 
+					}
+				}
+			}
 			if (mshortColNumDMSJobNum != -1)
 				mintDMSJobNum = Convert.ToInt32(items[mshortColNumDMSJobNum]) ; 
 			if (mshortColNumCreated != -1)

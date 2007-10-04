@@ -23,8 +23,8 @@ namespace MTDBCreator
 						return 0 ; 
 						break ; 
 					case enmState.RESULTS:
-						if (mobjXTandemReader != null)
-							return mobjXTandemReader.PercentDone ;
+						if (mobjSequestReader != null)
+							return mobjSequestReader.PercentDone ;
 						return 0 ; 
 						break ; 
 					case enmState.RESULTSTOSEQMAP:
@@ -50,7 +50,7 @@ namespace MTDBCreator
 		public clsSeqInfo [] marrSeqInfo ; 
 
 		private clsSeqToProteinMapReader mobjSeqToProteinMapReader ; 
-		// private clsSequestReader mobjSequestReader ; 
+		private clsSequestResultsReader mobjSequestReader ; 
 		private clsResultsToSeqMapReader mobjResultsToSeqMapReader ; 
 		private clsSeqInfoReader mobjSeqInfoReader ; 
 
@@ -62,7 +62,7 @@ namespace MTDBCreator
 
 			string seqToProteinMapFile = "" ;
 			if (path != null)
-				seqToProteinMapFile = path + "\\" + name + mstrSeqToProteinMapExt ; 
+				seqToProteinMapFile = System.IO.Path.Combine(path, name + mstrSeqToProteinMapExt) ; 
 			else
 				seqToProteinMapFile = name + mstrSeqToProteinMapExt ; 
 			mobjSeqToProteinMapReader = new clsSeqToProteinMapReader(statusForm) ; 
@@ -71,7 +71,7 @@ namespace MTDBCreator
 
 			string sequestResultsFile = "" ;
 			if (path != null)
-				sequestResultsFile = path + "\\" + name + mstrSequestResultsExt ; 
+				sequestResultsFile = System.IO.Path.Combine(path, name + mstrSequestResultsExt) ; 
 			else
 				sequestResultsFile = name + mstrSequestResultsExt ; 
 
@@ -81,7 +81,7 @@ namespace MTDBCreator
 
 			string resultsToSeqMapFile = "" ;
 			if (path != null)
-				resultsToSeqMapFile = path + "\\" + name + mstrResultToSeqMapExt ; 
+				resultsToSeqMapFile = System.IO.Path.Combine(path, name + mstrResultToSeqMapExt) ; 
 			else
 				resultsToSeqMapFile = name + mstrResultToSeqMapExt ; 
 
@@ -91,14 +91,31 @@ namespace MTDBCreator
 
 			string seqInfoFile = "" ;
 			if (path != null)
-				seqInfoFile = path + "\\" + name + mstrSeqInfoExt ; 
+				seqInfoFile = System.IO.Path.Combine(path, name + mstrSeqInfoExt) ; 
 			else
 				seqInfoFile = name + mstrSeqInfoExt ; 
 
 			mobjSeqInfoReader = new clsSeqInfoReader(statusForm) ; 
 			menmState = enmState.SEQINFO ; 
 			marrSeqInfo = mobjSeqInfoReader.ReadSeqInfoFile(seqInfoFile) ; 
+			Clean() ; 
+		}
 
+		/// <summary>
+		/// This function removes extra hit nums that are present in the sequest files 
+		/// which are not needed. To do so, we move through elements of the marrResultsToSeqMap, 
+		/// and remove 
+		/// </summary>
+		private void Clean()
+		{
+			ArrayList arrSequestResults = new ArrayList() ; 
+			int numResultsToSeqMaps = marrResultsToSeqMap.Length ; 
+			for (int resultMapNum = 0 ; resultMapNum < numResultsToSeqMaps ; resultMapNum++)
+			{
+				clsResultsToSeqMap result2SeqMap = marrResultsToSeqMap[resultMapNum] ; 
+				arrSequestResults.Add(marrSequestResults[result2SeqMap.mint_result_id-1]) ; 
+			}
+			marrSequestResults = (clsSequestResults []) arrSequestResults.ToArray(typeof(clsSequestResults)) ; 
 		}
 	}
 }

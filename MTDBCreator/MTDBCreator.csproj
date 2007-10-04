@@ -28,7 +28,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
+                    DefineConstants = "DEBUG;TRACE;BASIC"
                     DocumentationFile = ""
                     DebugSymbols = "true"
                     FileAlignment = "4096"
@@ -48,7 +48,7 @@
                     BaseAddress = "285212672"
                     CheckForOverflowUnderflow = "false"
                     ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE"
+                    DefineConstants = "TRACE;BASIC"
                     DocumentationFile = ""
                     DebugSymbols = "false"
                     FileAlignment = "4096"
@@ -152,10 +152,24 @@
                     Project = "{8A102398-56CC-4AEE-A09C-B98741CB6ECA}"
                     Package = "{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}"
                 />
+                <Reference
+                    Name = "NETPredictionBasic"
+                    AssemblyName = "NETPredictionBasic"
+                    HintPath = "bin\NETPredictionBasic.dll"
+                />
+                <Reference
+                    Name = "NETPrediction"
+                    AssemblyName = "NETPrediction"
+                    HintPath = "bin\NETPrediction.dll"
+                />
             </References>
         </Build>
         <Files>
             <Include>
+                <File
+                    RelPath = "app.config"
+                    BuildAction = "None"
+                />
                 <File
                     RelPath = "App.ico"
                     BuildAction = "Content"
@@ -176,6 +190,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "clsAppException.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "clsMassTag.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -192,6 +211,11 @@
                 />
                 <File
                     RelPath = "clsNETPredictionKrokhin.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "clsOptions.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -217,6 +241,16 @@
                 />
                 <File
                     RelPath = "clsSeqToProteinMap.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "clsSequestAnalysisReader.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "clsSequestResults.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -248,6 +282,16 @@
                 <File
                     RelPath = "frmMain.resx"
                     DependentUpon = "frmMain.cs"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "frmOptions.cs"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "frmOptions.resx"
+                    DependentUpon = "frmOptions.cs"
                     BuildAction = "EmbeddedResource"
                 />
                 <File

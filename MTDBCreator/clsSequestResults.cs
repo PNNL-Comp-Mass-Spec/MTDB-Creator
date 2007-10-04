@@ -26,6 +26,7 @@ namespace MTDBCreator
 		public double mdbl_DelM ; 
 		public double mdbl_XcRatio ; 
 		public bool mbln_PassFilt ; 
+		public double mdbl_FScore ; 
 		public double mdbl_MScore ; 
 		public short mshort_NumTrypticEnds ; 
 
@@ -33,49 +34,86 @@ namespace MTDBCreator
 		public string mstr_clean_peptide ; 
 
 		
-		public string mstrHeader_HitNum = "" ; 
-		public string mstrHeader_ScanNum = "" ; 
-		public string mstrHeader_ScanCount = "" ; 
-		public string mstrHeader_ChargeState	= "" ; 
-		public string mstrHeader_MH = "" ;
-		public string mstrHeader_XCorr = "" ; 
-		public string mstrHeader_DelCn = "" ;
-		public string mstrHeader_Sp = "" ;
-		public string mstrHeader_Reference = "" ; 
-		public string mstrHeader_MultiProtein = "" ; 				
-		public string mstrHeader_Peptide = "" ; 
-		public string mstrHeader_DelCn2 = "" ; 
-		public string mstrHeader_RankSp = "" ; 
-		public string mstrHeader_RankXc = "" ; 
-		public string mstrHeader_DelM = "" ; 
-		public string mstrHeader_XcRatio = "" ; 
-		public string mstrHeader_PassFilt = "" ; 
-		public string mstrHeader_MScore = "" ; 
-		public string mstrHeader_NumTrypticEnds = "" ; 
+		private static string mstrHeader_HitNum = "" ; 
+		private static string mstrHeader_ScanNum = "" ; 
+		private static string mstrHeader_ScanCount = "" ; 
+		private static string mstrHeader_ChargeState	= "" ; 
+		private static string mstrHeader_MH = "" ;
+		private static string mstrHeader_XCorr = "" ; 
+		private static string mstrHeader_DelCn = "" ;
+		private static string mstrHeader_Sp = "" ;
+		private static string mstrHeader_Reference = "" ; 
+		private static string mstrHeader_MultiProtein = "" ; 				
+		private static string mstrHeader_Peptide = "" ; 
+		private static string mstrHeader_DelCn2 = "" ; 
+		private static string mstrHeader_RankSp = "" ; 
+		private static string mstrHeader_RankXc = "" ; 
+		private static string mstrHeader_DelM = "" ; 
+		private static string mstrHeader_XcRatio = "" ; 
+		private static string mstrHeader_PassFilt = "" ; 
+		private static string mstrHeader_MScore = "" ; 
+		private static string mstrHeader_NumTrypticEnds = "" ; 
 
-		public static short mshortColNum_HitNum = 0 ; 
-		public static short mshortColNum_ScanNum = 1 ; 
-		public static short mshortColNum_ScanCount = 2 ; 
-		public static short mshortColNum_ChargeState = 3 ; 
-		public static short mshortColNum_MH = 4 ;
-		public static short mshortColNum_XCorr = 5 ; 
-		public static short mshortColNum_DelCn = 6 ;
-		public static short mshortColNum_Sp = 7 ;
-		public static short mshortColNum_Reference = 8 ; 
-		public static short mshortColNum_MultiProtein = 9 ; 				
-		public static short mshortColNum_Peptide = 10 ; 
-		public static short mshortColNum_DelCn2 = 11 ; 
-		public static short mshortColNum_RankSp = 12 ; 
-		public static short mshortColNum_RankXc = 13 ; 
-		public static short mshortColNum_DelM = 14 ; 
-		public static short mshortColNum_XcRatio = 15 ; 
-		public static short mshortColNum_PassFilt = 16 ; 
-		public static short mshortColNum_MScore = 17 ; 
-		public static short mshortColNum_NumTrypticEnds = 18 ; 
+		private static short mshortColNum_HitNum = 0 ; 
+		private static short mshortColNum_ScanNum = 1 ; 
+		private static short mshortColNum_ScanCount = 2 ; 
+		private static short mshortColNum_ChargeState = 3 ; 
+		private static short mshortColNum_MH = 4 ;
+		private static short mshortColNum_XCorr = 5 ; 
+		private static short mshortColNum_DelCn = 6 ;
+		private static short mshortColNum_Sp = 7 ;
+		private static short mshortColNum_Reference = 8 ; 
+		private static short mshortColNum_MultiProtein = 9 ; 				
+		private static short mshortColNum_Peptide = 10 ; 
+		private static short mshortColNum_DelCn2 = 11 ; 
+		private static short mshortColNum_RankSp = 12 ; 
+		private static short mshortColNum_RankXc = 13 ; 
+		private static short mshortColNum_DelM = 14 ; 
+		private static short mshortColNum_XcRatio = 15 ; 
+		private static short mshortColNum_PassFilt = 16 ; 
+		private static short mshortColNum_MScore = 17 ; 
+		private static short mshortColNum_NumTrypticEnds = 18 ; 
 
 
 		public static string mstrDefaultHeader ="HitNum	ScanNum	ScanCount	ChargeState	MH	XCorr	DelCn	Sp	Reference	MultiProtein	Peptide	DelCn2	RankSp	RankXc	DelM	XcRatio	PassFilt	MScore	NumTrypticEnds" ; 
 
+		public const short MAX_CHARGE_FOR_FSCORE = 3 ;
+		static readonly double [] consts = {0.646, -0.959, -1.460, -0.959, -0.959} ;
+		static readonly double [] xcorrs = {5.49, 8.362, 9.933, 8.362, 8.362} ;
+		static readonly double [] deltas = {4.643, 7.386, 11.149, 7.386, 7.386} ;
+		static readonly double [] ranks = {-0.455, -0.194, -0.201, -0.194, -0.194} ;
+		static readonly double [] massdiffs =  {-0.84, -0.314, -0.277, -0.314, -0.314} ;
+		static readonly int [] max_pep_lens = {100, 15, 25, 50, 50} ;
+		static readonly int [] num_frags = {2, 2, 4, 6, 6} ;
+
+		public static double CalculatePeptideProphetDistriminantScore(clsSequestResults result)
+		{
+			short charge_ = result.mshort_ChargeState ; 
+			if (charge_ > MAX_CHARGE_FOR_FSCORE)
+				charge_ = MAX_CHARGE_FOR_FSCORE ; 
+			double const_ = consts[charge_-1];
+			double xcorr_p_wt_ = xcorrs[charge_-1];
+			double delta_wt_ = deltas[charge_-1];
+			double log_rank_wt_ = ranks[charge_-1];
+			double abs_massd_wt_ = massdiffs[charge_-1];
+			int max_pep_len_ = max_pep_lens[charge_-1];
+			int num_frags_ = num_frags[charge_-1];
+
+			int eff_pep_len = result.mstr_clean_peptide.Length ;
+			if(eff_pep_len > max_pep_len_)
+				eff_pep_len = max_pep_len_;
+			double lg_xcorr = Math.Log(result.mdbl_XcRatio) ; 
+			double lg_eff_len = Math.Log((float)(1.0*eff_pep_len * num_frags_)) ; 
+			double adjustedXCorr = lg_xcorr / lg_eff_len ;
+
+			double tot = const_;
+			tot += xcorr_p_wt_ * adjustedXCorr ;
+			tot += delta_wt_ * result.mdbl_DelCn2 ;
+			double lg_val = Math.Log(1.0*result.mshort_RankSp) ; 
+			tot += log_rank_wt_ * lg_val ;
+			tot += abs_massd_wt_ * Math.Abs(result.mdbl_DelM) ;	
+			return tot ;
+		}
 		public static void SetHeaderNames()
 		{
 			string []colNames = mstrDefaultHeader.Split(new char[]{'\t'}) ; 
@@ -107,15 +145,13 @@ namespace MTDBCreator
 			string [] colNames = headerLine.Split(delimiters) ; 
 			for (int i = 0 ; i < colNames.Length ; i++)
 			{
-				if (colNames[i]	== mstrHeader_result_id)
-					mshortColNum_result_id = (short) i ;
-				else if (colNames[i] == mstrHeader_HitNum)
+				if (colNames[i] == mstrHeader_HitNum)
 					mshortColNum_HitNum	= (short) i	; 
 				else if (colNames[i] == mstrHeader_ScanNum)
 					mshortColNum_ScanNum = (short) i ; 
 				else if (colNames[i] == mstrHeader_ScanCount)
 					mshortColNum_ScanCount = (short) i ; 
-				else if (colNames[i] == mshortColNum_ChargeState)
+				else if (colNames[i] == mstrHeader_ChargeState)
 					mshortColNum_ChargeState = (short) i ; 
 				else if (colNames[i] == mstrHeader_MH)
 					mshortColNum_MH	= (short) i	;
@@ -150,33 +186,41 @@ namespace MTDBCreator
 			}
 		}
 		
-
 		
 		public clsSequestResults(string line, char [] delimiters)
 		{
 			//
 			// TODO: Add constructor logic here
 			//
-			string [] column = line.Split(delimiters) ; 
-			mint_HitNum = Convert.ToInt32(column[mshortColNum_HitNum]); 
-			mint_ScanNum = Convert.ToInt32(column[mshortColNum_ScanNum]); 
-			mshort_ScanCount = Convert.ToInt16(column[mshortColNum_ScanCount]); 
-			mshort_ChargeState	= Convert.ToInt16(column[mshortColNum_ChargeState]); 
-			mdbl_MH = Convert.ToDouble(column[mshortColNum_MH]);
-			mdbl_XCorr = Convert.ToDouble(column[mshortColNum_XCorr]); 
-			mdbl_DelCn = Convert.ToDouble(column[mshortColNum_DelCn]);
-			mdbl_Sp = Convert.ToDouble(column[mshortColNum_Sp]);
-			mstr_Reference = column[mshortColNum_Reference] ; 
-			mshort_MultiProtein = Convert.ToInt16(column[mshortColNum_MultiProtein]); 				
-			mstr_Peptide = column[mshortColNum_Peptide]; 
-			mdbl_DelCn2 = Convert.ToDouble(column[mshortColNum_DelCn2]); 
-			mshort_RankSp = Convert.ToDouble(column[mshortColNum_RankSp]); 
-			mshort_RankXc = Convert.To(column[mshortColNum_RankXc]); 
-			mdbl_DelM = Convert.ToDouble(column[mshortColNum_DelM]); 
-			mdbl_XcRatio = Convert.ToDouble(column[mshortColNum_XcRatio]); 
-			mbln_PassFilt = Convert.ToBoolean(column[mshortColNum_PassFilt]); 
-			mdbl_MScore = Convert.ToDouble(column[mshortColNum_MScore]); 
-			mshort_NumTrypticEnds = Convert.ToInt16(column[mshortColNum_NumTrypticEnds]); 
+			try
+			{
+				string [] column = line.Split(delimiters) ; 
+				mint_HitNum = Convert.ToInt32(column[mshortColNum_HitNum]); 
+				mint_ScanNum = Convert.ToInt32(column[mshortColNum_ScanNum]); 
+				mshort_ScanCount = Convert.ToInt16(column[mshortColNum_ScanCount]); 
+				mshort_ChargeState	= Convert.ToInt16(column[mshortColNum_ChargeState]); 
+				mdbl_MH = Convert.ToDouble(column[mshortColNum_MH]);
+				mdbl_XCorr = Convert.ToDouble(column[mshortColNum_XCorr]); 
+				mdbl_DelCn = Convert.ToDouble(column[mshortColNum_DelCn]);
+				mdbl_Sp = Convert.ToDouble(column[mshortColNum_Sp]);
+				mstr_Reference = column[mshortColNum_Reference] ; 
+				mshort_MultiProtein = Convert.ToInt16(column[mshortColNum_MultiProtein]); 				
+				mstr_Peptide = column[mshortColNum_Peptide]; 
+				mstr_clean_peptide = CleanPeptide(mstr_Peptide) ;  
+				mdbl_DelCn2 = Convert.ToDouble(column[mshortColNum_DelCn2]); 
+				mshort_RankSp = Convert.ToInt16(column[mshortColNum_RankSp]); 
+				mshort_RankXc = Convert.ToInt16(column[mshortColNum_RankXc]); 
+				mdbl_DelM = Convert.ToDouble(column[mshortColNum_DelM]); 
+				mdbl_XcRatio = Convert.ToDouble(column[mshortColNum_XcRatio]); 
+				mbln_PassFilt = Convert.ToBoolean(Convert.ToInt16(column[mshortColNum_PassFilt])); 
+				mdbl_MScore = Convert.ToDouble(column[mshortColNum_MScore]); 
+				mshort_NumTrypticEnds = Convert.ToInt16(column[mshortColNum_NumTrypticEnds]); 
+				mdbl_FScore = CalculatePeptideProphetDistriminantScore(this) ; 
+			}
+			catch (Exception ex)
+			{
+				System.Console.WriteLine(ex.Message + ex.StackTrace) ; 
+			}
 		}
 
 		private string CleanPeptide(string peptide)

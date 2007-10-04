@@ -14,12 +14,14 @@ namespace RegressionEngine
 
 		double mdbl_unif_u ;
 		double mdbl_stdev ; 
+		int mint_percent_complete ; 
 		static const int NUM_ITERATIONS_TO_PERFORM = 20 ; 
 
 		void CalculateProbabilitiesAndWeightMatrix() ; 
 		void CalculateSlopeInterceptEstimates() ; 
 		double CalculateInitialStdev() ;
 	public:
+		double mdbl_rsq ;
 		double mdbl_slope ;
 		double mdbl_intercept ; 
 		double mdbl_percent_normal ; 
@@ -30,5 +32,6 @@ namespace RegressionEngine
 		{
 			return mdbl_slope * x + mdbl_intercept ; 
 		}
+		int PercentComplete() ; 
 	};
 }

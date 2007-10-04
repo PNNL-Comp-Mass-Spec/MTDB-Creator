@@ -99,7 +99,7 @@ namespace MTDBCreator
 			this.mbar_progress.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mbar_progress.Location = new System.Drawing.Point(82, 10);
 			this.mbar_progress.Name = "mbar_progress";
-			this.mbar_progress.Size = new System.Drawing.Size(252, 20);
+			this.mbar_progress.Size = new System.Drawing.Size(300, 20);
 			this.mbar_progress.TabIndex = 1;
 			// 
 			// label1
@@ -127,7 +127,7 @@ namespace MTDBCreator
 			this.mlbl_status.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mlbl_status.Location = new System.Drawing.Point(58, 10);
 			this.mlbl_status.Name = "mlbl_status";
-			this.mlbl_status.Size = new System.Drawing.Size(276, 20);
+			this.mlbl_status.Size = new System.Drawing.Size(324, 20);
 			this.mlbl_status.TabIndex = 4;
 			// 
 			// panel1
@@ -138,7 +138,7 @@ namespace MTDBCreator
 			this.panel1.DockPadding.All = 10;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(344, 40);
+			this.panel1.Size = new System.Drawing.Size(392, 40);
 			this.panel1.TabIndex = 5;
 			// 
 			// panel2
@@ -149,7 +149,7 @@ namespace MTDBCreator
 			this.panel2.DockPadding.All = 10;
 			this.panel2.Location = new System.Drawing.Point(0, 40);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(344, 40);
+			this.panel2.Size = new System.Drawing.Size(392, 40);
 			this.panel2.TabIndex = 6;
 			// 
 			// frmStatus
@@ -157,7 +157,7 @@ namespace MTDBCreator
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.CancelButton = this.mbtn_cancel;
-			this.ClientSize = new System.Drawing.Size(344, 113);
+			this.ClientSize = new System.Drawing.Size(392, 113);
 			this.ControlBox = false;
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.panel1);

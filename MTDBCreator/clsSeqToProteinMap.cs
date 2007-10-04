@@ -30,19 +30,34 @@ namespace MTDBCreator
 		private static short mshortColNum_protein_e_value = 4 ; 
 		private static short mshortColNum_protein_intensity_log = 5 ; 
 
+		private const int UNDEFINED = -100 ; 
+
 		public clsSeqToProteinMap(string line, char [] delimiters)
 		{
 			//
 			// TODO: Add constructor logic here
 			//
 			string [] columns = line.Split(delimiters) ; 
-
-			mint_unique_seq_id = Convert.ToInt32(columns[mshortColNum_unique_seq_id]);
-			mshort_cleavage_state = Convert.ToInt16(columns[mshortColNum_cleavage_state]) ;
-			mshort_terminus_state = Convert.ToInt16(columns[mshortColNum_terminus_state]) ;
-			mstr_protein_name = columns[mshortColNum_protein_name] ;
-			mdbl_protein_e_value = Convert.ToDouble(columns[mshortColNum_protein_e_value]) ;
-			mdbl_protein_intensity_log = Convert.ToDouble(columns[mshortColNum_protein_intensity_log]) ;
+			try
+			{
+				mint_unique_seq_id = Convert.ToInt32(columns[mshortColNum_unique_seq_id]);
+				mshort_cleavage_state = Convert.ToInt16(columns[mshortColNum_cleavage_state]) ;
+				mshort_terminus_state = Convert.ToInt16(columns[mshortColNum_terminus_state]) ;
+				mstr_protein_name = columns[mshortColNum_protein_name] ;
+				if (columns[mshortColNum_protein_e_value] != null && columns[mshortColNum_protein_e_value].Length > 0)
+					mdbl_protein_e_value = Convert.ToDouble(columns[mshortColNum_protein_e_value]) ;
+				else 
+					// undefined. 
+					mdbl_protein_e_value = UNDEFINED ; 
+				if (columns[mshortColNum_protein_intensity_log] != null && columns[mshortColNum_protein_intensity_log].Length > 0)
+					mdbl_protein_intensity_log = Convert.ToDouble(columns[mshortColNum_protein_intensity_log]) ;
+				else
+					// undefined. 
+					mdbl_protein_intensity_log = UNDEFINED ; 
+			}
+			catch (Exception ex)
+			{
+			}
 		}
 
 		public static void SetHeaderColumns(string headerLine, char [] delimiters)

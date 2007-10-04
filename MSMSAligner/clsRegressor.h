@@ -1,23 +1,21 @@
 // clsUMCCreator.h
 #pragma once
 #include "clsLinearModelEM.h"
-#include "clsCombinedRegression.h"
-#include "clsCentralRegression.h"
-#include "clsNaturalCubicSplineRegression.h"
+#include "clsMixtureModelRegressionEM.h"
 #include <vector> 
 
 using namespace System;
 namespace Regressor
 {
-	public __value enum RegressionType {LINEAR_EM = 0, CUBIC_SPLINE, CENTRAL, HYBRID} ; 
 	public __gc class clsRegressor
 	{
+	public:
+		__value enum RegressionType {LINEAR_EM = 0, MIXTURE_REGRESSION } ; 
+	private:
 		RegressionType menmRegressionType ;
 		bool mblnSuccessFull ; 
 		RegressionEngine::clsLinearModelEM __nogc *mobjLinearRegressionEM ; 
-		RegressionEngine::clsCombinedRegression __nogc *mobjCombinedRegression ; 
-		RegressionEngine::clsNaturalCubicSplineRegression __nogc *mobjNatCubicRegression ; 
-		RegressionEngine::clsCentralRegression __nogc *mobjCentralRegression ; 
+		RegressionEngine::clsMixtureModelRegressionEM __nogc *mobjMixtureRegressionEM ; 
 		std::vector<RegressionEngine::clsRegressionPts> __nogc *mptrVectRegressionPoints ; 
 	public:
 		clsRegressor() ; 
@@ -29,11 +27,104 @@ namespace Regressor
 
 		__property double get_Slope()
 		{
-			return mobjLinearRegressionEM->mdbl_slope ; 
+			; 
+			switch (menmRegressionType)
+			{
+				case RegressionType::LINEAR_EM:
+					return mobjLinearRegressionEM->mdbl_slope ; 
+					break ; 
+				case RegressionType::MIXTURE_REGRESSION:
+					return mobjMixtureRegressionEM->GetSlope() ;
+					break ; 
+				default:
+					return 20 ; 
+					break ; 
+
+			}
 		}
 		__property double get_Intercept()
 		{
-			return mobjLinearRegressionEM->mdbl_intercept ; 
+			switch (menmRegressionType)
+			{
+				case RegressionType::LINEAR_EM:
+					return mobjLinearRegressionEM->mdbl_intercept ; 
+					break ; 
+				case RegressionType::MIXTURE_REGRESSION:
+					return mobjMixtureRegressionEM->GetIntercept() ;
+					break ; 
+				default:
+					return 20 ; 
+					break ; 
+
+			}
+		}
+
+		__property short get_RegressionOrder()
+		{
+			switch (menmRegressionType)
+			{
+				case RegressionType::LINEAR_EM:
+					return 0 ; 
+					break ; 
+				case RegressionType::MIXTURE_REGRESSION:
+					return mobjMixtureRegressionEM->GetRegressionOrder() ;
+					break ; 
+				default:
+					return 20 ; 
+					break ; 
+
+			}
+		}
+		__property void set_RegressionOrder(short order)
+		{
+			switch (menmRegressionType)
+			{
+				case RegressionType::LINEAR_EM:
+					return  ; 
+					break ; 
+				case RegressionType::MIXTURE_REGRESSION:
+					return mobjMixtureRegressionEM->SetRegressionOrder(order) ;
+					break ; 
+				default:
+					break ; 
+			}
+			return ; 
+		}
+
+		__property double get_RSquared()
+		{
+			switch (menmRegressionType)
+			{
+				case RegressionType::LINEAR_EM:
+					return mobjLinearRegressionEM->mdbl_rsq ; 
+					break ; 
+				case RegressionType::MIXTURE_REGRESSION:
+					return 0 ;
+					break ; 
+				default:
+					return 20 ; 
+					break ; 
+
+			}
+			return 0 ; 
+		}
+
+		__property int get_PercentComplete()
+		{
+			switch (menmRegressionType)
+			{
+				case RegressionType::LINEAR_EM:
+					return mobjLinearRegressionEM->PercentComplete() ;
+					break ; 
+				case RegressionType::MIXTURE_REGRESSION:
+					return mobjMixtureRegressionEM->PercentComplete() ;
+					break ; 
+				default:
+					return 20 ; 
+					break ; 
+
+			}
+			return 10 ; 
 		}
 
 		float GetNETFromScan(float scan) ; 

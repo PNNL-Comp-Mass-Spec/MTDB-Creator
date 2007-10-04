@@ -1,6 +1,7 @@
 #include ".\clslinearmodelem.h"
 #include <float.h>
 #include <math.h>
+#include <iostream> 
 const double PI = 3.1415926 ; 
 
 namespace RegressionEngine
@@ -10,6 +11,7 @@ namespace RegressionEngine
 		mobj_X = NULL ; 
 		mobj_Y = NULL ; 
 		mobj_Weights = NULL ; 
+		mint_percent_complete = 0 ; 
 	}
 
 	clsLinearModelEM::~clsLinearModelEM(void)
@@ -34,6 +36,9 @@ namespace RegressionEngine
 
 		double normal_prob_sum = 0 ; 
 		double sum_square_diff = 0 ;
+		double sum_square_diff_for_rsq = 0 ;
+		double sum_square_y = 0 ; 
+		double sum_y = 0 ; 
 		for (int index = 0 ; index < numPoints ; index++)
 		{
 			double diff = ptrMatrixY[index][0] - (mdbl_slope * ptrMatrixX[index][0] + mdbl_intercept)  ;
@@ -44,9 +49,23 @@ namespace RegressionEngine
 			ptrMatrixWeights[index][index] = prob_normal_posterior ;
 			normal_prob_sum += prob_normal_posterior ; 
 			sum_square_diff += prob_normal_posterior * diff * diff ; 
+			sum_square_diff_for_rsq += diff * diff ;
+			sum_square_y += (ptrMatrixY[index][0]*ptrMatrixY[index][0]) ; 
+			sum_y += ptrMatrixY[index][0] ; 
 		}
 		mdbl_percent_normal = normal_prob_sum/numPoints ; 
 		mdbl_stdev = sqrt(sum_square_diff / (normal_prob_sum)) ; 
+		double yVar = sum_square_y - sum_y * sum_y/numPoints ; 
+		if (yVar == 0)
+		{
+			mdbl_rsq = 0 ; 
+			throw "All y values are the same" ;
+		}
+		else
+		{
+			mdbl_rsq = 1 - sum_square_diff_for_rsq/yVar ; 
+			//mdbl_rsq = 1 - sum_square_diff/yVar ; 
+		}
 	}
 
 	void clsLinearModelEM::CalculateSlopeInterceptEstimates()
@@ -133,6 +152,7 @@ namespace RegressionEngine
 
 	bool clsLinearModelEM::CalculateRegressionFunction(std::vector<clsRegressionPts> &vectPoints)
 	{
+		mint_percent_complete = 0 ; 
 		int numPoints = vectPoints.size() ; 
 		if (mobj_X != NULL)
 		{
@@ -153,11 +173,16 @@ namespace RegressionEngine
 		double **ptrMatrixY = (double **) mobj_Y->ptr ; 
 		double **ptrMatrixWeights = (double **) mobj_Weights->ptr ; 
 
+		double sumX = 0 ; 
+		double sumXX = 0 ;
+
 		for (int index = 0 ; index < numPoints ; index++)
 		{
 			clsRegressionPts currentPoint = vectPoints[index] ; 
 
 			ptrMatrixX[index][0] = currentPoint.mdbl_x ; 
+			sumX += currentPoint.mdbl_x ; 
+			sumXX += (currentPoint.mdbl_x * currentPoint.mdbl_x ); 
 			ptrMatrixX[index][1] = 1 ; 
 
 			ptrMatrixY[index][0] = currentPoint.mdbl_y ; 
@@ -166,8 +191,18 @@ namespace RegressionEngine
 				ptrMatrixWeights[index][colNum] = 0 ; 
 			}
 			ptrMatrixWeights[index][index] = 1 ; 
+			mint_percent_complete = (10 * index)/numPoints ; 
 		}
+
+		if (sumX * sumX == numPoints * sumXX)
+		{
+			mdbl_intercept = 0 ; 
+			mdbl_slope = 0 ; 
+			throw "All X values cannot be same for linear regression" ; 
+		}
+
 		mobj_XTranspose = matrix_transpose(mobj_X) ; 
+		mint_percent_complete = 20 ; 
 
 		CalculateSlopeInterceptEstimates(); 
 		CalculateInitialStdev() ; 
@@ -175,6 +210,7 @@ namespace RegressionEngine
 		// matrices are set up. 
 		for (int iterationNum = 0 ; iterationNum < NUM_ITERATIONS_TO_PERFORM ; iterationNum++)
 		{
+			mint_percent_complete = 20 + (80*(iterationNum+1))/NUM_ITERATIONS_TO_PERFORM ; 
 			CalculateSlopeInterceptEstimates() ; 
 			CalculateProbabilitiesAndWeightMatrix() ; 
 			if (mdbl_percent_normal < 0.01)
@@ -182,5 +218,8 @@ namespace RegressionEngine
 		}
 		return true ; 
 	}
-
+	int clsLinearModelEM::PercentComplete()
+	{
+		return mint_percent_complete ; 
+	}
 }

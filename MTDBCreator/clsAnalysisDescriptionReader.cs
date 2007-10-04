@@ -47,6 +47,7 @@ namespace MTDBCreator
 							errors += "\n Directory " + analysis.mstrArchivePath + " does not exist" ; 
 							marrAnalyses.RemoveAt(marrAnalyses.Count-1) ; 
 						}
+						
 					}
 				}
 				if (errors != "")
