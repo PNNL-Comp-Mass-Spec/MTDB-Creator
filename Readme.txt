@@ -1,18 +1,20 @@
-The MTDBCreator will read a series of Peptide Hit Result Processor output files
-from X!Tandem search results, align the data, then create a standalone
-Microsoft Access DB. For an example please see data in the data folder. 
-The file DatasetDescription.txt is loaded into MTDBCreator and provides it with 
-information about the input PHRP files used to create the mass tag database. 
-The Tools menu provides the ability to create the Mass Tag Database. Individual 
-datasets can be visualized by clicking on the bottom list. Users need to modify
-this file or create a similar file, with appropriate path names for the input 
-data for the program to work correctly.
+The MTDBCreator will read a series of Peptide Hit Result Processor (PHRP) output files
+from X!Tandem or Sequest search results, align the data, then create a standalone
+Microsoft Access DB.  For an example please see the ExampleDatabase.mdb file
+installed with the program (typically at C:\Program Files\MTDBCreator\)  For
+more information on PHRP, see http://ncrr.pnl.gov/software/PeptideHitResultsProcessor.stm
 
-Note: this is a beta release of this software.  Please visit 
-http://ncrr.pnl.gov/software/ for program updates.
+Use File->Open Dataset List to select a file defining the paths to the folders
+containing the input PHRP files to use to create the mass tag database.  As an 
+example, see file DatasetDescription.txt.  You will need to customize this file
+as needed to read your own data files.  Use Tools->Options to define the filters
+for aligning the data and for storing the data in the database.  Next, use
+Tools->Create Mass Tag Database to align the data files and create the Microsoft
+Access database.  Following this, the alignment of individual datasets can be 
+visualized by clicking on the dataset name in the list at the bottom of the program
 
 -------------------------------------------------------------------------------
-Written by Deep Jaitly for the Department of Energy (PNNL, Richland, WA)
+Written by Deep Jaitly and Matthew Monroe for the Department of Energy (PNNL, Richland, WA)
 Copyright 2007, Battelle Memorial Institute.  All Rights Reserved.
 
 E-mail: navdeep.jaitly@pnl.gov or proteomics@pnl.gov
