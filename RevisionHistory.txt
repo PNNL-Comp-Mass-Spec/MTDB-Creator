@@ -1,5 +1,8 @@
 MTDBCreator Revision History
 
+Version 1.0.2881; November 21, 2007
+	- Fixed minor bug involving dataset name validation when reading the dataset list file
+
 Version 1.0.2833; October 4, 2007
 	- Now uses an improved alignment algoritm
 	- Added support for reading Sequest _syn.txt files
