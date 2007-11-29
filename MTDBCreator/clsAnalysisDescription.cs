@@ -88,7 +88,8 @@ namespace MTDBCreator
 			if (mshortColNumDataset != -1)
 			{
 				mstrDataset = items[mshortColNumDataset]; 
-				if (mstrDataset.LastIndexOf(xTandemExtension) == mstrDataset.Length - xTandemExtension.Length)
+				if (mstrDataset.LastIndexOf(xTandemExtension) != -1 
+					&& mstrDataset.LastIndexOf(xTandemExtension) == mstrDataset.Length - xTandemExtension.Length)
 				{
 					if (firstProblem)
 					{
