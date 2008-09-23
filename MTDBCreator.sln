@@ -14,19 +14,33 @@ EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
+		Debug_Basic = Debug_Basic
 		Release = Release
+		Release_Basic = Release_Basic
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Debug.ActiveCfg = Debug|.NET
 		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Debug.Build.0 = Debug|.NET
+		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Debug_Basic.ActiveCfg = Debug_Basic|.NET
+		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Debug_Basic.Build.0 = Debug_Basic|.NET
 		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Release.ActiveCfg = Release|.NET
 		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Release.Build.0 = Release|.NET
+		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Release_Basic.ActiveCfg = Release_Basic|.NET
+		{5F099595-D69F-43A4-843D-7CAD673B98AA}.Release_Basic.Build.0 = Release_Basic|.NET
 		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Debug.ActiveCfg = Debug|Win32
 		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Debug.Build.0 = Debug|Win32
+		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Debug_Basic.ActiveCfg = Debug_Basic|Win32
+		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Debug_Basic.Build.0 = Debug_Basic|Win32
 		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Release.ActiveCfg = Release|Win32
 		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Release.Build.0 = Release|Win32
+		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Release_Basic.ActiveCfg = Release_Basic|Win32
+		{8A102398-56CC-4AEE-A09C-B98741CB6ECA}.Release_Basic.Build.0 = Release_Basic|Win32
 		{2BFD2C02-8E61-4323-802B-479159022EB9}.Debug.ActiveCfg = Debug
+		{2BFD2C02-8E61-4323-802B-479159022EB9}.Debug_Basic.ActiveCfg = Debug_Basic
 		{2BFD2C02-8E61-4323-802B-479159022EB9}.Release.ActiveCfg = Release
+		{2BFD2C02-8E61-4323-802B-479159022EB9}.Release_Basic.ActiveCfg = Release_Basic
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
