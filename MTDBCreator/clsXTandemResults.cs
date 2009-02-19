@@ -253,13 +253,14 @@ namespace MTDBCreator
 		private int mintPercentRead ; 
 		private frmStatus.dlgSetPercentComplete mevntPercentComplete ; 
 		private frmStatus.dlgSetStatusMessage mevntStatusMessage ; 
-
+		private frmStatus.dlgSetErrorMessage mevntErrorMessage ; 
 
 		public clsXTandemResultsReader(frmStatus statusForm)
 		{
 			mintPercentRead = 0 ; 
 			mevntPercentComplete = new MTDBCreator.frmStatus.dlgSetPercentComplete(statusForm.SetPrecentComplete) ; 
 			mevntStatusMessage = new MTDBCreator.frmStatus.dlgSetStatusMessage(statusForm.SetStatusMessage) ; 
+			mevntErrorMessage = new  MTDBCreator.frmStatus.dlgSetErrorMessage(statusForm.SetErrorMessage) ; 
 		}
 
 		public int PercentDone
@@ -299,10 +300,11 @@ namespace MTDBCreator
 					}
 				}
 			}
-			catch (Exception e) 
+			catch (Exception ex) 
 			{
 				// Let the user know what went wrong.
-				System.Windows.Forms.MessageBox.Show(e.Message + e.StackTrace);
+				mevntErrorMessage("Error reading XTandem results file: " + ex.Message ) ;
+				Console.WriteLine("Error reading XTandem results file: " + ex.Message + ex.StackTrace);
 			}
 			return (clsXTandemResults []) arrXTandemResults.ToArray(typeof(clsXTandemResults)) ; 
 		}

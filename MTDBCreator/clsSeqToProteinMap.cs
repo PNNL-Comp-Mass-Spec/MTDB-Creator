@@ -97,6 +97,7 @@ namespace MTDBCreator
 		private int mintPercentRead ; 
 		private frmStatus.dlgSetPercentComplete mevntPercentComplete ; 
 		private frmStatus.dlgSetStatusMessage mevntStatusMessage ; 
+		private frmStatus.dlgSetErrorMessage mevntErrorMessage ; 
 		
 
 		public clsSeqToProteinMapReader(frmStatus statusForm)
@@ -104,6 +105,7 @@ namespace MTDBCreator
 			mintPercentRead = 0 ; 
 			mevntPercentComplete = new MTDBCreator.frmStatus.dlgSetPercentComplete(statusForm.SetPrecentComplete) ; 
 			mevntStatusMessage = new MTDBCreator.frmStatus.dlgSetStatusMessage(statusForm.SetStatusMessage) ; 
+			mevntErrorMessage = new  MTDBCreator.frmStatus.dlgSetErrorMessage(statusForm.SetErrorMessage) ;
 		}
 
 		public int PercentDone
@@ -144,7 +146,9 @@ namespace MTDBCreator
 			}
 			catch (Exception e) 
 			{
-				throw e ; 
+				// Let the user know what went wrong.
+				mevntErrorMessage("Error reading SeqToProteinMap file: " + e.Message ) ;
+				Console.WriteLine("Error reading SeqToProteinMap file: " + e.Message + e.StackTrace);
 			}
 			return (clsSeqToProteinMap []) arrSeqToProteinMaps.ToArray(typeof(clsSeqToProteinMap)) ; 
 		}

@@ -19,17 +19,21 @@ namespace MTDBCreator
 
 		private System.Windows.Forms.Label mlbl_status;
 
-		private delegate void SetControlString(string status) ; 
+		private delegate void SetControlString(string strMessage) ; 
 		private delegate void SetProgressValue() ; 
 		private delegate void NonArgFunc() ; 
 
-		public delegate void dlgSetStatusMessage(string status) ; 
+		public delegate void dlgSetErrorMessage(string strError) ; 
+		public delegate void dlgSetStatusMessage(string strStatus) ; 
 		public delegate void dlgSetPercentComplete(int percentDone) ; 
 
 		private int mint_percent_done = 0 ; 
 		private int mint_step_size = 2 ;
 		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.Panel panel2; 
+		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.Button mbtn_close;
+		private System.Windows.Forms.TextBox txtErrors;
+		private System.Windows.Forms.Label label2; 
 
 		/// <summary>
 		/// Required designer variable.
@@ -80,6 +84,9 @@ namespace MTDBCreator
 			this.mlbl_status = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.mbtn_close = new System.Windows.Forms.Button();
+			this.txtErrors = new System.Windows.Forms.TextBox();
+			this.label2 = new System.Windows.Forms.Label();
 			this.panel1.SuspendLayout();
 			this.panel2.SuspendLayout();
 			this.SuspendLayout();
@@ -99,7 +106,7 @@ namespace MTDBCreator
 			this.mbar_progress.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mbar_progress.Location = new System.Drawing.Point(82, 10);
 			this.mbar_progress.Name = "mbar_progress";
-			this.mbar_progress.Size = new System.Drawing.Size(300, 20);
+			this.mbar_progress.Size = new System.Drawing.Size(308, 20);
 			this.mbar_progress.TabIndex = 1;
 			// 
 			// label1
@@ -114,8 +121,9 @@ namespace MTDBCreator
 			// 
 			// mbtn_cancel
 			// 
+			this.mbtn_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.mbtn_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.mbtn_cancel.Location = new System.Drawing.Point(152, 85);
+			this.mbtn_cancel.Location = new System.Drawing.Point(160, 176);
 			this.mbtn_cancel.Name = "mbtn_cancel";
 			this.mbtn_cancel.Size = new System.Drawing.Size(80, 24);
 			this.mbtn_cancel.TabIndex = 3;
@@ -127,7 +135,7 @@ namespace MTDBCreator
 			this.mlbl_status.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mlbl_status.Location = new System.Drawing.Point(58, 10);
 			this.mlbl_status.Name = "mlbl_status";
-			this.mlbl_status.Size = new System.Drawing.Size(324, 20);
+			this.mlbl_status.Size = new System.Drawing.Size(332, 20);
 			this.mlbl_status.TabIndex = 4;
 			// 
 			// panel1
@@ -138,7 +146,7 @@ namespace MTDBCreator
 			this.panel1.DockPadding.All = 10;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(392, 40);
+			this.panel1.Size = new System.Drawing.Size(400, 40);
 			this.panel1.TabIndex = 5;
 			// 
 			// panel2
@@ -149,16 +157,54 @@ namespace MTDBCreator
 			this.panel2.DockPadding.All = 10;
 			this.panel2.Location = new System.Drawing.Point(0, 40);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(392, 40);
+			this.panel2.Size = new System.Drawing.Size(400, 40);
 			this.panel2.TabIndex = 6;
+			// 
+			// mbtn_close
+			// 
+			this.mbtn_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.mbtn_close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+			this.mbtn_close.Location = new System.Drawing.Point(160, 176);
+			this.mbtn_close.Name = "mbtn_close";
+			this.mbtn_close.Size = new System.Drawing.Size(80, 24);
+			this.mbtn_close.TabIndex = 8;
+			this.mbtn_close.Text = "Close";
+			this.mbtn_close.Visible = false;
+			this.mbtn_close.Click += new System.EventHandler(this.mbtn_close_Click);
+			// 
+			// txtErrors
+			// 
+			this.txtErrors.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+				| System.Windows.Forms.AnchorStyles.Left) 
+				| System.Windows.Forms.AnchorStyles.Right)));
+			this.txtErrors.Location = new System.Drawing.Point(64, 88);
+			this.txtErrors.Multiline = true;
+			this.txtErrors.Name = "txtErrors";
+			this.txtErrors.ReadOnly = true;
+			this.txtErrors.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+			this.txtErrors.Size = new System.Drawing.Size(328, 72);
+			this.txtErrors.TabIndex = 10;
+			this.txtErrors.Text = "";
+			// 
+			// label2
+			// 
+			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
+			this.label2.Location = new System.Drawing.Point(10, 96);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(48, 20);
+			this.label2.TabIndex = 9;
+			this.label2.Text = "Errors:";
 			// 
 			// frmStatus
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.CancelButton = this.mbtn_cancel;
-			this.ClientSize = new System.Drawing.Size(392, 113);
+			this.ClientSize = new System.Drawing.Size(400, 206);
 			this.ControlBox = false;
+			this.Controls.Add(this.txtErrors);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.mbtn_close);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.mbtn_cancel);
@@ -176,6 +222,30 @@ namespace MTDBCreator
 		}
 		#endregion
 
+		public void ClearErrorMessages() 
+		{
+			txtErrors.Text = "" ;
+		}
+
+		public bool HasErrorMessages
+		{
+			get
+			{
+				if (txtErrors.TextLength == 0)
+					return false ;
+				else
+					return true ;
+				
+			}
+		}
+
+		public bool CloseButtonVisible
+		{
+			set 
+			{
+				mbtn_close.Visible = value ;
+			}
+		}
 
 		public void SetPrecentComplete(int percent_done)
 		{
@@ -232,6 +302,9 @@ namespace MTDBCreator
 			{
 				mint_percent_done = 0 ; 
 				SetProgressVal() ;
+
+				this.ClearErrorMessages() ;
+				this.CloseButtonVisible = false ;
 			}
 			catch (Exception ex)
 			{
@@ -239,14 +312,27 @@ namespace MTDBCreator
 			}
 		}
 
-		
-		public void SetStatusMessage(string status_str)
+		public void SetErrorMessage(string strError)
 		{
 			try
 			{
 				if (!IsHandleCreated)
 					return ; 
-				Invoke(new SetControlString(this.SetStatusString), new object [] {status_str}) ; 
+				Invoke(new SetControlString(this.SetErrorString), new object [] {strError}) ; 
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show(e.ToString()) ; 
+			}
+		}
+		
+		public void SetStatusMessage(string strStatus)
+		{
+			try
+			{
+				if (!IsHandleCreated)
+					return ; 
+				Invoke(new SetControlString(this.SetStatusString), new object [] {strStatus}) ; 
 			}
 			catch (Exception e)
 			{
@@ -254,11 +340,24 @@ namespace MTDBCreator
 			}
 		}
 
-		private void SetStatusString(string txt)
+		private void SetErrorString(string strMessage)
 		{
 			try
 			{
-				this.mlbl_status.Text = txt ; 
+				this.txtErrors.Text += strMessage + "\r\n" ; 
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message + ex.StackTrace) ; 
+			}
+		}
+
+
+		private void SetStatusString(string strMessage)
+		{
+			try
+			{
+				this.mlbl_status.Text = strMessage ; 
 			}
 			catch (Exception ex)
 			{
@@ -292,6 +391,20 @@ namespace MTDBCreator
 			{
 				Console.WriteLine(ex.Message + ex.StackTrace) ; 
 			}
+		}
+
+		private void mbtn_close_Click(object sender, System.EventArgs e)
+		{
+			try
+			{
+				this.DialogResult = DialogResult.OK;
+				this.Hide();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message + ex.StackTrace) ; 
+			}
+
 		}
 	}
 }

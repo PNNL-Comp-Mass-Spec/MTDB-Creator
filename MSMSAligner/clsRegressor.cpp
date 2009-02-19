@@ -63,10 +63,11 @@ namespace Regressor
 
 	void clsRegressor::PerformRegression(RegressionType type)
 	{
+		mobjLinearRegressionEM->mdbl_slope = 0 ; 
+		mobjLinearRegressionEM->mdbl_intercept = 0 ; 
+
 		if (!mptrVectRegressionPoints || mptrVectRegressionPoints->size() <2)
 		{
-			mobjLinearRegressionEM->mdbl_slope = 0 ; 
-			mobjLinearRegressionEM->mdbl_intercept = 0 ; 
 			return ; 
 		}
 		

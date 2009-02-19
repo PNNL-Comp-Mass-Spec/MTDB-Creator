@@ -207,6 +207,7 @@ namespace MTDBCreator
 
 		private frmStatus.dlgSetPercentComplete mevntPercentComplete ; 
 		private frmStatus.dlgSetStatusMessage mevntStatusMessage ; 
+		private frmStatus.dlgSetErrorMessage mevntErrorMessage ;
 
 		private clsOptions mobjOptions ; 
 
@@ -248,6 +249,8 @@ namespace MTDBCreator
 
 			mevntPercentComplete = new MTDBCreator.frmStatus.dlgSetPercentComplete(statusForm.SetPrecentComplete) ; 
 			mevntStatusMessage = new MTDBCreator.frmStatus.dlgSetStatusMessage(statusForm.SetStatusMessage) ; 
+			mevntErrorMessage = new  MTDBCreator.frmStatus.dlgSetErrorMessage(statusForm.SetErrorMessage) ;
+
 			DateTime now = DateTime.Now ; 
 
 			string ext = ".txt" ;
@@ -1318,6 +1321,10 @@ namespace MTDBCreator
 			}
 			catch (Exception ex)
 			{
+				// Let the user know what went wrong.
+				mevntErrorMessage("Error performing alignment: " + ex.Message ) ;
+				Console.WriteLine("Error performing alignment: " + ex.Message + ex.StackTrace);
+
 				menmAction = ACTION.ERROR ; 
 			}
 			finally
@@ -1400,6 +1407,10 @@ namespace MTDBCreator
 			}
 			catch (Exception ex)
 			{
+				// Let the user know what went wrong.
+				mevntErrorMessage("Error performing alignment: " + ex.Message ) ;
+				Console.WriteLine("Error performing alignment: " + ex.Message + ex.StackTrace);
+				
 				menmAction = ACTION.ERROR ; 
 			}
 			finally
@@ -1505,6 +1516,10 @@ namespace MTDBCreator
 			}
 			catch (Exception ex)
 			{
+				// Let the user know what went wrong.
+				mevntErrorMessage("Error performing alignment: " + ex.Message ) ;
+				Console.WriteLine("Error performing alignment: " + ex.Message + ex.StackTrace);
+
 				menmAction = ACTION.ERROR ; 
 			}
 			finally
@@ -1593,7 +1608,10 @@ namespace MTDBCreator
 				}
 				catch (Exception ex)
 				{
-					System.Console.WriteLine("error in alignment. " + ex.Message + ex.StackTrace) ; 
+					// Let the user know what went wrong.
+					mevntErrorMessage("Error in alignment: " + ex.Message ) ;
+					Console.WriteLine("Error in alignment: " + ex.Message + ex.StackTrace);
+
 					slope = 0 ; 
 					intercept = 0 ; 
 					rsquared = 0 ; 
@@ -1705,6 +1723,10 @@ namespace MTDBCreator
 				}
 				catch (Exception ex)
 				{
+					// Let the user know what went wrong.
+					mevntErrorMessage("Error adding mass tag to protein mapping: " + ex.Message ) ;
+					Console.WriteLine("Error adding mass tag to protein mapping: " + ex.Message + ex.StackTrace);
+
 					Console.WriteLine(ex.StackTrace + ex.Message) ; 
 				}
 			}

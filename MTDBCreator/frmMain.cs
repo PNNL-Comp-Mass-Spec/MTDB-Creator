@@ -9,16 +9,13 @@ using PNNL.Controls ;
 namespace MTDBCreator
 {
 	/// <summary>
-	/// Summary description for Form1.
+	/// Summary description for frmMain.
 	/// </summary>
-	public class Form1 : System.Windows.Forms.Form
+	public class frmMain : System.Windows.Forms.Form
 	{
 		private PNNL.Controls.ExpandPanel expandPanelLists;
-		private System.Windows.Forms.MainMenu mainMenu1;
-		private System.Windows.Forms.MenuItem menuItem1;
 		private PNNL.Controls.ExpandPanel expandPanelOptions;
 		private System.Windows.Forms.Splitter splitter2;
-		private System.Windows.Forms.MenuItem menuItemOpenList;
 		private System.Windows.Forms.ListView listViewDatasets;
 		private System.Windows.Forms.ColumnHeader columnHeaderId;
 		private System.Windows.Forms.ColumnHeader columnHeaderDataset;
@@ -26,7 +23,6 @@ namespace MTDBCreator
 		private System.Windows.Forms.ColumnHeader columnHeaderIntercept;
 		private System.Windows.Forms.ColumnHeader columnHeaderRSquared;
 		private System.Windows.Forms.ColumnHeader columnHeaderNumUniqueMassTags;
-		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.RadioButton radioButtonPredictedNET;
 		private System.Windows.Forms.RadioButton radioButtonAverageNET;
 		private System.Windows.Forms.CheckBox checkBoxShowResiduals;
@@ -50,25 +46,33 @@ namespace MTDBCreator
 		private double mdbl_slope ; 
 		private double mdbl_intercept ; 
 
+		public const string PROGRAM_DATE = "November 26, 2008" ;
+
 		private clsXTandemAnalysisReader mobjXTandemPHRPResultsReader ; 
 		private clsSequestAnalysisReader mobjSequestPHRPResultsReader ; 
 		private PNNL.Controls.clsPlotParams mobjPlotParams ;
 		private PNNL.Controls.ctlScatterChart ctlChartScanVsNET; 
-		private PNNL.Controls.clsSeries mobjSeries ;
-		private System.Windows.Forms.MenuItem menuItem2;
-		private System.Windows.Forms.MenuItem menuItemCreateDB; 
+		private PNNL.Controls.clsSeries mobjSeries ; 
 		private PNNL.Controls.ChartPostRenderingProcessor mobjTransformPlotter ;
-		private System.Windows.Forms.MenuItem menuItem3;
 		frmStatus mfrmStatus = new frmStatus() ; 
 		private string 	mstrErrors = "" ;
-		private System.Windows.Forms.MenuItem menuItemOpenSelected;
 		private System.Windows.Forms.Splitter splitter1;
 		private System.Windows.Forms.StatusBar statusBarMessages; 
 
 		private bool mblnCreatingDB = false ;
-		private System.Windows.Forms.MenuItem menuItemOptions; 
+		private System.Windows.Forms.MenuItem mnuFileOpenDatasetList;
+		private System.Windows.Forms.GroupBox GroupBox1;
+		private System.Windows.Forms.MainMenu mnuMainMenu;
+		private System.Windows.Forms.MenuItem mnuFile;
+		private System.Windows.Forms.MenuItem mnuFileSep1;
+		private System.Windows.Forms.MenuItem mnuFileExit;
+		private System.Windows.Forms.MenuItem mnuTools;
+		private System.Windows.Forms.MenuItem mnuToolsCreateDB;
+		private System.Windows.Forms.MenuItem mnuToolsAlignSelected;
+		private System.Windows.Forms.MenuItem mnuToolsOptions;
+		private System.Windows.Forms.MenuItem mnuAbout; 
 		private clsOptions mobjOptions = new clsOptions() ;
-		public Form1()
+		public frmMain()
 		{
 			//
 			// Required for Windows Form Designer support
@@ -79,7 +83,7 @@ namespace MTDBCreator
 			//
 
 			Init() ;
-			menuItemCreateDB.Enabled = false ; 
+			mnuToolsCreateDB.Enabled = false ; 
 		}
 
 
@@ -121,7 +125,7 @@ namespace MTDBCreator
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(Form1));
+			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmMain));
 			PNNL.Controls.PenProvider penProvider1 = new PNNL.Controls.PenProvider();
 			PNNL.Controls.PenProvider penProvider2 = new PNNL.Controls.PenProvider();
 			this.expandPanelLists = new PNNL.Controls.ExpandPanel(228);
@@ -133,27 +137,29 @@ namespace MTDBCreator
 			this.columnHeaderRSquared = new System.Windows.Forms.ColumnHeader();
 			this.columnHeaderNumUniqueMassTags = new System.Windows.Forms.ColumnHeader();
 			this.expandPanelOptions = new PNNL.Controls.ExpandPanel(156);
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.GroupBox1 = new System.Windows.Forms.GroupBox();
 			this.checkBoxShowResiduals = new System.Windows.Forms.CheckBox();
 			this.radioButtonAverageNET = new System.Windows.Forms.RadioButton();
 			this.radioButtonPredictedNET = new System.Windows.Forms.RadioButton();
-			this.mainMenu1 = new System.Windows.Forms.MainMenu();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuItemOpenList = new System.Windows.Forms.MenuItem();
-			this.menuItem2 = new System.Windows.Forms.MenuItem();
-			this.menuItemCreateDB = new System.Windows.Forms.MenuItem();
-			this.menuItemOpenSelected = new System.Windows.Forms.MenuItem();
-			this.menuItem3 = new System.Windows.Forms.MenuItem();
+			this.mnuMainMenu = new System.Windows.Forms.MainMenu();
+			this.mnuFile = new System.Windows.Forms.MenuItem();
+			this.mnuFileOpenDatasetList = new System.Windows.Forms.MenuItem();
+			this.mnuFileSep1 = new System.Windows.Forms.MenuItem();
+			this.mnuFileExit = new System.Windows.Forms.MenuItem();
+			this.mnuTools = new System.Windows.Forms.MenuItem();
+			this.mnuToolsCreateDB = new System.Windows.Forms.MenuItem();
+			this.mnuToolsAlignSelected = new System.Windows.Forms.MenuItem();
+			this.mnuToolsOptions = new System.Windows.Forms.MenuItem();
+			this.mnuAbout = new System.Windows.Forms.MenuItem();
 			this.splitter2 = new System.Windows.Forms.Splitter();
 			this.ctlChartScanVsNET = new PNNL.Controls.ctlScatterChart();
 			this.statusBarMessages = new System.Windows.Forms.StatusBar();
 			this.splitter1 = new System.Windows.Forms.Splitter();
-			this.menuItemOptions = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.expandPanelLists)).BeginInit();
 			this.expandPanelLists.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.expandPanelOptions)).BeginInit();
 			this.expandPanelOptions.SuspendLayout();
-			this.groupBox1.SuspendLayout();
+			this.GroupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.ctlChartScanVsNET)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -189,7 +195,6 @@ namespace MTDBCreator
 			this.listViewDatasets.TabIndex = 2;
 			this.listViewDatasets.View = System.Windows.Forms.View.Details;
 			this.listViewDatasets.MouseHover += new System.EventHandler(this.listViewDatasets_MouseHover);
-			this.listViewDatasets.SelectedIndexChanged += new System.EventHandler(this.listViewDatasets_SelectedIndexChanged);
 			// 
 			// columnHeaderId
 			// 
@@ -221,7 +226,7 @@ namespace MTDBCreator
 			// 
 			// expandPanelOptions
 			// 
-			this.expandPanelOptions.Controls.Add(this.groupBox1);
+			this.expandPanelOptions.Controls.Add(this.GroupBox1);
 			this.expandPanelOptions.Dock = System.Windows.Forms.DockStyle.Right;
 			this.expandPanelOptions.DockPadding.All = 10;
 			this.expandPanelOptions.ExpandDirection = PNNL.Controls.ExpandDirection.Left;
@@ -239,18 +244,18 @@ namespace MTDBCreator
 			this.expandPanelOptions.Size = new System.Drawing.Size(176, 517);
 			this.expandPanelOptions.TabIndex = 4;
 			// 
-			// groupBox1
+			// GroupBox1
 			// 
-			this.groupBox1.Controls.Add(this.checkBoxShowResiduals);
-			this.groupBox1.Controls.Add(this.radioButtonAverageNET);
-			this.groupBox1.Controls.Add(this.radioButtonPredictedNET);
-			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.groupBox1.Location = new System.Drawing.Point(20, 1);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(154, 119);
-			this.groupBox1.TabIndex = 2;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "NET Values";
+			this.GroupBox1.Controls.Add(this.checkBoxShowResiduals);
+			this.GroupBox1.Controls.Add(this.radioButtonAverageNET);
+			this.GroupBox1.Controls.Add(this.radioButtonPredictedNET);
+			this.GroupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+			this.GroupBox1.Location = new System.Drawing.Point(20, 1);
+			this.GroupBox1.Name = "GroupBox1";
+			this.GroupBox1.Size = new System.Drawing.Size(154, 119);
+			this.GroupBox1.TabIndex = 2;
+			this.GroupBox1.TabStop = false;
+			this.GroupBox1.Text = "NET Values";
 			// 
 			// checkBoxShowResiduals
 			// 
@@ -282,54 +287,73 @@ namespace MTDBCreator
 			this.radioButtonPredictedNET.TabStop = true;
 			this.radioButtonPredictedNET.Text = "Predicted NET";
 			// 
-			// mainMenu1
+			// mnuMainMenu
 			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItem1,
-																					  this.menuItem2,
-																					  this.menuItem3});
+			this.mnuMainMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																						this.mnuFile,
+																						this.mnuTools,
+																						this.mnuAbout});
 			// 
-			// menuItem1
+			// mnuFile
 			// 
-			this.menuItem1.Index = 0;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItemOpenList});
-			this.menuItem1.Text = "File";
+			this.mnuFile.Index = 0;
+			this.mnuFile.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					this.mnuFileOpenDatasetList,
+																					this.mnuFileSep1,
+																					this.mnuFileExit});
+			this.mnuFile.Text = "&File";
 			// 
-			// menuItemOpenList
+			// mnuFileOpenDatasetList
 			// 
-			this.menuItemOpenList.Index = 0;
-			this.menuItemOpenList.Text = "Open Dataset List";
-			this.menuItemOpenList.Click += new System.EventHandler(this.menuItemOpenList_Click);
+			this.mnuFileOpenDatasetList.Index = 0;
+			this.mnuFileOpenDatasetList.Text = "&Open Dataset List";
+			this.mnuFileOpenDatasetList.Click += new System.EventHandler(this.mnuFileOpenDatasetList_Click);
 			// 
-			// menuItem2
+			// mnuFileSep1
 			// 
-			this.menuItem2.Index = 1;
-			this.menuItem2.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-																					  this.menuItemCreateDB,
-																					  this.menuItemOpenSelected,
-																					  this.menuItemOptions});
-			this.menuItem2.Text = "Tools";
+			this.mnuFileSep1.Index = 1;
+			this.mnuFileSep1.Text = "-";
 			// 
-			// menuItemCreateDB
+			// mnuFileExit
 			// 
-			this.menuItemCreateDB.Enabled = false;
-			this.menuItemCreateDB.Index = 0;
-			this.menuItemCreateDB.Text = "Create Mass Tag Database";
-			this.menuItemCreateDB.Click += new System.EventHandler(this.menuItemCreateDB_Click);
+			this.mnuFileExit.Index = 2;
+			this.mnuFileExit.Text = "E&xit";
+			this.mnuFileExit.Click += new System.EventHandler(this.mnuFileExit_Click);
 			// 
-			// menuItemOpenSelected
+			// mnuTools
 			// 
-			this.menuItemOpenSelected.Enabled = false;
-			this.menuItemOpenSelected.Index = 1;
-			this.menuItemOpenSelected.Text = "Align Selected Dataset";
-			this.menuItemOpenSelected.Click += new System.EventHandler(this.menuItemOpenSelected_Click);
+			this.mnuTools.Index = 1;
+			this.mnuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+																					 this.mnuToolsCreateDB,
+																					 this.mnuToolsAlignSelected,
+																					 this.mnuToolsOptions});
+			this.mnuTools.Text = "&Tools";
 			// 
-			// menuItem3
+			// mnuToolsCreateDB
 			// 
-			this.menuItem3.Index = 2;
-			this.menuItem3.Text = "About";
-			this.menuItem3.Click += new System.EventHandler(this.menuItem3_Click);
+			this.mnuToolsCreateDB.Enabled = false;
+			this.mnuToolsCreateDB.Index = 0;
+			this.mnuToolsCreateDB.Text = "&Create Mass Tag Database";
+			this.mnuToolsCreateDB.Click += new System.EventHandler(this.mnuToolsCreateDB_Click);
+			// 
+			// mnuToolsAlignSelected
+			// 
+			this.mnuToolsAlignSelected.Enabled = false;
+			this.mnuToolsAlignSelected.Index = 1;
+			this.mnuToolsAlignSelected.Text = "&Align Selected Dataset";
+			this.mnuToolsAlignSelected.Click += new System.EventHandler(this.mnuToolsAlignSelected_Click);
+			// 
+			// mnuToolsOptions
+			// 
+			this.mnuToolsOptions.Index = 2;
+			this.mnuToolsOptions.Text = "&Options";
+			this.mnuToolsOptions.Click += new System.EventHandler(this.mnuToolsOptions_Click);
+			// 
+			// mnuAbout
+			// 
+			this.mnuAbout.Index = 2;
+			this.mnuAbout.Text = "&About";
+			this.mnuAbout.Click += new System.EventHandler(this.mnuAbout_Click);
 			// 
 			// splitter2
 			// 
@@ -414,13 +438,7 @@ namespace MTDBCreator
 			this.splitter1.TabIndex = 8;
 			this.splitter1.TabStop = false;
 			// 
-			// menuItemOptions
-			// 
-			this.menuItemOptions.Index = 2;
-			this.menuItemOptions.Text = "Options";
-			this.menuItemOptions.Click += new System.EventHandler(this.menuItemOptions_Click);
-			// 
-			// Form1
+			// frmMain
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(1136, 793);
@@ -430,14 +448,14 @@ namespace MTDBCreator
 			this.Controls.Add(this.splitter1);
 			this.Controls.Add(this.expandPanelLists);
 			this.Controls.Add(this.statusBarMessages);
-			this.Menu = this.mainMenu1;
-			this.Name = "Form1";
+			this.Menu = this.mnuMainMenu;
+			this.Name = "frmMain";
 			this.Text = "MTDBCreator";
 			((System.ComponentModel.ISupportInitialize)(this.expandPanelLists)).EndInit();
 			this.expandPanelLists.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.expandPanelOptions)).EndInit();
 			this.expandPanelOptions.ResumeLayout(false);
-			this.groupBox1.ResumeLayout(false);
+			this.GroupBox1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.ctlChartScanVsNET)).EndInit();
 			this.ResumeLayout(false);
 
@@ -450,7 +468,7 @@ namespace MTDBCreator
 		[STAThread]
 		static void Main() 
 		{
-			Application.Run(new Form1());
+			Application.Run(new frmMain());
 		}
 
 		#region "Helpers"
@@ -474,15 +492,20 @@ namespace MTDBCreator
 		private void LoadDisplayXTandemDataset(clsAnalysisDescription analysis)
 		{
 			DateTime now = DateTime.Now ; 
+			mdbl_slope = 0 ;
+			mdbl_intercept = 0 ;
+			double rsquared = 0 ; 
+			int numScans = 0 ; 
+
 			mfrmStatus.Text = analysis.mstrDataset ; 
 			mfrmStatus.SetStatusMessage("Reading PHRP files") ; 
+			mfrmStatus.Reset() ;
+
 			mobjXTandemPHRPResultsReader = new clsXTandemAnalysisReader(analysis.mstrArchivePath, 
 				analysis.mstrDataset, mfrmStatus) ; 
 			DateTime read = DateTime.Now; 
 
-			double rsquared = 0 ; 
-			int numScans = 0 ; 
-			if (!radioButtonAverageNET.Checked)
+					if (!radioButtonAverageNET.Checked)
 			{
 				mobjMTDB.AlignXTandemDatasetToTheoreticalNETs(mobjXTandemPHRPResultsReader,  
 					ref marrPeptideScans, ref marrPeptidePredictedNETs, ref mdbl_slope, ref mdbl_intercept, 
@@ -499,14 +522,19 @@ namespace MTDBCreator
 		private void LoadDisplaySequestDataset(clsAnalysisDescription analysis)
 		{
 			DateTime now = DateTime.Now ; 
+			mdbl_slope = 0 ;
+			mdbl_intercept = 0 ;
+			double rsquared = 0 ; 
+			int numScans = 0 ; 
+
 			mfrmStatus.Text = analysis.mstrDataset ; 
 			mfrmStatus.SetStatusMessage("Reading PHRP files") ; 
+			mfrmStatus.Reset() ;
+
 			mobjSequestPHRPResultsReader = new clsSequestAnalysisReader(analysis.mstrArchivePath, 
 				analysis.mstrDataset, mfrmStatus) ; 
 			DateTime read = DateTime.Now; 
 
-			double rsquared = 0 ; 
-			int numScans = 0 ; 
 			if (!radioButtonAverageNET.Checked)
 				mobjMTDB.AlignSequestDatasetToTheoreticalNETs(mobjSequestPHRPResultsReader, ref marrPeptideScans, 
 					ref marrPeptidePredictedNETs, ref mdbl_slope, ref mdbl_intercept, 
@@ -527,6 +555,8 @@ namespace MTDBCreator
 			{
 				mblnCreatingDB = true ; 
 				mstrErrors = "" ; 
+				mfrmStatus.Reset() ;
+
 				bool stopProcessing = false ; 
 				for (int i = 0 ; i < listViewDatasets.Items.Count ; i++)
 				{
@@ -551,8 +581,15 @@ namespace MTDBCreator
 					mobjMTDB.CalculateMassTagNETs() ; 
 					mobjMTDB.CalculateProteinsPassingFilters() ; 
 					mobjMTDB.LoadResultsIntoDB() ; 
+
+					mfrmStatus.SetStatusMessage("Processing is complete") ;
 				}
-				mfrmStatus.Hide() ; 
+
+				if (mfrmStatus.HasErrorMessages)
+					mfrmStatus.CloseButtonVisible = true ;
+				else
+					mfrmStatus.Hide() ; 
+
 				GC.Collect();
 
 			}
@@ -581,18 +618,23 @@ namespace MTDBCreator
 		private void ProcessXTandemFile(clsAnalysisDescription analysis, ListViewItem item)
 		{
 			DateTime now = DateTime.Now ; 
+			mdbl_slope = 0 ;
+			mdbl_intercept = 0 ;
+			double rsquared = 0 ; 
+			int numScans = 0 ; 
+
 			mfrmStatus.Text = analysis.mstrDataset ; 
 			mfrmStatus.SetStatusMessage("Reading PHRP files") ; 
 			mobjXTandemPHRPResultsReader = new clsXTandemAnalysisReader(analysis.mstrArchivePath, 
 				analysis.mstrDataset, mfrmStatus) ; 
 			DateTime read = DateTime.Now; 
 
-			double rsquared = 0 ; 
-			int numScans = 0 ; 
 			mfrmStatus.SetStatusMessage("Performing Alignment") ; 
+			
 			mobjMTDB.AlignXTandemDatasetToTheoreticalNETs(mobjXTandemPHRPResultsReader, 
 				ref marrPeptideScans, ref marrPeptidePredictedNETs, ref mdbl_slope, 
 				ref mdbl_intercept, ref numScans, ref rsquared) ; 
+
 			DisplayScansVsNet(analysis.mstrDataset) ; 
 			analysis.mdbl_scan_net_intercept = mdbl_intercept ; 
 			analysis.mdbl_scan_net_slope = mdbl_slope ;
@@ -613,18 +655,23 @@ namespace MTDBCreator
 		private void ProcessSequestFile(clsAnalysisDescription analysis, ListViewItem item)
 		{
 			DateTime now = DateTime.Now ; 
+			mdbl_slope = 0 ;
+			mdbl_intercept = 0 ;
+			double rsquared = 0 ; 
+			int numScans = 0 ; 
+			
 			mfrmStatus.Text = analysis.mstrDataset ; 
 			mfrmStatus.SetStatusMessage("Reading PHRP files") ; 
 			mobjSequestPHRPResultsReader = new clsSequestAnalysisReader(analysis.mstrArchivePath, 
 				analysis.mstrDataset, mfrmStatus) ; 
 			DateTime read = DateTime.Now; 
 
-			double rsquared = 0 ; 
-			int numScans = 0 ; 
 			mfrmStatus.SetStatusMessage("Performing Alignment") ; 
+
 			mobjMTDB.AlignSequestDatasetToTheoreticalNETs(mobjSequestPHRPResultsReader,  
 				ref marrPeptideScans, ref marrPeptidePredictedNETs, ref mdbl_slope, 
 				ref mdbl_intercept, ref numScans, ref rsquared ) ; 
+
 			DisplayScansVsNet(analysis.mstrDataset) ; 
 			analysis.mdbl_scan_net_intercept = mdbl_intercept ; 
 			analysis.mdbl_scan_net_slope = mdbl_slope ;
@@ -648,7 +695,13 @@ namespace MTDBCreator
 			item.Selected = true ; 
 			try
 			{
+				mdbl_slope = 0 ;
+				mdbl_intercept = 0 ;
+
 				clsAnalysisDescription analysis = (clsAnalysisDescription) item.Tag ; 
+				analysis.mdbl_scan_net_slope = 0 ;
+				analysis.mdbl_scan_net_intercept = 0 ;
+
 				if (analysis.mstrAnalysisTool.ToUpper() == "XTANDEM")
 				{
 					ProcessXTandemFile(analysis, item)   ;
@@ -678,10 +731,14 @@ namespace MTDBCreator
 		private void OpenSelectedDatasetThreaded()
 		{
 			mstrErrors = "" ; 
+			mfrmStatus.Reset() ;
+
 			System.Threading.ThreadStart start = new System.Threading.ThreadStart(this.ShowSelectedDatasetAndCloseMessage) ; 
 			System.Threading.Thread thrd = new System.Threading.Thread(start) ; 
 			thrd.Start() ; 
-			mfrmStatus.ShowStatusBox(this, "Aligning Run") ; 
+
+			mfrmStatus.ShowStatusBox(this, "Aligning Run") ;
+ 
 			if (mstrErrors != "")
 			{
 				MessageBox.Show(this, mstrErrors, "Errors in processing") ; 
@@ -692,7 +749,11 @@ namespace MTDBCreator
 		{
 			ShowSelectedDataset() ; 
 			System.Threading.Thread.Sleep(500) ; 
-			mfrmStatus.Hide() ; 
+
+			if (mfrmStatus.HasErrorMessages)
+				mfrmStatus.CloseButtonVisible = true ;
+			else
+				mfrmStatus.Hide() ; 
 		}
 		private void ShowSelectedDataset()
 		{
@@ -789,7 +850,7 @@ namespace MTDBCreator
 		#endregion
 
 		# region "UI Responses"
-		private void menuItemOpenList_Click(object sender, System.EventArgs e)
+		private void mnuFileOpenDatasetList_Click(object sender, System.EventArgs e)
 		{
 			try
 			{
@@ -810,8 +871,8 @@ namespace MTDBCreator
 					clsAnalysisDescriptionReader reader = new clsAnalysisDescriptionReader(openFileDialog1.FileName) ; 
 					marrAnalyses = reader.Analyses ; 
 					AddAnalysesTolist(marrAnalyses) ; 
-					menuItemCreateDB.Enabled = true ; 
-					menuItemOpenSelected.Enabled = true ; 
+					mnuToolsCreateDB.Enabled = true ; 
+					mnuToolsAlignSelected.Enabled = true ; 
 					statusBarMessages.Text = "Double Click Item to Perform Alignment or Select Tools -> Create Mass Tag Database for creating a mass tag database" ; 
 				}
 			}
@@ -821,7 +882,7 @@ namespace MTDBCreator
 			}
 		}
 
-		private void menuItemCreateDB_Click(object sender, System.EventArgs e)
+		private void mnuToolsCreateDB_Click(object sender, System.EventArgs e)
 		{
 			mobjMTDB = null ; 
 			mobjMTDB = new clsMTDB(mfrmStatus, mobjOptions) ; 
@@ -832,6 +893,7 @@ namespace MTDBCreator
 			saveFileDialog.FilterIndex = 1 ; 
 			saveFileDialog.RestoreDirectory = true ; 
 			mstrErrors = "" ; 
+			mfrmStatus.Reset() ;
 
 			if (saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
@@ -863,20 +925,12 @@ namespace MTDBCreator
 			{
 				thrd.Abort() ; 
 			}
+
 			if (mstrErrors != "")
 			{
 				MessageBox.Show(this, mstrErrors, "Errors in processing") ; 
 			}
 			radioButtonAverageNET.Enabled = true ; 
-		}
-
-		private void menuItemOpen_Click(object sender, System.EventArgs e)
-		{
-		}
-
-		private void listViewDatasets_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-			menuItemOpen_Click(sender, e) ; 
 		}
 
 		private void checkBoxShowResiduals_CheckedChanged(object sender, System.EventArgs e)
@@ -888,7 +942,7 @@ namespace MTDBCreator
 			DisplayScansVsNet(analysis.mstrDataset) ; 
 		}
 
-		private void menuItem3_Click(object sender, System.EventArgs e)
+		private void mnuAbout_Click(object sender, System.EventArgs e)
 		{
 			frmAbout aboutForm = new frmAbout() ;
 			aboutForm.ShowDialog() ; 
@@ -914,7 +968,7 @@ namespace MTDBCreator
 			OpenSelectedDatasetThreaded() ; 
 		}
 
-		private void menuItemOpenSelected_Click(object sender, System.EventArgs e)
+		private void mnuToolsAlignSelected_Click(object sender, System.EventArgs e)
 		{
 			if (listViewDatasets.SelectedItems.Count == 0)
 			{
@@ -924,7 +978,7 @@ namespace MTDBCreator
 			OpenSelectedDatasetThreaded() ; 
 		}
 
-		private void menuItemOptions_Click(object sender, System.EventArgs e)
+		private void mnuToolsOptions_Click(object sender, System.EventArgs e)
 		{
 			frmOptions optionsForm = new frmOptions() ; 
 			optionsForm.Options = mobjOptions ; 
@@ -934,6 +988,12 @@ namespace MTDBCreator
 				mobjMTDB.Options = mobjOptions ; 
 			}
 		}
+
+		private void mnuFileExit_Click(object sender, System.EventArgs e)
+		{
+			this.Close();
+		}
+
 
 	}
 	public class AnalysisToolException : System.Exception

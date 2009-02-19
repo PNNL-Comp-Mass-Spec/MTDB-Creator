@@ -21,20 +21,16 @@ namespace MTDBCreator
 						if (mobjSeqToProteinMapReader != null)
 							return mobjSeqToProteinMapReader.PercentDone ;
 						return 0 ; 
-						break ; 
 					case enmState.RESULTS:
 						if (mobjSequestReader != null)
 							return mobjSequestReader.PercentDone ;
 						return 0 ; 
-						break ; 
 					case enmState.RESULTSTOSEQMAP:
 						if (mobjResultsToSeqMapReader != null)
 							return mobjResultsToSeqMapReader.PercentDone ;
 						return 0 ; 
-						break ; 
 					default:
 						return 0 ;
-						break ; 
 				}
 			}
 		}

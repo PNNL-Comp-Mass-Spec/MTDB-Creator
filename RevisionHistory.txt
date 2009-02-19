@@ -1,5 +1,18 @@
 MTDBCreator Revision History
 
+Version 1.0.3252; November 26, 2008
+	- Updated to continue processing when creating a database using a list of datasets, even if errors occur
+		- Datasets with errors will be skipped
+		- The status window will display any errors that occur
+
+Version 1.0.3006; March 25, 2008
+	- Removed the requirement that X!Tandem input files end in _xt.txt
+
+Version 1.0.2994; March 13, 2008
+	- Computes Peptide Prophet values for SEQUEST results
+	- Allows the user to select a pre-generated Mass Tag Database (Microsoft Access DB file)
+	- Numerous usability improvements
+
 Version 1.0.2881; November 21, 2007
 	- Fixed minor bug involving dataset name validation when reading the dataset list file
 

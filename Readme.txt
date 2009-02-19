@@ -2,7 +2,7 @@ The MTDBCreator will read a series of Peptide Hit Result Processor (PHRP) output
 from X!Tandem or Sequest search results, align the data, then create a standalone
 Microsoft Access DB.  For an example please see the ExampleDatabase.mdb file
 installed with the program (typically at C:\Program Files\MTDBCreator\)  For
-more information on PHRP, see http://ncrr.pnl.gov/software/PeptideHitResultsProcessor.stm
+more information on PHRP, see http://omics.pnl.gov/software/PeptideHitResultsProcessor.php
 
 Use File->Open Dataset List to select a file defining the paths to the folders
 containing the input PHRP files to use to create the mass tag database.  As an 
@@ -17,7 +17,7 @@ visualized by clicking on the dataset name in the list at the bottom of the prog
 Written by Deep Jaitly and Matthew Monroe for the Department of Energy (PNNL, Richland, WA)
 Copyright 2007, Battelle Memorial Institute.  All Rights Reserved.
 
-E-mail: navdeep.jaitly@pnl.gov or proteomics@pnl.gov
+E-mail: matthew.monroe@pnl.gov or proteomics@pnl.gov
 Website: http://ncrr.pnl.gov/ or http://www.sysbio.org/resources/staff/
 -------------------------------------------------------------------------------
 
