@@ -45,8 +45,9 @@ namespace MTDBCreator
 		private float [] marrPeptidePredictedNETs ; 
 		private double mdbl_slope ; 
 		private double mdbl_intercept ; 
+		private bool m_WritingToAccessDB ;
 
-		public const string PROGRAM_DATE = "November 26, 2008" ;
+		public const string PROGRAM_DATE = "October 23, 2009" ;
 
 		private clsXTandemAnalysisReader mobjXTandemPHRPResultsReader ; 
 		private clsSequestAnalysisReader mobjSequestPHRPResultsReader ; 
@@ -70,7 +71,8 @@ namespace MTDBCreator
 		private System.Windows.Forms.MenuItem mnuToolsCreateDB;
 		private System.Windows.Forms.MenuItem mnuToolsAlignSelected;
 		private System.Windows.Forms.MenuItem mnuToolsOptions;
-		private System.Windows.Forms.MenuItem mnuAbout; 
+		private System.Windows.Forms.MenuItem mnuAbout;
+		private System.Windows.Forms.MenuItem mnuToolsCreateMTDBFiles; 
 		private clsOptions mobjOptions = new clsOptions() ;
 		public frmMain()
 		{
@@ -84,6 +86,7 @@ namespace MTDBCreator
 
 			Init() ;
 			mnuToolsCreateDB.Enabled = false ; 
+			mnuToolsCreateMTDBFiles.Enabled = false ; 
 		}
 
 
@@ -101,6 +104,34 @@ namespace MTDBCreator
 			listViewDatasets.DoubleClick +=new EventHandler(listViewDatasets_DoubleClick);
 		}
 
+		protected void CreateMTDBFiles(bool WriteToAccessDB)
+		{
+			
+			radioButtonPredictedNET.Checked = true ; 
+			radioButtonAverageNET.Enabled = false ; 
+
+			m_WritingToAccessDB = WriteToAccessDB;
+
+			System.Threading.ThreadStart start = new System.Threading.ThreadStart(this.ProcessAllDatasets) ; 
+			System.Threading.Thread thrd = new System.Threading.Thread(start) ; 
+			thrd.Start() ; 
+
+			if (WriteToAccessDB)
+				mfrmStatus.ShowStatusBox(this, "Creating Mass Tag Database") ; 
+			else
+				mfrmStatus.ShowStatusBox(this, "Creating MT DB Files") ; 
+
+			if (thrd.IsAlive)
+			{
+				thrd.Abort() ; 
+			}
+
+			if (mstrErrors != "")
+			{
+				MessageBox.Show(this, mstrErrors, "Errors in processing") ; 
+			}
+			radioButtonAverageNET.Enabled = true ; 
+		}
 
 
 		/// <summary>
@@ -155,6 +186,7 @@ namespace MTDBCreator
 			this.ctlChartScanVsNET = new PNNL.Controls.ctlScatterChart();
 			this.statusBarMessages = new System.Windows.Forms.StatusBar();
 			this.splitter1 = new System.Windows.Forms.Splitter();
+			this.mnuToolsCreateMTDBFiles = new System.Windows.Forms.MenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.expandPanelLists)).BeginInit();
 			this.expandPanelLists.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.expandPanelOptions)).BeginInit();
@@ -325,6 +357,7 @@ namespace MTDBCreator
 			this.mnuTools.Index = 1;
 			this.mnuTools.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
 																					 this.mnuToolsCreateDB,
+																					 this.mnuToolsCreateMTDBFiles,
 																					 this.mnuToolsAlignSelected,
 																					 this.mnuToolsOptions});
 			this.mnuTools.Text = "&Tools";
@@ -339,13 +372,13 @@ namespace MTDBCreator
 			// mnuToolsAlignSelected
 			// 
 			this.mnuToolsAlignSelected.Enabled = false;
-			this.mnuToolsAlignSelected.Index = 1;
+			this.mnuToolsAlignSelected.Index = 2;
 			this.mnuToolsAlignSelected.Text = "&Align Selected Dataset";
 			this.mnuToolsAlignSelected.Click += new System.EventHandler(this.mnuToolsAlignSelected_Click);
 			// 
 			// mnuToolsOptions
 			// 
-			this.mnuToolsOptions.Index = 2;
+			this.mnuToolsOptions.Index = 3;
 			this.mnuToolsOptions.Text = "&Options";
 			this.mnuToolsOptions.Click += new System.EventHandler(this.mnuToolsOptions_Click);
 			// 
@@ -437,6 +470,13 @@ namespace MTDBCreator
 			this.splitter1.Size = new System.Drawing.Size(1136, 6);
 			this.splitter1.TabIndex = 8;
 			this.splitter1.TabStop = false;
+			// 
+			// mnuToolsCreateMTDBFiles
+			// 
+			this.mnuToolsCreateMTDBFiles.Enabled = false;
+			this.mnuToolsCreateMTDBFiles.Index = 1;
+			this.mnuToolsCreateMTDBFiles.Text = "Create MT DB Files for &Manual Import";
+			this.mnuToolsCreateMTDBFiles.Click += new System.EventHandler(this.mnuToolsCreateMTDBFiles_Click);
 			// 
 			// frmMain
 			// 
@@ -580,7 +620,7 @@ namespace MTDBCreator
 				{
 					mobjMTDB.CalculateMassTagNETs() ; 
 					mobjMTDB.CalculateProteinsPassingFilters() ; 
-					mobjMTDB.LoadResultsIntoDB() ; 
+					mobjMTDB.LoadResultsIntoDB(m_WritingToAccessDB) ; 
 
 					mfrmStatus.SetStatusMessage("Processing is complete") ;
 				}
@@ -871,7 +911,8 @@ namespace MTDBCreator
 					clsAnalysisDescriptionReader reader = new clsAnalysisDescriptionReader(openFileDialog1.FileName) ; 
 					marrAnalyses = reader.Analyses ; 
 					AddAnalysesTolist(marrAnalyses) ; 
-					mnuToolsCreateDB.Enabled = true ; 
+					// Disabled in this version since Office Support has been removed mnuToolsCreateDB.Enabled = true ; 
+					mnuToolsCreateMTDBFiles.Enabled = true ; 
 					mnuToolsAlignSelected.Enabled = true ; 
 					statusBarMessages.Text = "Double Click Item to Perform Alignment or Select Tools -> Create Mass Tag Database for creating a mass tag database" ; 
 				}
@@ -913,24 +954,7 @@ namespace MTDBCreator
 			{
 			}
 
-			radioButtonPredictedNET.Checked = true ; 
-			radioButtonAverageNET.Enabled = false ; 
-
-			System.Threading.ThreadStart start = new System.Threading.ThreadStart(this.ProcessAllDatasets) ; 
-			System.Threading.Thread thrd = new System.Threading.Thread(start) ; 
-			thrd.Start() ; 
-
-			mfrmStatus.ShowStatusBox(this, "Creating Mass Tag Database") ; 
-			if (thrd.IsAlive)
-			{
-				thrd.Abort() ; 
-			}
-
-			if (mstrErrors != "")
-			{
-				MessageBox.Show(this, mstrErrors, "Errors in processing") ; 
-			}
-			radioButtonAverageNET.Enabled = true ; 
+			CreateMTDBFiles(true);
 		}
 
 		private void checkBoxShowResiduals_CheckedChanged(object sender, System.EventArgs e)
@@ -992,6 +1016,27 @@ namespace MTDBCreator
 		private void mnuFileExit_Click(object sender, System.EventArgs e)
 		{
 			this.Close();
+		}
+
+		private void mnuToolsCreateMTDBFiles_Click(object sender, System.EventArgs e)
+		{
+			System.Windows.Forms.DialogResult eResponse;
+
+			mobjMTDB = null ; 
+			mobjMTDB = new clsMTDB(mfrmStatus, mobjOptions) ; 
+
+			eResponse = MessageBox.Show("Creating MT DB Files, which you can then manually import.  Continue?", "Processing", System.Windows.Forms.MessageBoxButtons.YesNoCancel, System.Windows.Forms.MessageBoxIcon.Question, System.Windows.Forms.MessageBoxDefaultButton.Button1) ; 
+
+			if (eResponse == System.Windows.Forms.DialogResult.Yes) 
+			{
+				mstrErrors = "" ; 
+				mfrmStatus.Reset() ;
+
+				mstrAccessDbPath = "untitled.mdb" ;
+				mobjMTDB.AccessDBPath = mstrAccessDbPath ; 
+
+				CreateMTDBFiles(false);
+			}
 		}
 
 

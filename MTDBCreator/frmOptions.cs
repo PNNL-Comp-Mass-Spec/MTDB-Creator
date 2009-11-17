@@ -89,6 +89,7 @@ namespace MTDBCreator
 		private System.Windows.Forms.Label mlabelRegressionOrder;
 		private System.Windows.Forms.GroupBox mgroupBoxXCorrThresholdsNonTryptic;
 		private System.Windows.Forms.GroupBox mgroupBoxXCorrThresholdsPartiallyTryptic;
+		private System.Windows.Forms.TextBox txtPredictionAlgorithmReference;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -141,8 +142,11 @@ namespace MTDBCreator
 			mradioButtonKrokhin.Checked = true ; 
 			mradioButtonKangas.Enabled = false ; 
 #else 
+			mradioButtonKangas.Checked = true ;
 			mradioButtonKangas.Enabled = true ; 
 #endif 
+			UpdatePredictionReference();
+
 		}
 		/// <summary>
 		/// Clean up any resources being used.
@@ -174,6 +178,7 @@ namespace MTDBCreator
 			this.mpanelMain = new System.Windows.Forms.Panel();
 			this.mtabControlOptions = new System.Windows.Forms.TabControl();
 			this.mtabPageAlignmentOptions = new System.Windows.Forms.TabPage();
+			this.txtPredictionAlgorithmReference = new System.Windows.Forms.TextBox();
 			this.panelAlignmentOptions = new System.Windows.Forms.Panel();
 			this.groupBoxAlignmentType = new System.Windows.Forms.GroupBox();
 			this.panelOrderRegression = new System.Windows.Forms.Panel();
@@ -340,6 +345,7 @@ namespace MTDBCreator
 			// 
 			// mtabPageAlignmentOptions
 			// 
+			this.mtabPageAlignmentOptions.Controls.Add(this.txtPredictionAlgorithmReference);
 			this.mtabPageAlignmentOptions.Controls.Add(this.panelAlignmentOptions);
 			this.mtabPageAlignmentOptions.Controls.Add(this.groupBox1);
 			this.mtabPageAlignmentOptions.Location = new System.Drawing.Point(4, 22);
@@ -347,6 +353,17 @@ namespace MTDBCreator
 			this.mtabPageAlignmentOptions.Size = new System.Drawing.Size(554, 181);
 			this.mtabPageAlignmentOptions.TabIndex = 0;
 			this.mtabPageAlignmentOptions.Text = "Alignment Options";
+			// 
+			// txtPredictionAlgorithmReference
+			// 
+			this.txtPredictionAlgorithmReference.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.txtPredictionAlgorithmReference.Location = new System.Drawing.Point(368, 0);
+			this.txtPredictionAlgorithmReference.Multiline = true;
+			this.txtPredictionAlgorithmReference.Name = "txtPredictionAlgorithmReference";
+			this.txtPredictionAlgorithmReference.ReadOnly = true;
+			this.txtPredictionAlgorithmReference.Size = new System.Drawing.Size(186, 181);
+			this.txtPredictionAlgorithmReference.TabIndex = 9;
+			this.txtPredictionAlgorithmReference.Text = "Prediction Algorithm Reference";
 			// 
 			// panelAlignmentOptions
 			// 
@@ -444,6 +461,7 @@ namespace MTDBCreator
 			this.mradioButtonKrokhin.TabIndex = 2;
 			this.mradioButtonKrokhin.Text = "Krokhin";
 			this.mradioButtonKrokhin.MouseHover += new System.EventHandler(this.mradioButtonKrokhin_MouseHover);
+			this.mradioButtonKrokhin.CheckedChanged += new System.EventHandler(this.mradioButtonKrokhin_CheckedChanged);
 			// 
 			// mradioButtonKangas
 			// 
@@ -456,6 +474,7 @@ namespace MTDBCreator
 			this.mradioButtonKangas.TabStop = true;
 			this.mradioButtonKangas.Text = "Kangas ANN";
 			this.mradioButtonKangas.MouseHover += new System.EventHandler(this.mradioButtonKangas_MouseHover);
+			this.mradioButtonKangas.CheckedChanged += new System.EventHandler(this.mradioButtonKangas_CheckedChanged);
 			// 
 			// groupBox1
 			// 
@@ -1438,6 +1457,28 @@ namespace MTDBCreator
 			this.Hide() ; 
 		}
 		#endregion
+
+		private void UpdatePredictionReference()
+		{
+			if (mradioButtonKangas.Checked) 
+			{
+				txtPredictionAlgorithmReference.Text = "Kangas ANN algorithm developed by Lars Kangas and Kostas Petritis.  See:  " +
+					"K. Petritis, L.J. Kangas, P.L. Ferguson, G.A. Anderson, L. Paša-Tolic, M.S. Lipton, K.J. Auberry, " +
+					"E.F. Strittmatter, Y. Shen, R. Zhao, R.D. Smith. 2003. \"Use of artificial neural networks for the " +
+					"accurate prediction of peptide liquid chromatography elution times in proteome analyses\". " +
+					"Analytical Chemistry, 75 (5) 1039-1048.";
+			} 
+			else
+			{
+				txtPredictionAlgorithmReference.Text = "Prediction algorithm developed by Oleg Krokhin.  See: " + 
+				    "O.V. Krokhin, R. Craig, V. Spicer, W. Ens, K.G. Standing, R.C. Beavis, J.A. Wilkins. 2004. " + 
+					"\"An improved model for prediction of retention times of tryptic peptides in ion pair reversed-phase HPLC " + 
+                    "- Its application to protein peptide mapping by off-line HPLC-MALDI MS\". " +
+                   "Molecular & Cellular Proteomics, 3 (9) 908-919.";
+			}
+
+		}
+
 		private void mtextBoxMaxLogEValForAlignment_MouseHover(object sender, System.EventArgs e)
 		{
 			mstatusBar.Text = "Specifies the maximum log(eval) that a match from X!Tandem can have for it to be used in the alignment" ;		
@@ -1465,12 +1506,12 @@ namespace MTDBCreator
 
 		private void mradioButtonKangas_MouseHover(object sender, System.EventArgs e)
 		{
-			mstatusBar.Text = "Use Prediction by Kangas to compute NET for a sequence. (Petritis, K., Kangas, L.J., et. al. Anal Chem. 2003 Mar 1; 75(5):1039-48)" ; 								
+			mstatusBar.Text = "Use Prediction by Kangas to compute NET for a sequence." ;
 		}
 
 		private void mradioButtonKrokhin_MouseHover(object sender, System.EventArgs e)
 		{
-			mstatusBar.Text = "Use Prediction by Krokhin to compute NET for a sequence. (Krokhin, O.V. et. al.  Mol. Cell. Proteomics 2004, 3, 908-919)" ; 								
+			mstatusBar.Text = "Use Prediction by Krokhin to compute NET for a sequence." ;
 		}
 
 		private void mradioButtonLinearEM_MouseHover(object sender, System.EventArgs e)
@@ -1501,6 +1542,16 @@ namespace MTDBCreator
 		private void mgroupBoxXCorrThresholdsNonTryptic_MouseHover(object sender, System.EventArgs e)
 		{
 			mstatusBar.Text = "Specify threshold XCorr scores for different charges of non tryptic peptides, for matches to be exported to database" ; 				
+		}
+
+		private void mradioButtonKangas_CheckedChanged(object sender, System.EventArgs e)
+		{
+			UpdatePredictionReference();
+		}
+
+		private void mradioButtonKrokhin_CheckedChanged(object sender, System.EventArgs e)
+		{
+			UpdatePredictionReference();
 		}
 
 	}

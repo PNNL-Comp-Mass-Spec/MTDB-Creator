@@ -1,5 +1,9 @@
 MTDBCreator Revision History
 
+Version 1.0.3488; July 20, 2009
+	- Updated the options screen to state that the Kangas/Petritis retention time prediction algorithm is protected by patent 7,136,759 and pending patent 2005-0267688A1
+	- Updated Options screen to show the NET prediction reference for both prediction algorithms
+
 Version 1.0.3252; November 26, 2008
 	- Updated to continue processing when creating a database using a list of datasets, even if errors occur
 		- Datasets with errors will be skipped

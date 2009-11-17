@@ -77,7 +77,8 @@ namespace MTDBCreator
 			// 
 			// mbuttonOK
 			// 
-			this.mbuttonOK.Location = new System.Drawing.Point(224, 224);
+			this.mbuttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+			this.mbuttonOK.Location = new System.Drawing.Point(224, 370);
 			this.mbuttonOK.Name = "mbuttonOK";
 			this.mbuttonOK.Size = new System.Drawing.Size(104, 24);
 			this.mbuttonOK.TabIndex = 3;
@@ -112,14 +113,14 @@ namespace MTDBCreator
 				| System.Windows.Forms.AnchorStyles.Right)));
 			this.richTextBox1.Location = new System.Drawing.Point(8, 88);
 			this.richTextBox1.Name = "richTextBox1";
-			this.richTextBox1.Size = new System.Drawing.Size(584, 120);
+			this.richTextBox1.Size = new System.Drawing.Size(578, 266);
 			this.richTextBox1.TabIndex = 6;
 			this.richTextBox1.Text = "richTextBox1";
 			// 
 			// frmAbout
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(608, 262);
+			this.ClientSize = new System.Drawing.Size(608, 408);
 			this.Controls.Add(this.richTextBox1);
 			this.Controls.Add(this.mlinkLabelDownload);
 			this.Controls.Add(this.label2);
@@ -151,6 +152,15 @@ namespace MTDBCreator
 					    "Website: http://ncrr.pnl.gov/ or http://omics.pnl.gov" + "\n\n" ;
 
 			strAbout += "For information on the AMT Tag approach and algorithms, please see: \"Advances in Proteomics Data Analysis and Display Using an Accurate Mass and Time Tag Approach,\" J.D. Zimmer, M.E. Monroe, W.J. Qian, and R.D. Smith. Mass Spectrometry Reviews, 25, 450-482 (2006).\n\n" ;
+
+			#if !BASIC 
+			strAbout += "The methods embodied in this software to derive the Kangas/Petritis retention time " +
+                "prediction values are covered by U.S. patent 7,136,759 and pending patent 2005-0267688A1.  " +
+                "The software is made available solely for non-commercial research purposes on an " +
+                "\"as is\" basis by Battelle Memorial Institute.  If rights to deploy and distribute  " +
+                "the code for commercial purposes are of interest, please contact Bruce Harrer " +
+                "at bruce.harrer@pnl.gov\n\n";
+			#endif
 
 			strAbout += "Licensed under the Apache License, Version 2.0; you may not use this file except in compliance with the License.  " +
                         "You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0" + "\n\n" ;

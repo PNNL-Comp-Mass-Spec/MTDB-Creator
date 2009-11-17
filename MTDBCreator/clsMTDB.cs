@@ -299,7 +299,7 @@ namespace MTDBCreator
 			mstrTScoreSequestFileName = mstrTScoreSequestFileName.Replace(' ','_'); 
 
 			string path = System.IO.Path.GetTempPath() ; 
-			mstrTAnalysisDescriptionFileName =path + mstrTAnalysisDescriptionFileName  ;
+			mstrTAnalysisDescriptionFileName = path + mstrTAnalysisDescriptionFileName  ;
 			mstrTPeptideFileName =path + mstrTPeptideFileName  ; 
 			mstrTMassTagsFileName =path + mstrTMassTagsFileName  ; 
 			mstrTMassTagsNETFileName =path + mstrTMassTagsNETFileName  ; 
@@ -311,50 +311,29 @@ namespace MTDBCreator
 
 		}
 
-		~clsMTDB()
+		private void DeleteFile(string strPath)
 		{
 			try
 			{
-				System.IO.File.Delete(mstrTMassTagsFileName) ; 
+				if (System.IO.File.Exists(strPath))
+					System.IO.File.Delete(strPath) ; 
 			}
 			catch (Exception ex)
 			{
 			}
-			try
-			{
-				System.IO.File.Delete(mstrTMassTagsNETFileName) ; 
-			}
-			catch (Exception ex)
-			{
-			}
-			try
-			{
-				System.IO.File.Delete(mstrTMassTagsToProteinMapFileName) ; 
-			}
-			catch (Exception ex)
-			{
-			}
-			try
-			{
-				System.IO.File.Delete(mstrTPeptideFileName) ; 
-			}
-			catch (Exception ex)
-			{
-			}
-			try
-			{
-				System.IO.File.Delete(mstrTScoreXTandemFileName) ; 
-			}
-			catch (Exception ex)
-			{
-			}
-			try
-			{
-				System.IO.File.Delete(mstrTProteinsFileName) ; 
-			}
-			catch (Exception ex)
-			{
-			}
+		}
+		~clsMTDB()
+		{
+
+			DeleteFile(mstrTAnalysisDescriptionFileName); 
+			DeleteFile(mstrTPeptideFileName);
+			DeleteFile(mstrTMassTagsFileName);
+			DeleteFile(mstrTMassTagsNETFileName);
+			DeleteFile(mstrTMassTagPeptideProphetStatsFileName);
+			DeleteFile(mstrTMassTagsToProteinMapFileName);
+			DeleteFile(mstrTProteinsFileName);
+			DeleteFile(mstrTScoreXTandemFileName);
+			DeleteFile(mstrTScoreSequestFileName);
 		}
 		private void LoadCurrentMassTags()
 		{
@@ -371,18 +350,40 @@ namespace MTDBCreator
 			}
 		}
 
-		public void LoadResultsIntoDB()
+		public void LoadResultsIntoDB(bool WriteToAccessDB)
 		{
+			string strMessage = "";
+
+			WriteMassTagsToFile() ; 
+			WriteProteinsToFile() ; 
+			WriteMassTagsToProteinMapToFile() ; 
+			WriteMassTagsNETToFile() ; 
+			if (mblnSequestFilesExist)
+				WriteMassTagsPeptideProphetStatsToFile() ; 
+			WriteAnalysisDescriptionToFile() ; 
+
+			if (!WriteToAccessDB) 
+			{
+
+				strMessage = "You must now manually import these files into your Access DB:\r\n" + mstrTPeptideFileName + "\r\n" + mstrTMassTagsFileName + "\r\n" + mstrTMassTagsNETFileName + "\r\n" + mstrTMassTagsToProteinMapFileName + "\r\n" + mstrTProteinsFileName;
+
+				if (mblnXTandemFilesExist)
+					strMessage += "\r\n" + mstrTScoreXTandemFileName;
+
+				if (mblnSequestFilesExist)
+					strMessage += "\r\n" + mstrTScoreSequestFileName + "\r\n" + mstrTMassTagPeptideProphetStatsFileName;
+
+				mevntStatusMessage(strMessage) ; 
+				mevntErrorMessage(strMessage) ;
+			}
+			else 
+			{
+
+/*
+			mevntStatusMessage("Loading results into Microsoft Access DB") ; 
 			Microsoft.Office.Interop.Access.ApplicationClass oAccess = new Microsoft.Office.Interop.Access.ApplicationClass() ; 
 			try
 			{
-				WriteMassTagsToFile() ; 
-				WriteProteinsToFile() ; 
-				WriteMassTagsToProteinMapToFile() ; 
-				WriteMassTagsNETToFile() ; 
-				if (mblnSequestFilesExist)
-					WriteMassTagsPeptideProphetStatsToFile() ; 
-				WriteAnalysisDescriptionToFile() ; 
 
 				oAccess.NewCurrentDatabase(mstrAccessDBPath) ; 
 
@@ -457,6 +458,8 @@ namespace MTDBCreator
 			{
 				oAccess.CloseCurrentDatabase() ;
 				oAccess = null ; 
+			}
+*/
 			}
 
 		}

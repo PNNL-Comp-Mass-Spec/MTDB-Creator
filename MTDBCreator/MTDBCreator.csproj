@@ -143,44 +143,12 @@
                     WrapperTool = "tlbimp"
                 />
                 <Reference
-                    Name = "DAO"
-                    Guid = "{00025E01-0000-0000-C000-000000000046}"
-                    VersionMajor = "5"
-                    VersionMinor = "0"
-                    Lcid = "0"
-                    WrapperTool = "primary"
-                />
-                <Reference
-                    Name = "Microsoft.Office.Core"
-                    Guid = "{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}"
-                    VersionMajor = "2"
-                    VersionMinor = "3"
-                    Lcid = "0"
-                    WrapperTool = "primary"
-                />
-                <Reference
-                    Name = "VBIDE"
-                    Guid = "{0002E157-0000-0000-C000-000000000046}"
-                    VersionMajor = "5"
-                    VersionMinor = "3"
-                    Lcid = "0"
-                    WrapperTool = "primary"
-                />
-                <Reference
                     Name = "ADODB"
                     Guid = "{2A75196C-D9EB-4129-B803-931327F72D5C}"
                     VersionMajor = "2"
                     VersionMinor = "8"
                     Lcid = "0"
                     WrapperTool = "tlbimp"
-                />
-                <Reference
-                    Name = "Access"
-                    Guid = "{4AFFC9A0-5F99-101B-AF4E-00AA003F0F07}"
-                    VersionMajor = "9"
-                    VersionMinor = "0"
-                    Lcid = "0"
-                    WrapperTool = "primary"
                 />
                 <Reference
                     Name = "Regressor"
@@ -201,6 +169,46 @@
                     Name = "NETPrediction"
                     AssemblyName = "NETPrediction"
                     HintPath = "bin\NETPrediction.dll"
+                />
+                <Reference
+                    Name = "stdole"
+                    Guid = "{00020430-0000-0000-C000-000000000046}"
+                    VersionMajor = "2"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "primary"
+                />
+                <Reference
+                    Name = "VBIDE"
+                    Guid = "{0002E157-0000-0000-C000-000000000046}"
+                    VersionMajor = "5"
+                    VersionMinor = "3"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
+                />
+                <Reference
+                    Name = "DAO"
+                    Guid = "{00025E01-0000-0000-C000-000000000046}"
+                    VersionMajor = "5"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
+                />
+                <Reference
+                    Name = "Microsoft.Office.Core"
+                    Guid = "{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}"
+                    VersionMajor = "2"
+                    VersionMinor = "3"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
+                />
+                <Reference
+                    Name = "Access"
+                    Guid = "{4AFFC9A0-5F99-101B-AF4E-00AA003F0F07}"
+                    VersionMajor = "9"
+                    VersionMinor = "0"
+                    Lcid = "0"
+                    WrapperTool = "tlbimp"
                 />
             </References>
         </Build>

@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <CSHARP LastOpenVersion = "7.10.6030" >
         <Build>
-            <Settings ReferencePath = "D:\My Documents\Projects\DataMining\MTDB_Creator\MTDBCreator\bin\;" >
+            <Settings ReferencePath = "D:\My Documents\Projects\DataMining\MTDB_Creator\MTDBCreator\bin\;F:\My Documents\Projects\DataMining\MTDB_Creator\MTDBCreator\bin\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"
