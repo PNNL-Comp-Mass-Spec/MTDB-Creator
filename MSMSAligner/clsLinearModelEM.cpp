@@ -1,3 +1,9 @@
+
+
+#pragma once 
+#pragma managed(push)
+#pragma unmanaged 
+
 #include ".\clslinearmodelem.h"
 #include <float.h>
 #include <math.h>
@@ -14,7 +20,7 @@ namespace RegressionEngine
 		mint_percent_complete = 0 ; 
 	}
 
-	clsLinearModelEM::~clsLinearModelEM(void)
+	clsLinearModelEM::~clsLinearModelEM(void)	
 	{
 		if (mobj_X != NULL)
 		{
@@ -73,32 +79,32 @@ namespace RegressionEngine
 		MATRIX *wx = matrix_mult(mobj_Weights, mobj_X) ; 
 		if (wx == NULL)
 		{
-			PrintMatrix(wx, "c:\\test1.csv") ; 
+			///PrintMatrix(wx, "c:\\test1.csv") ; 
 		}
 		MATRIX *xprime_wx = matrix_mult(mobj_XTranspose, wx) ; 
 		if (xprime_wx == NULL)
 		{
-			PrintMatrix(xprime_wx, "c:\\test1.csv") ; 
+			//PrintMatrix(xprime_wx, "c:\\test1.csv") ; 
 		}
 		MATRIX *inv_xprime_wx = matrix_invert(xprime_wx) ; 
 		if (inv_xprime_wx == NULL)
 		{
-			PrintMatrix(inv_xprime_wx, "c:\\test1.csv") ; 
+			//PrintMatrix(inv_xprime_wx, "c:\\test1.csv") ; 
 		}
 		MATRIX *wy = matrix_mult(mobj_Weights, mobj_Y) ; 
 		if (wy == NULL)
 		{
-			PrintMatrix(wy, "c:\\test1.csv") ; 
+			//PrintMatrix(wy, "c:\\test1.csv") ; 
 		}
 		MATRIX *xprime_wy = matrix_mult(mobj_XTranspose, wy) ; 
 		if (xprime_wy == NULL)
 		{
-			PrintMatrix(xprime_wy, "c:\\test1.csv") ; 
+			//PrintMatrix(xprime_wy, "c:\\test1.csv") ; 
 		}
 		MATRIX *beta = matrix_mult(inv_xprime_wx, xprime_wy) ; 
 		if (beta == NULL)
 		{
-			PrintMatrix(beta, "c:\\test1.csv") ; 
+			//PrintMatrix(beta, "c:\\test1.csv") ; 
 		}
 
 		double **betaPtr = (double **) beta->ptr ; 
@@ -223,3 +229,4 @@ namespace RegressionEngine
 		return mint_percent_complete ; 
 	}
 }
+#pragma managed(pop)

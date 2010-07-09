@@ -15,9 +15,6 @@ namespace MTDBCreator
 
 		public clsMassTagToProteinMap()
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 		}
 	}
 }

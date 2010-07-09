@@ -28,9 +28,6 @@ namespace MTDBCreator
 			//
 			InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
 			InitializeAboutBox() ;
 		}
 
@@ -56,80 +53,82 @@ namespace MTDBCreator
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.label1 = new System.Windows.Forms.Label();
-			this.mbuttonOK = new System.Windows.Forms.Button();
-			this.label2 = new System.Windows.Forms.Label();
-			this.mlinkLabelDownload = new System.Windows.Forms.LinkLabel();
-			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-			this.SuspendLayout();
-			// 
-			// label1
-			// 
-			this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label1.Location = new System.Drawing.Point(0, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(608, 40);
-			this.label1.TabIndex = 0;
-			this.label1.Text = "MTDBCreator";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// mbuttonOK
-			// 
-			this.mbuttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.mbuttonOK.Location = new System.Drawing.Point(224, 370);
-			this.mbuttonOK.Name = "mbuttonOK";
-			this.mbuttonOK.Size = new System.Drawing.Size(104, 24);
-			this.mbuttonOK.TabIndex = 3;
-			this.mbuttonOK.Text = "OK";
-			this.mbuttonOK.Click += new System.EventHandler(this.mbuttonOK_Click);
-			// 
-			// label2
-			// 
-			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.label2.Location = new System.Drawing.Point(8, 48);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(256, 32);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "Download Latest version from: ";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// mlinkLabelDownload
-			// 
-			this.mlinkLabelDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.mlinkLabelDownload.Location = new System.Drawing.Point(296, 48);
-			this.mlinkLabelDownload.Name = "mlinkLabelDownload";
-			this.mlinkLabelDownload.Size = new System.Drawing.Size(280, 32);
-			this.mlinkLabelDownload.TabIndex = 5;
-			this.mlinkLabelDownload.TabStop = true;
-			this.mlinkLabelDownload.Text = "http://omics.pnl.gov/software";
-			this.mlinkLabelDownload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// richTextBox1
-			// 
-			this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-				| System.Windows.Forms.AnchorStyles.Left) 
-				| System.Windows.Forms.AnchorStyles.Right)));
-			this.richTextBox1.Location = new System.Drawing.Point(8, 88);
-			this.richTextBox1.Name = "richTextBox1";
-			this.richTextBox1.Size = new System.Drawing.Size(578, 266);
-			this.richTextBox1.TabIndex = 6;
-			this.richTextBox1.Text = "richTextBox1";
-			// 
-			// frmAbout
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(608, 408);
-			this.Controls.Add(this.richTextBox1);
-			this.Controls.Add(this.mlinkLabelDownload);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.mbuttonOK);
-			this.Controls.Add(this.label1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-			this.Name = "frmAbout";
-			this.Text = "frmAbout";
-			this.ResumeLayout(false);
+            this.label1 = new System.Windows.Forms.Label();
+            this.mbuttonOK = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.mlinkLabelDownload = new System.Windows.Forms.LinkLabel();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.SuspendLayout();
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(608, 40);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "MTDB Creator";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // mbuttonOK
+            // 
+            this.mbuttonOK.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.mbuttonOK.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.mbuttonOK.Location = new System.Drawing.Point(253, 372);
+            this.mbuttonOK.Name = "mbuttonOK";
+            this.mbuttonOK.Size = new System.Drawing.Size(104, 24);
+            this.mbuttonOK.TabIndex = 3;
+            this.mbuttonOK.Text = "OK";
+            this.mbuttonOK.Click += new System.EventHandler(this.mbuttonOK_Click);
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(8, 48);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(256, 32);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Download Latest version from: ";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // mlinkLabelDownload
+            // 
+            this.mlinkLabelDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mlinkLabelDownload.Location = new System.Drawing.Point(296, 48);
+            this.mlinkLabelDownload.Name = "mlinkLabelDownload";
+            this.mlinkLabelDownload.Size = new System.Drawing.Size(280, 32);
+            this.mlinkLabelDownload.TabIndex = 5;
+            this.mlinkLabelDownload.TabStop = true;
+            this.mlinkLabelDownload.Text = "http://omics.pnl.gov/software";
+            this.mlinkLabelDownload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox1.Location = new System.Drawing.Point(20, 83);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(588, 266);
+            this.richTextBox1.TabIndex = 6;
+            this.richTextBox1.Text = "";
+            // 
+            // frmAbout
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(608, 408);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.mlinkLabelDownload);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.mbuttonOK);
+            this.Controls.Add(this.label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Name = "frmAbout";
+            this.Text = "About ";
+            this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -138,7 +137,7 @@ namespace MTDBCreator
 		{
 			string strAbout ;
 
-			strAbout = "Program written by Deep Jaitly and maintained by Matthew Monroe for PNNL's National Center for Research Resources and the Department of Energy (PNNL, Richland, WA). \n\n" ;
+			strAbout = "Program written by Deep Jaitly and maintained by Matthew Monroe and Brian LaMarche for PNNL's National Center for Research Resources and the Department of Energy (PNNL, Richland, WA). \n\n" ;
 			
 
 			strAbout += "Program date: " + MTDBCreator.frmMain.PROGRAM_DATE ;
@@ -148,7 +147,7 @@ namespace MTDBCreator
 				strAbout += "\n" ;
 			#endif 
 
-			strAbout += "E-mail: matthew.monroe@pnl.gov or proteomics@pnl.gov \n" +
+			strAbout += "E-mail: matthew.monroe@pnl.gov, brian.lamarche@pnl.gov or proteomics@pnl.gov \n" +
 					    "Website: http://ncrr.pnl.gov/ or http://omics.pnl.gov" + "\n\n" ;
 
 			strAbout += "For information on the AMT Tag approach and algorithms, please see: \"Advances in Proteomics Data Analysis and Display Using an Accurate Mass and Time Tag Approach,\" J.D. Zimmer, M.E. Monroe, W.J. Qian, and R.D. Smith. Mass Spectrometry Reviews, 25, 450-482 (2006).\n\n" ;

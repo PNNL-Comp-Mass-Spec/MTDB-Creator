@@ -4,7 +4,7 @@ Microsoft Access DB.  For an example please see the ExampleDatabase.mdb file
 installed with the program (typically at C:\Program Files\MTDBCreator\)  For
 more information on PHRP, see http://omics.pnl.gov/software/PeptideHitResultsProcessor.php
 
-Use File->Open Dataset List to select a file defining the paths to the folders
+Use File->Load to select a file defining the paths to the folders
 containing the input PHRP files to use to create the mass tag database.  As an 
 example, see file DatasetDescription.txt.  You will need to customize this file
 as needed to read your own data files.  Use Tools->Options to define the filters
@@ -14,10 +14,11 @@ Access database.  Following this, the alignment of individual datasets can be
 visualized by clicking on the dataset name in the list at the bottom of the program
 
 -------------------------------------------------------------------------------
-Written by Deep Jaitly and Matthew Monroe for the Department of Energy (PNNL, Richland, WA)
-Copyright 2007, Battelle Memorial Institute.  All Rights Reserved.
+Written by Deep Jaitly, Matthew Monroe, and Brian LaMarche
+for the Department of Energy (PNNL, Richland, WA) Copyright 2007, 
+Battelle Memorial Institute.  All Rights Reserved.
 
-E-mail: matthew.monroe@pnl.gov or proteomics@pnl.gov
+E-mail: matthew.monroe@pnl.gov or proteomics@pnl.gov, or brian.lamarche@pnl.gov
 Website: http://ncrr.pnl.gov/ or http://www.sysbio.org/resources/staff/
 -------------------------------------------------------------------------------
 

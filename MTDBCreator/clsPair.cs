@@ -11,9 +11,6 @@ namespace MTDBCreator
 		public object Second ; 
 		public clsPair()
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 		}
 	}
 }

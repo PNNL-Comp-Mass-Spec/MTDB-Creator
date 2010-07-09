@@ -81,9 +81,7 @@ namespace MTDBCreator
 			string xTandemExtension = "_xt.txt" ; 
 			bool removeXTandemExtension = false ; 
 			bool firstProblem = true ; 
-			//
-			// TODO: Add constructor logic here
-			//
+			
 			string [] items = line.Split(delimiters) ; 
 			if (mshortColNumDataset != -1)
 			{

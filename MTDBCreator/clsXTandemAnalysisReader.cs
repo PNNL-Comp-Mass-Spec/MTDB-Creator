@@ -50,18 +50,15 @@ namespace MTDBCreator
 		private clsResultsToSeqMapReader mobjResultsToSeqMapReader ; 
 		private clsSeqInfoReader mobjSeqInfoReader ; 
 
-		public clsXTandemAnalysisReader(string path, string name, frmStatus statusForm )
+		public clsXTandemAnalysisReader(string path, string name)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
-
+			
 			string seqToProteinMapFile = "" ;
 			if (path != null)
 				seqToProteinMapFile = System.IO.Path.Combine(path , name + mstrSeqToProteinMapExt) ; 
 			else
 				seqToProteinMapFile = name + mstrSeqToProteinMapExt ; 
-			mobjSeqToProteinMapReader = new clsSeqToProteinMapReader(statusForm) ; 
+			mobjSeqToProteinMapReader = new clsSeqToProteinMapReader() ; 
 			menmState = enmState.SEQTOPROTEINMAP ; 
 			marrSeqToProteinMap = mobjSeqToProteinMapReader.ReadSeqToProteinMapFile(seqToProteinMapFile) ; 
 
@@ -70,7 +67,7 @@ namespace MTDBCreator
 				xtandemResultsFile = System.IO.Path.Combine(path, name + mstrXTandemResultsExt) ; 
 			else
 				xtandemResultsFile = name + mstrXTandemResultsExt ; 
-			mobjXTandemReader = new clsXTandemResultsReader(statusForm) ; 
+			mobjXTandemReader = new clsXTandemResultsReader() ; 
 			menmState = enmState.RESULTS ; 
 			marrXTandemResults = mobjXTandemReader.ReadXTandemFile(xtandemResultsFile) ; 
 
@@ -79,7 +76,7 @@ namespace MTDBCreator
 				resultsToSeqMapFile = System.IO.Path.Combine(path, name + mstrResultToSeqMapExt) ; 
 			else
 				resultsToSeqMapFile = name + mstrXTandemResultsExt ; 
-			mobjResultsToSeqMapReader = new clsResultsToSeqMapReader(statusForm) ; 
+			mobjResultsToSeqMapReader = new clsResultsToSeqMapReader() ; 
 			menmState = enmState.RESULTSTOSEQMAP ; 
 			marrResultsToSeqMap = mobjResultsToSeqMapReader.ReadResultsToSeqMapFile(resultsToSeqMapFile) ; 
 
@@ -89,7 +86,7 @@ namespace MTDBCreator
 			else
 				seqInfoFile = name + mstrSeqInfoExt ; 
 
-			mobjSeqInfoReader = new clsSeqInfoReader(statusForm) ; 
+			mobjSeqInfoReader = new clsSeqInfoReader() ; 
 			menmState = enmState.SEQINFO ; 
 			marrSeqInfo = mobjSeqInfoReader.ReadSeqInfoFile(seqInfoFile) ; 
 

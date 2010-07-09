@@ -1,3 +1,8 @@
+
+#pragma once 
+#pragma managed(push)
+#pragma unmanaged 
+
 #include ".\clsMixtureModelRegressionEM.h"
 #include <float.h>
 #include <math.h>
@@ -302,7 +307,7 @@ namespace RegressionEngine
 		// CALCULATE FIRST SET OF COEFFICIENTS HERE .. 
 		// Remember that the coefficients should be: 
 		// (XX')-1X 
-		PrintMatrix(mobj_X, "c:\\x_matrix.csv") ; 
+		//PrintMatrix(mobj_X, "c:\\x_matrix.csv") ; 
 
 		MATRIX *XTranspose = matrix_transpose(mobj_X) ; 
 		MATRIX *xprime_x = matrix_mult(XTranspose, mobj_X) ; 
@@ -311,7 +316,7 @@ namespace RegressionEngine
 			matrix_free(XTranspose) ; 
 			throw "Unable to multiply mobj_X with XTranspose in clsMixtureModelRegressionEM::CalculateRegressionFunction" ; 
 		}
-		PrintMatrix(xprime_x, "c:\\test_matrix.csv") ; 
+		//PrintMatrix(xprime_x, "c:\\test_matrix.csv") ; 
 		MATRIX *inv_xprime_x = matrix_invert(xprime_x) ; 
 		matrix_free(xprime_x) ; 
 		if (inv_xprime_x == NULL)
@@ -399,25 +404,31 @@ namespace RegressionEngine
 			mvect_stdevNoise.push_back(stdev_noise) ; 
 			mvect_meanNoise.push_back(mean_noise) ; 
 
+			/*
 			if (printCoeffs)
 			{
 				fout<<"Stdev Real = "<< stdev_real<<" Mean noise = "<<mean_noise ; 
 				fout<<" Stdev Noise = "<<stdev_noise<<" Prob real = "<<probability_real ; 
 				fout<<" Likelihood = "<<mvect_Likelihoods[mvect_Likelihoods.size()-1]<<std::endl ; 
-
 			}
+			*/
 
 			for (short coefficientNum = 0 ; coefficientNum < mshort_order + 1 ; 
 				coefficientNum++)
 			{
 				double coefficient = 0 ; 
 				CalculateCoefficient(coefficientNum, coefficient) ; 
-				ptr_next_coeffs[coefficientNum][0] = coefficient; 
+				ptr_next_coeffs[coefficientNum][0] = coefficient;
+				/*
 				if (printCoeffs)
 					fout<<coefficient<<"\t" ; 
+				*/
 			}
+
+			/*
 			if (printCoeffs)
 				fout<<std::endl ; 
+			*/
 
 			// set the next set of coefficient. 
 			for (short coefficientNum = 0 ; coefficientNum < mshort_order + 1 ; 
@@ -491,4 +502,7 @@ namespace RegressionEngine
 		mshort_order = order ; 
 	}
 
+
 }
+
+#pragma managed(pop)

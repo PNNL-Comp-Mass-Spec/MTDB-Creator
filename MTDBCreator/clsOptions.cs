@@ -1,5 +1,8 @@
 using System;
 
+using Regressor;
+using NETPrediction;
+
 namespace MTDBCreator
 {
 	/// <summary>
@@ -7,39 +10,36 @@ namespace MTDBCreator
 	/// </summary>
 	public class clsOptions
 	{
+        public enum RegressionTypeIdentifier
+        {
+            LINEAR_EM = 0,
+            MIXTURE_REGRESSION
+        }
+
 		private double [] marrXCorrForExportTryptic = new double [] {1.5,2.0,2.5} ; 
 		private double [] marrXCorrForExportPartiallyTryptic = new double [] {1.5,2.0,2.5} ; 
 		private double [] marrXCorrForExportNonTryptic = new double [] {3.0,3.5,4.0} ; 
 
-		private bool mblnUseDelCN = true ; 
+		private bool   mblnUseDelCN = true ; 
 		private double mdblMaxDelCN = 0.1 ; 
-
-		private bool mblnExportTryptic = true ; 
-		private bool mblnExportPartiallyTryptic = true ; 
-		private bool mblnExportNonTryptic = true ; 
-
+		private bool   mblnExportTryptic = true ; 
+		private bool   mblnExportPartiallyTryptic = true ; 
+		private bool   mblnExportNonTryptic = true ; 
 		private double mdblMaxLogEValForXTandemExport = -2.0 ;
 		private double mdblMaxLogEValForXTandemAlignment = -2.0 ;
-
-		private short mshortMaxModsForAlignment = 2 ; 
-		private short mshortMaxRankForExport = 2 ; 
-		private short mshortMinObservationsForExport = 2 ; 
-
-		private double mdblMinXCorrForAlignment = 3.0 ; 
-
-		private bool mblnUseKrokhinNET = false ; 
-		private Regressor.clsRegressor.RegressionType menmRegressionType = Regressor.clsRegressor.RegressionType.MIXTURE_REGRESSION ; 
+		private short  mshortMaxModsForAlignment = 2 ; 
+		private short  mshortMaxRankForExport = 2 ; 
+		private short  mshortMinObservationsForExport = 2 ; 
+		private double mdblMinXCorrForAlignment = 3.0 ;
+        private bool mblnUseKrokhinNET;
+		private RegressionTypeIdentifier menmRegressionType = RegressionTypeIdentifier.MIXTURE_REGRESSION ; 
 		private short mshortRegressionOrder = 1 ; 
 
 		public clsOptions()
 		{
-			//
-			// TODO: Add constructor logic here
-			//
-#if BASIC
-			mblnUseKrokhinNET = true ; 
-#endif
+            UseKrokhinNET = false;
 		}
+
 		public double  [] MinXCorrForExportTrytpic
 		{
 			get
@@ -86,6 +86,14 @@ namespace MTDBCreator
 				marrXCorrForExportNonTryptic = (double [])value.Clone() ; 
 			}
 		}
+        /// <summary>
+        /// Gets or sets the prediction algorithm
+        /// </summary>
+        public iPeptideElutionTime PredictionAlgorithm
+        {
+            get;
+            set;
+        }
 
 		public double MinDelCNForExport
 		{
@@ -242,7 +250,7 @@ namespace MTDBCreator
 			}
 		}
 
-		public Regressor.clsRegressor.RegressionType RegressionType
+		public RegressionTypeIdentifier RegressionType
 		{
 			get
 			{

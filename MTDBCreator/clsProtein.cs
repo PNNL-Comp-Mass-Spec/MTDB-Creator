@@ -12,9 +12,6 @@ namespace MTDBCreator
 
 		public clsProtein()
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 		}
 	}
 }

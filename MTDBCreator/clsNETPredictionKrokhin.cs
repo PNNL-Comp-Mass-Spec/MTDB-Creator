@@ -196,6 +196,7 @@ namespace MTDBCreator
 			mResidueCoefficients[24].NTCoefficient = -3F; 
 			mResidueCoefficients[25].NTCoefficient = 7F; 
 			mResidueCoefficients[ALKYLATION_INDEX].NTCoefficient = 4F; 
+
 			// TODO: NotImplemented statement: ICSharpCode.SharpRefactory.Parser.AST.VB.ReDimStatement 
 			mNTerminusWeightings[0] = 0.42F; 
 			mNTerminusWeightings[1] = 0.22F; 

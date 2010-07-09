@@ -1,5 +1,9 @@
 #pragma once
 
+#pragma once 
+#pragma managed(push)
+#pragma unmanaged 
+
 namespace RegressionEngine
 {
 	class clsRegressionPts
@@ -14,3 +18,5 @@ namespace RegressionEngine
 		}
 	} ; 
 }
+
+#pragma managed(pop)

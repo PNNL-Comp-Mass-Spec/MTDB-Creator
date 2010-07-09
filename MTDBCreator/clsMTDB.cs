@@ -1,235 +1,233 @@
-using System;	
-using System.Collections ; 
-using System.Data.OleDb ; 
-using System.Data ; 
+using System;
+using System.Data;
+using System.Data.OleDb;
+using System.Collections; 
 
+using Microsoft.Office.Interop.Access;
+using MassTagDatabaseStoredQueryCreator;
 
 namespace MTDBCreator
 {
 	/// <summary>
 	/// Summary description for clsMTDB.
 	/// </summary>
-	public class clsMTDB
+	public class clsMTDB: ProcessorBase, IDisposable 
 	{
+
+        #region Static Column Names
+        private static string m_TPeptidesColName_Peptide_Id = "Peptide_Id";
+        private static string m_TPeptidesColName_Analysis_Id = "Analysis_Id";
+        private static string m_TPeptidesColName_Scan_Number = "Scan_Number";
+        private static string m_TPeptidesColName_Number_Of_Scans = "Number_Of_Scans";
+        private static string m_TPeptidesColName_Charge_State = "Charge_State";
+        private static string m_TPeptidesColName_MH = "MH";
+        private static string m_TPeptidesColName_Multiple_Proteins = "Multiple_Proteins";
+        private static string m_TPeptidesColName_Peptide = "Peptide";
+        private static string m_TPeptidesColName_Mass_Tag_ID = "Mass_Tag_ID";
+        private static string m_TPeptidesColName_GANET_Obs = "GANET_Obs";
+        private static string m_TPeptidesColName_Scan_Time_Peak_Apex = "Scan_Time_Peak_Apex";
+        private static string m_TPeptidesColName_Peak_Area = "Peak_Area";
+        private static string m_TPeptidesColName_Peak_SN_Ratio = "Peak_SN_Ratio";
+
+        private static string m_TMassTagsColName_Mass_Tag_ID = "Mass_Tag_ID";
+        private static string m_TMassTagsColName_Peptide = "Peptide";
+        private static string m_TMassTagsColName_Monoisotopic_Mass = "Monoisotopic_Mass";
+        private static string m_TMassTagsColName_Multiple_Proteins = "Multiple_Proteins";
+        private static string m_TMassTagsColName_Created = "Created";
+        private static string m_TMassTagsColName_Last_Affected = "Last_Affected";
+        private static string m_TMassTagsColName_Number_Of_Peptides = "Number_Of_Peptides";
+        private static string m_TMassTagsColName_Peptide_Obs_Count_Passing_Filter = "Peptide_Obs_Count_Passing_Filter";
+        private static string m_TMassTagsColName_High_Normalized_Score = "High_Normalized_Score";
+        private static string m_TMassTagsColName_High_Peptide_Prophet_Probability = "High_Peptide_Prophet_Probability";
+        private static string m_TMassTagsColName_Min_Log_EValue = "Min_Log_EValue";
+        private static string m_TMassTagsColName_Mod_Count = "Mod_Count";
+        private static string m_TMassTagsColName_Mod_Description = "Mod_Description";
+        private static string m_TMassTagsColName_PMT_Quality_Score = "PMT_Quality_Score";        
+        private static string m_TMassTagsColName_External_Protein_ID            = "External_Protein_ID";
+        private static string m_TMassTagsColName_External_Reference_ID          = "External_Reference_ID";
+        private static string m_TMassTagsColName_PepProphet_FScore_Max_CS1      = "PepProphet_FScore_Max_CS1";
+        private static string m_TMassTagsColName_PepProphet_FScore_Max_CS2      = "PepProphet_FScore_Max_CS2";
+        private static string m_TMassTagsColName_PepProphet_FScore_Max_CS3      = "PepProphet_FScore_Max_CS3";
+        private static string m_TMassTagsColName_PepProphet_Probability_Max_CS1 = "PepProphet_Probability_Max_CS1";
+        private static string m_TMassTagsColName_PepProphet_Probability_Max_CS2 = "PepProphet_Probability_Max_CS2";
+        private static string m_TMassTagsColName_PepProphet_Probability_Max_CS3 = "PepProphet_Probability_Max_CS3";
+        private static string m_TMassTagsColName_Is_confirmed                   = "Is_Confirmed";
+        private static string m_TMassTagsColName_High_Dicriminant_Score         = "High_Discriminant_Score";
+        
+        
+
+        private static string m_TProteinsColName_Ref_ID = "Ref_ID";
+        private static string m_TProteinsColName_Reference = "Reference";
+        private static string m_TProteinsColName_Description = "Description";
+        private static string m_TProteinsColName_Protein_Sequence = "Protein_Sequence";
+        private static string m_TProteinsColName_Protein_Residue_Count = "Protein_Residue_Count";
+        private static string m_TProteinsColName_Monoisotopic_Mass = "Monoisotopic_Mass";
+        private static string m_TProteinsColName_Protein_Collection_ID = "Protein_Collection_ID";
+        private static string m_TProteinsColName_Last_Affected = "Last_Affected";
+        private static string m_TProteinsColName_External_Reference_ID = "External_Reference_ID";
+        private static string m_TProteinsColName_Protein_DB_ID = "Protein_DB_ID";
+        private static string m_TProteinsColName_External_Protein_ID = "External_Protein_ID";
+
+        private static string m_TMassTagsToProteinMapColName_Mass_Tag_ID = "Mass_Tag_ID";
+        private static string m_TMassTagsToProteinMapColName_Mass_Tag_Name = "Mass_Tag_Name";
+        private static string m_TMassTagsToProteinMapColName_Ref_ID = "Ref_ID";
+        private static string m_TMassTagsToProteinMapColName_Cleavage_State = "Cleavage_State";
+        private static string m_TMassTagsToProteinMapColName_Fragment_Number = "Fragment_Number";
+        private static string m_TMassTagsToProteinMapColName_Fragment_Span = "Fragment_Span";
+        private static string m_TMassTagsToProteinMapColName_Residue_Start = "Residue_Start";
+        private static string m_TMassTagsToProteinMapColName_Residue_End = "Residue_End";
+        private static string m_TMassTagsToProteinMapColName_Repeat_Count = "Repeat_Count";
+        private static string m_TMassTagsToProteinMapColName_Terminus_State = "Terminus_State";
+        private static string m_TMassTagsToProteinMapColName_Missed_Cleavage_Count = "Missed_Cleavage_Count";
+
+
+        private static string m_TScoreXTandemColName_Peptide_ID = "Peptide_ID";
+        private static string m_TScoreXTandemColName_Hyperscore = "Hyperscore";
+        private static string m_TScoreXTandemColName_Log_EValue = "Log_EValue";
+        private static string m_TScoreXTandemColName_DeltaCn2 = "DeltaCn2";
+        private static string m_TScoreXTandemColName_Y_Score = "Y_Score";
+        private static string m_TScoreXTandemColName_Y_Ions = "Y_Ions";
+        private static string m_TScoreXTandemColName_B_Score = "B_Score";
+        private static string m_TScoreXTandemColName_B_Ions = "B_Ions";
+        private static string m_TScoreXTandemColName_DelM = "DelM";
+        private static string m_TScoreXTandemColName_Intensity = "Intensity";
+        private static string m_TScoreXTandemColName_Normalized_Score = "Normalized_Score";
+
+        private static string m_TScoreSequestColName_Peptide_ID = "Peptide_ID";
+        private static string m_TScoreSequestColName_XCorr = "XCorr";
+        private static string m_TScoreSequestColName_DeltaCn = "DeltaCn";
+        private static string m_TScoreSequestColName_DeltaCn2 = "DeltaCn2";
+        private static string m_TScoreSequestColName_Sp = "Sp";
+        private static string m_TScoreSequestColName_RankSp = "RankSp";
+        private static string m_TScoreSequestColName_RankXc = "RankXc";
+        private static string m_TScoreSequestColName_DelM = "DelM";
+        private static string m_TScoreSequestColName_XcRatio = "XcRatio";
+
+        private static string m_TMassTagsNETColName_Mass_Tag_ID = "Mass_Tag_ID";
+        private static string m_TMassTagsNETColName_Min_GANET = "Min_GANET";
+        private static string m_TMassTagsNETColName_Max_GANET = "Max_GANET";
+        private static string m_TMassTagsNETColName_Avg_GANET = "Avg_GANET";
+        private static string m_TMassTagsNETColName_Cnt_GANET = "Cnt_GANET";
+        private static string m_TMassTagsNETColName_StD_GANET = "StD_GANET";
+        private static string m_TMassTagsNETColName_StdError_GANET = "StdError_GANET";
+        private static string m_TMassTagsNETColName_PNET = "PNET";
+
+
+        private static string m_TAnalysisDescriptionColName_Job = "Job";
+        private static string m_TAnalysisDescriptionColName_Dataset = "Dataset";
+        private static string m_TAnalysisDescriptionColName_Dataset_ID = "Dataset_ID";
+        private static string m_TAnalysisDescriptionColName_Dataset_Created_DMS = "Dataset_Created_DMS";
+        private static string m_TAnalysisDescriptionColName_Dataset_Acq_Time_Start = "Dataset_Acq_Time_Start";
+        private static string m_TAnalysisDescriptionColName_Dataset_Acq_Time_End = "Dataset_Acq_Time_End";
+        private static string m_TAnalysisDescriptionColName_Dataset_Scan_Count = "Dataset_Scan_Count";
+        private static string m_TAnalysisDescriptionColName_Experiment = "Experiment";
+        private static string m_TAnalysisDescriptionColName_Campaign = "Campaign";
+        private static string m_TAnalysisDescriptionColName_Organism = "Organism";
+        private static string m_TAnalysisDescriptionColName_Instrument_Class = "Instrument_Class";
+        private static string m_TAnalysisDescriptionColName_Instrument = "Instrument";
+        private static string m_TAnalysisDescriptionColName_Analysis_Tool = "Analysis_Tool";
+        private static string m_TAnalysisDescriptionColName_Parameter_File_Name = "Parameter_File_Name";
+        private static string m_TAnalysisDescriptionColName_Settings_File_Name = "Settings_File_Name";
+        private static string m_TAnalysisDescriptionColName_Organism_DB_Name = "Organism_DB_Name";
+        private static string m_TAnalysisDescriptionColName_Protein_Collection_List = "Protein_Collection_List";
+        private static string m_TAnalysisDescriptionColName_Protein_Options_List = "Protein_Options_List";
+        private static string m_TAnalysisDescriptionColName_Completed = "Completed";
+        private static string m_TAnalysisDescriptionColName_ResultType = "ResultType";
+        private static string m_TAnalysisDescriptionColName_Separation_Sys_Type = "Separation_Sys_Type";
+        private static string m_TAnalysisDescriptionColName_ScanTime_NET_Slope = "ScanTime_NET_Slope";
+        private static string m_TAnalysisDescriptionColName_ScanTime_NET_Intercept = "ScanTime_NET_Intercept";
+        private static string m_TAnalysisDescriptionColName_ScanTime_NET_RSquared = "ScanTime_NET_RSquared";
+        private static string m_TAnalysisDescriptionColName_ScanTime_NET_Fit = "ScanTime_NET_Fit";
+
+
+        // T_Mass_Tag_Peptide_Prophet_Stats data structures:
+        // Mass_Tag_ID, ObsCount_CS1, ObsCount_CS2, ObsCount_CS3, 
+        // PepProphet_FScore_Max_CS1, PepProphet_FScore_Max_CS2, PepProphet_FScore_Max_CS3,
+        // PepProphet_Probability_Max_CS1, PepProphet_Probability_Max_CS2, PepProphet_Probability_Max_CS3
+        // PepProphet_Probability_Avg_CS1, PepProphet_Probability_Avg_CS2, PepProphet_Probability_Avg_CS3
+        private static string m_TMassTagPeptideProphetStatsColName_Mass_Tag_ID = "Mass_Tag_ID";
+        private static string m_TMassTagPeptideProphetStatsColName_ObsCount_CS1 = "ObsCount_CS1";
+        private static string m_TMassTagPeptideProphetStatsColName_ObsCount_CS2 = "ObsCount_CS2";
+        private static string m_TMassTagPeptideProphetStatsColName_ObsCount_CS3 = "ObsCount_CS3";
+        // maxs will not be printed for now. 
+        private static string m_TMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS1 = "PepProphet_Probability_Avg_CS1";
+        private static string m_TMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS2 = "PepProphet_Probability_Avg_CS2";
+        private static string m_TMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS3 = "PepProphet_Probability_Avg_CS3";
+        private static string m_TMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS1 = "PepProphet_FScore_Avg_CS1";
+        private static string m_TMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS2 = "PepProphet_FScore_Avg_CS2";
+        private static string m_TMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS3 = "PepProphet_FScore_Avg_CS3";
+        private static string m_TAnalysisDescriptionTable = "T_Analysis_Description";
+        private static string m_TPeptidesTable = "T_Peptides";
+        private static string m_TMassTagsTable = "T_Mass_Tags";
+        private static string m_TMassTagsNETTable = "T_Mass_Tags_NET";
+        private static string m_TMassTagsToProteinMapTable = "T_Mass_Tag_to_Protein_Map";
+        private static string m_TProteinsTable = "T_Proteins";
+        private static string m_TScoreXTandemTable = "T_Score_XTandem";
+        private static string m_TScoreSequestTable = "T_Score_Sequest";
+        private static string m_TMassTagPeptideProphetStatsTable = "T_Mass_Tag_Peptide_Prophet_Stats"; 
+        #endregion
+
 		public const float MISSING_F_SCORE = -100 ; 
 		private enum ACTION { IDLE=0, ALIGNING, ERROR } ;
+
 		private ACTION menmAction ; 
-		private int mintNumResultsSoFar ; 
-		// hashtable that goes from sequence to index. 
+		/// <summary>
+        /// hashtable that goes from sequence to index. 
+		/// </summary> 
 		private Hashtable mhashMassTags ; 
-		// hashtable that goes from protein name to protein index 
+		/// <summary>
+        /// hashtable that goes from protein name to protein index 
+		/// </summary>
 		private Hashtable mhashProteins ; 
-		// hashtable that goes from Protein Reference Id_Peptide 
+		/// <summary>
+        /// hashtable that goes from Protein Reference Id_Peptide 
+		/// </summary> 
 		private Hashtable mhashMassTagsToProteinMap ;
-		// masstag Arraylist. 
-		private ArrayList marrMassTags ; 
-		// protein Arraylist.
+		private ArrayList m_massTags ; 
 		private ArrayList marrProteins ; 
 		private Hashtable mhashCurrentJobUniqIdToMassTagId ; 
-		private ArrayList marrMassTagsInJobs ; 
+		private ArrayList m_massTagsInJobs ; 
 		private ArrayList marrAnalyses ; 
 
-		private Hashtable mhashProteinsPassingConstraints = new Hashtable() ; 
-		private string mstrDataName ; 
-		private bool mblnSequestFilesExist = false ; 
-		private bool mblnXTandemFilesExist = false ; 
-
-		private static string mstrTPeptidesColName_Peptide_Id = "Peptide_Id" ; 
-		private static string mstrTPeptidesColName_Analysis_Id = "Analysis_Id" ; 
-		private static string mstrTPeptidesColName_Scan_Number = "Scan_Number" ; 
-		private static string mstrTPeptidesColName_Number_Of_Scans = "Number_Of_Scans" ; 
-		private static string mstrTPeptidesColName_Charge_State = "Charge_State" ; 
-		private static string mstrTPeptidesColName_MH = "MH" ; 
-		private static string mstrTPeptidesColName_Multiple_Proteins = "Multiple_Proteins" ; 
-		private static string mstrTPeptidesColName_Peptide = "Peptide" ; 
-		private static string mstrTPeptidesColName_Mass_Tag_ID = "Mass_Tag_ID" ; 
-		private static string mstrTPeptidesColName_GANET_Obs = "GANET_Obs" ; 
-		private static string mstrTPeptidesColName_Scan_Time_Peak_Apex = "Scan_Time_Peak_Apex" ; 
-		private static string mstrTPeptidesColName_Peak_Area = "Peak_Area" ; 
-		private static string mstrTPeptidesColName_Peak_SN_Ratio = "Peak_SN_Ratio" ; 
-
-		private static string mstrTMassTagsColName_Mass_Tag_ID = "Mass_Tag_ID" ; 
-		private static string mstrTMassTagsColName_Peptide = "Peptide" ; 
-		private static string mstrTMassTagsColName_Monoisotopic_Mass = "Monoisotopic_Mass" ; 
-		private static string mstrTMassTagsColName_Multiple_Proteins = "Multiple_Proteins" ; 
-		private static string mstrTMassTagsColName_Created = "Created" ; 
-		private static string mstrTMassTagsColName_Last_Affected = "Last_Affected" ; 
-		private static string mstrTMassTagsColName_Number_Of_Peptides = "Number_Of_Peptides" ; 
-		private static string mstrTMassTagsColName_Peptide_Obs_Count_Passing_Filter = "Peptide_Obs_Count_Passing_Filter" ; 
-		private static string mstrTMassTagsColName_High_Normalized_Score = "High_Normalized_Score" ; 
-		private static string mstrTMassTagsColName_High_Peptide_Prophet_Probability = "High_Peptide_Prophet_Probability" ; 
-		private static string mstrTMassTagsColName_Min_Log_EValue = "Min_Log_EValue" ; 
-		private static string mstrTMassTagsColName_Mod_Count = "Mod_Count" ; 		
-		private static string mstrTMassTagsColName_Mod_Description = "Mod_Description" ; 
-		private static string mstrTMassTagsColName_PMT_Quality_Score = "PMT_Quality_Score" ; 
-
-		private static string mstrTProteinsColName_Ref_ID = "Ref_ID" ; 
-		private static string mstrTProteinsColName_Reference = "Reference" ; 
-		private static string mstrTProteinsColName_Description = "Description" ; 
-		private static string mstrTProteinsColName_Protein_Sequence = "Protein_Sequence" ; 
-		private static string mstrTProteinsColName_Protein_Residue_Count = "Protein_Residue_Count" ; 
-		private static string mstrTProteinsColName_Monoisotopic_Mass = "Monoisotopic_Mass" ; 
-		private static string mstrTProteinsColName_Protein_Collection_ID = "Protein_Collection_ID" ; 
-		private static string mstrTProteinsColName_Last_Affected = "Last_Affected" ; 
-
-		private static string mstrTMassTagsToProteinMapColName_Mass_Tag_ID = "Mass_Tag_ID" ; 
-		private static string mstrTMassTagsToProteinMapColName_Mass_Tag_Name = "Mass_Tag_Name" ; 
-		private static string mstrTMassTagsToProteinMapColName_Ref_ID = "Ref_ID" ; 
-		private static string mstrTMassTagsToProteinMapColName_Cleavage_State = "Cleavage_State" ; 
-		private static string mstrTMassTagsToProteinMapColName_Fragment_Number = "Fragment_Number" ; 
-		private static string mstrTMassTagsToProteinMapColName_Fragment_Span = "Fragment_Span" ; 
-		private static string mstrTMassTagsToProteinMapColName_Residue_Start = "Residue_Start" ; 
-		private static string mstrTMassTagsToProteinMapColName_Residue_End = "Residue_End" ; 
-		private static string mstrTMassTagsToProteinMapColName_Repeat_Count = "Repeat_Count" ; 
-		private static string mstrTMassTagsToProteinMapColName_Terminus_State = "Terminus_State" ; 
-		private static string mstrTMassTagsToProteinMapColName_Missed_Cleavage_Count = "Missed_Cleavage_Count" ; 
-
-
-		private static string mstrTScoreXTandemColName_Peptide_ID = "Peptide_ID" ; 
-		private static string mstrTScoreXTandemColName_Hyperscore = "Hyperscore" ; 
-		private static string mstrTScoreXTandemColName_Log_EValue = "Log_EValue" ; 
-		private static string mstrTScoreXTandemColName_DeltaCn2 = "DeltaCn2" ; 
-		private static string mstrTScoreXTandemColName_Y_Score = "Y_Score" ; 
-		private static string mstrTScoreXTandemColName_Y_Ions = "Y_Ions" ; 
-		private static string mstrTScoreXTandemColName_B_Score = "B_Score" ; 
-		private static string mstrTScoreXTandemColName_B_Ions = "B_Ions" ; 
-		private static string mstrTScoreXTandemColName_DelM = "DelM" ; 
-		private static string mstrTScoreXTandemColName_Intensity = "Intensity" ; 
-		private static string mstrTScoreXTandemColName_Normalized_Score = "Normalized_Score" ; 
-
-		private static string mstrTScoreSequestColName_Peptide_ID = "Peptide_ID" ;
-		private static string mstrTScoreSequestColName_XCorr = "XCorr" ;
-		private static string mstrTScoreSequestColName_DeltaCn = "DeltaCn" ;
-		private static string mstrTScoreSequestColName_DeltaCn2 = "DeltaCn2" ;
-		private static string mstrTScoreSequestColName_Sp = "Sp" ;
-		private static string mstrTScoreSequestColName_RankSp = "RankSp" ;
-		private static string mstrTScoreSequestColName_RankXc = "RankXc" ;
-		private static string mstrTScoreSequestColName_DelM = "DelM" ;
-		private static string mstrTScoreSequestColName_XcRatio = "XcRatio" ;
-
-		private static string mstrTMassTagsNETColName_Mass_Tag_ID = "Mass_Tag_ID" ; 
-		private static string mstrTMassTagsNETColName_Min_GANET = "Min_GANET" ; 
-		private static string mstrTMassTagsNETColName_Max_GANET = "Max_GANET" ; 
-		private static string mstrTMassTagsNETColName_Avg_GANET = "Avg_GANET" ; 
-		private static string mstrTMassTagsNETColName_Cnt_GANET = "Cnt_GANET" ; 
-		private static string mstrTMassTagsNETColName_StD_GANET = "StD_GANET" ; 
-		private static string mstrTMassTagsNETColName_StdError_GANET = "StdError_GANET" ; 
-		private static string mstrTMassTagsNETColName_PNET = "PNET" ; 
-
-
-		private static string mstrTAnalysisDescriptionColName_Job = "Job" ; 
-		private static string mstrTAnalysisDescriptionColName_Dataset = "Dataset" ; 
-		private static string mstrTAnalysisDescriptionColName_Dataset_ID = "Dataset_ID" ; 
-		private static string mstrTAnalysisDescriptionColName_Dataset_Created_DMS = "Dataset_Created_DMS" ; 
-		private static string mstrTAnalysisDescriptionColName_Dataset_Acq_Time_Start = "Dataset_Acq_Time_Start" ; 
-		private static string mstrTAnalysisDescriptionColName_Dataset_Acq_Time_End = "Dataset_Acq_Time_End" ; 
-		private static string mstrTAnalysisDescriptionColName_Dataset_Scan_Count = "Dataset_Scan_Count" ; 
-		private static string mstrTAnalysisDescriptionColName_Experiment = "Experiment" ; 
-		private static string mstrTAnalysisDescriptionColName_Campaign = "Campaign" ; 
-		private static string mstrTAnalysisDescriptionColName_Organism = "Organism" ; 
-		private static string mstrTAnalysisDescriptionColName_Instrument_Class = "Instrument_Class" ; 
-		private static string mstrTAnalysisDescriptionColName_Instrument = "Instrument" ; 
-		private static string mstrTAnalysisDescriptionColName_Analysis_Tool = "Analysis_Tool" ; 
-		private static string mstrTAnalysisDescriptionColName_Parameter_File_Name = "Parameter_File_Name" ; 
-		private static string mstrTAnalysisDescriptionColName_Settings_File_Name = "Settings_File_Name" ; 
-		private static string mstrTAnalysisDescriptionColName_Organism_DB_Name = "Organism_DB_Name" ; 
-		private static string mstrTAnalysisDescriptionColName_Protein_Collection_List = "Protein_Collection_List" ; 
-		private static string mstrTAnalysisDescriptionColName_Protein_Options_List = "Protein_Options_List" ; 
-		private static string mstrTAnalysisDescriptionColName_Completed = "Completed" ; 
-		private static string mstrTAnalysisDescriptionColName_ResultType = "ResultType" ; 
-		private static string mstrTAnalysisDescriptionColName_Separation_Sys_Type = "Separation_Sys_Type" ; 
-		private static string mstrTAnalysisDescriptionColName_ScanTime_NET_Slope = "ScanTime_NET_Slope" ; 
-		private static string mstrTAnalysisDescriptionColName_ScanTime_NET_Intercept = "ScanTime_NET_Intercept" ; 
-		private static string mstrTAnalysisDescriptionColName_ScanTime_NET_RSquared = "ScanTime_NET_RSquared" ; 
-		private static string mstrTAnalysisDescriptionColName_ScanTime_NET_Fit = "ScanTime_NET_Fit" ; 
-
-
-		// T_Mass_Tag_Peptide_Prophet_Stats data structures:
-		// Mass_Tag_ID, ObsCount_CS1, ObsCount_CS2, ObsCount_CS3, 
-		// PepProphet_FScore_Max_CS1, PepProphet_FScore_Max_CS2, PepProphet_FScore_Max_CS3,
-		// PepProphet_Probability_Max_CS1, PepProphet_Probability_Max_CS2, PepProphet_Probability_Max_CS3
-		// PepProphet_Probability_Avg_CS1, PepProphet_Probability_Avg_CS2, PepProphet_Probability_Avg_CS3
-		private static string mstrTMassTagPeptideProphetStatsColName_Mass_Tag_ID = "Mass_Tag_ID" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_ObsCount_CS1 = "ObsCount_CS1" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_ObsCount_CS2 = "ObsCount_CS2" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_ObsCount_CS3 = "ObsCount_CS3" ; 
-		// maxs will not be printed for now. 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_FScore_Max_CS1 = "PepProphet_FScore_Max_CS1" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_FScore_Max_CS2 = "PepProphet_FScore_Max_CS2" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_FScore_Max_CS3 = "PepProphet_FScore_Max_CS3" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_Probability_Max_CS1 = "PepProphet_Probability_Max_CS1" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_Probability_Max_CS2 = "PepProphet_Probability_Max_CS2" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_Probability_Max_CS3 = "PepProphet_Probability_Max_CS3" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS1 = "PepProphet_Probability_Avg_CS1" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS2 = "PepProphet_Probability_Avg_CS2" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS3 = "PepProphet_Probability_Avg_CS3" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS1 = "PepProphet_FScore_Avg_CS1" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS2 = "PepProphet_FScore_Avg_CS2" ; 
-		private static string mstrTMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS3 = "PepProphet_FScore_Avg_CS3" ; 
-
-
-		private string mstrDelim = "," ; 
-
-
+		private Hashtable mhashProteinsPassingConstraints = new Hashtable() ; 		
+		private bool mblnSequestFilesExist  = false ; 
+		private bool mblnXTandemFilesExist  = false;
+        private string mstrDelim            = "," ; 
 		private bool mblnTPeptideHeaderWritten = false ; 
 		private bool mblnTScoreSequestFileNameHeaderWritten = false ; 
 		private bool mblnTScoreXTandemFileNameHeaderWritten = false ; 
-		private string mstrTAnalysisDescriptionFileName ; 
-		private string mstrTPeptideFileName ;
-		private string mstrTMassTagsFileName ;
-		private string mstrTMassTagsNETFileName ;
-		private string mstrTMassTagPeptideProphetStatsFileName ;
-		private string mstrTMassTagsToProteinMapFileName ;
-		private string mstrTProteinsFileName ;
-		private string mstrTScoreXTandemFileName ;
-		private string mstrTScoreSequestFileName ;
-
-		private static string mstrTAnalysisDescriptionTable = "T_Analysis_Description" ; 
-		private static string mstrTPeptidesTable = "T_Peptides" ; 
-		private static string mstrTMassTagsTable = "T_Mass_Tags" ; 
-		private static string mstrTMassTagsNETTable = "T_Mass_Tags_NET" ; 
-		private static string mstrTMassTagsToProteinMapTable = "T_Mass_Tag_to_Protein_Map" ; 
-		private static string mstrTProteinsTable = "T_Proteins" ; 
-		private static string mstrTScoreXTandemTable = "T_Score_XTandem" ; 
-		private static string mstrTScoreSequestTable = "T_Score_Sequest" ; 
-		private static string mstrTMassTagPeptideProphetStatsTable = "T_Mass_Tag_Peptide_Prophet_Stats" ; 
-
+		private string m_TAnalysisDescriptionFileName ; 
+		private string m_TPeptideFileName ;
+		private string m_TMassTagsFileName ;
+		private string m_TMassTagsNETFileName ;
+		private string m_TMassTagPeptideProphetStatsFileName ;
+		private string m_TMassTagsToProteinMapFileName ;
+		private string m_TProteinsFileName ;
+		private string m_TScoreXTandemFileName ;
+		private string m_TScoreSequestFileName ;
 		private string mstrAccessDBPath = "" ; 
 		private int mintNumPeptides = 0 ;
 
-#if BASIC 
-		private NETPredictionBasic.iPeptideElutionTime mobjPrediction ; 
-#else
-		private NETPrediction.iPeptideElutionTime mobjPrediction ; 
-#endif 
-		private Regressor.clsRegressor mobjRegressor ; 
 
+		private NETPredictionBasic.iPeptideElutionTime mobjPredictionKrokhin; 
+		private NETPrediction.iPeptideElutionTime      mobjPredictionKangas; 
 
-		private frmStatus.dlgSetPercentComplete mevntPercentComplete ; 
-		private frmStatus.dlgSetStatusMessage mevntStatusMessage ; 
-		private frmStatus.dlgSetErrorMessage mevntErrorMessage ;
-
+        private Regressor.clsRegressor mobjRegressor ; 
 		private clsOptions mobjOptions ; 
-
-
-		// for each dataset, store 
-		public clsMTDB(frmStatus statusForm, clsOptions options)
+		
+		public clsMTDB(clsOptions options)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
-			menmAction = ACTION.IDLE ; 
-			mintNumResultsSoFar = 0 ; 
-			mhashMassTags = new Hashtable() ; 
-			mhashProteins = new Hashtable() ; 
-			mhashMassTagsToProteinMap = new Hashtable() ; 
-			mobjRegressor = new Regressor.clsRegressor() ; 
-			marrMassTags = new ArrayList() ; 
-			marrProteins = new ArrayList() ;
-			mhashCurrentJobUniqIdToMassTagId = new Hashtable() ; 
-			marrMassTagsInJobs = new ArrayList() ; 
-			marrAnalyses = new ArrayList() ; 
-			Options = options ; 
+			menmAction          = ACTION.IDLE ; 			
+			mhashMassTags       = new Hashtable() ; 
+			mhashProteins       = new Hashtable() ;
+			mobjRegressor       = new Regressor.clsRegressor() ; 
+			m_massTags        = new ArrayList() ; 
+			marrProteins        = new ArrayList() ;
+			m_massTagsInJobs  = new ArrayList() ; 
+			marrAnalyses        = new ArrayList() ; 
+			Options             = options ; 
+            mhashMassTagsToProteinMap        = new Hashtable();
+            mhashCurrentJobUniqIdToMassTagId = new Hashtable(); 
 
 
 //			string executablePath = System.Windows.Forms.Application.ExecutablePath ;
@@ -237,81 +235,97 @@ namespace MTDBCreator
 //				executablePath.LastIndexOf(System.IO.Path.DirectorySeparatorChar)) ; 
 
 			//System.Reflection.Assembly netPredictionAssembly ;
-#if BASIC
-			mobjPrediction = new NETPredictionBasic.ElutionTimePredictionKrokhin() ; 
-			//netPredictionAssembly = System.Reflection.Assembly.LoadFile(System.IO.Path.Combine(executableFolder, "NETPredictionBasic.dll")) ; 
-#else 
-			mobjPrediction = new NETPrediction.ElutionTimePredictionKangas() ; 
-			//netPredictionAssembly = System.Reflection.Assembly.LoadFile(System.IO.Path.Combine(executableFolder, "NETPrediction.dll")) ; 
-#endif 
-			//mobjPrediction = (NETPrediction.ElutionTimePredictionKangas) netPredictionAssembly.CreateInstance("NETPrediction.ElutionTimePredictionKangas") ; 
 
-
-			mevntPercentComplete = new MTDBCreator.frmStatus.dlgSetPercentComplete(statusForm.SetPrecentComplete) ; 
-			mevntStatusMessage = new MTDBCreator.frmStatus.dlgSetStatusMessage(statusForm.SetStatusMessage) ; 
-			mevntErrorMessage = new  MTDBCreator.frmStatus.dlgSetErrorMessage(statusForm.SetErrorMessage) ;
+			mobjPredictionKrokhin = new NETPredictionBasic.ElutionTimePredictionKrokhin() ; 
+			mobjPredictionKangas  = new NETPrediction.ElutionTimePredictionKangas() ; 
 
 			DateTime now = DateTime.Now ; 
 
 			string ext = ".txt" ;
 			if (mstrDelim == ",")
 				ext = ".csv" ; 
-			mstrTAnalysisDescriptionFileName =  mstrTAnalysisDescriptionTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext ; 
-			mstrTPeptideFileName =  mstrTPeptidesTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext ; 
-			mstrTMassTagsFileName =  mstrTMassTagsTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds)  + ext ; 
-			mstrTMassTagsNETFileName =  mstrTMassTagsNETTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
-			// filenames are too long. Access only allows 64 characters!!GRRR!!.
-			//mstrTMassTagPeptideProphetStatsFileName =  mstrTMassTagPeptideProphetStatsTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
-			mstrTMassTagPeptideProphetStatsFileName =  "TMTPP_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
-			mstrTMassTagsToProteinMapFileName =  mstrTMassTagsToProteinMapTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
-			mstrTProteinsFileName =  mstrTProteinsTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext ; 
-			mstrTScoreXTandemFileName =  mstrTScoreXTandemTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
-			mstrTScoreSequestFileName =  mstrTScoreSequestTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
+			m_TAnalysisDescriptionFileName    =  m_TAnalysisDescriptionTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext ; 
+			m_TPeptideFileName                =  m_TPeptidesTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext ; 
+			m_TMassTagsFileName               =  m_TMassTagsTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds)  + ext ; 
+			m_TMassTagsNETFileName            =  m_TMassTagsNETTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
+			
+            // filenames are too long. Access only allows 64 characters!!GRRR!!.
+			//m_TMassTagPeptideProphetStatsFileName =  m_TMassTagPeptideProphetStatsTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
+			m_TMassTagPeptideProphetStatsFileName =  "TMTPP_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
+			
+            m_TMassTagsToProteinMapFileName   =  m_TMassTagsToProteinMapTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
+			m_TProteinsFileName               =  m_TProteinsTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext ; 
+			m_TScoreXTandemFileName           =  m_TScoreXTandemTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
+			m_TScoreSequestFileName           =  m_TScoreSequestTable +  "_" + Convert.ToInt32(now.TimeOfDay.TotalMilliseconds) + ext; 
 
-			mstrTAnalysisDescriptionFileName = mstrTAnalysisDescriptionFileName.Replace('/', '_') ;
-			mstrTPeptideFileName = mstrTPeptideFileName.Replace('/','_'); 
-			mstrTMassTagsFileName = mstrTMassTagsFileName.Replace('/','_'); 
-			mstrTMassTagsNETFileName = mstrTMassTagsNETFileName.Replace('/','_'); 
-			mstrTMassTagPeptideProphetStatsFileName = mstrTMassTagPeptideProphetStatsFileName.Replace('/','_'); 
-			mstrTMassTagsToProteinMapFileName = mstrTMassTagsToProteinMapFileName.Replace('/','_'); 
-			mstrTProteinsFileName = mstrTProteinsFileName.Replace('/','_'); 
-			mstrTScoreXTandemFileName = mstrTScoreXTandemFileName.Replace('/','_'); 
-			mstrTScoreSequestFileName = mstrTScoreSequestFileName.Replace('/','_'); 
+			m_TAnalysisDescriptionFileName        = m_TAnalysisDescriptionFileName.Replace('/', '_') ;
+			m_TPeptideFileName                    = m_TPeptideFileName.Replace('/','_'); 
+			m_TMassTagsFileName                   = m_TMassTagsFileName.Replace('/','_'); 
+			m_TMassTagsNETFileName                = m_TMassTagsNETFileName.Replace('/','_'); 
+			m_TMassTagPeptideProphetStatsFileName = m_TMassTagPeptideProphetStatsFileName.Replace('/','_'); 
+			m_TMassTagsToProteinMapFileName       = m_TMassTagsToProteinMapFileName.Replace('/','_'); 
+			m_TProteinsFileName                   = m_TProteinsFileName.Replace('/','_'); 
+			m_TScoreXTandemFileName               = m_TScoreXTandemFileName.Replace('/','_'); 
+			m_TScoreSequestFileName               = m_TScoreSequestFileName.Replace('/','_'); 
 
-			mstrTAnalysisDescriptionFileName = mstrTAnalysisDescriptionFileName.Replace(':', '_') ;
-			mstrTPeptideFileName = mstrTPeptideFileName.Replace(':','_'); 
-			mstrTMassTagsFileName = mstrTMassTagsFileName.Replace(':','_'); 
-			mstrTMassTagsNETFileName = mstrTMassTagsNETFileName.Replace(':','_'); 
-			mstrTMassTagPeptideProphetStatsFileName = mstrTMassTagPeptideProphetStatsFileName.Replace(':','_'); 
-			mstrTMassTagsToProteinMapFileName = mstrTMassTagsToProteinMapFileName.Replace(':','_'); 
-			mstrTProteinsFileName = mstrTProteinsFileName.Replace(':','_'); 
-			mstrTScoreXTandemFileName = mstrTScoreXTandemFileName.Replace(':','_'); 
-			mstrTScoreSequestFileName = mstrTScoreSequestFileName.Replace(':','_'); 
+			m_TAnalysisDescriptionFileName    = m_TAnalysisDescriptionFileName.Replace(':', '_') ;
+			m_TPeptideFileName                = m_TPeptideFileName.Replace(':','_'); 
+			m_TMassTagsFileName               = m_TMassTagsFileName.Replace(':','_'); 
+			m_TMassTagsNETFileName            = m_TMassTagsNETFileName.Replace(':','_'); 
+			m_TMassTagPeptideProphetStatsFileName = m_TMassTagPeptideProphetStatsFileName.Replace(':','_'); 
+			m_TMassTagsToProteinMapFileName       = m_TMassTagsToProteinMapFileName.Replace(':','_'); 
+			m_TProteinsFileName                   = m_TProteinsFileName.Replace(':','_'); 
+			m_TScoreXTandemFileName               = m_TScoreXTandemFileName.Replace(':','_'); 
+			m_TScoreSequestFileName               = m_TScoreSequestFileName.Replace(':','_'); 
 
-			mstrTAnalysisDescriptionFileName = mstrTAnalysisDescriptionFileName.Replace(' ', '_') ;
-			mstrTPeptideFileName = mstrTPeptideFileName.Replace(' ','_'); 
-			mstrTMassTagsFileName = mstrTMassTagsFileName.Replace(' ','_'); 
-			mstrTMassTagsNETFileName = mstrTMassTagsNETFileName.Replace(' ','_'); 
-			mstrTMassTagPeptideProphetStatsFileName = mstrTMassTagPeptideProphetStatsFileName.Replace(' ','_'); 
-			mstrTMassTagsToProteinMapFileName = mstrTMassTagsToProteinMapFileName.Replace(' ','_'); 
-			mstrTProteinsFileName = mstrTProteinsFileName.Replace(' ','_'); 
-			mstrTScoreXTandemFileName = mstrTScoreXTandemFileName.Replace(' ','_'); 
-			mstrTScoreSequestFileName = mstrTScoreSequestFileName.Replace(' ','_'); 
+			m_TAnalysisDescriptionFileName        = m_TAnalysisDescriptionFileName.Replace(' ', '_') ;
+			m_TPeptideFileName                    = m_TPeptideFileName.Replace(' ','_'); 
+			m_TMassTagsFileName                   = m_TMassTagsFileName.Replace(' ','_'); 
+			m_TMassTagsNETFileName                = m_TMassTagsNETFileName.Replace(' ','_'); 
+			m_TMassTagPeptideProphetStatsFileName = m_TMassTagPeptideProphetStatsFileName.Replace(' ','_'); 
+			m_TMassTagsToProteinMapFileName       = m_TMassTagsToProteinMapFileName.Replace(' ','_'); 
+			m_TProteinsFileName                   = m_TProteinsFileName.Replace(' ','_'); 
+			m_TScoreXTandemFileName               = m_TScoreXTandemFileName.Replace(' ','_'); 
+			m_TScoreSequestFileName               = m_TScoreSequestFileName.Replace(' ','_'); 
 
 			string path = System.IO.Path.GetTempPath() ; 
-			mstrTAnalysisDescriptionFileName = path + mstrTAnalysisDescriptionFileName  ;
-			mstrTPeptideFileName =path + mstrTPeptideFileName  ; 
-			mstrTMassTagsFileName =path + mstrTMassTagsFileName  ; 
-			mstrTMassTagsNETFileName =path + mstrTMassTagsNETFileName  ; 
-			mstrTMassTagPeptideProphetStatsFileName =path + mstrTMassTagPeptideProphetStatsFileName ; 
-			mstrTMassTagsToProteinMapFileName =path + mstrTMassTagsToProteinMapFileName  ; 
-			mstrTProteinsFileName =path + mstrTProteinsFileName  ; 
-			mstrTScoreXTandemFileName =path + mstrTScoreXTandemFileName  ; 
-			mstrTScoreSequestFileName =path + mstrTScoreSequestFileName  ; 
+			m_TAnalysisDescriptionFileName        = path + m_TAnalysisDescriptionFileName  ;
+			m_TPeptideFileName                    = path + m_TPeptideFileName  ; 
+			m_TMassTagsFileName                   = path + m_TMassTagsFileName  ; 
+			m_TMassTagsNETFileName                = path + m_TMassTagsNETFileName  ; 
+			m_TMassTagPeptideProphetStatsFileName = path + m_TMassTagPeptideProphetStatsFileName ; 
+			m_TMassTagsToProteinMapFileName       = path + m_TMassTagsToProteinMapFileName  ; 
+			m_TProteinsFileName                   = path + m_TProteinsFileName  ; 
+			m_TScoreXTandemFileName               = path + m_TScoreXTandemFileName  ; 
+			m_TScoreSequestFileName               = path + m_TScoreSequestFileName  ;
+        }
 
-		}
+        #region Properties
 
-		private void DeleteFile(string strPath)
+        public string AccessDBPath
+        {
+            set
+            {
+                mstrAccessDBPath = value;
+            }
+        }
+        public clsOptions Options
+        {
+            get
+            {
+                return mobjOptions;
+            }
+            set
+            {
+                mobjOptions = value;
+                mobjRegressor.RegressionOrder = mobjOptions.RegressionOrder;
+            }
+        }
+
+        #endregion
+
+        #region methods
+        private void DeleteFile(string strPath)
 		{
 			try
 			{
@@ -320,21 +334,11 @@ namespace MTDBCreator
 			}
 			catch (Exception ex)
 			{
+                ErrorMessage("Could not delete the file " + strPath + " " + ex.Message);
 			}
 		}
-		~clsMTDB()
-		{
-
-			DeleteFile(mstrTAnalysisDescriptionFileName); 
-			DeleteFile(mstrTPeptideFileName);
-			DeleteFile(mstrTMassTagsFileName);
-			DeleteFile(mstrTMassTagsNETFileName);
-			DeleteFile(mstrTMassTagPeptideProphetStatsFileName);
-			DeleteFile(mstrTMassTagsToProteinMapFileName);
-			DeleteFile(mstrTProteinsFileName);
-			DeleteFile(mstrTScoreXTandemFileName);
-			DeleteFile(mstrTScoreSequestFileName);
-		}
+		
+		
 		private void LoadCurrentMassTags()
 		{
 			if (mstrAccessDBPath == null)
@@ -347,12 +351,15 @@ namespace MTDBCreator
 			}
 			catch (Exception ex)
 			{
+                ErrorMessage("Could not load the mass tags stored in the access path provided. " + ex.Message);
 			}
 		}
-
-		public void LoadResultsIntoDB(bool WriteToAccessDB)
+        /// <summary>
+        /// Writes the stored results to file.
+        /// </summary>
+        /// <param name="writeToAccessDB">When true, writes to an Access MTDB.  When False, writes to temporary text files so the user can create a MTDB manually.</param>
+		public void LoadResultsIntoDB(bool writeToAccessDB, string databasePath)
 		{
-			string strMessage = "";
 
 			WriteMassTagsToFile() ; 
 			WriteProteinsToFile() ; 
@@ -362,167 +369,234 @@ namespace MTDBCreator
 				WriteMassTagsPeptideProphetStatsToFile() ; 
 			WriteAnalysisDescriptionToFile() ; 
 
-			if (!WriteToAccessDB) 
+			if (!writeToAccessDB) 
 			{
-
-				strMessage = "You must now manually import these files into your Access DB:\r\n" + mstrTPeptideFileName + "\r\n" + mstrTMassTagsFileName + "\r\n" + mstrTMassTagsNETFileName + "\r\n" + mstrTMassTagsToProteinMapFileName + "\r\n" + mstrTProteinsFileName;
+                string message = string.Format("You must now manually import these files into your Access DB: {0}\r\n{1}\r\n{2}\r\n{3}\r\n{4}",
+				                                m_TPeptideFileName,
+                                                m_TMassTagsFileName,
+                                                m_TMassTagsNETFileName,
+                                                m_TMassTagsToProteinMapFileName,
+                                                m_TProteinsFileName);
 
 				if (mblnXTandemFilesExist)
-					strMessage += "\r\n" + mstrTScoreXTandemFileName;
+					message += "\r\n" + m_TScoreXTandemFileName;
 
 				if (mblnSequestFilesExist)
-					strMessage += "\r\n" + mstrTScoreSequestFileName + "\r\n" + mstrTMassTagPeptideProphetStatsFileName;
+				    message += "\r\n" + m_TScoreSequestFileName + "\r\n" + m_TMassTagPeptideProphetStatsFileName;
 
-				mevntStatusMessage(strMessage) ; 
-				mevntErrorMessage(strMessage) ;
+				StatusMessage(message) ; 				
 			}
 			else 
 			{
+                StatusMessage("Loading results into Microsoft Access DB") ; 
+			    ApplicationClass access = new ApplicationClass() ;
+                DAO.Database  database   = null;
+                DAO._DBEngine engine     = null;
+                bool error              = false;
+			    
+			    try
+			    {
+				    access.NewCurrentDatabase(databasePath);
+                    
+				    access.DoCmd.TransferText(AcTextTransferType.acImportDelim, "", m_TPeptidesTable,                m_TPeptideFileName,               true, null, null) ; 
+				    access.DoCmd.TransferText(AcTextTransferType.acImportDelim, "", m_TMassTagsTable,                m_TMassTagsFileName,              true, null, null) ; 
+				    access.DoCmd.TransferText(AcTextTransferType.acImportDelim, "", m_TMassTagsNETTable,             m_TMassTagsNETFileName,           true, null, null) ; 
+				    access.DoCmd.TransferText(AcTextTransferType.acImportDelim, "", m_TMassTagsToProteinMapTable,    m_TMassTagsToProteinMapFileName,  true, null, null) ; 
+				    access.DoCmd.TransferText(AcTextTransferType.acImportDelim, "", m_TProteinsTable,                m_TProteinsFileName,              true, null, null) ;
 
-/*
-			mevntStatusMessage("Loading results into Microsoft Access DB") ; 
-			Microsoft.Office.Interop.Access.ApplicationClass oAccess = new Microsoft.Office.Interop.Access.ApplicationClass() ; 
-			try
-			{
+                    if (mblnXTandemFilesExist)
+                    {
+                        access.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", m_TScoreXTandemTable, m_TScoreXTandemFileName, true, null, null);
+                    }
+				    if (mblnSequestFilesExist)
+				    {
+					    access.DoCmd.TransferText(AcTextTransferType.acImportDelim, "", m_TScoreSequestTable,                m_TScoreSequestFileName,               true, null, null) ; 
+					    access.DoCmd.TransferText(AcTextTransferType.acImportDelim, "", m_TMassTagPeptideProphetStatsTable,  m_TMassTagPeptideProphetStatsFileName, true, null, null) ; 
+				    }    			
+				    access.DoCmd.TransferText(AcTextTransferType.acImportDelim, "", m_TAnalysisDescriptionTable, m_TAnalysisDescriptionFileName, true, null, null) ; 
 
-				oAccess.NewCurrentDatabase(mstrAccessDBPath) ; 
+                    
+				    DAO.Field    field;
+				    DAO.Relation relation;
+                    database    = access.CurrentDb();
+                    engine      = access.DBEngine;
+                    
+                    // I dont know if we need relationships?
 
-				DateTime now = new DateTime() ; 
-			
-				oAccess.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", mstrTPeptidesTable, mstrTPeptideFileName, true,null, null) ; 
-				oAccess.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", mstrTMassTagsTable, mstrTMassTagsFileName, true,null, null) ; 
-				oAccess.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", mstrTMassTagsNETTable, mstrTMassTagsNETFileName, true,null, null) ; 
-				oAccess.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", mstrTMassTagsToProteinMapTable, mstrTMassTagsToProteinMapFileName, true,null, null) ; 
-				oAccess.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", mstrTProteinsTable, mstrTProteinsFileName, true,null, null) ; 
-				if (mblnXTandemFilesExist)
-					oAccess.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", mstrTScoreXTandemTable, mstrTScoreXTandemFileName, true,null, null) ; 
-				if (mblnSequestFilesExist)
-				{
-					oAccess.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", mstrTScoreSequestTable, mstrTScoreSequestFileName, true,null, null) ; 
-					oAccess.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", mstrTMassTagPeptideProphetStatsTable, mstrTMassTagPeptideProphetStatsFileName, true,null, null) ; 
-				}
-			
-				oAccess.DoCmd.TransferText(Microsoft.Office.Interop.Access.AcTextTransferType.acImportDelim, "", mstrTAnalysisDescriptionTable, mstrTAnalysisDescriptionFileName, true,null, null) ; 
+                    
+				    if (mblnXTandemFilesExist)
+				    {
+					    relation          = database.CreateRelation("PeptideIDRelationship", m_TPeptidesTable, m_TScoreXTandemTable, DAO.RelationAttributeEnum.dbRelationDontEnforce) ; 
+					    field             = relation.CreateField(m_TPeptidesColName_Peptide_Id, DAO.DataTypeEnum.dbInteger, 0) ; 
+					    field.ForeignName = m_TScoreXTandemColName_Peptide_ID ; 
+					    relation.Fields.Append(field) ;
+                        database.Relations.Append(relation); 
+				    }
+				    if (mblnSequestFilesExist)
+				    {
+					    relation          = database.CreateRelation("PeptideIDRelationship", m_TPeptidesTable, m_TScoreSequestTable, DAO.RelationAttributeEnum.dbRelationDontEnforce) ; 
+					    field             = relation.CreateField(m_TPeptidesColName_Peptide_Id,DAO.DataTypeEnum.dbInteger, 0) ; 
+					    field.ForeignName = m_TScoreSequestColName_Peptide_ID ; 
+					    relation.Fields.Append(field) ;
+                        database.Relations.Append(relation); 
+				    }
 
-				dao.Field fld ;
-				dao.Relation relation ;
+				    relation              = database.CreateRelation("MassTagdIDRelationshipTPepTmass", m_TMassTagsTable, m_TPeptidesTable, DAO.RelationAttributeEnum.dbRelationDontEnforce) ; 
+				    field                 = relation.CreateField(m_TMassTagsColName_Mass_Tag_ID,DAO.DataTypeEnum.dbInteger, 0) ; 
+				    field.ForeignName     = m_TPeptidesColName_Mass_Tag_ID ; 
+				    relation.Fields.Append(field) ;
+                    database.Relations.Append(relation); 
 
-				if (mblnXTandemFilesExist)
-				{
-					relation = oAccess.CurrentDb().CreateRelation("PeptideIDRelationship", mstrTPeptidesTable, mstrTScoreXTandemTable, dao.RelationAttributeEnum.dbRelationDontEnforce) ; 
-					fld = relation.CreateField(mstrTPeptidesColName_Peptide_Id,dao.DataTypeEnum.dbInteger, 0) ; 
-					fld.ForeignName = mstrTScoreXTandemColName_Peptide_ID ; 
-					relation.Fields.Append(fld) ; 
-					oAccess.CurrentDb().Relations.Append(relation) ; 
-				}
-				if (mblnSequestFilesExist)
-				{
-					relation = oAccess.CurrentDb().CreateRelation("PeptideIDRelationship", mstrTPeptidesTable, mstrTScoreSequestTable, dao.RelationAttributeEnum.dbRelationDontEnforce) ; 
-					fld = relation.CreateField(mstrTPeptidesColName_Peptide_Id,dao.DataTypeEnum.dbInteger, 0) ; 
-					fld.ForeignName = mstrTScoreSequestColName_Peptide_ID ; 
-					relation.Fields.Append(fld) ; 
-					oAccess.CurrentDb().Relations.Append(relation) ; 
-				}
+				    relation              = database.CreateRelation("MassTagdIDRelationshipTmassTmassNet", m_TMassTagsTable, m_TMassTagsNETTable, DAO.RelationAttributeEnum.dbRelationDontEnforce) ; 
+				    field                 = relation.CreateField(m_TMassTagsColName_Mass_Tag_ID,DAO.DataTypeEnum.dbInteger, 0) ; 
+				    field.ForeignName     = m_TMassTagsNETColName_Mass_Tag_ID; 
+				    relation.Fields.Append(field) ;
+                    database.Relations.Append(relation); 
 
-				relation = oAccess.CurrentDb().CreateRelation("MassTagdIDRelationshipTPepTmass", mstrTMassTagsTable, mstrTPeptidesTable, dao.RelationAttributeEnum.dbRelationDontEnforce) ; 
-				fld = relation.CreateField(mstrTMassTagsColName_Mass_Tag_ID,dao.DataTypeEnum.dbInteger, 0) ; 
-				fld.ForeignName = mstrTPeptidesColName_Mass_Tag_ID ; 
-				relation.Fields.Append(fld) ; 
-				oAccess.CurrentDb().Relations.Append(relation) ; 
+				    relation              = database.CreateRelation("MassTagdIDRelationshipTmassTmasstagtoprotein", m_TMassTagsTable, m_TMassTagsToProteinMapTable, DAO.RelationAttributeEnum.dbRelationDontEnforce) ; 
+				    field                 = relation.CreateField(m_TMassTagsColName_Mass_Tag_ID,DAO.DataTypeEnum.dbInteger, 0) ; 
+				    field.ForeignName     = m_TMassTagsToProteinMapColName_Mass_Tag_ID ; 
+				    relation.Fields.Append(field) ;
+                    database.Relations.Append(relation); 
 
-				relation = oAccess.CurrentDb().CreateRelation("MassTagdIDRelationshipTmassTmassNet", mstrTMassTagsTable, mstrTMassTagsNETTable, dao.RelationAttributeEnum.dbRelationDontEnforce) ; 
-				fld = relation.CreateField(mstrTMassTagsColName_Mass_Tag_ID,dao.DataTypeEnum.dbInteger, 0) ; 
-				fld.ForeignName = mstrTMassTagsNETColName_Mass_Tag_ID; 
-				relation.Fields.Append(fld) ; 
-				oAccess.CurrentDb().Relations.Append(relation) ; 
+				    relation              = database.CreateRelation("ProteinIDRelationshipTproteinTmasstagtoprotein", m_TProteinsTable,m_TMassTagsToProteinMapTable,  DAO.RelationAttributeEnum.dbRelationDontEnforce) ; 
+				    field                 = relation.CreateField(m_TProteinsColName_Ref_ID,DAO.DataTypeEnum.dbInteger, 0) ; 
+				    field.ForeignName     = m_TMassTagsToProteinMapColName_Ref_ID; 
+				    relation.Fields.Append(field) ;
+                    database.Relations.Append(relation);
 
-				relation = oAccess.CurrentDb().CreateRelation("MassTagdIDRelationshipTmassTmasstagtoprotein", mstrTMassTagsTable, mstrTMassTagsToProteinMapTable, dao.RelationAttributeEnum.dbRelationDontEnforce) ; 
-				fld = relation.CreateField(mstrTMassTagsColName_Mass_Tag_ID,dao.DataTypeEnum.dbInteger, 0) ; 
-				fld.ForeignName = mstrTMassTagsToProteinMapColName_Mass_Tag_ID ; 
-				relation.Fields.Append(fld) ; 
-				oAccess.CurrentDb().Relations.Append(relation) ; 
+                    relation              = database.CreateRelation("AnalysisIDRelationship", m_TAnalysisDescriptionTable, m_TPeptidesTable, DAO.RelationAttributeEnum.dbRelationDontEnforce); 
+				    field                 = relation.CreateField(m_TAnalysisDescriptionColName_Job, DAO.DataTypeEnum.dbInteger, 0) ; 
+				    field.ForeignName     = m_TPeptidesColName_Analysis_Id ; 
+				    relation.Fields.Append(field) ; 
+				    database.Relations.Append(relation) ; 
+                     
+			    }
+                catch(Exception ex)
+                {
+                    error = true;
+                    ErrorMessage("Failed to save the MTDB in access format. " + ex.Message);
+                }
+			    finally
+                {
+                    // Release the underlying engine COM object that would otherwise leave a reference to the database and lock the db file.
+                    // http://support.microsoft.com/kb/317113
+                    if (database != null)
+                    {
+                        database.Close();
+                        System.Runtime.InteropServices.Marshal.ReleaseComObject(database);                        
+                    }
+                    // Release the underlying engine COM object that would otherwise leave a reference to the database and lock the db file.
+                    // http://support.microsoft.com/kb/317113
+                    if (engine != null)
+                    {
+                        System.Runtime.InteropServices.Marshal.ReleaseComObject(engine);                        
+                    }
+                    // Close access if necessary?
+                    if (access != null)
+                    {
+                        try
+                        {
+                            access.CloseCurrentDatabase();
 
-				relation = oAccess.CurrentDb().CreateRelation("ProteinIDRelationshipTproteinTmasstagtoprotein", mstrTProteinsTable,mstrTMassTagsToProteinMapTable,  dao.RelationAttributeEnum.dbRelationDontEnforce) ; 
-				fld = relation.CreateField(mstrTProteinsColName_Ref_ID,dao.DataTypeEnum.dbInteger, 0) ; 
-				fld.ForeignName = mstrTMassTagsToProteinMapColName_Ref_ID; 
-				relation.Fields.Append(fld) ; 
-				oAccess.CurrentDb().Relations.Append(relation) ; 
+                            // Release the underlying engine COM object that would otherwise leave a reference to the database and lock the db file.
+                            // http://support.microsoft.com/kb/317113
+                            System.Runtime.InteropServices.Marshal.ReleaseComObject(access);
+                        }
+                        catch (Exception ex)
+                        {
+                            ErrorMessage(ex.Message);
+                            // Do nothing.  It may fail to close if the database failed to be created.
+                        }
+                    }
 
-				relation = oAccess.CurrentDb().CreateRelation("AnalysisIDRelationship", mstrTAnalysisDescriptionTable, mstrTPeptidesTable, dao.RelationAttributeEnum.dbRelationDontEnforce) ; 
-				fld = relation.CreateField(mstrTAnalysisDescriptionColName_Job, dao.DataTypeEnum.dbInteger, 0) ; 
-				fld.ForeignName = mstrTPeptidesColName_Analysis_Id ; 
-				relation.Fields.Append(fld) ; 
-				oAccess.CurrentDb().Relations.Append(relation) ; 
+                    database = null;
+                    engine   = null;
+				    access   = null; 
+			    }
+
+                if (!error)
+                {
+                    CreateStoredQueries(databasePath);
+                }
 			}
-			finally
-			{
-				oAccess.CloseCurrentDatabase() ;
-				oAccess = null ; 
-			}
-*/
-			}
+        }
+        /// <summary>
+        /// Adds stored queries to the access database provided
+        /// </summary>
+        /// <param name="databasePath"></param>
+        public void CreateStoredQueries(string databasePath)
+        {
+            if (!System.IO.File.Exists(databasePath))
+            {
+                ErrorMessage("Could not find the database path provided");
+                return;
+            }
 
-		}
+            StatusMessage("Updating mass tag database with stored queries for use with peak matching tools.");
+            // The queries are stored in files in a resources file.  Here we access them and then
+            // start the process of modifying an existing MTDB.
+            string massTagMatchCount                =  global::MTDBCreator.StoredQueries.GetMassTagMatchCount;
+            string massTagsPassingFiltersWork       =  global::MTDBCreator.StoredQueries.GetMassTagsPassingFiltersWork;
+            string massTagsPlusPeptideProphetStats  =  global::MTDBCreator.StoredQueries.GetMassTagsPlusPepProphetStats;
+            string massTagToProteinNameMap          =  global::MTDBCreator.StoredQueries.GetMassTagToProteinNameMap;
+            string viewMassTagToProteinNamemap      =  global::MTDBCreator.StoredQueries.V_IFC_Mass_Tag_to_Protein_Name_Map;
 
+            clsMassTagDBPeptideStoredQueryCreator creator = new clsMassTagDBPeptideStoredQueryCreator(AccessType.Access2007, databasePath);
+            creator.CreateGetMassTagToProteinNameMap(massTagToProteinNameMap, viewMassTagToProteinNamemap);
+            try
+            {
+                creator.CreateGetMassTagsPlusPepProphetStats(massTagsPlusPeptideProphetStats, massTagsPassingFiltersWork);
+            }
+            catch
+            {
+                //TODO: May not work if sequest files do not exist....
+            }
+            creator.CreateGetMassTagsMatchCount(massTagMatchCount);
+        }
+        #endregion
 
-		
-		public string AccessDBPath
-		{
-			set
-			{
-				mstrAccessDBPath = value ;
-			}
-		}
-		public clsOptions Options
-		{
-			set
-			{
-				mobjOptions = value ; 
-				mobjRegressor.RegressionOrder = mobjOptions.RegressionOrder ; 
-			}
-		}
-
-		#region "Writing Region"
-		private void WritePeptidesToFile(clsXTandemAnalysisReader results, clsAnalysisDescription analysis)
+        #region Writing Methods
+        private void WritePeptidesToFile(clsXTandemAnalysisReader results, clsAnalysisDescription analysis)
 		{
 			int numResults = results.marrXTandemResults.Length ; 
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTPeptideFileName, true)) 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TPeptideFileName, true)) 
 			{
 				if (!mblnTPeptideHeaderWritten)
 				{
 					mblnTPeptideHeaderWritten = true ; 
 					// Headers first.
-					sw.Write(mstrTPeptidesColName_Peptide_Id);
+					sw.Write(m_TPeptidesColName_Peptide_Id);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Analysis_Id);
+					sw.Write(m_TPeptidesColName_Analysis_Id);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Scan_Number);
+					sw.Write(m_TPeptidesColName_Scan_Number);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Number_Of_Scans);
+					sw.Write(m_TPeptidesColName_Number_Of_Scans);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Charge_State);
+					sw.Write(m_TPeptidesColName_Charge_State);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_MH);
+					sw.Write(m_TPeptidesColName_MH);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Multiple_Proteins);
+					sw.Write(m_TPeptidesColName_Multiple_Proteins);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Peptide);
+					sw.Write(m_TPeptidesColName_Peptide);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Mass_Tag_ID);
+					sw.Write(m_TPeptidesColName_Mass_Tag_ID);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_GANET_Obs);
+					sw.Write(m_TPeptidesColName_GANET_Obs);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Scan_Time_Peak_Apex);
+					sw.Write(m_TPeptidesColName_Scan_Time_Peak_Apex);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Peak_Area);
+					sw.Write(m_TPeptidesColName_Peak_Area);
 					sw.Write(mstrDelim) ; 
-					sw.WriteLine(mstrTPeptidesColName_Peak_SN_Ratio);
+					sw.WriteLine(m_TPeptidesColName_Peak_SN_Ratio);
 				}
 				
 				for (int resultNum = 0 ; resultNum < numResults ; resultNum++)
 				{
 					int percentDone = (resultNum*100)/numResults ; 
-					mevntPercentComplete(percentDone) ; 
+					PercentComplete(percentDone) ; 
 					clsXTandemResults xtResult = results.marrXTandemResults[resultNum] ; 
 
 					if (!mobjOptions.IsToBeExported(xtResult))
@@ -563,47 +637,46 @@ namespace MTDBCreator
 			}
 
 		}
-
 		private void WritePeptidesToFile(clsSequestAnalysisReader results, clsAnalysisDescription analysis)
 		{
 			int numResults = results.marrSequestResults.Length ; 
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTPeptideFileName, true)) 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TPeptideFileName, true)) 
 			{
 				if (!mblnTPeptideHeaderWritten)
 				{
 					mblnTPeptideHeaderWritten = true ; 
 					// Headers first.
-					sw.Write(mstrTPeptidesColName_Peptide_Id);
+					sw.Write(m_TPeptidesColName_Peptide_Id);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Analysis_Id);
+					sw.Write(m_TPeptidesColName_Analysis_Id);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Scan_Number);
+					sw.Write(m_TPeptidesColName_Scan_Number);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Number_Of_Scans);
+					sw.Write(m_TPeptidesColName_Number_Of_Scans);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Charge_State);
+					sw.Write(m_TPeptidesColName_Charge_State);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_MH);
+					sw.Write(m_TPeptidesColName_MH);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Multiple_Proteins);
+					sw.Write(m_TPeptidesColName_Multiple_Proteins);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Peptide);
+					sw.Write(m_TPeptidesColName_Peptide);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Mass_Tag_ID);
+					sw.Write(m_TPeptidesColName_Mass_Tag_ID);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_GANET_Obs);
+					sw.Write(m_TPeptidesColName_GANET_Obs);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Scan_Time_Peak_Apex);
+					sw.Write(m_TPeptidesColName_Scan_Time_Peak_Apex);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTPeptidesColName_Peak_Area);
+					sw.Write(m_TPeptidesColName_Peak_Area);
 					sw.Write(mstrDelim) ; 
-					sw.WriteLine(mstrTPeptidesColName_Peak_SN_Ratio);
+					sw.WriteLine(m_TPeptidesColName_Peak_SN_Ratio);
 				}
 				
 				for (int resultNum = 0 ; resultNum < numResults ; resultNum++)
 				{
 					int percentDone = (resultNum*100)/numResults ; 
-					mevntPercentComplete(percentDone) ; 
+					PercentComplete(percentDone) ; 
 					clsSequestResults seqResult = results.marrSequestResults[resultNum] ; 
 
 					if (!mobjOptions.IsToBeExported(seqResult)) 
@@ -645,44 +718,43 @@ namespace MTDBCreator
 			}
 
 		}
-
 		private void WriteXTandemScoresToFile(clsXTandemAnalysisReader results, clsAnalysisDescription analysis)
 		{
 
 			int numResults = results.marrXTandemResults.Length ; 
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTScoreXTandemFileName, true)) 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TScoreXTandemFileName, true)) 
 			{
 				if (!mblnTScoreXTandemFileNameHeaderWritten)
 				{
 					mblnTScoreXTandemFileNameHeaderWritten = true ; 
 					// Headers first.
-					sw.Write(mstrTScoreXTandemColName_Peptide_ID);
+					sw.Write(m_TScoreXTandemColName_Peptide_ID);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreXTandemColName_Hyperscore);
+					sw.Write(m_TScoreXTandemColName_Hyperscore);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreXTandemColName_Log_EValue);
+					sw.Write(m_TScoreXTandemColName_Log_EValue);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreXTandemColName_DeltaCn2);
+					sw.Write(m_TScoreXTandemColName_DeltaCn2);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreXTandemColName_Y_Score);
+					sw.Write(m_TScoreXTandemColName_Y_Score);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreXTandemColName_Y_Ions);
+					sw.Write(m_TScoreXTandemColName_Y_Ions);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreXTandemColName_B_Score);
+					sw.Write(m_TScoreXTandemColName_B_Score);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreXTandemColName_B_Ions);
+					sw.Write(m_TScoreXTandemColName_B_Ions);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreXTandemColName_DelM);
+					sw.Write(m_TScoreXTandemColName_DelM);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreXTandemColName_Intensity);
+					sw.Write(m_TScoreXTandemColName_Intensity);
 					sw.Write(mstrDelim) ; 
-					sw.WriteLine(mstrTScoreXTandemColName_Normalized_Score);
+					sw.WriteLine(m_TScoreXTandemColName_Normalized_Score);
 				}
 				
 				for (int resultNum = 0 ; resultNum < numResults ; resultNum++)
 				{
 					int percentDone = (resultNum * 100)/ numResults ; 
-					mevntPercentComplete(percentDone) ; 
+					PercentComplete(percentDone) ; 
 					clsXTandemResults xtResult = results.marrXTandemResults[resultNum] ; 
 
 					if (!mobjOptions.IsToBeExported(xtResult))
@@ -723,40 +795,39 @@ namespace MTDBCreator
 			}
 
 		}
-
 		private void WriteSequestScoresToFile(clsSequestAnalysisReader results, clsAnalysisDescription analysis)
 		{
 
 			int numResults = results.marrSequestResults.Length ; 
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTScoreSequestFileName, true)) 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TScoreSequestFileName, true)) 
 			{
 				if (!mblnTScoreSequestFileNameHeaderWritten)
 				{
 					mblnTScoreSequestFileNameHeaderWritten = true ; 
 					// Headers first.
-					sw.Write(mstrTScoreSequestColName_Peptide_ID);
+					sw.Write(m_TScoreSequestColName_Peptide_ID);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreSequestColName_XCorr);
+					sw.Write(m_TScoreSequestColName_XCorr);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreSequestColName_DeltaCn);
+					sw.Write(m_TScoreSequestColName_DeltaCn);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreSequestColName_DeltaCn2);
+					sw.Write(m_TScoreSequestColName_DeltaCn2);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreSequestColName_Sp);
+					sw.Write(m_TScoreSequestColName_Sp);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreSequestColName_RankSp);
+					sw.Write(m_TScoreSequestColName_RankSp);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreSequestColName_RankXc);
+					sw.Write(m_TScoreSequestColName_RankXc);
 					sw.Write(mstrDelim) ; 
-					sw.Write(mstrTScoreSequestColName_DelM);
+					sw.Write(m_TScoreSequestColName_DelM);
 					sw.Write(mstrDelim) ; 
-					sw.WriteLine(mstrTScoreSequestColName_XcRatio);
+					sw.WriteLine(m_TScoreSequestColName_XcRatio);
 				}
 				
 				for (int resultNum = 0 ; resultNum < numResults ; resultNum++)
 				{
 					int percentDone = (resultNum * 100)/ numResults ; 
-					mevntPercentComplete(percentDone) ; 
+					PercentComplete(percentDone) ; 
 					clsSequestResults seqResult = results.marrSequestResults[resultNum] ; 
 
 					if (!mobjOptions.IsToBeExported(seqResult))
@@ -784,55 +855,75 @@ namespace MTDBCreator
 			}
 
 		}
-
 		private void WriteMassTagsToFile()
 		{
-			int numMassTags = marrMassTags.Count ; 
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTMassTagsFileName)) 
+			int numMassTags = m_massTags.Count ; 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TMassTagsFileName)) 
 			{
 				// Headers first.
-				sw.Write( mstrTMassTagsColName_Mass_Tag_ID ); 
+				sw.Write( m_TMassTagsColName_Mass_Tag_ID ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Peptide ); 
+				sw.Write( m_TMassTagsColName_Peptide ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Monoisotopic_Mass ); 
+				sw.Write( m_TMassTagsColName_Monoisotopic_Mass ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Multiple_Proteins ); 
+				sw.Write( m_TMassTagsColName_Multiple_Proteins ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Created ); 
+				sw.Write( m_TMassTagsColName_Created ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Last_Affected ); 
+				sw.Write( m_TMassTagsColName_Last_Affected ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Number_Of_Peptides ); 
+				sw.Write( m_TMassTagsColName_Number_Of_Peptides ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Peptide_Obs_Count_Passing_Filter ); 
+				sw.Write( m_TMassTagsColName_Peptide_Obs_Count_Passing_Filter ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_High_Normalized_Score ); 
+				sw.Write( m_TMassTagsColName_High_Normalized_Score ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_High_Peptide_Prophet_Probability ); 
+				sw.Write( m_TMassTagsColName_High_Peptide_Prophet_Probability ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Min_Log_EValue ); 
+				sw.Write( m_TMassTagsColName_Min_Log_EValue ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Mod_Count ); 		
-				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsColName_Mod_Description ); 
-				sw.Write(mstrDelim) ; 
-				sw.WriteLine( mstrTMassTagsColName_PMT_Quality_Score ); 
+				sw.Write( m_TMassTagsColName_Mod_Count ); 		
+				sw.Write(mstrDelim) ;
+                sw.Write(m_TMassTagsColName_Mod_Description);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_PMT_Quality_Score);
+
+                // Added these columns so they will work with MultiAlign.
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_External_Protein_ID);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_External_Reference_ID);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_PepProphet_FScore_Max_CS1);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_PepProphet_FScore_Max_CS2);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_PepProphet_FScore_Max_CS3);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_PepProphet_Probability_Max_CS1);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_PepProphet_Probability_Max_CS2);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_PepProphet_Probability_Max_CS3);
+                //sw.Write(mstrDelim);        
+                //sw.Write(m_TMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS1);
+                //sw.Write(mstrDelim);
+                //sw.Write(m_TMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS2);
+                //sw.Write(mstrDelim);        
+                //sw.Write(m_TMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS3);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagsColName_Is_confirmed);
+                sw.Write(mstrDelim);
+                sw.WriteLine(m_TMassTagsColName_High_Dicriminant_Score);
+
 				
 				for (int massTagNum = 0 ; massTagNum < numMassTags ; massTagNum++)
 				{
 					int percentDone = (massTagNum * 100)/ numMassTags ; 
-					mevntPercentComplete(percentDone) ; 
+					PercentComplete(percentDone) ; 
 
-					clsMassTag massTag = (clsMassTag) marrMassTags[massTagNum] ; 
-
-//					if (
-//						(massTag.mdbl_min_log_evalue == clsMassTag.DEFAULT_MIN_LOG_EVAL && 
-//						massTag.mdbl_high_normalized_score < mdbl_min_xcorr)
-//						|| (massTag.mdbl_min_log_evalue != clsMassTag.DEFAULT_MIN_LOG_EVAL && 
-//						massTag.mdbl_min_log_evalue > mdbl_max_log_eval)
-//						)
-//						continue ; 
+					clsMassTag massTag = (clsMassTag) m_massTags[massTagNum] ; 
 					sw.Write(massTag.mint_mass_tag_id+1) ; 
 					sw.Write(mstrDelim) ; 
 					sw.Write(massTag.mstr_clean_peptide) ; 
@@ -858,46 +949,59 @@ namespace MTDBCreator
 					sw.Write(mstrDelim) ; 
 					sw.Write(massTag.mshort_mod_count) ; 
 					sw.Write(mstrDelim) ; 
+
 					if (massTag.mstr_mod_description.IndexOf(",") != -1)
 						sw.Write("\""+ massTag.mstr_mod_description+ "\"") ;
 					else
 						sw.Write(massTag.mstr_mod_description) ; 
-					sw.Write(mstrDelim) ; 
-					sw.WriteLine(massTag.mshort_PMT_Quality_Score) ; // a value that is not set yet.
+
+					sw.Write(mstrDelim) ;                    
+                    sw.Write(mstrDelim);                    
+                    sw.Write(mstrDelim);                    
+                    sw.Write(mstrDelim);
+                    sw.Write(mstrDelim);
+                    sw.Write(mstrDelim);
+                    sw.Write(mstrDelim);
+                    sw.Write(mstrDelim);
+                    sw.Write(mstrDelim);
+                    sw.Write(mstrDelim);
+                    //sw.Write(mstrDelim);
+                    //sw.Write(mstrDelim);
+                    //sw.Write(mstrDelim);
+                    sw.WriteLine(mstrDelim);                    
 				}
 				sw.Close() ; 
 			}
 
-		}
-		
+		}		
 		private void WriteMassTagsNETToFile()
 		{
-			int numMassTags = marrMassTags.Count ; 
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTMassTagsNETFileName)) 
+			int numMassTags = m_massTags.Count ; 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TMassTagsNETFileName)) 
 			{
 				// Headers first.
-				sw.Write( mstrTMassTagsNETColName_Mass_Tag_ID); 
+				sw.Write( m_TMassTagsNETColName_Mass_Tag_ID); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsNETColName_Min_GANET); 
+				sw.Write( m_TMassTagsNETColName_Min_GANET); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsNETColName_Max_GANET); 
+				sw.Write( m_TMassTagsNETColName_Max_GANET); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsNETColName_Avg_GANET); 
+				sw.Write( m_TMassTagsNETColName_Avg_GANET); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsNETColName_Cnt_GANET); 
+				sw.Write( m_TMassTagsNETColName_Cnt_GANET); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsNETColName_StD_GANET); 
+				sw.Write( m_TMassTagsNETColName_StD_GANET); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsNETColName_StdError_GANET); 
+				sw.Write( m_TMassTagsNETColName_StdError_GANET); 
 				sw.Write(mstrDelim) ; 
-				sw.WriteLine( mstrTMassTagsNETColName_PNET); 
+				sw.WriteLine( m_TMassTagsNETColName_PNET); 
 				
 				for (int massTagNum = 0 ; massTagNum < numMassTags ; massTagNum++)
 				{
 					int percentDone = (massTagNum * 100)/ numMassTags ; 
-					mevntPercentComplete(percentDone) ; 
+					PercentComplete(percentDone) ; 
 
-					clsMassTag massTag = (clsMassTag) marrMassTags[massTagNum] ; 
+					clsMassTag massTag = (clsMassTag) m_massTags[massTagNum] ; 
 
 //					if (
 //						(massTag.mdbl_min_log_evalue == clsMassTag.DEFAULT_MIN_LOG_EVAL && 
@@ -926,42 +1030,39 @@ namespace MTDBCreator
 				sw.Close() ; 
 			}
 
-		}
-		
+		}	
 		private void WriteMassTagsPeptideProphetStatsToFile()
 		{
-			int numMassTags = marrMassTags.Count ; 
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTMassTagPeptideProphetStatsFileName)) 
+			int numMassTags = m_massTags.Count ; 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TMassTagPeptideProphetStatsFileName)) 
 			{
 				// Headers first.
-				sw.Write(mstrTMassTagPeptideProphetStatsColName_Mass_Tag_ID); 
+				sw.Write(m_TMassTagPeptideProphetStatsColName_Mass_Tag_ID); 
 				sw.Write(mstrDelim) ; 
-				sw.Write(mstrTMassTagPeptideProphetStatsColName_ObsCount_CS1); 
+				sw.Write(m_TMassTagPeptideProphetStatsColName_ObsCount_CS1); 
 				sw.Write(mstrDelim) ; 
-				sw.Write(mstrTMassTagPeptideProphetStatsColName_ObsCount_CS2); 
+				sw.Write(m_TMassTagPeptideProphetStatsColName_ObsCount_CS2); 
 				sw.Write(mstrDelim) ; 
-				sw.Write(mstrTMassTagPeptideProphetStatsColName_ObsCount_CS3); 
+				sw.Write(m_TMassTagPeptideProphetStatsColName_ObsCount_CS3); 
 				sw.Write(mstrDelim) ; 
-				sw.Write(mstrTMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS1); 
+				sw.Write(m_TMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS1); 
 				sw.Write(mstrDelim) ; 
-				sw.Write(mstrTMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS2); 
-				sw.Write(mstrDelim) ; 
-				sw.WriteLine(mstrTMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS3); 
+				sw.Write(m_TMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS2); 
+				sw.Write(mstrDelim) ;
+                sw.Write(m_TMassTagPeptideProphetStatsColName_PepProphet_FScore_Avg_CS3);
+                sw.Write(mstrDelim);        
+                sw.Write(m_TMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS1);
+                sw.Write(mstrDelim);
+                sw.Write(m_TMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS2);
+                sw.Write(mstrDelim);        
+                sw.WriteLine(m_TMassTagPeptideProphetStatsColName_PepProphet_Probability_Avg_CS3);
 				
 				for (int massTagNum = 0 ; massTagNum < numMassTags ; massTagNum++)
 				{
 					int percentDone = (massTagNum * 100)/ numMassTags ; 
-					mevntPercentComplete(percentDone) ; 
+					PercentComplete(percentDone) ; 
 
-					clsMassTag massTag = (clsMassTag) marrMassTags[massTagNum] ; 
-
-//					if (
-//						(massTag.mdbl_min_log_evalue == clsMassTag.DEFAULT_MIN_LOG_EVAL && 
-//						massTag.mdbl_high_normalized_score < mdbl_min_xcorr)
-//						|| (massTag.mdbl_min_log_evalue != clsMassTag.DEFAULT_MIN_LOG_EVAL && 
-//						massTag.mdbl_min_log_evalue > mdbl_max_log_eval)
-//						)
-//						continue ; 
+					clsMassTag massTag = (clsMassTag) m_massTags[massTagNum] ; 
 
 					float fcs1 = MISSING_F_SCORE ; 
 					float fcs2 = MISSING_F_SCORE ; 
@@ -991,40 +1092,48 @@ namespace MTDBCreator
 					sw.Write(fcs1) ; 
 					sw.Write(mstrDelim) ; 
 					sw.Write(fcs2) ; 
-					sw.Write(mstrDelim) ; 
-					sw.WriteLine(fcs3) ; 
+					sw.Write(mstrDelim) ;
+                    sw.Write(fcs3);
+                    sw.Write(mstrDelim);
+                    sw.Write(mstrDelim);
+                    sw.WriteLine(mstrDelim); 
 				}
 				sw.Close() ; 
 			}
 
-		}
-		
+		}		
 		private void WriteProteinsToFile()
 		{
 			int numProteins = marrProteins.Count ; 
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTProteinsFileName)) 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TProteinsFileName)) 
 			{
 				// Headers first.
-				sw.Write( mstrTProteinsColName_Ref_ID); 
+				sw.Write( m_TProteinsColName_Ref_ID); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTProteinsColName_Reference); 
+				sw.Write( m_TProteinsColName_Reference); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTProteinsColName_Description ); 
+				sw.Write( m_TProteinsColName_Description ); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTProteinsColName_Protein_Sequence); 
+				sw.Write( m_TProteinsColName_Protein_Sequence); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTProteinsColName_Protein_Residue_Count); 
+				sw.Write( m_TProteinsColName_Protein_Residue_Count); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTProteinsColName_Monoisotopic_Mass); 
+				sw.Write( m_TProteinsColName_Monoisotopic_Mass); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTProteinsColName_Protein_Collection_ID); 
-				sw.Write(mstrDelim) ; 
-				sw.WriteLine( mstrTProteinsColName_Last_Affected); 
+				sw.Write( m_TProteinsColName_Protein_Collection_ID); 
+				sw.Write(mstrDelim) ;
+                sw.Write(m_TProteinsColName_Last_Affected);
+                sw.Write(mstrDelim);
+                sw.Write(m_TProteinsColName_External_Reference_ID);
+                sw.Write(mstrDelim); 
+                sw.Write(m_TProteinsColName_Protein_DB_ID);
+                sw.Write(mstrDelim); 
+                sw.WriteLine(m_TProteinsColName_External_Protein_ID);
 				
 				for (int proteinNum = 0 ; proteinNum < numProteins ; proteinNum++)
 				{
 					int percentDone = (proteinNum * 100)/ numProteins ; 
-					mevntPercentComplete(percentDone) ; 
+					PercentComplete(percentDone) ; 
 					clsProtein protein = (clsProtein) marrProteins[proteinNum] ; 
 
 					if (!mhashProteinsPassingConstraints.ContainsKey(protein.mint_ref_id))
@@ -1044,48 +1153,54 @@ namespace MTDBCreator
 					sw.Write(mstrDelim) ; 
 					sw.Write("") ; 
 					sw.Write(mstrDelim) ; 
-					sw.WriteLine("") ; 
+					sw.WriteLine("") ;
+
+                    sw.Write(mstrDelim);
+                    sw.WriteLine("");
+                    sw.Write(mstrDelim);
+                    sw.WriteLine("");
+                    sw.Write(mstrDelim);
+                    sw.WriteLine(""); 
 				}
 				sw.Close() ; 
 			}
 		}
-
 		private void WriteMassTagsToProteinMapToFile()
 		{
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTMassTagsToProteinMapFileName)) 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TMassTagsToProteinMapFileName)) 
 			{
 				// Headers first.
-				sw.Write( mstrTMassTagsToProteinMapColName_Mass_Tag_ID); 
+				sw.Write( m_TMassTagsToProteinMapColName_Mass_Tag_ID); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsToProteinMapColName_Mass_Tag_Name); 
+				sw.Write( m_TMassTagsToProteinMapColName_Mass_Tag_Name); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsToProteinMapColName_Ref_ID); 
+				sw.Write( m_TMassTagsToProteinMapColName_Ref_ID); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsToProteinMapColName_Cleavage_State); 
+				sw.Write( m_TMassTagsToProteinMapColName_Cleavage_State); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsToProteinMapColName_Fragment_Number); 
+				sw.Write( m_TMassTagsToProteinMapColName_Fragment_Number); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsToProteinMapColName_Fragment_Span); 
+				sw.Write( m_TMassTagsToProteinMapColName_Fragment_Span); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsToProteinMapColName_Residue_Start); 
+				sw.Write( m_TMassTagsToProteinMapColName_Residue_Start); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsToProteinMapColName_Residue_End); 
+				sw.Write( m_TMassTagsToProteinMapColName_Residue_End); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsToProteinMapColName_Repeat_Count); 
+				sw.Write( m_TMassTagsToProteinMapColName_Repeat_Count); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTMassTagsToProteinMapColName_Terminus_State); 
+				sw.Write( m_TMassTagsToProteinMapColName_Terminus_State); 
 				sw.Write(mstrDelim) ; 
-				sw.WriteLine( mstrTMassTagsToProteinMapColName_Missed_Cleavage_Count); 
+				sw.WriteLine( m_TMassTagsToProteinMapColName_Missed_Cleavage_Count); 
 
 				int mapSize = mhashMassTagsToProteinMap.Count ; 
 				int numDone = 0 ; 
 				foreach (clsMassTagToProteinMap massTagToProteinMap in mhashMassTagsToProteinMap.Values)
 				{
 					int percentDone = (numDone * 100)/ mapSize ; 
-					mevntPercentComplete(percentDone) ; 
+					PercentComplete(percentDone) ; 
 
 					numDone++ ; 
-					clsMassTag massTag = (clsMassTag) marrMassTags[massTagToProteinMap.mint_mass_tag_id] ; 
+					clsMassTag massTag = (clsMassTag) m_massTags[massTagToProteinMap.mint_mass_tag_id] ; 
 					sw.Write(massTagToProteinMap.mint_mass_tag_id+1) ; 
 					sw.Write(mstrDelim) ; 
 					sw.Write("") ; 
@@ -1111,68 +1226,68 @@ namespace MTDBCreator
 				sw.Close() ; 
 			}
 		}
-
 		private void WriteAnalysisDescriptionToFile()
 		{
-			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(mstrTAnalysisDescriptionFileName)) 
+			using (System.IO.StreamWriter sw = new System.IO.StreamWriter(m_TAnalysisDescriptionFileName)) 
 			{				
 				// Headers first.
-				sw.Write( mstrTAnalysisDescriptionColName_Job); 
+				sw.Write( m_TAnalysisDescriptionColName_Job); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Dataset); 
+				sw.Write( m_TAnalysisDescriptionColName_Dataset); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Dataset_ID); 
+				sw.Write( m_TAnalysisDescriptionColName_Dataset_ID); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Dataset_Created_DMS); 
+				sw.Write( m_TAnalysisDescriptionColName_Dataset_Created_DMS); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Dataset_Acq_Time_Start); 
+				sw.Write( m_TAnalysisDescriptionColName_Dataset_Acq_Time_Start); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Dataset_Acq_Time_End); 
+				sw.Write( m_TAnalysisDescriptionColName_Dataset_Acq_Time_End); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Dataset_Scan_Count); 
+				sw.Write( m_TAnalysisDescriptionColName_Dataset_Scan_Count); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Experiment); 
+				sw.Write( m_TAnalysisDescriptionColName_Experiment); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Campaign); 
+				sw.Write( m_TAnalysisDescriptionColName_Campaign); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Organism); 
+				sw.Write( m_TAnalysisDescriptionColName_Organism); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Instrument_Class); 
+				sw.Write( m_TAnalysisDescriptionColName_Instrument_Class); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Instrument); 
+				sw.Write( m_TAnalysisDescriptionColName_Instrument); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Analysis_Tool); 
+				sw.Write( m_TAnalysisDescriptionColName_Analysis_Tool); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Parameter_File_Name); 
+				sw.Write( m_TAnalysisDescriptionColName_Parameter_File_Name); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Settings_File_Name); 
+				sw.Write( m_TAnalysisDescriptionColName_Settings_File_Name); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Organism_DB_Name); 
+				sw.Write( m_TAnalysisDescriptionColName_Organism_DB_Name); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Protein_Collection_List); 
+				sw.Write( m_TAnalysisDescriptionColName_Protein_Collection_List); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Protein_Options_List); 
+				sw.Write( m_TAnalysisDescriptionColName_Protein_Options_List); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Completed); 
+				sw.Write( m_TAnalysisDescriptionColName_Completed); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_ResultType); 
+				sw.Write( m_TAnalysisDescriptionColName_ResultType); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_Separation_Sys_Type); 
+				sw.Write( m_TAnalysisDescriptionColName_Separation_Sys_Type); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_ScanTime_NET_Slope); 
+				sw.Write( m_TAnalysisDescriptionColName_ScanTime_NET_Slope); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_ScanTime_NET_Intercept); 
+				sw.Write( m_TAnalysisDescriptionColName_ScanTime_NET_Intercept); 
 				sw.Write(mstrDelim) ; 
-				sw.Write( mstrTAnalysisDescriptionColName_ScanTime_NET_RSquared); 
+				sw.Write( m_TAnalysisDescriptionColName_ScanTime_NET_RSquared); 
 				sw.Write(mstrDelim) ; 
-				sw.WriteLine( mstrTAnalysisDescriptionColName_ScanTime_NET_Fit); 
+				sw.WriteLine( m_TAnalysisDescriptionColName_ScanTime_NET_Fit); 
 
 
 				int numAnalyses = marrAnalyses.Count ; 
 				for (int analysisNum = 0 ; analysisNum < numAnalyses ; analysisNum++)
 				{
 					int percentDone = (analysisNum * 100)/ numAnalyses ; 
-					mevntPercentComplete(percentDone) ;
+					PercentComplete(percentDone) ;
+
 					clsAnalysisDescription analysis = (clsAnalysisDescription) marrAnalyses[analysisNum] ; 
 					sw.Write(analysis.mintDMSJobNum) ; 
 					sw.Write(mstrDelim) ; 
@@ -1227,7 +1342,6 @@ namespace MTDBCreator
 				sw.Close() ; 
 			}
 		}
-
 		#endregion
 
 		#region "Helpers"
@@ -1263,9 +1377,12 @@ namespace MTDBCreator
 		#endregion
 
 		#region "XTandem aligning functions" 
-		public void AlignXTandemDatasetToAverageNETs(clsXTandemAnalysisReader results, 
-			ref float [] peptideScans, ref float []peptidePredictedNET, ref double slope, 
-			ref double intercept, ref double rsquared)
+		public void AlignXTandemDatasetToAverageNETs(   clsXTandemAnalysisReader results, 
+			                                            ref float [] peptideScans,
+                                                        ref float []peptidePredictedNET,
+                                                        ref double slope, 
+			                                            ref double intercept,
+                                                        ref double rsquared)
 		{
 			try
 			{
@@ -1281,7 +1398,7 @@ namespace MTDBCreator
 					clsSeqInfo seqInfo = results.marrSeqInfo[resultToSeq.mint_unique_seq_id-1] ; 
 
 					int massTagIndex = (int) mhashMassTags[xtResult.mstr_clean_peptide + seqInfo.mstr_mod_description] ; 
-					clsMassTag massTag = (clsMassTag) marrMassTags[massTagIndex] ; 
+					clsMassTag massTag = (clsMassTag) m_massTags[massTagIndex] ; 
 					if (massTag.mshort_cnt_ganet < mobjOptions.MinObservationsForExport 
 						|| !mobjOptions.IsToBeExported(xtResult)
 						|| xtResult.mdbl_log_peptide_e_value > mobjOptions.MaxLogEValForXTandemAlignment)
@@ -1304,20 +1421,20 @@ namespace MTDBCreator
 				// now for each peptide calculate theoretical NET value. 
 				foreach (int massTagIndex in peptideTable.Keys)
 				{
-					clsMassTag massTag = (clsMassTag) marrMassTags[massTagIndex] ; 
+					clsMassTag massTag = (clsMassTag) m_massTags[massTagIndex] ; 
 					peptideScans[numElementsSoFar] = Convert.ToSingle((int) peptideTable[massTagIndex]) ; 
 					peptidePredictedNET[numElementsSoFar] = Convert.ToSingle(massTag.mdbl_avg_ganet); 
 					numElementsSoFar++ ; 
 				}
-				mevntStatusMessage("Performing Alignment") ; 
-				mevntPercentComplete(0) ; 
+				StatusMessage("Performing Alignment") ; 
+				PercentComplete(0) ; 
 				// regression is done on a different thread. Lets put a status. 
 				System.Threading.ThreadStart monitorThreadStart = new System.Threading.ThreadStart(this.MonitorAlignment) ; 
 				System.Threading.Thread monitorThread = new System.Threading.Thread(monitorThreadStart) ; 
 
 				mobjRegressor.SetPoints(ref peptideScans, ref peptidePredictedNET);
 				monitorThread.Start() ; 
-				mobjRegressor.PerformRegression(mobjOptions.RegressionType) ; 
+				mobjRegressor.PerformRegression((Regressor.RegressionType)mobjOptions.RegressionType) ; 
 				slope = mobjRegressor.Slope ; 
 				intercept = mobjRegressor.Intercept ; 
 				rsquared = mobjRegressor.RSquared ; 
@@ -1325,7 +1442,7 @@ namespace MTDBCreator
 			catch (Exception ex)
 			{
 				// Let the user know what went wrong.
-				mevntErrorMessage("Error performing alignment: " + ex.Message ) ;
+				ErrorMessage("Error performing alignment: " + ex.Message ) ;
 				Console.WriteLine("Error performing alignment: " + ex.Message + ex.StackTrace);
 
 				menmAction = ACTION.ERROR ; 
@@ -1339,7 +1456,7 @@ namespace MTDBCreator
 
 		public void AlignXTandemDatasetToTheoreticalNETs(clsXTandemAnalysisReader results, 
 			ref float [] peptideScans, ref float []peptidePredictedNET, ref double slope, 
-			ref double intercept, ref int numScans, ref double rsquared)
+			ref double intercept, ref int numScans, ref double rsquared, bool useKrohkin)
 		{
 			try
 			{
@@ -1379,23 +1496,30 @@ namespace MTDBCreator
 				// now for each peptide calculate theoretical NET value. 
 				foreach (string cleanPeptide in peptideTable.Keys)
 				{
-					peptideScans[numElementsSoFar] = Convert.ToSingle((int) peptideTable[cleanPeptide]) ; 
-					peptidePredictedNET[numElementsSoFar] = mobjPrediction.GetElutionTime(cleanPeptide) ;
+					peptideScans[numElementsSoFar] = Convert.ToSingle((int) peptideTable[cleanPeptide]) ;
+                    if (useKrohkin)
+                    {
+                        peptidePredictedNET[numElementsSoFar] = mobjPredictionKrokhin.GetElutionTime(cleanPeptide);
+                    }
+                    else
+                    {
+                        peptidePredictedNET[numElementsSoFar] = mobjPredictionKangas.GetElutionTime(cleanPeptide);
+                    }
 
 					//Console.WriteLine(Convert.ToString(peptideScans[numElementsSoFar])+ "," + Convert.ToString(peptidePredictedNET[numElementsSoFar])) ; 
 					numElementsSoFar++ ; 
 				}
 				try
 				{
-					mevntStatusMessage("Performing Alignment") ; 
-					mevntPercentComplete(0) ; 
+					StatusMessage("Performing Alignment") ; 
+					PercentComplete(0) ; 
 					// regression is done on a different thread. Lets put a status. 
 					System.Threading.ThreadStart monitorThreadStart = new System.Threading.ThreadStart(this.MonitorAlignment) ; 
 					System.Threading.Thread monitorThread = new System.Threading.Thread(monitorThreadStart) ; 
 
 					mobjRegressor.SetPoints(ref peptideScans, ref peptidePredictedNET); 
 					monitorThread.Start() ; 
-					mobjRegressor.PerformRegression(mobjOptions.RegressionType) ;
+					mobjRegressor.PerformRegression( (Regressor.RegressionType) mobjOptions.RegressionType) ;
 					slope = mobjRegressor.Slope ; 
 					intercept = mobjRegressor.Intercept ; 
 					rsquared = mobjRegressor.RSquared ; 
@@ -1405,13 +1529,14 @@ namespace MTDBCreator
 				{
 					slope = 0 ; 
 					intercept = 0 ; 
-					rsquared = 0 ; 
+					rsquared = 0 ;
+                    ErrorMessage("Could not align X!Tandem results. " + ex.Message);
 				}
 			}
 			catch (Exception ex)
 			{
 				// Let the user know what went wrong.
-				mevntErrorMessage("Error performing alignment: " + ex.Message ) ;
+				ErrorMessage("Error performing alignment: " + ex.Message ) ;
 				Console.WriteLine("Error performing alignment: " + ex.Message + ex.StackTrace);
 				
 				menmAction = ACTION.ERROR ; 
@@ -1422,9 +1547,8 @@ namespace MTDBCreator
 					menmAction = ACTION.IDLE ; 
 			}
 		}
-
-
-		private void MonitorAlignment()
+        
+        private void MonitorAlignment()
 		{
 			while(menmAction == ACTION.ALIGNING)
 			{
@@ -1432,7 +1556,7 @@ namespace MTDBCreator
 				{
 					int percent_complete = mobjRegressor.PercentComplete ; 
 					Console.WriteLine("Regression Completion = " + percent_complete) ; 
-					mevntPercentComplete(percent_complete) ; 
+					PercentComplete(percent_complete) ; 
 				}
 				System.Threading.Thread.Sleep(200); 
 			}
@@ -1477,7 +1601,7 @@ namespace MTDBCreator
 					clsSeqInfo seqInfo = results.marrSeqInfo[resultToSeq.mint_unique_seq_id-1] ; 
 
 					int massTagIndex = (int) mhashMassTags[seqResult.mstr_clean_peptide + seqInfo.mstr_mod_description] ; 
-					clsMassTag massTag = (clsMassTag) marrMassTags[massTagIndex] ; 
+					clsMassTag massTag = (clsMassTag) m_massTags[massTagIndex] ; 
 					if (massTag.mshort_cnt_ganet < minMTObservations)
 						continue ; 
 					if (!mobjOptions.IsToBeExported(seqResult))
@@ -1499,20 +1623,20 @@ namespace MTDBCreator
 				// now for each peptide calculate theoretical NET value. 
 				foreach (int massTagIndex in peptideTable.Keys)
 				{
-					clsMassTag massTag = (clsMassTag) marrMassTags[massTagIndex] ; 
+					clsMassTag massTag = (clsMassTag) m_massTags[massTagIndex] ; 
 					peptideScans[numElementsSoFar] = Convert.ToSingle((int) peptideTable[massTagIndex]) ; 
 					peptidePredictedNET[numElementsSoFar] = Convert.ToSingle(massTag.mdbl_avg_ganet); 
 					numElementsSoFar++ ; 
 				}
-				mevntStatusMessage("Performing Alignment") ; 
-				mevntPercentComplete(0) ; 
+				StatusMessage("Performing Alignment") ; 
+				PercentComplete(0) ; 
 				// regression is done on a different thread. Lets put a status. 
 				System.Threading.ThreadStart monitorThreadStart = new System.Threading.ThreadStart(this.MonitorAlignment) ; 
 				System.Threading.Thread monitorThread = new System.Threading.Thread(monitorThreadStart) ; 
 
 				mobjRegressor.SetPoints(ref peptideScans, ref peptidePredictedNET); 
-				monitorThread.Start() ; 
-				mobjRegressor.PerformRegression(mobjOptions.RegressionType) ; 
+				monitorThread.Start() ;
+                mobjRegressor.PerformRegression((Regressor.RegressionType)mobjOptions.RegressionType); 
 				slope = mobjRegressor.Slope ; 
 				intercept = mobjRegressor.Intercept ; 
 				rsquared = mobjRegressor.RSquared ; 
@@ -1520,7 +1644,7 @@ namespace MTDBCreator
 			catch (Exception ex)
 			{
 				// Let the user know what went wrong.
-				mevntErrorMessage("Error performing alignment: " + ex.Message ) ;
+				ErrorMessage("Error performing alignment: " + ex.Message ) ;
 				Console.WriteLine("Error performing alignment: " + ex.Message + ex.StackTrace);
 
 				menmAction = ACTION.ERROR ; 
@@ -1532,39 +1656,47 @@ namespace MTDBCreator
 			}
 		}
 
-		public void AlignSequestDatasetToTheoreticalNETs(clsSequestAnalysisReader results, 
-			ref float [] peptideScans, ref float []peptidePredictedNET, ref double slope, 
-			ref double intercept, ref int numScans, ref double rsquared)
+		public void AlignSequestDatasetToTheoreticalNETs(   clsSequestAnalysisReader results, 
+			                                                ref float []    peptideScans, 
+                                                            ref float []    peptidePredictedNET, 
+                                                            ref double      slope, 
+			                                                ref double      intercept, 
+                                                            ref int         numScans, 
+                                                            ref double      rsquared,
+                                                            bool useKrokhin)
 		{
 			try
 			{
-				menmAction = ACTION.ALIGNING ; 
-				int numResults = results.marrSequestResults.Length ; 
+				menmAction      = ACTION.ALIGNING ; 
+				int numResults  = results.marrSequestResults.Length ; 
 				// contains first scan number each observed peptide was seen in.
 				Hashtable peptideTable = new Hashtable(results.marrSeqInfo.Length) ; 
 
 				numScans = 0 ; 
 
-				short max_mod_count_for_alignment = mobjOptions.MaxModificationsForAlignment ; 
-				double minXCorrForAlignment = mobjOptions.MinXCorrForAlignment ; 
+				short  max_mod_count_for_alignment  = mobjOptions.MaxModificationsForAlignment ; 
+				double minXCorrForAlignment         = mobjOptions.MinXCorrForAlignment ; 
 
 				for (int resultNum = 0 ; resultNum < numResults ; resultNum++)
 				{
-					clsSequestResults seqResult = results.marrSequestResults[resultNum] ; 
-					clsResultsToSeqMap resultToSeq = results.marrResultsToSeqMap[resultNum] ; 
+					clsSequestResults seqResult     = results.marrSequestResults[resultNum] ; 
+					clsResultsToSeqMap resultToSeq  = results.marrResultsToSeqMap[resultNum] ; 
 
 					clsSeqInfo seqInfo = results.marrSeqInfo[resultToSeq.mint_unique_seq_id-1] ; 
 
 					// in the alignment we will only use the unmodified peptides
 					if (seqInfo.mshort_mod_count > max_mod_count_for_alignment)
 						continue ;
-					if (seqResult.mdbl_XCorr < minXCorrForAlignment 
-						|| seqResult.mshort_RankXc != 1 )
+
+					if (seqResult.mdbl_XCorr < minXCorrForAlignment || seqResult.mshort_RankXc != 1 )
 						continue ; 
+
 					if (peptideTable.ContainsKey(seqResult.mstr_clean_peptide))
 					{
-						if ((int) peptideTable[seqResult.mstr_clean_peptide] < seqResult.mint_ScanNum)
-							peptideTable[seqResult.mstr_clean_peptide] = seqResult.mint_ScanNum ; 
+                        if ((int)peptideTable[seqResult.mstr_clean_peptide] < seqResult.mint_ScanNum)
+                        {
+                            peptideTable[seqResult.mstr_clean_peptide] = seqResult.mint_ScanNum;
+                        }
 					}
 					else
 					{
@@ -1576,27 +1708,33 @@ namespace MTDBCreator
 					}
 				}
 
-				peptideScans = new float [peptideTable.Count] ; 
-				peptidePredictedNET = new float [peptideTable.Count] ; 
+				peptideScans         = new float [peptideTable.Count] ; 
+				peptidePredictedNET  = new float [peptideTable.Count] ; 
 				int numElementsSoFar = 0 ; 
 				// now for each peptide calculate theoretical NET value. 
 				foreach (string cleanPeptide in peptideTable.Keys)
 				{
-					peptideScans[numElementsSoFar] = Convert.ToSingle((int) peptideTable[cleanPeptide]) ; 
-					peptidePredictedNET[numElementsSoFar] = mobjPrediction.GetElutionTime(cleanPeptide) ; 
-					//Console.WriteLine(Convert.ToString(peptideScans[numElementsSoFar])+ "," + Convert.ToString(peptidePredictedNET[numElementsSoFar])) ; 
+					peptideScans[numElementsSoFar] = Convert.ToSingle((int) peptideTable[cleanPeptide]) ;
+                    if (useKrokhin)
+                    {
+                        peptidePredictedNET[numElementsSoFar] = mobjPredictionKrokhin.GetElutionTime(cleanPeptide);
+                    }
+                    else
+                    {
+                        peptidePredictedNET[numElementsSoFar] = mobjPredictionKangas.GetElutionTime(cleanPeptide);
+                    }
 					numElementsSoFar++ ; 
 				}
 				try
 				{
-					mevntStatusMessage("Performing Alignment") ; 
-					mevntPercentComplete(0) ; 
+					StatusMessage("Performing Alignment") ; 
+					PercentComplete(0) ; 
 					// regression is done on a different thread. Lets put a status. 
 					System.Threading.ThreadStart monitorThreadStart = new System.Threading.ThreadStart(this.MonitorAlignment) ; 
 					System.Threading.Thread monitorThread = new System.Threading.Thread(monitorThreadStart) ; 
 					mobjRegressor.SetPoints(ref peptideScans, ref peptidePredictedNET); 
-					monitorThread.Start() ; 
-					mobjRegressor.PerformRegression(mobjOptions.RegressionType) ;
+					monitorThread.Start() ;
+                    mobjRegressor.PerformRegression((Regressor.RegressionType)mobjOptions.RegressionType);
 					slope = mobjRegressor.Slope ; 
 					intercept = mobjRegressor.Intercept ; 
 					rsquared = mobjRegressor.RSquared ; 
@@ -1612,8 +1750,7 @@ namespace MTDBCreator
 				catch (Exception ex)
 				{
 					// Let the user know what went wrong.
-					mevntErrorMessage("Error in alignment: " + ex.Message ) ;
-					Console.WriteLine("Error in alignment: " + ex.Message + ex.StackTrace);
+					ErrorMessage("Error in alignment: " + ex.Message ) ;					
 
 					slope = 0 ; 
 					intercept = 0 ; 
@@ -1622,6 +1759,7 @@ namespace MTDBCreator
 			}
 			catch (Exception ex)
 			{
+                ErrorMessage("Could not align SEQUEST data. " + ex.Message);
 				menmAction = ACTION.IDLE ; 
 			}
 			finally
@@ -1727,7 +1865,7 @@ namespace MTDBCreator
 				catch (Exception ex)
 				{
 					// Let the user know what went wrong.
-					mevntErrorMessage("Error adding mass tag to protein mapping: " + ex.Message ) ;
+					ErrorMessage("Error adding mass tag to protein mapping: " + ex.Message ) ;
 					Console.WriteLine("Error adding mass tag to protein mapping: " + ex.Message + ex.StackTrace);
 
 					Console.WriteLine(ex.StackTrace + ex.Message) ; 
@@ -1752,7 +1890,7 @@ namespace MTDBCreator
 					continue ; 
 
 				int percentDone = (resultNum*100)/numResults ; 
-				mevntPercentComplete(percentDone) ; 
+				PercentComplete(percentDone) ; 
 
 				string peptideWithMod = seqResult.mstr_clean_peptide + seqInfo.mstr_mod_description ; 
 
@@ -1764,13 +1902,13 @@ namespace MTDBCreator
 				if (mhashMassTags.ContainsKey(peptideWithMod))
 				{
 					massTagIndex = (int) mhashMassTags[peptideWithMod] ; 
-					if (((clsMassTag)marrMassTags[massTagIndex]).mdbl_high_normalized_score < highNorm)
+					if (((clsMassTag)m_massTags[massTagIndex]).mdbl_high_normalized_score < highNorm)
 					{
-						((clsMassTag)marrMassTags[massTagIndex]).mdbl_high_normalized_score = highNorm ; 
+						((clsMassTag)m_massTags[massTagIndex]).mdbl_high_normalized_score = highNorm ; 
 					}
 					if (!massTag2NET.ContainsKey(massTagIndex))
 					{
-						((clsMassTag)marrMassTags[massTagIndex]).mint_number_of_peptides++ ;
+						((clsMassTag)m_massTags[massTagIndex]).mint_number_of_peptides++ ;
 						mhashCurrentJobUniqIdToMassTagId[seqInfo.mint_unique_seq_id] = massTagIndex ; 
 					}
 
@@ -1779,12 +1917,12 @@ namespace MTDBCreator
 					{
 						charge = clsSequestResults.MAX_CHARGE_FOR_FSCORE ; 
 					}
-					((clsMassTag)marrMassTags[massTagIndex]).marr_FScore_CS_Count[charge-1]++ ; 
-					((clsMassTag)marrMassTags[massTagIndex]).marr_FScore_CS_Sum[charge-1] += Convert.ToSingle(seqResult.mdbl_FScore) ;
+					((clsMassTag)m_massTags[massTagIndex]).marr_FScore_CS_Count[charge-1]++ ; 
+					((clsMassTag)m_massTags[massTagIndex]).marr_FScore_CS_Sum[charge-1] += Convert.ToSingle(seqResult.mdbl_FScore) ;
 				}
 				else
 				{
-					massTagIndex = marrMassTags.Count ;
+					massTagIndex = m_massTags.Count ;
 					clsMassTag massTag = new clsMassTag() ; 
 					massTag.mdbl_monoisotopic_mass = seqInfo.mdbl_mono_mass ; 
 					massTag.mint_mass_tag_id = massTagIndex ; 
@@ -1796,8 +1934,16 @@ namespace MTDBCreator
 					massTag.mshort_PMT_Quality_Score = 0 ; 
 					massTag.mstr_mod_description = seqInfo.mstr_mod_description ; 
 					massTag.mstr_peptide = peptideWithMod ; 
-					massTag.mstr_clean_peptide = seqResult.mstr_clean_peptide ; 
-					massTag.mdbl_predicted_net = mobjPrediction.GetElutionTime(seqResult.mstr_clean_peptide) ; 
+					massTag.mstr_clean_peptide = seqResult.mstr_clean_peptide ;
+
+                    if (mobjOptions.UseKrokhinNET)
+                    {
+                        massTag.mdbl_predicted_net = mobjPredictionKrokhin.GetElutionTime(seqResult.mstr_clean_peptide);
+                    }
+                    else
+                    {
+                        massTag.mdbl_predicted_net = mobjPredictionKangas.GetElutionTime(seqResult.mstr_clean_peptide);
+                    }
 					mhashMassTags[peptideWithMod] = massTagIndex ; 
 
 					short charge = seqResult.mshort_ChargeState ; 
@@ -1808,7 +1954,7 @@ namespace MTDBCreator
 					massTag.marr_FScore_CS_Count[charge-1]++ ; 
 					massTag.marr_FScore_CS_Sum[charge-1] += Convert.ToSingle(seqResult.mdbl_FScore) ; 
 
-					marrMassTags.Add(massTag) ; 
+					m_massTags.Add(massTag) ; 
 					mhashCurrentJobUniqIdToMassTagId[seqInfo.mint_unique_seq_id] = massTagIndex ; 
 				}
 
@@ -1832,7 +1978,7 @@ namespace MTDBCreator
 				pair.First = massTagIndex ; 
 				int scan = (int) massTag2NET[massTagIndex] ;
 				pair.Second = mobjRegressor.GetNETFromScan(scan) ;
-				marrMassTagsInJobs.Add(pair) ;
+				m_massTagsInJobs.Add(pair) ;
 			}
 		}
 
@@ -1852,7 +1998,7 @@ namespace MTDBCreator
 					continue ; 
 
 				int percentDone = (resultNum*100)/numResults ; 
-				mevntPercentComplete(percentDone) ; 
+				PercentComplete(percentDone) ; 
 
 				string peptideWithMod = xtResult.mstr_clean_peptide + seqInfo.mstr_mod_description ; 
 
@@ -1870,23 +2016,23 @@ namespace MTDBCreator
 				if (mhashMassTags.ContainsKey(peptideWithMod))
 				{
 					massTagIndex = (int) mhashMassTags[peptideWithMod] ; 
-					if (((clsMassTag)marrMassTags[massTagIndex]).mdbl_high_normalized_score < highNorm)
+					if (((clsMassTag)m_massTags[massTagIndex]).mdbl_high_normalized_score < highNorm)
 					{
-						((clsMassTag)marrMassTags[massTagIndex]).mdbl_high_normalized_score = highNorm ; 
+						((clsMassTag)m_massTags[massTagIndex]).mdbl_high_normalized_score = highNorm ; 
 					}
-					if (((clsMassTag)marrMassTags[massTagIndex]).mdbl_min_log_evalue > xtResult.mdbl_log_peptide_e_value)
+					if (((clsMassTag)m_massTags[massTagIndex]).mdbl_min_log_evalue > xtResult.mdbl_log_peptide_e_value)
 					{
-						((clsMassTag)marrMassTags[massTagIndex]).mdbl_min_log_evalue = xtResult.mdbl_log_peptide_e_value ; 
+						((clsMassTag)m_massTags[massTagIndex]).mdbl_min_log_evalue = xtResult.mdbl_log_peptide_e_value ; 
 					}
 					if (!massTag2NET.ContainsKey(massTagIndex))
 					{
-						((clsMassTag)marrMassTags[massTagIndex]).mint_number_of_peptides++ ;
+						((clsMassTag)m_massTags[massTagIndex]).mint_number_of_peptides++ ;
 						mhashCurrentJobUniqIdToMassTagId[seqInfo.mint_unique_seq_id] = massTagIndex ; 
 					}
 				}
 				else
 				{
-					massTagIndex = marrMassTags.Count ;
+					massTagIndex = m_massTags.Count ;
 					clsMassTag massTag = new clsMassTag() ; 
 					massTag.mdbl_monoisotopic_mass = seqInfo.mdbl_mono_mass ; 
 					massTag.mint_mass_tag_id = massTagIndex ; 
@@ -1899,10 +2045,17 @@ namespace MTDBCreator
 					massTag.mshort_PMT_Quality_Score = 0 ; 
 					massTag.mstr_mod_description = seqInfo.mstr_mod_description ; 
 					massTag.mstr_peptide = peptideWithMod ; 
-					massTag.mstr_clean_peptide = xtResult.mstr_clean_peptide ; 
-					massTag.mdbl_predicted_net = mobjPrediction.GetElutionTime(xtResult.mstr_clean_peptide) ; 
+					massTag.mstr_clean_peptide = xtResult.mstr_clean_peptide ;
+                    if (mobjOptions.UseKrokhinNET)
+                    {
+                        massTag.mdbl_predicted_net = mobjPredictionKrokhin.GetElutionTime(xtResult.mstr_clean_peptide);
+                    }
+                    else
+                    {
+                        massTag.mdbl_predicted_net = mobjPredictionKangas.GetElutionTime(xtResult.mstr_clean_peptide);
+                    }
 					mhashMassTags[peptideWithMod] = massTagIndex ; 
-					marrMassTags.Add(massTag) ; 
+					m_massTags.Add(massTag) ; 
 					mhashCurrentJobUniqIdToMassTagId[seqInfo.mint_unique_seq_id] = massTagIndex ; 
 				}
 
@@ -1926,47 +2079,47 @@ namespace MTDBCreator
 				pair.First = massTagIndex ; 
 				int scan = (int) massTag2NET[massTagIndex] ;
 				pair.Second = mobjRegressor.GetNETFromScan(scan) ;
-				marrMassTagsInJobs.Add(pair) ;
+				m_massTagsInJobs.Add(pair) ;
 			}
 		}
 
 	
-		public void AddResults(clsXTandemAnalysisReader results, Regressor.clsRegressor.RegressionType regressionType,
+		public void AddResults(clsXTandemAnalysisReader results, Regressor.RegressionType regressionType,
 			clsAnalysisDescription analysis)
 		{
 			mblnXTandemFilesExist = true ; 
 			marrAnalyses.Add(analysis) ; 
 			mhashCurrentJobUniqIdToMassTagId.Clear() ; 
-			mevntStatusMessage("Aligning " + analysis.mstrDataset) ; 
+			StatusMessage("Aligning " + analysis.mstrDataset) ; 
 			// Go through each line, check if mass tag, protein exists, if not, add them and get ids. 
 			ApplyScanTransformation(results) ; 
-			mevntStatusMessage("Adding Mass Tags: ") ; 
+			StatusMessage("Adding Mass Tags: ") ; 
 			AddMassTags(results, analysis) ; 
-			mevntStatusMessage("Adding Proteins ") ; 
+			StatusMessage("Adding Proteins ") ; 
 			AddProteinsAndMassTagMap(results, analysis) ; 
-			mevntStatusMessage("Writing peptides to temporary files ") ; 
+			StatusMessage("Writing peptides to temporary files ") ; 
 			WritePeptidesToFile(results, analysis) ; 
-			mevntStatusMessage("Writing XTandem results to temporary files ") ; 
+			StatusMessage("Writing XTandem results to temporary files ") ; 
 			WriteXTandemScoresToFile(results, analysis) ; 
 			mintNumPeptides += results.marrXTandemResults.Length ; 
 		}
 
-		public void AddResults(clsSequestAnalysisReader results, Regressor.clsRegressor.RegressionType regressionType,
+		public void AddResults(clsSequestAnalysisReader results, Regressor.RegressionType regressionType,
 			clsAnalysisDescription analysis)
 		{
 			mblnSequestFilesExist = true ; 
 			marrAnalyses.Add(analysis) ; 
 			mhashCurrentJobUniqIdToMassTagId.Clear() ; 
-			mevntStatusMessage("Aligning " + analysis.mstrDataset) ; 
+			StatusMessage("Aligning " + analysis.mstrDataset) ; 
 			// Go through each line, check if mass tag, protein exists, if not, add them and get ids. 
 			ApplyScanTransformation(results) ; 
-			mevntStatusMessage("Adding Mass Tags: ") ; 
+			StatusMessage("Adding Mass Tags: ") ; 
 			AddMassTags(results, analysis) ; 
-			mevntStatusMessage("Adding Proteins ") ; 
+			StatusMessage("Adding Proteins ") ; 
 			AddProteinsAndMassTagMap(results, analysis) ; 
-			mevntStatusMessage("Writing peptides to temporary files ") ; 
+			StatusMessage("Writing peptides to temporary files ") ; 
 			WritePeptidesToFile(results, analysis) ; 
-			mevntStatusMessage("Writing Sequest results to temporary files ") ; 
+			StatusMessage("Writing Sequest results to temporary files ") ; 
 			WriteSequestScoresToFile(results, analysis) ; 
 			mintNumPeptides += results.marrSequestResults.Length ; 
 		}
@@ -1991,17 +2144,17 @@ namespace MTDBCreator
 		#region "Summary Stats Region" 
 		public void CalculateMassTagNETs()
 		{
-			marrMassTagsInJobs.Sort(new MassTagSorterClass()) ; 
+			m_massTagsInJobs.Sort(new MassTagSorterClass()) ; 
 			// Go through each guy and compute average. 
 			int startIndex = 0 ; 
 			int stopIndex = 0 ; 
-			int numPairs = marrMassTagsInJobs.Count ; 
+			int numPairs = m_massTagsInJobs.Count ; 
 			while (startIndex < numPairs)
 			{
-				int massTagId = (int) ((clsPair)marrMassTagsInJobs[startIndex]).First ; 
+				int massTagId = (int) ((clsPair)m_massTagsInJobs[startIndex]).First ; 
 				while (stopIndex < numPairs)
 				{
-					int massTagIdThis = (int) ((clsPair)marrMassTagsInJobs[stopIndex]).First ; 
+					int massTagIdThis = (int) ((clsPair)m_massTagsInJobs[stopIndex]).First ; 
 					if (massTagIdThis != massTagId)
 						break ; 
 					stopIndex++ ; 
@@ -2016,7 +2169,7 @@ namespace MTDBCreator
 				double max_ganet = double.MinValue ; 
 				for (int index = startIndex ; index <= stopIndex ; index++)
 				{
-					float val = (float) ((clsPair)marrMassTagsInJobs[index]).Second  ; 
+					float val = (float) ((clsPair)m_massTagsInJobs[index]).Second  ; 
 					if (val > max_ganet)
 						max_ganet = val ; 
 					if (val < min_ganet)
@@ -2028,13 +2181,13 @@ namespace MTDBCreator
 				if (numObs > 1)
 					std = Math.Sqrt((numObs * sumSquare - sum * sum) / (numObs * numObs-1)) ; 
 
-				((clsMassTag)marrMassTags[massTagId]).mshort_cnt_ganet = numObs ;
-				((clsMassTag)marrMassTags[massTagId]).mdbl_avg_ganet = sum/numObs ;
-				((clsMassTag)marrMassTags[massTagId]).mdbl_std_ganet = std ;
-				((clsMassTag)marrMassTags[massTagId]).mdbl_stderr_ganet = std / Math.Sqrt(numObs) ; 
+				((clsMassTag)m_massTags[massTagId]).mshort_cnt_ganet = numObs ;
+				((clsMassTag)m_massTags[massTagId]).mdbl_avg_ganet = sum/numObs ;
+				((clsMassTag)m_massTags[massTagId]).mdbl_std_ganet = std ;
+				((clsMassTag)m_massTags[massTagId]).mdbl_stderr_ganet = std / Math.Sqrt(numObs) ; 
 
-				((clsMassTag)marrMassTags[massTagId]).mdbl_min_ganet = min_ganet ;
-				((clsMassTag)marrMassTags[massTagId]).mdbl_max_ganet = max_ganet ;
+				((clsMassTag)m_massTags[massTagId]).mdbl_min_ganet = min_ganet ;
+				((clsMassTag)m_massTags[massTagId]).mdbl_max_ganet = max_ganet ;
 
 				startIndex = stopIndex + 1 ; 
 				stopIndex++ ; 
@@ -2043,16 +2196,16 @@ namespace MTDBCreator
 		public void CalculateProteinsPassingFilters()
 		{
 			mhashProteinsPassingConstraints.Clear() ; 
-			mevntStatusMessage("Calculating Proteins with at least one mass tag passing filter") ; 
+			StatusMessage("Calculating Proteins with at least one mass tag passing filter") ; 
 			int mapSize = mhashMassTagsToProteinMap.Count ; 
 			int numDone = 0 ; 
 			foreach (clsMassTagToProteinMap massTagToProteinMap in mhashMassTagsToProteinMap.Values)
 			{
 				int percentDone = (numDone * 100)/ mapSize ; 
-				mevntPercentComplete(percentDone) ; 
+				PercentComplete(percentDone) ; 
 
 				numDone++ ; 
-				clsMassTag massTag = (clsMassTag) marrMassTags[massTagToProteinMap.mint_mass_tag_id] ; 
+				clsMassTag massTag = (clsMassTag) m_massTags[massTagToProteinMap.mint_mass_tag_id] ; 
 //				if (
 //					(massTag.mdbl_min_log_evalue == clsMassTag.DEFAULT_MIN_LOG_EVAL && 
 //						massTag.mdbl_high_normalized_score < mdbl_min_xcorr)
@@ -2071,5 +2224,24 @@ namespace MTDBCreator
 			}
 		}
 		#endregion
-	}
+
+        #region IDisposable Members
+
+        /// <summary>
+        /// Disposes of any allocated resources.
+        /// </summary>
+        public void Dispose()
+        {
+            DeleteFile(m_TAnalysisDescriptionFileName);
+            DeleteFile(m_TPeptideFileName);
+            DeleteFile(m_TMassTagsFileName);
+            DeleteFile(m_TMassTagsNETFileName);
+            DeleteFile(m_TMassTagPeptideProphetStatsFileName);
+            DeleteFile(m_TMassTagsToProteinMapFileName);
+            DeleteFile(m_TProteinsFileName);
+            DeleteFile(m_TScoreXTandemFileName);
+            DeleteFile(m_TScoreSequestFileName);		
+        }
+        #endregion
+    }
 }

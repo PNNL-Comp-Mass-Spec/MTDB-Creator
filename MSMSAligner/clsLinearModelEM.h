@@ -3,8 +3,11 @@
 #include "Matrix.h" 
 #include <vector> 
 
+
 namespace RegressionEngine
 {
+	
+
 	class clsLinearModelEM
 	{
 		MATRIX *mobj_X ; 

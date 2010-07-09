@@ -9,9 +9,7 @@ namespace MTDBCreator
 	{
 		public clsAppException(string message): base(message)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
+			
 		}
 	}
 }

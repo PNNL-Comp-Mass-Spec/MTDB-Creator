@@ -1,5 +1,20 @@
 MTDBCreator Revision History
 
+Version 2.0.; July 9, 2009
+	- Changed threading paradigm.  Removed references to status from embedded in processing objects.  
+	- Decoupled user interface from processing.
+	- Upgraded to .net 3.5 framework.  changed C++ compiler flag from /oldsyntax to /clr and removed /Zi from the advanced C++ compiling command line.
+	- Upgraded menu's to look more like the new Windows.Forms menus and the status bar.
+	- Added icon to the main form in form of database.
+	- Changed background to white instead of gray.
+	- Removed several of the docking and panels used to format a form.  Instead use anchoring and reoroganized options window so it's not as cluttered.
+	- Removed the hide form buttons that mimic the "docking" panels in Microsoft Visual Studio.
+	- Removed the "BASIC" and "PNNL" compiler #if statements to allow any user to use Krokhin's or Kanga's NET prediction method.
+	- Added status and messages tool strip items (left, and far right aligned). 
+	- Removed error messages from the status window, instead error messages show up on the status bar.
+	- Added stored query insertion into access MTDB's for use with tools such as MultiAlign.
+	- Added columns in each manual import file output to be consistent with MTS so Multialign can use the same call and parameters in it's access of the Mass Tags, peptides, and proteins.
+	
 Version 1.0.3488; July 20, 2009
 	- Updated the options screen to state that the Kangas/Petritis retention time prediction algorithm is protected by patent 7,136,759 and pending patent 2005-0267688A1
 	- Updated Options screen to show the NET prediction reference for both prediction algorithms

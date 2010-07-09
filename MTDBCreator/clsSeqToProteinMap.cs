@@ -9,9 +9,9 @@ namespace MTDBCreator
 	/// </summary>
 	public class clsSeqToProteinMap
 	{
-		public int mint_unique_seq_id ; 
-		public short mshort_cleavage_state ; 
-		public short mshort_terminus_state ; 
+		public int    mint_unique_seq_id ; 
+		public short  mshort_cleavage_state ; 
+		public short  mshort_terminus_state ; 
 		public string mstr_protein_name ; 
 		public double mdbl_protein_e_value ;
 		public double mdbl_protein_intensity_log ; 
@@ -34,30 +34,21 @@ namespace MTDBCreator
 
 		public clsSeqToProteinMap(string line, char [] delimiters)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 			string [] columns = line.Split(delimiters) ; 
-			try
-			{
-				mint_unique_seq_id = Convert.ToInt32(columns[mshortColNum_unique_seq_id]);
-				mshort_cleavage_state = Convert.ToInt16(columns[mshortColNum_cleavage_state]) ;
-				mshort_terminus_state = Convert.ToInt16(columns[mshortColNum_terminus_state]) ;
-				mstr_protein_name = columns[mshortColNum_protein_name] ;
-				if (columns[mshortColNum_protein_e_value] != null && columns[mshortColNum_protein_e_value].Length > 0)
-					mdbl_protein_e_value = Convert.ToDouble(columns[mshortColNum_protein_e_value]) ;
-				else 
-					// undefined. 
-					mdbl_protein_e_value = UNDEFINED ; 
-				if (columns[mshortColNum_protein_intensity_log] != null && columns[mshortColNum_protein_intensity_log].Length > 0)
-					mdbl_protein_intensity_log = Convert.ToDouble(columns[mshortColNum_protein_intensity_log]) ;
-				else
-					// undefined. 
-					mdbl_protein_intensity_log = UNDEFINED ; 
-			}
-			catch (Exception ex)
-			{
-			}
+			mint_unique_seq_id      = Convert.ToInt32(columns[mshortColNum_unique_seq_id]);
+			mshort_cleavage_state   = Convert.ToInt16(columns[mshortColNum_cleavage_state]) ;
+			mshort_terminus_state   = Convert.ToInt16(columns[mshortColNum_terminus_state]) ;
+			mstr_protein_name       = columns[mshortColNum_protein_name] ;
+			if (columns[mshortColNum_protein_e_value] != null && columns[mshortColNum_protein_e_value].Length > 0)
+				mdbl_protein_e_value = Convert.ToDouble(columns[mshortColNum_protein_e_value]) ;
+			else 
+				// undefined. 
+				mdbl_protein_e_value = UNDEFINED ; 
+			if (columns[mshortColNum_protein_intensity_log] != null && columns[mshortColNum_protein_intensity_log].Length > 0)
+				mdbl_protein_intensity_log = Convert.ToDouble(columns[mshortColNum_protein_intensity_log]) ;
+			else
+				// undefined. 
+				mdbl_protein_intensity_log = UNDEFINED ; 		
 		}
 
 		public static void SetHeaderColumns(string headerLine, char [] delimiters)
@@ -92,20 +83,14 @@ namespace MTDBCreator
 		}
 	}
 
-	public class clsSeqToProteinMapReader
+	public class clsSeqToProteinMapReader: ProcessorBase
 	{
 		private int mintPercentRead ; 
-		private frmStatus.dlgSetPercentComplete mevntPercentComplete ; 
-		private frmStatus.dlgSetStatusMessage mevntStatusMessage ; 
-		private frmStatus.dlgSetErrorMessage mevntErrorMessage ; 
 		
 
-		public clsSeqToProteinMapReader(frmStatus statusForm)
+		public clsSeqToProteinMapReader()
 		{
 			mintPercentRead = 0 ; 
-			mevntPercentComplete = new MTDBCreator.frmStatus.dlgSetPercentComplete(statusForm.SetPrecentComplete) ; 
-			mevntStatusMessage = new MTDBCreator.frmStatus.dlgSetStatusMessage(statusForm.SetStatusMessage) ; 
-			mevntErrorMessage = new  MTDBCreator.frmStatus.dlgSetErrorMessage(statusForm.SetErrorMessage) ;
 		}
 
 		public int PercentDone
@@ -132,25 +117,24 @@ namespace MTDBCreator
 					string line;
 					// Read and display lines from the file until the end of 
 					// the file is reached.
-					long numRead = 0 ; 
-					mevntStatusMessage("Loading SeqToProteinMap file" ) ;
+					long numRead = 0 ;                     
+					StatusMessage("Loading SeqToProteinMap file" ) ;
 					while ((line = sr.ReadLine()) != null) 
 					{
 						numRead += line.Length; 
 						mintPercentRead = Convert.ToInt32((numRead*100)/totalLength) ; 
 						if (numRead % 100 == 0)
-							mevntPercentComplete(mintPercentRead) ; 
+							PercentComplete(mintPercentRead) ; 
 						arrSeqToProteinMaps.Add(new clsSeqToProteinMap(line, delimiters)) ; 
 					}
 				}
 			}
 			catch (Exception e) 
-			{
-				// Let the user know what went wrong.
-				mevntErrorMessage("Error reading SeqToProteinMap file: " + e.Message ) ;
-				Console.WriteLine("Error reading SeqToProteinMap file: " + e.Message + e.StackTrace);
+			{                
+                ErrorMessage("Error reading SeqToProteinMap file: " + e.Message);                
 			}
 			return (clsSeqToProteinMap []) arrSeqToProteinMaps.ToArray(typeof(clsSeqToProteinMap)) ; 
 		}
+        
 	}
 }

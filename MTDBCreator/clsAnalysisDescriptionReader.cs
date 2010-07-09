@@ -13,9 +13,6 @@ namespace MTDBCreator
 		private ArrayList marrAnalyses ; 
 		public clsAnalysisDescriptionReader(string fileName)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 			marrAnalyses = new ArrayList() ; 
 			try 
 			{

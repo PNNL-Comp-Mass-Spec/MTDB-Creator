@@ -8,10 +8,10 @@ namespace Regressor
 
 	clsRegressor::clsRegressor()
 	{
-		mobjLinearRegressionEM = new RegressionEngine::clsLinearModelEM() ; 
-		mobjMixtureRegressionEM = new RegressionEngine::clsMixtureModelRegressionEM() ; 
+		mobjLinearRegressionEM   = new RegressionEngine::clsLinearModelEM() ; 
+		mobjMixtureRegressionEM  = new RegressionEngine::clsMixtureModelRegressionEM() ; 
 		mptrVectRegressionPoints = new std::vector<RegressionEngine::clsRegressionPts> () ;
-		menmRegressionType = RegressionType::MIXTURE_REGRESSION ; 
+		menmRegressionType       = MIXTURE_REGRESSION ; 
 	}
 
 	clsRegressor::~clsRegressor()
@@ -26,14 +26,15 @@ namespace Regressor
 			delete mobjMixtureRegressionEM ; 
 			mobjMixtureRegressionEM = NULL ; 
 		}
-		if (mptrVectRegressionPoints != NULL)
+		if (mptrVectRegressionPoints != NULL) 
 		{
 			delete mptrVectRegressionPoints ; 
 			mptrVectRegressionPoints = NULL ; 
 		}
 	}
 
-	void clsRegressor::SetPoints(float (&x) __gc[], float (&y) __gc[])
+	//void clsRegressor::SetPoints(array<float> ^(&x) __gc[], float (&y) __gc[])
+	void clsRegressor::SetPoints(array<float> ^ %x, array<float> ^% y)
 	{
 		mptrVectRegressionPoints->clear() ; 
 		int numPts = x->Length ; 
@@ -78,11 +79,11 @@ namespace Regressor
 
 		switch (menmRegressionType)
 		{
-			case RegressionType::LINEAR_EM:
+			case LINEAR_EM:
 				mobjLinearRegressionEM->CalculateRegressionFunction(*mptrVectRegressionPoints);
 				break ; 
 			default:
-			case RegressionType::MIXTURE_REGRESSION:
+			case MIXTURE_REGRESSION:
 				mobjMixtureRegressionEM->CalculateRegressionFunction(*mptrVectRegressionPoints);
 				break ; 
 				break ; 
@@ -94,10 +95,10 @@ namespace Regressor
 	{
 		switch (menmRegressionType)
 		{
-			case RegressionType::LINEAR_EM:
+			case LINEAR_EM:
 				return (float) mobjLinearRegressionEM->GetPredictedValue(scan);
 				break ; 
-			case RegressionType::MIXTURE_REGRESSION:
+			case MIXTURE_REGRESSION:
 				return (float) mobjMixtureRegressionEM->GetPredictedValue(scan);
 				break ; 
 			default:

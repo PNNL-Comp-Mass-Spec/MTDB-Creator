@@ -6,7 +6,7 @@ namespace MTDBCreator
 	/// <summary>
 	/// Summary description for clsAnalysisReader.
 	/// </summary>
-	public class clsSequestAnalysisReader
+	public class clsSequestAnalysisReader: ProcessorBase
 	{
 		public enum enmState {IDLE=0, SEQTOPROTEINMAP, RESULTS, RESULTSTOSEQMAP, SEQINFO } ; 
 		private enmState menmState ;
@@ -50,18 +50,17 @@ namespace MTDBCreator
 		private clsResultsToSeqMapReader mobjResultsToSeqMapReader ; 
 		private clsSeqInfoReader mobjSeqInfoReader ; 
 
-		public clsSequestAnalysisReader(string path, string name, frmStatus statusForm )
+		public clsSequestAnalysisReader(string path, string name)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
-
 			string seqToProteinMapFile = "" ;
 			if (path != null)
 				seqToProteinMapFile = System.IO.Path.Combine(path, name + mstrSeqToProteinMapExt) ; 
 			else
-				seqToProteinMapFile = name + mstrSeqToProteinMapExt ; 
-			mobjSeqToProteinMapReader = new clsSeqToProteinMapReader(statusForm) ; 
+				seqToProteinMapFile = name + mstrSeqToProteinMapExt ;
+ 
+			mobjSeqToProteinMapReader        = new clsSeqToProteinMapReader() ;
+            RegisterProcessing(mobjSeqToProteinMapReader);
+
 			menmState = enmState.SEQTOPROTEINMAP ; 
 			marrSeqToProteinMap = mobjSeqToProteinMapReader.ReadSeqToProteinMapFile(seqToProteinMapFile) ; 
 
@@ -69,9 +68,11 @@ namespace MTDBCreator
 			if (path != null)
 				sequestResultsFile = System.IO.Path.Combine(path, name + mstrSequestResultsExt) ; 
 			else
-				sequestResultsFile = name + mstrSequestResultsExt ; 
+				sequestResultsFile = name + mstrSequestResultsExt ;
 
-			mobjSequestReader = new clsSequestResultsReader(statusForm) ; 
+            mobjSequestReader = new clsSequestResultsReader(); 
+            RegisterProcessing(mobjSequestReader);
+
 			menmState = enmState.RESULTS ; 
 			marrSequestResults = mobjSequestReader.ReadSequestFile(sequestResultsFile) ; 
 
@@ -81,7 +82,9 @@ namespace MTDBCreator
 			else
 				resultsToSeqMapFile = name + mstrResultToSeqMapExt ; 
 
-			mobjResultsToSeqMapReader = new clsResultsToSeqMapReader(statusForm) ; 
+			mobjResultsToSeqMapReader = new clsResultsToSeqMapReader() ;
+            RegisterProcessing(mobjResultsToSeqMapReader);
+
 			menmState = enmState.RESULTSTOSEQMAP ; 
 			marrResultsToSeqMap = mobjResultsToSeqMapReader.ReadResultsToSeqMapFile(resultsToSeqMapFile) ; 
 
@@ -91,7 +94,7 @@ namespace MTDBCreator
 			else
 				seqInfoFile = name + mstrSeqInfoExt ; 
 
-			mobjSeqInfoReader = new clsSeqInfoReader(statusForm) ; 
+			mobjSeqInfoReader = new clsSeqInfoReader() ; 
 			menmState = enmState.SEQINFO ; 
 			marrSeqInfo = mobjSeqInfoReader.ReadSeqInfoFile(seqInfoFile) ; 
 			Clean() ; 

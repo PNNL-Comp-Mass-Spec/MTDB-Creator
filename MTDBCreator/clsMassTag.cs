@@ -40,9 +40,6 @@ namespace MTDBCreator
 		public const double DEFAULT_MIN_LOG_EVAL = 100 ; 
 		public clsMassTag()
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 			mdbl_high_normalized_score = DEFAULT_XCORR ; 
 			mdbl_min_log_evalue = DEFAULT_MIN_LOG_EVAL ; 
 			for (int chargeNum = 0 ; chargeNum < clsSequestResults.MAX_CHARGE_FOR_FSCORE ; chargeNum++)

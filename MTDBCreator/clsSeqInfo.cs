@@ -53,9 +53,6 @@ namespace MTDBCreator
 		
 		public clsSeqInfo(string line, char []delimiters)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 			string [] column = line.Split(delimiters) ; 
 			mint_unique_seq_id = Convert.ToInt32(column[mshortColNum_unique_seq_id]) ; 
 			mshort_mod_count = Convert.ToInt16(column[mshortColNum_mod_count]) ; 
@@ -64,19 +61,13 @@ namespace MTDBCreator
 		}
 	}
 
-	public class clsSeqInfoReader
+	public class clsSeqInfoReader: ProcessorBase
 	{
 		private int mintPercentRead ; 
-		private frmStatus.dlgSetPercentComplete mevntPercentComplete ; 
-		private frmStatus.dlgSetStatusMessage mevntStatusMessage ; 
-		private frmStatus.dlgSetErrorMessage mevntErrorMessage ; 
 		
-		public clsSeqInfoReader(frmStatus statusForm)
+		public clsSeqInfoReader()
 		{
 			mintPercentRead = 0 ; 
-			mevntPercentComplete = new MTDBCreator.frmStatus.dlgSetPercentComplete(statusForm.SetPrecentComplete) ; 
-			mevntStatusMessage = new MTDBCreator.frmStatus.dlgSetStatusMessage(statusForm.SetStatusMessage) ; 
-			mevntErrorMessage = new  MTDBCreator.frmStatus.dlgSetErrorMessage(statusForm.SetErrorMessage) ;
 		}
 
 		public int PercentDone
@@ -98,7 +89,8 @@ namespace MTDBCreator
 
 				using (StreamReader sr = new StreamReader(fileName)) 
 				{
-					mevntStatusMessage("Loading SeqInfo file" ) ;
+                    
+					StatusMessage("Loading SeqInfo file" ) ;
 					char [] delimiters = {'\t'} ; 
 					string headerLine = sr.ReadLine() ; 
 					clsSeqInfo.SetHeaderNames() ; 
@@ -110,7 +102,7 @@ namespace MTDBCreator
 						numRead += line.Length; 
 						mintPercentRead = Convert.ToInt32((numRead*100)/totalLength) ; 
 						if (numRead % 100 == 0)
-							mevntPercentComplete(mintPercentRead) ; 
+							PercentComplete(mintPercentRead) ; 
 						arrSeqInfo.Add(new clsSeqInfo(line, delimiters)) ; 
 					}
 				}
@@ -118,7 +110,7 @@ namespace MTDBCreator
 			catch (Exception ex) 
 			{
 				// Let the user know what went wrong.
-				mevntErrorMessage("Error reading SeqInfo file: " + ex.Message ) ;
+				ErrorMessage("Error reading SeqInfo file: " + ex.Message ) ;
 				Console.WriteLine("Error reading SeqInfo file: " + ex.Message + ex.StackTrace);
 			}
 			return (clsSeqInfo []) arrSeqInfo.ToArray(typeof(clsSeqInfo)) ; 

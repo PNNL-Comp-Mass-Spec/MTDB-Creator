@@ -14,7 +14,7 @@ typedef struct
 	 char **ptr;
 } MATRIX;
 
-	void PrintMatrix(MATRIX *mat, char *file_name) ;
+	//void PrintMatrix(MATRIX *mat, char *file_name) ;
 
 	MATRIX *matrix_allocate(int, int, int);
 	void matrix_free(MATRIX *);

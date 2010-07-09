@@ -189,9 +189,6 @@ namespace MTDBCreator
 		
 		public clsSequestResults(string line, char [] delimiters)
 		{
-			//
-			// TODO: Add constructor logic here
-			//
 			try
 			{
 				string [] column = line.Split(delimiters) ; 
@@ -257,19 +254,13 @@ namespace MTDBCreator
 
 	}
 
-	public class clsSequestResultsReader
+	public class clsSequestResultsReader: ProcessorBase
 	{
 		private int mintPercentRead ; 
-		private frmStatus.dlgSetPercentComplete mevntPercentComplete ; 
-		private frmStatus.dlgSetStatusMessage mevntStatusMessage ; 
-		private frmStatus.dlgSetErrorMessage mevntErrorMessage ; 
 
-		public clsSequestResultsReader(frmStatus statusForm)
+		public clsSequestResultsReader()
 		{
 			mintPercentRead = 0 ; 
-			mevntPercentComplete = new MTDBCreator.frmStatus.dlgSetPercentComplete(statusForm.SetPrecentComplete) ; 
-			mevntStatusMessage = new MTDBCreator.frmStatus.dlgSetStatusMessage(statusForm.SetStatusMessage) ; 
-			mevntErrorMessage = new  MTDBCreator.frmStatus.dlgSetErrorMessage(statusForm.SetErrorMessage) ; 
 		}
 
 		public int PercentDone
@@ -290,7 +281,7 @@ namespace MTDBCreator
 				long totalLength = fInfo.Length ; 
 				using (StreamReader sr = new StreamReader(fileName)) 
 				{
-					mevntStatusMessage("Loading SEQUEST results file" ) ;
+					StatusMessage("Loading SEQUEST results file" ) ;
 					char [] delimiters = {'\t'} ; 
 					string headerLine = sr.ReadLine() ; 
 					clsSequestResults.SetHeaderNames() ; 
@@ -304,7 +295,7 @@ namespace MTDBCreator
 						numRead += line.Length; 
 						mintPercentRead = Convert.ToInt32((numRead*100)/totalLength) ; 
 						if (numRead % 100 == 0)
-							mevntPercentComplete(mintPercentRead) ; 
+							PercentComplete(mintPercentRead) ; 
 						arrSequestResults.Add(new clsSequestResults(line, delimiters)) ; 
 					}
 				}
@@ -312,8 +303,7 @@ namespace MTDBCreator
 			catch (Exception ex) 
 			{
 				// Let the user know what went wrong.
-				mevntErrorMessage("Error reading Sequest results file: " + ex.Message ) ;
-				Console.WriteLine("Error reading Sequest results file: " + ex.Message + ex.StackTrace);
+				ErrorMessage("Error reading Sequest results file: " + ex.Message ) ;				
 			}
 			return (clsSequestResults []) arrSequestResults.ToArray(typeof(clsSequestResults)) ; 
 		}

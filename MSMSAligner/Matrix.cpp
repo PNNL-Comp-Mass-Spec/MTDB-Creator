@@ -1,33 +1,41 @@
 //#include "StdAfx.h"
+
+#pragma once 
+#pragma managed(push)
+#pragma unmanaged 
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <malloc.h>
 #include <math.h>
 #include <fstream>
 #include "Matrix.h"
+
+
 using namespace std ;
+
 namespace RegressionEngine
 {
-void PrintMatrix(MATRIX *mat, char *file_name) 
-{
-	ofstream fout(file_name) ; 
-	int num_rows = mat->rows ; 
-	int num_cols = mat->cols ; 
-	double **mat_ptr = (double **) mat->ptr ; 
-
-	for (int row_num = 0 ; row_num < num_rows ; row_num++)
-	{
-		for (int col_num = 0 ; col_num < num_cols ; col_num++)
-		{
-			double val = mat_ptr[row_num][col_num] ; 
-			fout<<val ; 
-			if (col_num != num_cols -1)
-				fout<<"," ; 
-			else
-				fout<<"\n" ; 
-		}
-	}
-}
+//void PrintMatrix(MATRIX *mat, char *file_name) 
+//{
+//	ofstream fout(file_name) ; 
+//	int num_rows = mat->rows ; 
+//	int num_cols = mat->cols ; 
+//	double **mat_ptr = (double **) mat->ptr ; 
+//
+//	for (int row_num = 0 ; row_num < num_rows ; row_num++)
+//	{
+//		for (int col_num = 0 ; col_num < num_cols ; col_num++)
+//		{
+//			double val = mat_ptr[row_num][col_num] ; 
+//			fout<<val ; 
+//			if (col_num != num_cols -1)
+//				fout<<"," ; 
+//			else
+//				fout<<"\n" ; 
+//		}
+//	}
+//}
 
 /**************************************************************************
 
@@ -912,3 +920,5 @@ double matrix_det(MATRIX *A)
     return(det);
 }
 }
+
+#pragma managed(pop)
