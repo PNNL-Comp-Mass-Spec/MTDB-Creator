@@ -1,6 +1,8 @@
 MTDBCreator Revision History
-
-Version 2.0.; July 9, 2009
+Version 2.1.; August, 8, 2010
+	- Added error handling when working across UNC paths for archived syn files.
+	
+Version 2.0.; July 9, 2010
 	- Changed threading paradigm.  Removed references to status from embedded in processing objects.  
 	- Decoupled user interface from processing.
 	- Upgraded to .net 3.5 framework.  changed C++ compiler flag from /oldsyntax to /clr and removed /Zi from the advanced C++ compiling command line.

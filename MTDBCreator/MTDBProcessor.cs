@@ -57,16 +57,24 @@ namespace MTDBCreator
 
             bool success = true;
             int i = 0;
+            //  A list of datasets that had an IO error.
+            List<string> failed = new List<string>();
             foreach(clsAnalysisDescription description in analysisDescriptions)
             {
                 try
                 {
-                    ProcessAnalysisJob(description, options,ref  massTagDatabase);
-                    
+                    ProcessAnalysisJob(description, options, ref  massTagDatabase);
+
                     int percent = Convert.ToInt32(Convert.ToDouble(++i) * 100.0 / Convert.ToDouble(analysisDescriptions.Count));
                     if (TotalProgressComplete != null)
                         TotalProgressComplete(percent);
 
+                }
+                catch (System.IO.IOException io)
+                {
+                    //TODO: Do we continue?
+                    failed.Add(description.mstrDataset);
+                    ErrorMessage("Could not read " + description.mstrDataset + ".  There was an error. " + io.Message);                    
                 }
                 catch (AnalysisToolException ex)
                 {
@@ -91,7 +99,7 @@ namespace MTDBCreator
                 massTagDatabase.LoadResultsIntoDB(writeToAccessDatabase, databasePath);
 
                 if (ProcessingComplete != null)
-                    ProcessingComplete(this, new ProcessingCompleteEventArgs("Complete.", massTagDatabase));                            
+                    ProcessingComplete(this, new ProcessingCompleteEventArgs("Complete.", massTagDatabase, failed));                            
             }
             else
             {

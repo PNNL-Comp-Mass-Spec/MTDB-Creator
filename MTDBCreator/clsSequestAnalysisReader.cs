@@ -111,8 +111,15 @@ namespace MTDBCreator
 			int numResultsToSeqMaps = marrResultsToSeqMap.Length ; 
 			for (int resultMapNum = 0 ; resultMapNum < numResultsToSeqMaps ; resultMapNum++)
 			{
-				clsResultsToSeqMap result2SeqMap = marrResultsToSeqMap[resultMapNum] ; 
-				arrSequestResults.Add(marrSequestResults[result2SeqMap.mint_result_id-1]) ; 
+				clsResultsToSeqMap result2SeqMap = marrResultsToSeqMap[resultMapNum] ;
+                try
+                {
+                    arrSequestResults.Add(marrSequestResults[result2SeqMap.mint_result_id - 1]);
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
 			}
 			marrSequestResults = (clsSequestResults []) arrSequestResults.ToArray(typeof(clsSequestResults)) ; 
 		}

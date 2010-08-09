@@ -44,11 +44,13 @@ namespace MTDBCreator
     /// </summary>
     public class ProcessingCompleteEventArgs : EventArgs
     {
-        public ProcessingCompleteEventArgs(string message, clsMTDB database)
+        public ProcessingCompleteEventArgs(string message, clsMTDB database, List<string> failed)
         {
             Message  = message;
             Database = database;
+            FailedDatasets = failed;
         }
+        public List<string> FailedDatasets { get; set; }
 
         /// <summary>
         /// Gets or sets the message to be displayed.

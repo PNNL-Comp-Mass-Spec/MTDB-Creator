@@ -255,7 +255,8 @@ namespace MTDBCreator
 	}
 
 	public class clsSequestResultsReader: ProcessorBase
-	{
+    {
+        private const int CONST_MAX_ATTEMPTS = 3;
 		private int mintPercentRead ; 
 
 		public clsSequestResultsReader()
@@ -272,38 +273,60 @@ namespace MTDBCreator
 		}
 		public clsSequestResults[] ReadSequestFile(string fileName)
 		{
-			ArrayList arrSequestResults = new ArrayList() ; 
+			ArrayList arrSequestResults = new ArrayList() ;
+            int attempts = 0;
+            bool success = false;
+			
 			try 
 			{
-				// Create an instance of StreamReader to read from a file.
-				// The using statement also closes the StreamReader.
-				FileInfo fInfo = new FileInfo(fileName) ; 
-				long totalLength = fInfo.Length ; 
-				using (StreamReader sr = new StreamReader(fileName)) 
-				{
-					StatusMessage("Loading SEQUEST results file" ) ;
-					char [] delimiters = {'\t'} ; 
-					string headerLine = sr.ReadLine() ; 
-					clsSequestResults.SetHeaderNames() ; 
-					clsSequestResults.SetHeaderColumns(headerLine, delimiters) ; 
-					string line;
-					// Read and display lines from the file until the end of 
-					// the file is reached.
-					long numRead = 0 ; 
-					while ((line = sr.ReadLine()) != null) 
-					{
-						numRead += line.Length; 
-						mintPercentRead = Convert.ToInt32((numRead*100)/totalLength) ; 
-						if (numRead % 100 == 0)
-							PercentComplete(mintPercentRead) ; 
-						arrSequestResults.Add(new clsSequestResults(line, delimiters)) ; 
-					}
-				}
+                while (success == false)
+                {
+                    attempts++;
+                    try
+                    {
+                        // Create an instance of StreamReader to read from a file.
+                        // The using statement also closes the StreamReader.
+                        FileInfo fInfo = new FileInfo(fileName);
+                        long totalLength = fInfo.Length;
+                        using (StreamReader sr = new StreamReader(fileName))
+                        {
+                            StatusMessage("Loading SEQUEST results file");
+                            char[] delimiters = { '\t' };
+                            string headerLine = sr.ReadLine();
+                            clsSequestResults.SetHeaderNames();
+                            clsSequestResults.SetHeaderColumns(headerLine, delimiters);
+                            string line;
+                            // Read and display lines from the file until the end of 
+                            // the file is reached.
+                            long numRead = 0;
+                            while ((line = sr.ReadLine()) != null)
+                            {
+                                numRead += line.Length;
+                                mintPercentRead = Convert.ToInt32((numRead * 100) / totalLength);
+                                if (numRead % 100 == 0)
+                                    PercentComplete(mintPercentRead);
+                                arrSequestResults.Add(new clsSequestResults(line, delimiters));
+                            }
+                        }
+                        success = true;
+                    }
+                    catch (System.IO.IOException ioException)
+                    {
+                        // Let the user know what went wrong.
+                        ErrorMessage("Error reading ReadSequestFile file: " + ioException.Message);
+                        Console.WriteLine("Error reading ReadSequestFile file: " + ioException.Message + ioException.StackTrace);
+                        if (attempts > CONST_MAX_ATTEMPTS)
+                        {
+                            throw ioException;
+                        }
+                    }
+                }
 			}
 			catch (Exception ex) 
 			{
 				// Let the user know what went wrong.
-				ErrorMessage("Error reading Sequest results file: " + ex.Message ) ;				
+				ErrorMessage("Error reading Sequest results file: " + ex.Message ) ;
+                throw ex;
 			}
 			return (clsSequestResults []) arrSequestResults.ToArray(typeof(clsSequestResults)) ; 
 		}

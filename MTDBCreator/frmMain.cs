@@ -26,7 +26,7 @@ namespace MTDBCreator
         private const int mintInterceptColumn = 3;
         private const int mintRSquaredColumn = 4;
         private const int mintNumMassTagsColumn = 5;
-        public const string PROGRAM_DATE = "July 9, 2009";
+        public const string PROGRAM_DATE = "August 8, 2010";
         public const string CONST_DEFAULT_DATABASE_NAME = "untitled.mdb";
 
 		private Splitter splitter2;
@@ -231,14 +231,33 @@ namespace MTDBCreator
             statusMessages.Text = message;
         }
         /// <summary>
+        /// Delegate for displaying processing results.
+        /// </summary>
+        /// <param name="failed">List of datasets that failed to load.</param>
+        delegate void DelegateProcessingComplete(List<string> failed);
+        /// <summary>
         /// Notify people that the analysis is complete.
         /// </summary>
-        void UpdateCompleteAnalysis()
+        void UpdateCompleteAnalysis(List<string> failed)
         {
             statusMessages.Text = "Mass Tag Database Creation Complete.";
             radioButtonAverageNET.Enabled = true;
             m_statusForm.Reset();
             m_statusForm.Hide();
+
+            // If there are any failed datasets then show which ones failed to load.            
+            if (failed.Count > 0)
+            {
+                Form form = new Form();
+                ListBox box = new ListBox();
+                box.Dock = DockStyle.Fill;
+                foreach (string ioErrorDataset in failed)
+                {
+                    box.Items.Add(ioErrorDataset);
+                }
+                form.Controls.Add(box);
+                form.Show();
+            }
         }
 
         /// <summary>
@@ -260,7 +279,7 @@ namespace MTDBCreator
             }
             else
             {
-                UpdateCompleteAnalysis();
+                UpdateTotalPercentComplete(percentDone);
             }
         }
         /// <summary>
@@ -276,7 +295,8 @@ namespace MTDBCreator
             }
             else
             {
-                UpdateCompleteAnalysis();
+                UpdatePercentComplete(percentDone);
+                //UpdateCompleteAnalysis();
             }
         }
         /// <summary>
@@ -290,11 +310,11 @@ namespace MTDBCreator
             mobjMTDB = e.Database;
             if (InvokeRequired == true)
             {
-                Invoke(new MethodInvoker(UpdateCompleteAnalysis));
+                Invoke(new DelegateProcessingComplete(UpdateCompleteAnalysis), new object[] {e.FailedDatasets});
             }
             else
             {
-                UpdateCompleteAnalysis();
+                UpdateCompleteAnalysis(e.FailedDatasets);
             }
         }
         /// <summary>
@@ -894,8 +914,17 @@ namespace MTDBCreator
 			m_statusForm.SetStatusMessage("Reading PHRP files for " + analysis.mstrDataset) ;
             m_statusForm.Reset();
 
-			mobjSequestPHRPResultsReader = new clsSequestAnalysisReader(analysis.mstrArchivePath, 
-				                                                        analysis.mstrDataset); 
+            try
+            {
+                mobjSequestPHRPResultsReader = new clsSequestAnalysisReader(analysis.mstrArchivePath,
+                                                                            analysis.mstrDataset);
+            }
+            catch (Exception ex)
+            {
+                UpdateError("Could not display SEQUEST data. " + ex.Message);
+                m_statusForm.Hide();
+                return;
+            }
 			
             if (!radioButtonAverageNET.Checked)
             {

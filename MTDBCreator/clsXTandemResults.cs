@@ -247,7 +247,8 @@ namespace MTDBCreator
 
 	public class clsXTandemResultsReader: ProcessorBase
 	{
-		private int mintPercentRead ; 
+        private const int CONST_MAX_ATTEMPTS = 3;
+        private int mintPercentRead; 
 
 		public clsXTandemResultsReader()
 		{
@@ -263,33 +264,53 @@ namespace MTDBCreator
 		}
 		public clsXTandemResults[] ReadXTandemFile(string fileName)
 		{
-			ArrayList arrXTandemResults = new ArrayList() ; 
-			try 
+            ArrayList arrXTandemResults = new ArrayList() ;
+            int attempts = 0;
+            bool success = false;
+            try 
 			{
-				// Create an instance of StreamReader to read from a file.
-				// The using statement also closes the StreamReader.
-				FileInfo fInfo = new FileInfo(fileName) ; 
-				long totalLength = fInfo.Length ; 
-				using (StreamReader sr = new StreamReader(fileName)) 
-				{
-					StatusMessage("Loading XTandem results file" ) ;
-					char [] delimiters = {'\t'} ; 
-					string headerLine = sr.ReadLine() ; 
-					clsXTandemResults.SetHeaderNames() ; 
-					clsXTandemResults.SetHeaderColumns(headerLine, delimiters) ; 
-					string line;
-					// Read and display lines from the file until the end of 
-					// the file is reached.
-					long numRead = 0 ; 
-					while ((line = sr.ReadLine()) != null) 
-					{
-						numRead += line.Length; 
-						mintPercentRead = Convert.ToInt32((numRead*100)/totalLength) ; 
-						if (numRead % 100 == 0)
-							PercentComplete(mintPercentRead) ; 
-						arrXTandemResults.Add(new clsXTandemResults(line, delimiters)) ; 
-					}
-				}
+                while (success == false)
+                {
+                    attempts++;
+                    try
+                    {
+                        // Create an instance of StreamReader to read from a file.
+                        // The using statement also closes the StreamReader.
+                        FileInfo fInfo = new FileInfo(fileName);
+                        long totalLength = fInfo.Length;
+                        using (StreamReader sr = new StreamReader(fileName))
+                        {
+                            StatusMessage("Loading XTandem results file");
+                            char[] delimiters = { '\t' };
+                            string headerLine = sr.ReadLine();
+                            clsXTandemResults.SetHeaderNames();
+                            clsXTandemResults.SetHeaderColumns(headerLine, delimiters);
+                            string line;
+                            // Read and display lines from the file until the end of 
+                            // the file is reached.
+                            long numRead = 0;
+                            while ((line = sr.ReadLine()) != null)
+                            {
+                                numRead += line.Length;
+                                mintPercentRead = Convert.ToInt32((numRead * 100) / totalLength);
+                                if (numRead % 100 == 0)
+                                    PercentComplete(mintPercentRead);
+                                arrXTandemResults.Add(new clsXTandemResults(line, delimiters));
+                            }
+                        }
+                        success = true;
+                    }
+                    catch (System.IO.IOException ioException)
+                    {
+                        // Let the user know what went wrong.
+                        ErrorMessage("Error reading ReadXTandemFile file: " + ioException.Message);
+                        Console.WriteLine("Error reading ReadXTandemFile file: " + ioException.Message + ioException.StackTrace);
+                        if (attempts > CONST_MAX_ATTEMPTS)
+                        {
+                            throw ioException;
+                        }
+                    }
+                }
 			}
 			catch (Exception ex) 
 			{

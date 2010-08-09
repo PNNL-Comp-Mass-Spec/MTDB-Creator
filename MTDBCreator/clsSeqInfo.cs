@@ -62,7 +62,8 @@ namespace MTDBCreator
 	}
 
 	public class clsSeqInfoReader: ProcessorBase
-	{
+    {
+        private const int CONST_MAX_ATTEMPTS = 3;
 		private int mintPercentRead ; 
 		
 		public clsSeqInfoReader()
@@ -79,33 +80,53 @@ namespace MTDBCreator
 		}
 		public clsSeqInfo[] ReadSeqInfoFile(string fileName)
 		{
-			ArrayList arrSeqInfo = new ArrayList() ; 
+			ArrayList arrSeqInfo = new ArrayList() ;
+            int attempts = 0;
+            bool success = false;
 			try 
 			{
-				// Create an instance of StreamReader to read from a file.
-				// The using statement also closes the StreamReader.
-				FileInfo fInfo = new FileInfo(fileName) ; 
-				long totalLength = fInfo.Length ; 
+                while (success == false)
+                {
+                    attempts++;
+                    try
+                    {
+                        // Create an instance of StreamReader to read from a file.
+                        // The using statement also closes the StreamReader.
+                        FileInfo fInfo = new FileInfo(fileName);
+                        long totalLength = fInfo.Length;
 
-				using (StreamReader sr = new StreamReader(fileName)) 
-				{
-                    
-					StatusMessage("Loading SeqInfo file" ) ;
-					char [] delimiters = {'\t'} ; 
-					string headerLine = sr.ReadLine() ; 
-					clsSeqInfo.SetHeaderNames() ; 
-					clsSeqInfo.SetHeaderColumns(headerLine, delimiters) ; 
-					string line;
-					long numRead = 0 ; 
-					while ((line = sr.ReadLine()) != null) 
-					{
-						numRead += line.Length; 
-						mintPercentRead = Convert.ToInt32((numRead*100)/totalLength) ; 
-						if (numRead % 100 == 0)
-							PercentComplete(mintPercentRead) ; 
-						arrSeqInfo.Add(new clsSeqInfo(line, delimiters)) ; 
-					}
-				}
+                        using (StreamReader sr = new StreamReader(fileName))
+                        {
+
+                            StatusMessage("Loading SeqInfo file");
+                            char[] delimiters = { '\t' };
+                            string headerLine = sr.ReadLine();
+                            clsSeqInfo.SetHeaderNames();
+                            clsSeqInfo.SetHeaderColumns(headerLine, delimiters);
+                            string line;
+                            long numRead = 0;
+                            while ((line = sr.ReadLine()) != null)
+                            {
+                                numRead += line.Length;
+                                mintPercentRead = Convert.ToInt32((numRead * 100) / totalLength);
+                                if (numRead % 100 == 0)
+                                    PercentComplete(mintPercentRead);
+                                arrSeqInfo.Add(new clsSeqInfo(line, delimiters));
+                            }
+                        }
+                        success = true;
+                    }
+                    catch (System.IO.IOException ioException)
+                    {
+                        // Let the user know what went wrong.
+                        ErrorMessage("Error reading ResultsToSeqMap file: " + ioException.Message);
+                        Console.WriteLine("Error reading ResultsToSeqMap file: " + ioException.Message + ioException.StackTrace);
+                        if (attempts > CONST_MAX_ATTEMPTS)
+                        {
+                            throw ioException;
+                        }
+                    }
+                }
 			}
 			catch (Exception ex) 
 			{

@@ -50,6 +50,7 @@ namespace MTDBCreator
 
 	public class clsResultsToSeqMapReader: ProcessorBase
 	{
+        private const int CONST_MAX_ATTEMPTS = 3;
 		private int mintPercentRead ; 
 
 		public clsResultsToSeqMapReader()
@@ -66,41 +67,61 @@ namespace MTDBCreator
 		}
 		public clsResultsToSeqMap[] ReadResultsToSeqMapFile(string fileName)
 		{
-			ArrayList arrResultsToSeqMap = new ArrayList() ; 
-			try 
-			{
-				// Create an instance of StreamReader to read from a file.
-				// The using statement also closes the StreamReader.
-				FileInfo fInfo = new FileInfo(fileName) ; 
-				long totalLength = fInfo.Length ; 
+			ArrayList arrResultsToSeqMap = new ArrayList() ;
+            int attempts = 0;
+            bool success = false;
+            try
+            {
+                while (success == false)
+                {
+                    // Let the program try to download the data a number of times before giving up.
+                    attempts++;
+                    try
+                    {
+                        // Create an instance of StreamReader to read from a file.
+                        // The using statement also closes the StreamReader.
+                        FileInfo fInfo = new FileInfo(fileName);
+                        long totalLength = fInfo.Length;
 
-				using(StreamReader sr = new StreamReader(fileName))
-				{
-					StatusMessage("Loading ResultsToSeqMap file" ) ;
-					char [] delimiters = {'\t'} ; 
-					string headerLine = sr.ReadLine() ; 
-					clsResultsToSeqMap.SetHeaderNames() ; 
-					clsResultsToSeqMap.SetHeaderColumns(headerLine, delimiters) ; 
-					string line;
-					// Read and display lines from the file until the end of 
-					// the file is reached.
-					long numRead = 0 ; 
-					while ((line = sr.ReadLine()) != null) 
-					{
-						numRead += line.Length; 
-						mintPercentRead = Convert.ToInt32((numRead*100)/totalLength) ; 
-						if (numRead % 100 == 0)
-							PercentComplete(mintPercentRead) ; 
-						arrResultsToSeqMap.Add(new clsResultsToSeqMap(line, delimiters)) ; 
-					}
-				}
-			}
-			catch (Exception e) 
-			{
-				// Let the user know what went wrong.
-				ErrorMessage("Error reading ResultsToSeqMap file: " + e.Message ) ;
-				Console.WriteLine("Error reading ResultsToSeqMap file: " + e.Message + e.StackTrace);
-			}
+                        using (StreamReader sr = new StreamReader(fileName))
+                        {
+                            StatusMessage("Loading ResultsToSeqMap file");
+                            char[] delimiters = { '\t' };
+                            string headerLine = sr.ReadLine();
+                            clsResultsToSeqMap.SetHeaderNames();
+                            clsResultsToSeqMap.SetHeaderColumns(headerLine, delimiters);
+                            string line;
+                            // Read and display lines from the file until the end of 
+                            // the file is reached.
+                            long numRead = 0;
+                            while ((line = sr.ReadLine()) != null)
+                            {
+                                numRead += line.Length;
+                                mintPercentRead = Convert.ToInt32((numRead * 100) / totalLength);
+                                if (numRead % 100 == 0)
+                                    PercentComplete(mintPercentRead);
+                                arrResultsToSeqMap.Add(new clsResultsToSeqMap(line, delimiters));
+                            }
+                        }
+                        success = true;
+                    }
+                    catch (System.IO.IOException ioException)
+                    {
+                        // Let the user know what went wrong.
+                        ErrorMessage("Error reading ResultsToSeqMap file: " + ioException.Message);
+                        Console.WriteLine("Error reading ResultsToSeqMap file: " + ioException.Message + ioException.StackTrace);
+                        if (attempts > CONST_MAX_ATTEMPTS)
+                            throw ioException;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                // Let the user know what went wrong.
+                ErrorMessage("Error reading ResultsToSeqMap file: " + e.Message);
+                Console.WriteLine("Error reading ResultsToSeqMap file: " + e.Message + e.StackTrace);
+                throw e;
+            }
 			return (clsResultsToSeqMap []) arrResultsToSeqMap.ToArray(typeof(clsResultsToSeqMap)) ; 
 		}
 	}
