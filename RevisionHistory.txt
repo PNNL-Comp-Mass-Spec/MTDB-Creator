@@ -1,5 +1,6 @@
 MTDBCreator Revision History
-Version 2.1.; August, 8, 2010
+
+Version 2.1.; August 8, 2010
 	- Added error handling when working across UNC paths for archived syn files.
 	
 Version 2.0.; July 9, 2010
