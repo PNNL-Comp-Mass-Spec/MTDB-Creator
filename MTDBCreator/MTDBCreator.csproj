@@ -108,6 +108,10 @@
     <FileAlignment>4096</FileAlignment>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\x86\Release\MTDBCreator.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NETPrediction, Version=1.0.2797.35783, Culture=neutral">

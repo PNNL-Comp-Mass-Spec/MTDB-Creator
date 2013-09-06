@@ -24,7 +24,7 @@ namespace MTDBCreator.Data
                     filter = new BottomUpSequestTargetFilter(options);
                     break;
                 case SupportedTools.XTandem:
-                    filter = new BottomUpSequestTargetFilter(options);
+                    filter = new BottomUpXTandemTargetFilter(options);
                     break;
                 case SupportedTools.NotSupported:
                     break;

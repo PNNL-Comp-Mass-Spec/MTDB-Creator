@@ -15,7 +15,11 @@ Run the program, then click "Start Analysis".  Next click the appropriate
 button to select the PSM search results to process.  For X!Tandem, you choose
 the _xt.txt files (created by PHRP).  For SEQUEST choose the _syn.txt files.
 
-Next, click "OK" and you will see a list of your datasets.  
+Next, click "OK" and you will see a list of your datasets.  At this point you can
+double click each dataset in the list and the data for that dataset will be 
+loaded and regressed against the Predicted NET scale.  Alternatively, just 
+click "Create Database" and the program will process all of your datasets.  
+Once processing is complete, click "Save Database" to create a new SqLite file.
 
 == Example Data ==
 

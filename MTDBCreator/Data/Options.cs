@@ -314,7 +314,8 @@ namespace MTDBCreator.Data
 			hash = (hash * 7) + MinXCorrForExportNonTrytpic.GetHashCode();
 			hash = (hash * 7) + MinXCorrForExportPartiallyTrytpic.GetHashCode();
 			hash = (hash * 7) + MinXCorrForExportTrytpic.GetHashCode();
-			hash = (hash * 7) + PredictionAlgorithm.GetHashCode();
+			if (PredictionAlgorithm != null)
+				hash = (hash * 7) + PredictionAlgorithm.GetHashCode();
 			hash = (hash * 7) + PredictorType.GetHashCode();
 			hash = (hash * 7) + Regression.GetHashCode();
 			hash = (hash * 7) + RegressionOrder.GetHashCode();
