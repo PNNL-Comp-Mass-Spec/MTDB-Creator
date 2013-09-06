@@ -5,21 +5,23 @@ MTDB Creator
 The MTDBCreator will read a series of Peptide Hit Result Processor (PHRP) output files
 from X!Tandem or Sequest search results, align the data, then create a standalone
 SQLite database compatible with MultiAlign.  For an example please see the 
-exampleDatabase.db3 file installed with the program (typically at 
+Example_Database.db3 file installed with the program (typically at 
 C:\Program Files (x86)\MTDBCreator\)  For more information on PHRP, see 
 http://omics.pnl.gov/software/PeptideHitResultsProcessor.php
 
 == Details ==
 
 Run the program, then click "Start Analysis".  Next click the appropriate
-button to select the PSM search results to process.  For X!Tandem, you choose
+button to select the PSM search results to load.  For X!Tandem, you choose
 the _xt.txt files (created by PHRP).  For SEQUEST choose the _syn.txt files.
 
 Next, click "OK" and you will see a list of your datasets.  At this point you can
 double click each dataset in the list and the data for that dataset will be 
-loaded and regressed against the Predicted NET scale.  Alternatively, just 
-click "Create Database" and the program will process all of your datasets.  
-Once processing is complete, click "Save Database" to create a new SqLite file.
+loaded and regressed against the Predicted NET scale.  However, there is no need
+to manually click each dataset.  Instead, just click "Create Database" and 
+the program will process all of your datasets to create an in-memory database.
+Once processing is complete, click "Save Database" to save a new SqLite file
+to disk.
 
 == Example Data ==
 
@@ -38,12 +40,22 @@ Unzip these .Zip files to obtain these files:
 
 1. Example input files for MTDB Creator
 	- In MTDB_Creator_Example_Data.zip
-	- File QC_Shew_Datasets.txt 
-		- Select this file in MTDB Creator using File->Load
-		- This file lists the dataset names and paths to the SEQUEST result folders
-		- You will need to customize the paths in this file to match the paths on your computer
-	- Folder Sequest_Data in this .Zip file contains the Peptide Hit Results Processor files 
-	  processed by the MTDB Creator
+	- Includes three example SqLite databases
+		Example_Database.db3
+		Example_Sequest_Database.db3
+		Example_XTandem_Database.db3
+	- Folder Sequest_Data
+		- Example PHRP files for Sequest
+		- In the MTDB Creator you will select these files:
+			QC_Shew_10_02a_2Nov10_Cougar_10-09-06_syn.txt
+			QC_Shew_10_02b_2Nov10_Cougar_10-09-08_syn.txt
+			QC_Shew_10_02c_2Nov10_Cougar_10-09-09_syn.txt
+	- Folder XTandemData
+		- Example PHRP files for X!Tandem
+		- In the MTDB Creator you will select these files:
+			QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt
+			QC_Shew_12_02_pt5_2c_20Dec12_Leopard_12-11-10_xt.txt
+			QC_Shew_12_04_pt1_2_3_27Jun13_Leopard_13-05-21_xt.txt
 
 2. Accurate Mass and Time Tag Database (AMT tag DB) created by MTDB Creator
 	- In MTDB_Creator_Example_Data.zip
@@ -67,20 +79,3 @@ Website: http://ncrr.pnl.gov/ or http://www.sysbio.org/resources/staff/
 Licensed under the Apache License, Version 2.0; you may not use this file except 
 in compliance with the License.  You may obtain a copy of the License at 
 http://www.apache.org/licenses/LICENSE-2.0
-
-All publications that result from the use of this software should include 
-the following acknowledgment statement:
- Portions of this research were supported by the W.R. Wiley Environmental 
- Molecular Science Laboratory, a national scientific user facility sponsored 
- by the U.S. Department of Energy's Office of Biological and Environmental 
- Research and located at PNNL.  PNNL is operated by Battelle Memorial Institute 
- for the U.S. Department of Energy under contract DE-AC05-76RL0 1830.
-
-Notice: This computer software was prepared by Battelle Memorial Institute, 
-hereinafter the Contractor, under Contract No. DE-AC05-76RL0 1830 with the 
-Department of Energy (DOE).  All rights in the computer software are reserved 
-by DOE on behalf of the United States Government and the Contractor as 
-provided in the Contract.  NEITHER THE GOVERNMENT NOR THE CONTRACTOR MAKES ANY 
-WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LIABILITY FOR THE USE OF THIS 
-SOFTWARE.  This notice including this sentence must appear on any copies of 
-this computer software.
