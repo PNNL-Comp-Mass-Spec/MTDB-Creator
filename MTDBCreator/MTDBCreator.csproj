@@ -114,10 +114,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\NETPrediction.dll</HintPath>
     </Reference>
-    <Reference Include="NETPredictionBasic, Version=1.0.2103.22858, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\NETPredictionBasic.dll</HintPath>
-    </Reference>
     <Reference Include="PJLControls, Version=1.1.2600.42486, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\PJLControls.dll</HintPath>
