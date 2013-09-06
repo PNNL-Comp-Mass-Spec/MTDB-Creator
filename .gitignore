@@ -1,0 +1,10 @@
+*.csproj.user
+*.suo
+*.user
+*.sln.DotSettings.user
+*/bin/
+*/obj/
+*/*/obj/
+*/*/bin/
+packages/
+data/QC_Shew_DeconTools/

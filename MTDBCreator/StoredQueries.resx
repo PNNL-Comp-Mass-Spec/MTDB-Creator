@@ -112,28 +112,82 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="GetMassTagMatchCount" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\GetMassTagMatchCount.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="square_rounded_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\square-rounded-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="GetMassTagsPassingFiltersWork" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\GetMassTagsPassingFiltersWork.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="video_play_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\video-play-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="GetMassTagsPlusPepProphetStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\GetMassTagsPlusPepProphetStats.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="xtandem" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\xtandem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="GetMassTagToProteinNameMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\GetMassTagToProteinNameMap.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  <data name="database_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\database-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="V_IFC_Mass_Tag_to_Protein_Name_Map" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\V_IFC_Mass_Tag_to_Protein_Name_Map.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="GetMassTagsPassingFiltersWork" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\GetMassTagsPassingFiltersWork.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="video_play_3_128" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\video-play-3-128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gas_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\gas-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arrow_58_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\arrow-58-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GetMassTagToProteinNameMap" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\GetMassTagToProteinNameMap.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="databaseCreator" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Icons\databaseCreator.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="corkscrew_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\corkscrew-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mtdb" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Icons\mtdb.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="database_161" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\database-16.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="circle_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\circle-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="video_play_3_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\video-play-3-32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="check_mark_7_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\check-mark-7-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="startAnalysis" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\startAnalysis.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GetMassTagsPlusPepProphetStats" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\GetMassTagsPlusPepProphetStats.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="tree_structure_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\tree-structure-16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="database_256" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\database-256.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="database_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\database-32.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GetMassTagMatchCount" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\GetMassTagMatchCount.txt;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="sequest" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\sequest.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

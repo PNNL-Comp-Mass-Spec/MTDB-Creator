@@ -36,7 +36,7 @@ namespace MTDBCreatorUnitTests.FailedRegressionTests
             // that we are interested in processing.
             foreach (clsAnalysisDescription description in reader.Analyses)
             {
-                clsSequestAnalysisReader sequestData = new clsSequestAnalysisReader(description.mstrArchivePath, description.mstrDataset);
+                SequestAnalysisReader sequestData = new SequestAnalysisReader(description.mstrArchivePath, description.mstrDataset);
 
             }
         }
@@ -63,7 +63,7 @@ namespace MTDBCreatorUnitTests.FailedRegressionTests
             // that we are interested in processing.
             foreach (clsAnalysisDescription description in reader.Analyses)
             {
-                clsSequestAnalysisReader sequestData = new clsSequestAnalysisReader(description.mstrArchivePath, description.mstrDataset);
+                SequestAnalysisReader sequestData = new SequestAnalysisReader(description.mstrArchivePath, description.mstrDataset);
 
             }
         }
@@ -90,7 +90,7 @@ namespace MTDBCreatorUnitTests.FailedRegressionTests
             // that we are interested in processing.
             foreach (clsAnalysisDescription description in reader.Analyses)
             {
-                clsSequestAnalysisReader sequestData = new clsSequestAnalysisReader(description.mstrArchivePath, description.mstrDataset);
+                SequestAnalysisReader sequestData = new SequestAnalysisReader(description.mstrArchivePath, description.mstrDataset);
 
             }
         }
@@ -117,7 +117,7 @@ namespace MTDBCreatorUnitTests.FailedRegressionTests
             // that we are interested in processing.
             foreach (clsAnalysisDescription description in reader.Analyses)
             {
-                clsSequestAnalysisReader sequestData = new clsSequestAnalysisReader(description.mstrArchivePath, description.mstrDataset);
+                SequestAnalysisReader sequestData = new SequestAnalysisReader(description.mstrArchivePath, description.mstrDataset);
 
             }
         }

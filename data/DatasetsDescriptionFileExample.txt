@@ -1,0 +1,4 @@
+Tool	Dataset	Folder	
+XTandem	AID_STM_019_110804_25_LTQ_17Dec04_Earth_1004-10	D:\Data_Disc\Software_Installers\MTDBCreator\data\AID_STM_019_110804_25_LTQ_17Dec04_Earth_1004-10	
+XTandem	AID_STM_019_110804_24_LTQ_17Dec04_Earth_1004-9	D:\Data_Disc\Software_Installers\MTDBCreator\data\AID_STM_019_110804_24_LTQ_17Dec04_Earth_1004-9	
+XTandem	AID_STM_019_110804_23_LTQ_16Dec04_Earth_1004-10	D:\Data_Disc\Software_Installers\MTDBCreator\data\AID_STM_019_110804_23_LTQ_16Dec04_Earth_1004-10	
