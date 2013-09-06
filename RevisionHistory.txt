@@ -1,10 +1,12 @@
 MTDBCreator Revision History
+
 Version 3.0 : September 6, 2013
 	- Changed the user interface significantly.  
 	- New dataset description file format
 	- No longer supporting Microsoft Access Database output
 	- New output database format is SQLite 
 	- Still requires PHRP Reader to be run on X!Tandem and SEQUEST files.
+
 Version 2.1.; August 8, 2010
 	- Added error handling when working across UNC paths for archived syn files.
 	

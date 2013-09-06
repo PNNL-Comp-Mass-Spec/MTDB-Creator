@@ -295,6 +295,35 @@ namespace MTDBCreator.Data
         }
         #endregion
 
+		public override int GetHashCode()
+		{
+			int hash = 13;
+
+			hash = (hash * 7) + ExportNonTryptic.GetHashCode();
+			hash = (hash * 7) + ExportPartiallyTryptic.GetHashCode();
+			hash = (hash * 7) + ExportTryptic.GetHashCode();
+			hash = (hash * 7) + MaxDelCN.GetHashCode();
+			hash = (hash * 7) + MaxLogEValForXTandemAlignment.GetHashCode();
+			hash = (hash * 7) + MaxLogEValForXTandemExport.GetHashCode();
+			hash = (hash * 7) + MaxModificationsForAlignment.GetHashCode();
+			hash = (hash * 7) + MaxModsForAlignment.GetHashCode();
+			hash = (hash * 7) + MaxRankForExport.GetHashCode();
+			hash = (hash * 7) + MinDelCNForExport.GetHashCode();
+			hash = (hash * 7) + MinObservationsForExport.GetHashCode();
+			hash = (hash * 7) + MinXCorrForAlignment.GetHashCode();
+			hash = (hash * 7) + MinXCorrForExportNonTrytpic.GetHashCode();
+			hash = (hash * 7) + MinXCorrForExportPartiallyTrytpic.GetHashCode();
+			hash = (hash * 7) + MinXCorrForExportTrytpic.GetHashCode();
+			hash = (hash * 7) + PredictionAlgorithm.GetHashCode();
+			hash = (hash * 7) + PredictorType.GetHashCode();
+			hash = (hash * 7) + Regression.GetHashCode();
+			hash = (hash * 7) + RegressionOrder.GetHashCode();
+			hash = (hash * 7) + TargetFilterType.GetHashCode();
+			hash = (hash * 7) + UseDelCN.GetHashCode();
+
+			return hash;
+		}
+
         public override bool Equals(object obj)
         {
             Options other = obj as Options;

@@ -4,23 +4,18 @@ MTDB Creator
 
 The MTDBCreator will read a series of Peptide Hit Result Processor (PHRP) output files
 from X!Tandem or Sequest search results, align the data, then create a standalone
-Microsoft Access DB.  For an example please see the ExampleDatabase.mdb file
-installed with the program (typically at C:\Program Files\MTDBCreator\)  For
-more information on PHRP, see http://omics.pnl.gov/software/PeptideHitResultsProcessor.php
+SQLite database compatible with MultiAlign.  For an example please see the 
+exampleDatabase.db3 file installed with the program (typically at 
+C:\Program Files (x86)\MTDBCreator\)  For more information on PHRP, see 
+http://omics.pnl.gov/software/PeptideHitResultsProcessor.php
 
 == Details ==
-Use File->Load to select a file defining the paths to the folders
-containing the input PHRP files to use to create the mass tag database.  As an 
-example, see file DatasetDescription.txt.  You will need to customize this file
-as needed to read your own data files.  Use Tools->Options to define the filters
-for aligning the data and for storing the data in the database.  Next, use
-Tools->Create Mass Tag Database to align the data files and create the Microsoft
-Access database.  Following this, the alignment of individual datasets can be 
-visualized by clicking on the dataset name in the list at the bottom of the program
 
-Note that version 2.x of MTDB Creator requires Office 2007.
-Also, if you find that the T_Proteins table has a lot of blank lines, please
-manually delete them before using the file with MultiAlign.
+Run the program, then click "Start Analysis".  Next click the appropriate
+button to select the PSM search results to process.  For X!Tandem, you choose
+the _xt.txt files (created by PHRP).  For SEQUEST choose the _syn.txt files.
+
+Next, click "OK" and you will see a list of your datasets.  
 
 == Example Data ==
 
