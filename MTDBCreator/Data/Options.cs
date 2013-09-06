@@ -239,7 +239,7 @@ namespace MTDBCreator.Data
 		}
 		public bool IsToBeExported(XTandemResult xtResult)
 		{
-			if (xtResult.LogIntensity > MaxLogEValForXTandemExport)
+			if (xtResult.LogPeptideEValue > MaxLogEValForXTandemExport)
 				return false ; 
 			if (xtResult.TrypticState == 2)
 			{
