@@ -12,6 +12,6 @@ namespace MTDBCreator.IO
         /// Reads the path provided for files.
         /// </summary>
         /// <param name="path"></param>
-        Analysis Read(string path, string name, ITargetFilter filter);        
+        Analysis Read(string path, string name);        
     }
 }

@@ -18,7 +18,6 @@ namespace MTDBCreator
     /// </summary>
     public class MTDBProcessor: IDisposable
     {
-
         public event EventHandler<StatusEventArgs>              Status;
         public event EventHandler<StatusEventArgs>              Error;
         public event EventHandler<DatabaseCreatedEventArgs>     DatabaseCreated;
@@ -74,7 +73,7 @@ namespace MTDBCreator
             }
         }
 
-        #region Processing      
+        #region Processing
   
         /// <summary>
         /// Creates a mass tag database given the associated analysis.
@@ -138,6 +137,8 @@ namespace MTDBCreator
                     massTagDatabase.AddResults( analysis.Targets, 
                                                 options.Regression, 
                                                 predictor);
+
+                    
 
                     if (AnalysisCompleted != null)                    
                         AnalysisCompleted(this, new AnalysisCompletedEventArgs(analysisNumber++, analysisDescriptions.Count, analysis));                    
@@ -261,7 +262,7 @@ namespace MTDBCreator
             ITargetFilter filter                = TargetFilterFactory.CreateFilters(analysis.Tool, options);
 
             IRegressionAlgorithm    regressor   = RegressorFactory.CreateRegressor(RegressorType.LcmsRegressor, options.Regression);            
-            Analysis results                    = reader.Read(analysis.FilePath, analysis.Name, filter);
+            Analysis results                    = reader.Read(analysis.FilePath, analysis.Name);
             
             analysis.Proteins                   = results.Proteins; 
             analysis.Targets                    = results.Targets;            
@@ -269,8 +270,18 @@ namespace MTDBCreator
             // Calculate the regression based on the target data
             List<float> predicted               = new List<float>();
             List<float> scans                   = new List<float>();
+            
             foreach (Target target in analysis.Targets)
             {
+                // Also make sure that we dont use this if we arent going to export it also.
+                if (options.ShouldFilter(target))
+                    continue;
+
+                // Filter the target here...based on use for alignment.
+                if (filter.ShouldFilter(target))
+                    continue;
+
+                target.IsPredicted  = true;
                 target.NetPredicted = predictor.GetElutionTime(target.CleanSequence);
                 scans.Add(target.Scan);
                 predicted.Add(Convert.ToSingle(target.NetPredicted));
@@ -323,7 +334,6 @@ namespace MTDBCreator
         }
         public MassTagDatabase  Database { get; private set; }
     }
-
 
     /// <summary>
     /// Event arguments when a mass tag database is created.

@@ -156,7 +156,7 @@ namespace MTDBCreator.IO
         /// <param name="name"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        public Analysis Read(string path, string name, ITargetFilter filter)
+        public Analysis Read(string path, string name)
         {
             Analysis result = new Analysis();
             MapPaths(path, name);
@@ -181,8 +181,8 @@ namespace MTDBCreator.IO
             List<Sequence> sequences = seqInfoReader.Read(seqInfoFile);
 
             // Then map all of the data onto thee....
-            MapSequencesOntoTargets(targets, sequences, resultsMap);
-            result.Targets = FilterTargets(targets, filter);
+            MapSequencesOntoTargets(targets, sequences, resultsMap);   
+            result.Targets  = targets; 
             result.Proteins = MapProteins(result.Targets, sequenceMaps);
 
             return result;

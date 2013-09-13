@@ -10,9 +10,10 @@ namespace MTDBCreator.Data
     {
         public Target()
         {
-            Proteins = new List<Protein>();
-            SequenceData = new Sequence();
-            ParentTarget = null;
+            Proteins        = new List<Protein>();
+            SequenceData    = new Sequence();
+            ParentTarget    = null;
+            IsPredicted     = false;
         }
 
         /// <summary>
@@ -31,6 +32,7 @@ namespace MTDBCreator.Data
         public double        LogPeptideEValue { get; set; }
         public short         MultiProteinCount   { get; set; } 		
         public Sequence      SequenceData     { get; set; }
+        public bool IsPredicted { get; set; }
         public static short  CalculateTrypticState(string peptide)
         {
             short trypticState = 0;

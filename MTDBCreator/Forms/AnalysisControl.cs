@@ -242,6 +242,9 @@ namespace MTDBCreator.Forms
                         }
                         else
                         {
+                            /// Only display predicted peptides if not using average NET
+                            if (!target.IsPredicted) continue;
+
                             ordinate[i]   = Convert.ToSingle(target.NetPredicted);
                             abscissa[i++] = Convert.ToSingle(target.Scan);
                         }
@@ -259,8 +262,12 @@ namespace MTDBCreator.Forms
                         }
                         else
                         {
-                            ordinate[i] = Convert.ToSingle(target.NetPredicted - target.NetAligned);
-                            abscissa[i++] = Convert.ToSingle(target.Scan);
+                            /// Only display predicted peptides if not using average NET
+                            if (!target.IsPredicted) continue;
+                            
+                                ordinate[i] = Convert.ToSingle(target.NetPredicted - target.NetAligned);
+                                abscissa[i++] = Convert.ToSingle(target.Scan);
+                            
                         }
                     }
                 }

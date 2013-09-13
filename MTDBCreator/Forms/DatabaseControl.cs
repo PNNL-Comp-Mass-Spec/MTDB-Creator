@@ -61,6 +61,19 @@ namespace MTDBCreator.Forms
 
                 foreach (ConsensusTarget target in targets)
                 {
+
+                    //TODO:  This is just so we dont run out of memory (32-bit support)
+                    // we have too many mass tags otherwise for this tree view...barf!
+                    bool skip = false;
+                    foreach (Target t in target.Targets)
+                    {
+                        if (!t.IsPredicted)
+                        {
+                            skip = true;
+                        }
+                    }
+                    if (skip) continue;
+
                     TreeNode targetNode = new TreeNode(
                                             string.Format("{0} ({1})",
                                                                     target.CleanSequence,
@@ -75,26 +88,29 @@ namespace MTDBCreator.Forms
                     targetNode.Nodes[0].ImageIndex = CONST_PROPERTY;
                     targetNode.Nodes[1].ImageIndex = CONST_PROPERTY;
                     targetNode.Nodes[2].ImageIndex = CONST_PROPERTY;
-                    targetNode.Nodes[3].ImageIndex = CONST_PROPERTY;  
+                    targetNode.Nodes[3].ImageIndex = CONST_PROPERTY;
 
-                  
-                    TreeNode targetSubNode = new TreeNode("Peptides");
+
+                    TreeNode targetSubNode   = new TreeNode("Peptides");
                     targetSubNode.ImageIndex = CONST_FLAME;
                     targetNode.Nodes.Add(targetSubNode);
 
                     foreach (Target t in target.Targets)
                     {
-                        TreeNode node   = new TreeNode(t.Sequence);
-                        node.ImageIndex = CONST_FLAME;
-                        targetSubNode.Nodes.Add(node);
-                        node.Nodes.Add(string.Format("Mass: {0}", t.MonoisotopicMass)); 
-                        node.Nodes.Add(string.Format("Scan: {0}", t.Scan));
-                        node.Nodes.Add(string.Format("NET Pred: {0:0.00}", t.NetPredicted));
-                        node.Nodes.Add(string.Format("NET Align: {0:0.00}", t.NetAligned));
-                        node.Nodes[0].ImageIndex = CONST_PROPERTY;
-                        node.Nodes[1].ImageIndex = CONST_PROPERTY;
-                        node.Nodes[2].ImageIndex = CONST_PROPERTY;
-                        node.Nodes[3].ImageIndex = CONST_PROPERTY;                        
+                            if (t.IsPredicted)
+                        {
+                            TreeNode node = new TreeNode(t.Sequence);
+                            node.ImageIndex = CONST_FLAME;
+                            targetSubNode.Nodes.Add(node);
+                            node.Nodes.Add(string.Format("Mass: {0}", t.MonoisotopicMass));
+                            node.Nodes.Add(string.Format("Scan: {0}", t.Scan));
+                            node.Nodes.Add(string.Format("NET Pred: {0:0.00}", t.NetPredicted));
+                            node.Nodes.Add(string.Format("NET Align: {0:0.00}", t.NetAligned));
+                            node.Nodes[0].ImageIndex = CONST_PROPERTY;
+                            node.Nodes[1].ImageIndex = CONST_PROPERTY;
+                            node.Nodes[2].ImageIndex = CONST_PROPERTY;
+                            node.Nodes[3].ImageIndex = CONST_PROPERTY;
+                        }
                     }
                     massTagNode.Nodes.Add(targetNode);
                 }
