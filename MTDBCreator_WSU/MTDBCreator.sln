@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTDBCreator", "MTDBCreator\MTDBCreator.csproj", "{2DA18AEC-7DE7-4861-AC6A-537456DA9185}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Regressor", "Regressor\Regressor.csproj", "{FBB98B88-0EFD-486F-828C-E0A678552F58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTDBFramework", "MTDBFramework\MTDBFramework.csproj", "{3EE14E5D-3881-410E-86DF-611BAE112E90}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2DA18AEC-7DE7-4861-AC6A-537456DA9185}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DA18AEC-7DE7-4861-AC6A-537456DA9185}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DA18AEC-7DE7-4861-AC6A-537456DA9185}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DA18AEC-7DE7-4861-AC6A-537456DA9185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB98B88-0EFD-486F-828C-E0A678552F58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB98B88-0EFD-486F-828C-E0A678552F58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB98B88-0EFD-486F-828C-E0A678552F58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB98B88-0EFD-486F-828C-E0A678552F58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EE14E5D-3881-410E-86DF-611BAE112E90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EE14E5D-3881-410E-86DF-611BAE112E90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EE14E5D-3881-410E-86DF-611BAE112E90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EE14E5D-3881-410E-86DF-611BAE112E90}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

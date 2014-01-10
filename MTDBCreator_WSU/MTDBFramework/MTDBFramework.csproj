@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Any CPU</Platform>
+    <ProjectGuid>{3EE14E5D-3881-410E-86DF-611BAE112E90}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MTDBFramework</RootNamespace>
+    <AssemblyName>MTDBFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|Any CPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Any CPU\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>0</WarningLevel>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|Any CPU'">
+    <OutputPath>bin\Any CPU\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>Any CPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <OutputPath>bin\AnyCPU\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <ErrorReport>prompt</ErrorReport>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin\AnyCPU\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.1.3.0.733\lib\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=2.6.1.30, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MathNet.Numerics.2.6.1\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="NETPrediction, Version=1.3.5042.24371, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\NETPrediction.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="PNNLOmics">
+      <HintPath>..\libs\PNNLOmics.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\packages\System.Data.SQLite.1.0.88.0\lib\net40\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Algorithms\Alignment\AlignmentFilterFactory.cs" />
+    <Compile Include="Algorithms\Alignment\MSAlignAlignmentFilter.cs" />
+    <Compile Include="Algorithms\Alignment\XTandemAlignmentFilter.cs" />
+    <Compile Include="Algorithms\Alignment\SequestAlignmentFilter.cs" />
+    <Compile Include="Algorithms\Alignment\SpectralTargetAligner.cs" />
+    <Compile Include="Algorithms\Alignment\IAligner.cs" />
+    <Compile Include="Algorithms\Clustering\ConsensusTarget.cs" />
+    <Compile Include="Algorithms\Clustering\ITargetClusterer.cs" />
+    <Compile Include="Algorithms\Clustering\SequenceTargetClusterer.cs" />
+    <Compile Include="Algorithms\Clustering\SpectralTargetClusterer.cs" />
+    <Compile Include="Algorithms\Clustering\TargetClustererFactory.cs" />
+    <Compile Include="Algorithms\RetentionTimePrediction\IRetentionTimePredictor.cs" />
+    <Compile Include="Algorithms\RetentionTimePrediction\KangasPredictor.cs" />
+    <Compile Include="Algorithms\RetentionTimePrediction\KrokhinPredictor.cs" />
+    <Compile Include="Algorithms\MTDBProcessor.cs" />
+    <Compile Include="Algorithms\Alignment\PeptideTargetAligner.cs" />
+    <Compile Include="Algorithms\Alignment\ProteinTargetAligner.cs" />
+    <Compile Include="Algorithms\RetentionTimePrediction\RetentionTimePredictionType.cs" />
+    <Compile Include="Algorithms\RetentionTimePrediction\RetentionTimePredictorFactory.cs" />
+    <Compile Include="Algorithms\TargetWorkflowType.cs" />
+    <Compile Include="Database\ConsensusTargetMap.cs" />
+    <Compile Include="Database\DatabaseCreatorFactory.cs" />
+    <Compile Include="Database\ITargetDatabaseReader.cs" />
+    <Compile Include="Database\ITargetDatabaseWriter.cs" />
+    <Compile Include="Database\OptionsMap.cs" />
+    <Compile Include="Database\SQLiteTargetDatabaseReader.cs" />
+    <Compile Include="Database\SQLiteTargetDatabaseWriter.cs" />
+    <Compile Include="Database\TargetDatasetMap.cs" />
+    <Compile Include="Database\TargetMap.cs" />
+    <Compile Include="Database\TargetPeptideInfoMap.cs" />
+    <Compile Include="Data\AnalysisJobItem.cs" />
+    <Compile Include="Data\MSAlignResult.cs" />
+    <Compile Include="Data\MSAlignTargetFilter.cs" />
+    <Compile Include="Data\SequenceInfo.cs" />
+    <Compile Include="Data\SequenceToProteinMap.cs" />
+    <Compile Include="Data\ITargetFilter.cs" />
+    <Compile Include="Data\LcmsIdentificationTool.cs" />
+    <Compile Include="Data\Options.cs" />
+    <Compile Include="Data\ResultToSequenceMap.cs" />
+    <Compile Include="Data\SequestResult.cs" />
+    <Compile Include="Data\SequestTargetFilter.cs" />
+    <Compile Include="Data\Target.cs" />
+    <Compile Include="Algorithms\Alignment\TargetAlignmentFactory.cs" />
+    <Compile Include="Database\TargetDataSet.cs" />
+    <Compile Include="Data\TargetFilterFactory.cs" />
+    <Compile Include="Database\TargetPeptideInfo.cs" />
+    <Compile Include="Data\XTandemResult.cs" />
+    <Compile Include="Data\XTandemTargetFilter.cs" />
+    <Compile Include="IO\AnalysisJobDescriptionReader.cs" />
+    <Compile Include="IO\AnalysisReaderHelper.cs" />
+    <Compile Include="IO\AnalysisJobProcessor.cs" />
+    <Compile Include="IO\MSAlignAnalysisReader.cs" />
+    <Compile Include="IO\SequenceInfoReader.cs" />
+    <Compile Include="IO\SequenceToProteinMapReader.cs" />
+    <Compile Include="IO\ResultToSequenceMapReader.cs" />
+    <Compile Include="IO\TableDataReaderBase.cs" />
+    <Compile Include="IO\AnalysisReaderFactory.cs" />
+    <Compile Include="IO\SequestAnalysisReader.cs" />
+    <Compile Include="IO\IAnalysisReader.cs" />
+    <Compile Include="Data\LcmsDataSet.cs" />
+    <Compile Include="Database\TargetDatabase.cs" />
+    <Compile Include="IO\XTandemAnalysisReader.cs" />
+    <Compile Include="IProcessor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\MTDBCreationProgressType.cs" />
+    <Compile Include="UI\MTDBProgressChangedEvent.cs" />
+    <Compile Include="UI\ObservableObject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Regressor\Regressor.csproj">
+      <Project>{fbb98b88-0efd-486f-828c-e0a678552f58}</Project>
+      <Name>Regressor</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="x64\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\SQLite.Interop.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

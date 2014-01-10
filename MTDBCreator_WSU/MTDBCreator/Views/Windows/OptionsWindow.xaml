@@ -1,0 +1,437 @@
+﻿<Window x:Class="MTDBCreator.Views.OptionsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:helpers="clr-namespace:MTDBCreator.Helpers"
+        xmlns:algorithms="clr-namespace:Regressor.Algorithms;assembly=Regressor"
+        xmlns:retentionTimePrediction="clr-namespace:MTDBFramework.Algorithms.RetentionTimePrediction;assembly=MTDBFramework"
+        Title="Options" Height="650" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.Resources>
+        <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+        <helpers:OptionsParameterConverter x:Key="OptionsParameterConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="2" />
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0">
+            <TabItem Name="AlignmentOptionsTabItem" Header="Alignment Options">
+                <StackPanel Orientation="Vertical">
+                    <GroupBox Header="Peptides" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="8" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="1" Grid.Column="1">
+                                Maximum Modifications For Alignment
+                            </Label>
+                            <TextBox x:Name="MaxModsForAlignmentTextBox"
+                                     Grid.Row="1" Grid.Column="3"
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     Text="{Binding Path=Options.MaxModsForAlignment, UpdateSourceTrigger=Explicit}">
+                                <TextBox.ToolTip>
+                                    For datasets, this specifies the maximum number of modifications a peptide can have for it to be used in the alignment
+                                </TextBox.ToolTip>
+                            </TextBox>
+                            <Label Grid.Row="3" Grid.Column="1">
+                                Minimum Observations
+                            </Label>
+                            <TextBox x:Name="MinimObservationsTextBox"
+                                     Grid.Row="3" Grid.Column="3" 
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     Text="{Binding Path=Options.MinObservationsForExport, UpdateSourceTrigger=Explicit}">
+                                <TextBox.ToolTip>
+                                    Specifies the minimum number of observations needed for a mass tag to be exported into the database
+                                </TextBox.ToolTip>
+                            </TextBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="SEQUEST Filters">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="1" Grid.Column="1">
+                                Minimum SEQUEST XCorr For Alignment
+                            </Label>
+                            <TextBox x:Name="MinXCorrTextBox" 
+                                     Grid.Row="1" Grid.Column="3" 
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     Text="{Binding Path=Options.MinXCorrForAlignment, UpdateSourceTrigger=Explicit}" >
+                                <TextBox.ToolTip>
+                                    For SEQUEST results, this specifies the minimum XCorr a match can have for it to be used in the alignment
+                                </TextBox.ToolTip>
+                            </TextBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="X!Tandem Filters" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="1" Grid.Column="1">
+                                Max log(EVal) For Alignment
+                            </Label>
+                            <TextBox x:Name="MaxLogETextBox"
+                                     Grid.Row="1" Grid.Column="3" 
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     Text="{Binding Path=Options.MaxLogEValForXTandemAlignment, UpdateSourceTrigger=Explicit}">
+                                <TextBox.ToolTip>
+                                    Specifies the maximum log(eval) that a match from X!Tandem can have for it to be used in the alignment
+                                </TextBox.ToolTip>
+                            </TextBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Alignment Type" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton x:Name="LinearRegressionRadioButton"
+                                         Grid.Row="1" Grid.Column="1"  
+                                         IsChecked="{Binding Path=Options.RegressionType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static algorithms:RegressionType.LinearEm}, UpdateSourceTrigger=Explicit}" >
+                                Linear
+                            </RadioButton>
+                            <RadioButton x:Name="MixtureRegressionRadioButton"
+                                         Grid.Row="3" Grid.Column="1" 
+                                         IsChecked="{Binding Path=Options.RegressionType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static algorithms:RegressionType.MixtureRegression}, UpdateSourceTrigger=Explicit}" >
+                                Mixture Regression
+                            </RadioButton>
+                            <Label Grid.Row="5" Grid.Column="1">Order</Label>
+                            <TextBox x:Name="OrderTextBox"
+                                     Grid.Row="5" Grid.Column="3" 
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     IsEnabled="{Binding ElementName=MixtureRegressionRadioButton, Path=IsChecked}" 
+                                     Text="{Binding Path=Options.RegressionOrder}">
+                                <TextBox.ToolTip>
+                                    Specify order of Mixture Model Regression Fit between Scan and NET
+                                </TextBox.ToolTip>
+                            </TextBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Prediction Algorithm" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8"/>
+                            </Grid.ColumnDefinitions>
+                            <RadioButton x:Name="KangasRadioButton"
+                                         Grid.Row="1" Grid.Column="1" 
+                                         Command="{Binding Path=UpdatePredictionCommand}"
+                                         IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, 
+                                         ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.Kangas}, UpdateSourceTrigger=Explicit}" >
+                                Kangas ANN
+                            </RadioButton>
+                            <RadioButton x:Name="KrokhinRadioButton"
+                                         Grid.Row="3" Grid.Column="1"
+                                         Command="{Binding Path=UpdatePredictionCommand}"
+                                         IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, 
+                                         ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.Krokhin}, UpdateSourceTrigger=Explicit}">
+                                Krokhin
+                            </RadioButton>
+                            <TextBox x:Name="PredictionAlgorithmDescriptionTextBox" 
+                                     IsReadOnly="True"
+                                     Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" 
+                                     Text="{Binding Path=PredictionText}"
+                                     TextWrapping="Wrap">
+                            </TextBox>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+            <TabItem Name="ExportOptionsTabItem" Header="Export Options">
+                <StackPanel Orientation="Vertical">
+                    <GroupBox Header="Tryptic State " >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0">
+                                <CheckBox x:Name="TrypticPeptidesCheckBox"
+                                          Margin="8" 
+                                          IsChecked="{Binding Path=Options.ExportTryptic, UpdateSourceTrigger=Explicit}">
+                                    Tryptic Peptides
+                                </CheckBox>
+                                <GroupBox Margin="30,0,30,0" >
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="25" />
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0" Margin="8">
+                                            Charge 1
+                                        </Label>
+                                        <TextBox x:Name="TrypticCharge1TextBox"
+                                                 Grid.Row="0" Grid.Column="1" Margin="0,8,0,8" 
+                                                 IsEnabled="{Binding ElementName=TrypticPeptidesCheckBox, Path=IsChecked}"
+                                                 PreviewTextInput="Control_PreviewTextInput"
+                                                 Text="{Binding Path=Options.MinXCorrForExportTrytpic[0], UpdateSourceTrigger=Explicit}" />
+                                        <Label Grid.Row="1" Grid.Column="0" Margin="8">Charge 2</Label>
+                                        <TextBox x:Name="TrypticCharge2TextBox"
+                                                 Grid.Row="1" Grid.Column="1" Margin="0,8,0,8" 
+                                                 PreviewTextInput="Control_PreviewTextInput"
+                                                 IsEnabled="{Binding ElementName=TrypticPeptidesCheckBox, Path=IsChecked}"
+                                                 Text="{Binding Path=Options.MinXCorrForExportTrytpic[1], UpdateSourceTrigger=Explicit}"/>
+                                        <Label Grid.Row="0" Grid.Column="3" Margin="8">Charge >= 3</Label>
+                                        <TextBox x:Name="TrypticCharge3TextBox"
+                                                 Grid.Row="0" Grid.Column="4" Margin="0,8,0,8" 
+                                                 PreviewTextInput="Control_PreviewTextInput"
+                                                 IsEnabled="{Binding ElementName=TrypticPeptidesCheckBox, Path=IsChecked}"
+                                                 Text="{Binding Path=Options.MinXCorrForExportTrytpic[2], UpdateSourceTrigger=Explicit}"/>
+                                    </Grid>
+                                </GroupBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" >
+                                <CheckBox x:Name="PartiallyTrypticPeptidesCheckBox"
+                                          Margin="8"
+                                          IsChecked="{Binding Path=Options.ExportPartiallyTryptic, UpdateSourceTrigger=Explicit}">
+                                    Partially Tryptic Peptides
+                                </CheckBox>
+                                <GroupBox Margin="30,0,30,0" >
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="25" />
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0" Margin="8">
+                                            Charge 1
+                                        </Label>
+                                        <TextBox x:Name="PartiallyTrypticCharge1TextBox"
+                                                 Grid.Row="0" Grid.Column="1" Margin="0,8,0,8" 
+                                                 PreviewTextInput="Control_PreviewTextInput"
+                                                 IsEnabled="{Binding ElementName=PartiallyTrypticPeptidesCheckBox, Path=IsChecked}"
+                                                 Text="{Binding Path=Options.MinXCorrForExportPartiallyTrytpic[0], UpdateSourceTrigger=Explicit}" />
+                                        <Label Grid.Row="1" Grid.Column="0" Margin="8">Charge 2</Label>
+                                        <TextBox x:Name="PartiallyTrypticCharge2TextBox"
+                                                 Grid.Row="1" Grid.Column="1" Margin="0,8,0,8" 
+                                                 PreviewTextInput="Control_PreviewTextInput"
+                                                 IsEnabled="{Binding ElementName=PartiallyTrypticPeptidesCheckBox, Path=IsChecked}"
+                                                 Text="{Binding Path=Options.MinXCorrForExportPartiallyTrytpic[1], UpdateSourceTrigger=Explicit}"/>
+                                        <Label Grid.Row="0" Grid.Column="3" Margin="8">Charge >= 3</Label>
+                                        <TextBox x:Name="PartiallyTrypticCharge3TextBox"
+                                                 Grid.Row="0" Grid.Column="4" Margin="0,10,0,6" 
+                                                 PreviewTextInput="Control_PreviewTextInput"
+                                                 IsEnabled="{Binding ElementName=PartiallyTrypticPeptidesCheckBox, Path=IsChecked}"
+                                                 Text="{Binding Path=Options.MinXCorrForExportPartiallyTrytpic[2], UpdateSourceTrigger=Explicit}"/>
+                                    </Grid>
+                                </GroupBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" >
+                                <CheckBox x:Name="NonTrypticPeptidesCheckBox"
+                                          Margin="8"
+                                          IsChecked="{Binding Path=Options.ExportNonTryptic, UpdateSourceTrigger=Explicit}">
+                                    NonTryptic Peptides
+                                </CheckBox>
+                                <GroupBox Margin="30,0,30,0" >
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="25" />
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Row="0" Grid.Column="0" Margin="8">Charge 1</Label>
+                                        <TextBox x:Name="NonTrypticalCharge1TextBox"
+                                                 Grid.Row="0" Grid.Column="1" Margin="0,8,0,8" 
+                                                 PreviewTextInput="Control_PreviewTextInput"
+                                                 IsEnabled="{Binding ElementName=NonTrypticPeptidesCheckBox, Path=IsChecked}"
+                                                 Text="{Binding Path=Options.MinXCorrForExportNonTrytpic[0], UpdateSourceTrigger=Explicit}"/>
+                                        <Label Grid.Row="1" Grid.Column="0" Margin="8">Charge 2</Label>
+                                        <TextBox x:Name="NonTrypticalCharge2TextBox"
+                                                 Grid.Row="1" Grid.Column="1" Margin="0,8,0,8" 
+                                                 PreviewTextInput="Control_PreviewTextInput"
+                                                 IsEnabled="{Binding ElementName=NonTrypticPeptidesCheckBox, Path=IsChecked}"
+                                                 Text="{Binding Path=Options.MinXCorrForExportNonTrytpic[1], UpdateSourceTrigger=Explicit}"/>
+                                        <Label Grid.Row="0" Grid.Column="3" Margin="8">Charge >= 3</Label>
+                                        <TextBox x:Name="NonTrypticalCharge3TextBox"
+                                                 Grid.Row="0" Grid.Column="4" Margin="0,8,0,8" 
+                                                 PreviewTextInput="Control_PreviewTextInput"
+                                                 IsEnabled="{Binding ElementName=NonTrypticPeptidesCheckBox, Path=IsChecked}"
+                                                 Text="{Binding Path=Options.MinXCorrForExportNonTrytpic[2], UpdateSourceTrigger=Explicit}"/>
+                                    </Grid>
+                                </GroupBox>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="SEQUEST DelCN">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="25" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="75" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox x:Name="SequestDelCnCheckBox" 
+                                      Margin="8" Grid.ColumnSpan="3" 
+                                      IsChecked="{Binding Path=Options.UseDelCN, UpdateSourceTrigger=Explicit}">
+                                Use DelCN Threshold
+                            </CheckBox>
+                            <Label Margin="8" Grid.Row="1" Grid.Column="1" 
+                                       IsEnabled="{Binding ElementName=SequestDelCnCheckBox, Path=IsChecked}">
+                                Min DelCN
+                            </Label>
+                            <TextBox  x:Name="MinDelCnTextBox"
+                                      Margin="0,8,0,8" Grid.Row="1" Grid.Column="2"
+                                      PreviewTextInput="Control_PreviewTextInput"
+                                      IsEnabled="{Binding ElementName=SequestDelCnCheckBox, Path=IsChecked}"
+                                      Text="{Binding Path=Options.MaxDelCN, UpdateSourceTrigger=Explicit}">
+                            </TextBox>
+                        </Grid>
+                    </GroupBox>
+
+                    <GroupBox Header="X!Tandem">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="25" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="75" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Margin="8" Grid.Row="1" Grid.Column="1" >
+                                Max log(EVal) For Export
+                            </Label>
+                            <TextBox  x:Name="MaxLogEForExporTextBox"
+                                      Margin="0,10,0,6" Grid.Row="1" Grid.Column="2"
+                                      PreviewTextInput="Control_PreviewTextInput"
+                                      Text="{Binding Path=Options.MaxLogEValForXTandemExport, UpdateSourceTrigger=Explicit}">
+                            </TextBox>
+                        </Grid>
+                    </GroupBox>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
+        <!-- Bottom Buttons -->
+        <Grid Grid.Row="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="5" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" Content="_OK" IsDefault="True" Command="{Binding SaveCommand}" Click="Button_Click">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource OptionsParameterConverter}">
+                        <Binding ElementName="MaxModsForAlignmentTextBox" Path="Text" />
+                        <Binding ElementName="MinimObservationsTextBox" Path="Text" />
+                        <Binding ElementName="MinXCorrTextBox" Path="Text"/>
+                        <Binding ElementName="MaxLogETextBox" Path="Text"/>
+                        <Binding ElementName="LinearRegressionRadioButton" Path="IsChecked"/>
+                        <Binding ElementName="MixtureRegressionRadioButton" Path="IsChecked"/>
+                        <Binding ElementName="OrderTextBox" Path="Text"/>
+                        <Binding ElementName="KangasRadioButton" Path="IsChecked"/>
+                        <Binding ElementName="KrokhinRadioButton" Path="IsChecked"/>
+                        <Binding ElementName="TrypticPeptidesCheckBox" Path="IsChecked"/>
+                        <Binding ElementName="TrypticCharge1TextBox" Path="Text"/>
+                        <Binding ElementName="TrypticCharge2TextBox" Path="Text"/>
+                        <Binding ElementName="TrypticCharge3TextBox" Path="Text"/>
+                        <Binding ElementName="PartiallyTrypticPeptidesCheckBox" Path="IsChecked"/>
+                        <Binding ElementName="PartiallyTrypticCharge1TextBox" Path="Text"/>
+                        <Binding ElementName="PartiallyTrypticCharge2TextBox" Path="Text"/>
+                        <Binding ElementName="PartiallyTrypticCharge3TextBox" Path="Text"/>
+                        <Binding ElementName="NonTrypticPeptidesCheckBox" Path="IsChecked"/>
+                        <Binding ElementName="NonTrypticalCharge1TextBox" Path="Text"/>
+                        <Binding ElementName="NonTrypticalCharge2TextBox" Path="Text"/>
+                        <Binding ElementName="NonTrypticalCharge3TextBox" Path="Text"/>
+                        <Binding ElementName="SequestDelCnCheckBox" Path="IsChecked"/>
+                        <Binding ElementName="MinDelCnTextBox" Path="Text"/>
+                        <Binding ElementName="MinDelCnTextBox" Path="Text"/>
+                        <Binding ElementName="MaxLogEForExporTextBox" Path="Text" />
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+            <Button Grid.Column="3" Content="_Cancel" IsCancel="True" Click="Button_Click"/>
+        </Grid>
+    </Grid>
+</Window>
