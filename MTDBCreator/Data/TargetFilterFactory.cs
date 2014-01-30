@@ -26,6 +26,9 @@ namespace MTDBCreator.Data
                 case SupportedTools.XTandem:
                     filter = new BottomUpXTandemTargetFilter(options);
                     break;
+                case SupportedTools.MsgfPlus:
+                    filter = new BottomUpMsgfTargetFilter(options);
+                    break;
                 case SupportedTools.NotSupported:
                     break;
                 default:

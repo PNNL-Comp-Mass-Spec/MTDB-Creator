@@ -38,6 +38,7 @@
             this.listViewDatasets = new System.Windows.Forms.ListView();
             this.columnHeaderDataset = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.mbutton_msgfPlus = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // mbuttonOK
@@ -78,11 +79,12 @@
             this.mbutton_addXtandem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.mbutton_addXtandem.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_addXtandem.ForeColor = System.Drawing.Color.Black;
-            this.mbutton_addXtandem.Image = global::MTDBCreator.StoredQueries.xtandem;
+            this.mbutton_addXtandem.Image = global::MTDBCreator.StoredQueries.blank_file_3_321;
             this.mbutton_addXtandem.Location = new System.Drawing.Point(12, 48);
             this.mbutton_addXtandem.Name = "mbutton_addXtandem";
             this.mbutton_addXtandem.Size = new System.Drawing.Size(195, 79);
             this.mbutton_addXtandem.TabIndex = 6;
+            this.mbutton_addXtandem.Text = "X!Tandem";
             this.mbutton_addXtandem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.mbutton_addXtandem.UseVisualStyleBackColor = false;
             this.mbutton_addXtandem.Click += new System.EventHandler(this.mbutton_addXtandem_Click);
@@ -105,11 +107,13 @@
             this.mbutton_addSequest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.mbutton_addSequest.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_addSequest.ForeColor = System.Drawing.Color.Black;
-            this.mbutton_addSequest.Image = global::MTDBCreator.StoredQueries.sequest;
-            this.mbutton_addSequest.Location = new System.Drawing.Point(12, 133);
+            this.mbutton_addSequest.Image = global::MTDBCreator.StoredQueries.blank_file_3_32;
+            this.mbutton_addSequest.Location = new System.Drawing.Point(12, 134);
             this.mbutton_addSequest.Name = "mbutton_addSequest";
-            this.mbutton_addSequest.Size = new System.Drawing.Size(195, 105);
+            this.mbutton_addSequest.Size = new System.Drawing.Size(195, 68);
             this.mbutton_addSequest.TabIndex = 8;
+            this.mbutton_addSequest.Text = "SEQUEST";
+            this.mbutton_addSequest.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.mbutton_addSequest.UseVisualStyleBackColor = false;
             this.mbutton_addSequest.Click += new System.EventHandler(this.mbutton_addSequest_Click);
             // 
@@ -119,13 +123,15 @@
             this.mbutton_addPhrp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
             this.mbutton_addPhrp.FlatAppearance.BorderSize = 2;
             this.mbutton_addPhrp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.mbutton_addPhrp.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mbutton_addPhrp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mbutton_addPhrp.ForeColor = System.Drawing.Color.Black;
-            this.mbutton_addPhrp.Location = new System.Drawing.Point(12, 244);
+            this.mbutton_addPhrp.Image = global::MTDBCreator.StoredQueries.csv_32;
+            this.mbutton_addPhrp.Location = new System.Drawing.Point(12, 291);
             this.mbutton_addPhrp.Name = "mbutton_addPhrp";
-            this.mbutton_addPhrp.Size = new System.Drawing.Size(195, 114);
+            this.mbutton_addPhrp.Size = new System.Drawing.Size(195, 76);
             this.mbutton_addPhrp.TabIndex = 9;
             this.mbutton_addPhrp.Text = "Dataset Description File";
+            this.mbutton_addPhrp.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.mbutton_addPhrp.UseVisualStyleBackColor = false;
             this.mbutton_addPhrp.Click += new System.EventHandler(this.mbutton_addPhrp_Click);
             // 
@@ -160,12 +166,31 @@
             this.columnHeader2.Text = "Folder";
             this.columnHeader2.Width = 409;
             // 
+            // mbutton_msgfPlus
+            // 
+            this.mbutton_msgfPlus.BackColor = System.Drawing.Color.White;
+            this.mbutton_msgfPlus.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.mbutton_msgfPlus.FlatAppearance.BorderSize = 2;
+            this.mbutton_msgfPlus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.mbutton_msgfPlus.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mbutton_msgfPlus.ForeColor = System.Drawing.Color.Black;
+            this.mbutton_msgfPlus.Image = global::MTDBCreator.StoredQueries.blank_file_3_32;
+            this.mbutton_msgfPlus.Location = new System.Drawing.Point(12, 208);
+            this.mbutton_msgfPlus.Name = "mbutton_msgfPlus";
+            this.mbutton_msgfPlus.Size = new System.Drawing.Size(195, 68);
+            this.mbutton_msgfPlus.TabIndex = 16;
+            this.mbutton_msgfPlus.Text = "MSGF+";
+            this.mbutton_msgfPlus.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.mbutton_msgfPlus.UseVisualStyleBackColor = false;
+            this.mbutton_msgfPlus.Click += new System.EventHandler(this.mbutton_msgfPlus_Click);
+            // 
             // InputForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(943, 610);
+            this.Controls.Add(this.mbutton_msgfPlus);
             this.Controls.Add(this.listViewDatasets);
             this.Controls.Add(this.mbutton_addPhrp);
             this.Controls.Add(this.mbutton_addSequest);
@@ -193,5 +218,6 @@
         private System.Windows.Forms.ListView listViewDatasets;
         private System.Windows.Forms.ColumnHeader columnHeaderDataset;
         private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.Button mbutton_msgfPlus;
     }
 }

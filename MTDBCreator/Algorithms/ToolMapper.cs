@@ -21,6 +21,8 @@ namespace MTDBCreator.Algorithms
                 return SupportedTools.Sequest;
             else if (name == "xtandem")
                 return SupportedTools.XTandem;
+            else if (name == "msgfdb" || name == "msgfplus")
+                return SupportedTools.MsgfPlus;
             else return SupportedTools.NotSupported;
         }
     }

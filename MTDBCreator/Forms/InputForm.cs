@@ -50,6 +50,12 @@ namespace MTDBCreator.Forms
             ReadAnalysisData(new XTandemMetaDataReader() as IAnalysisMetaDataReader);
         }
 
+        private void mbutton_msgfPlus_Click(object sender, EventArgs e)
+        {
+            m_openAnalysisJobsDialog.Filter = "MSGF+ PHRP Analyzed Files (*msgfdb_syn.txt)|*msgfdb_syn.txt";
+            ReadAnalysisData(new MsgfPlusMetaDataReader() as IAnalysisMetaDataReader);
+        }
+
         private void ReadAnalysisData(IAnalysisMetaDataReader reader)
         {
             try
@@ -96,5 +102,6 @@ namespace MTDBCreator.Forms
         /// Gets or sets the list of analysis to use.
         /// </summary>
         public List<Analysis> Analysis { get; set; }
+
     }
 }

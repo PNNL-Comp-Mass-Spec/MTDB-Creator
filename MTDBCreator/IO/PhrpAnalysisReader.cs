@@ -181,8 +181,8 @@ namespace MTDBCreator.IO
             List<Sequence> sequences = seqInfoReader.Read(seqInfoFile);
 
             // Then map all of the data onto thee....
-            MapSequencesOntoTargets(targets, sequences, resultsMap);   
-            result.Targets  = targets; 
+            MapSequencesOntoTargets(targets, sequences, resultsMap);
+            result.AddTargets(targets);
             result.Proteins = MapProteins(result.Targets, sequenceMaps);
 
             return result;

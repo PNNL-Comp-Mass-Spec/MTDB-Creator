@@ -222,6 +222,12 @@ namespace RegressionEngine
 			if (mdbl_percent_normal < 0.01)
 				return false ; 
 		}
+		
+		matrix_free(mobj_X) ;
+		matrix_free(mobj_Y) ; 
+		matrix_free(mobj_Weights) ; 
+		matrix_free(mobj_XTranspose) ; 
+
 		return true ; 
 	}
 	int clsLinearModelEM::PercentComplete()

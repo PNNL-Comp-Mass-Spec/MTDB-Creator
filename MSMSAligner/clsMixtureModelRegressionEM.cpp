@@ -447,6 +447,11 @@ namespace RegressionEngine
 			ptr_current_coeffs[coefficientNum][0] = ptr_best_coeffs[coefficientNum][0] ;
 		matrix_free(next_coefficients) ; 
 		matrix_free(best_coefficients) ; 
+
+		matrix_free(mobj_X) ; 
+		matrix_free(mobj_Y) ; 
+		matrix_free(mobj_YRegressed) ; 
+		matrix_free(mobj_Likelihoods) ; 
 	}
 
 

@@ -34,87 +34,93 @@ namespace MTDBCreator.Forms
             }
 
             
-            List<Protein> proteins = database.Proteins;
-            TreeNode rootNode = new TreeNode(string.Format("Proteins ({0})", proteins.Count));
+            List<ConsensusTarget> targets = database.ConsensusTargets;
+            TreeNode rootNode = new TreeNode(string.Format("Mass Tags ({0})", targets.Count));
             rootNode.ImageIndex = CONST_DATABASE;
-            
-            proteins.Sort(delegate(Protein p, Protein p2)
+
+            targets.Sort(delegate(ConsensusTarget p, ConsensusTarget p2)
             {
-                return p.Reference.CompareTo(p2.Reference);
+                return p.Sequence.CompareTo(p2.Sequence);
             });
 
-            foreach (Protein p in proteins)
+            long count = 0;
+            
+            foreach (ConsensusTarget target in targets)
             {
-                List<ConsensusTarget> targets = p.GetMappedTargets();
 
-                TreeNode proteinNode = new TreeNode(
-                                            string.Format("{0} ({1})",
-                                                            p.Reference,
-                                                            targets.Count));
-                proteinNode.ImageIndex = CONST_PROTEIN;                
-                proteinNode.Nodes.Add(string.Format("Id: {0}", p.Id));
-                proteinNode.Nodes[0].ImageIndex = CONST_PROPERTY;
-
-                TreeNode massTagNode    = new TreeNode("Mass Tags");
-                massTagNode.ImageIndex = CONST_MASS_TAG_RED;
-                proteinNode.Nodes.Add(massTagNode);
-
-                foreach (ConsensusTarget target in targets)
+                if (count++ > 100)
                 {
-
-                    //TODO:  This is just so we dont run out of memory (32-bit support)
-                    // we have too many mass tags otherwise for this tree view...barf!
-                    bool skip = false;
-                    foreach (Target t in target.Targets)
-                    {
-                        if (!t.IsPredicted)
-                        {
-                            skip = true;
-                        }
-                    }
-                    if (skip) continue;
-
-                    TreeNode targetNode = new TreeNode(
-                                            string.Format("{0} ({1})",
-                                                                    target.CleanSequence,
-                                                                    target.Targets.Count
-                                                                    ));
-                    targetNode.ImageIndex = CONST_MASS_TAG_RED;
-                    targetNode.Nodes.Add(string.Format("Avg NET: {0:0.00}", target.GaNetAverage));                    
-                    targetNode.Nodes.Add(string.Format("Stdev. NET: {0:0.00}", target.GaNetStdev));
-                    targetNode.Nodes.Add(string.Format("Min NET: {0:0.00}", target.GaNetMinium));
-                    targetNode.Nodes.Add(string.Format("MaxNET: {0:0.00}", target.GaNetMax));
-                    // Cheating...
-                    targetNode.Nodes[0].ImageIndex = CONST_PROPERTY;
-                    targetNode.Nodes[1].ImageIndex = CONST_PROPERTY;
-                    targetNode.Nodes[2].ImageIndex = CONST_PROPERTY;
-                    targetNode.Nodes[3].ImageIndex = CONST_PROPERTY;
-
-
-                    TreeNode targetSubNode   = new TreeNode("Peptides");
-                    targetSubNode.ImageIndex = CONST_FLAME;
-                    targetNode.Nodes.Add(targetSubNode);
-
-                    foreach (Target t in target.Targets)
-                    {
-                            if (t.IsPredicted)
-                        {
-                            TreeNode node = new TreeNode(t.Sequence);
-                            node.ImageIndex = CONST_FLAME;
-                            targetSubNode.Nodes.Add(node);
-                            node.Nodes.Add(string.Format("Mass: {0}", t.MonoisotopicMass));
-                            node.Nodes.Add(string.Format("Scan: {0}", t.Scan));
-                            node.Nodes.Add(string.Format("NET Pred: {0:0.00}", t.NetPredicted));
-                            node.Nodes.Add(string.Format("NET Align: {0:0.00}", t.NetAligned));
-                            node.Nodes[0].ImageIndex = CONST_PROPERTY;
-                            node.Nodes[1].ImageIndex = CONST_PROPERTY;
-                            node.Nodes[2].ImageIndex = CONST_PROPERTY;
-                            node.Nodes[3].ImageIndex = CONST_PROPERTY;
-                        }
-                    }
-                    massTagNode.Nodes.Add(targetNode);
+                    count = 0;
+                    Application.DoEvents(); // I hate doing this but we should "draw" every N nodes (100 in this case)
                 }
-                rootNode.Nodes.Add(proteinNode);
+
+                // Only for predicted targets
+                bool skip = false;
+                foreach (Target t in target.Targets)
+                {
+                    if (!t.IsPredicted)
+                    {
+                        skip = true;
+                    }
+                }
+                if (skip) continue;
+
+                TreeNode targetNode = new TreeNode(
+                                        string.Format("{0} ({1})",
+                                                                target.CleanSequence,
+                                                                target.Targets.Count
+                                                                ));
+                targetNode.ImageIndex = CONST_MASS_TAG_RED;
+                targetNode.Nodes.Add(string.Format("Avg NET: {0:F2}", target.GaNetAverage));
+                targetNode.Nodes.Add(string.Format("Stdev. NET: {0:F2}", target.GaNetStdev));
+                targetNode.Nodes.Add(string.Format("Min NET: {0:F2}", target.GaNetMinium));
+                targetNode.Nodes.Add(string.Format("MaxNET: {0:F2}", target.GaNetMax));
+                // Cheating...
+                targetNode.Nodes[0].ImageIndex = CONST_PROPERTY;
+                targetNode.Nodes[1].ImageIndex = CONST_PROPERTY;
+                targetNode.Nodes[2].ImageIndex = CONST_PROPERTY;
+                targetNode.Nodes[3].ImageIndex = CONST_PROPERTY;
+
+
+                TreeNode targetSubNode   = new TreeNode("Peptides");
+                targetSubNode.ImageIndex = CONST_FLAME;
+                targetNode.Nodes.Add(targetSubNode);
+
+                foreach (Target t in target.Targets)
+                {
+                    TreeNode node   = new TreeNode(t.Sequence);
+                    node.ImageIndex = CONST_FLAME;
+                    targetSubNode.Nodes.Add(node);
+                    node.Nodes.Add(string.Format("Mass: {0:F2}", t.MonoisotopicMass));
+                    node.Nodes.Add(string.Format("Scan: {0}", t.Scan));
+                    node.Nodes.Add(string.Format("NET Pred: {0:F2}", t.NetPredicted));
+                    node.Nodes.Add(string.Format("NET Align: {0:F2}", t.NetAligned));
+                    node.Nodes[0].ImageIndex = CONST_PROPERTY;
+                    node.Nodes[1].ImageIndex = CONST_PROPERTY;
+                    node.Nodes[2].ImageIndex = CONST_PROPERTY;
+                    node.Nodes[3].ImageIndex = CONST_PROPERTY;                    
+                }
+
+
+                TreeNode proteinSubNode     = new TreeNode("Proteins");
+                proteinSubNode.ImageIndex   = CONST_PROTEIN;
+                targetNode.Nodes.Add(proteinSubNode);
+
+                foreach (Protein p in target.GetProteins())
+                {
+                    int matchedTargets      = p.GetMappedTargets().Count;
+
+                    TreeNode proteinNode    = new TreeNode(
+                                                    string.Format("{0} ({1})",
+                                                            p.Reference,
+                                                            matchedTargets)); 
+
+                    proteinNode.ImageIndex          = CONST_PROTEIN;
+                    proteinNode.Nodes.Add(string.Format("Matching Mass Tags: {0}", matchedTargets));
+                    proteinNode.Nodes[0].ImageIndex = CONST_PROTEIN;
+                    proteinSubNode.Nodes.Add(proteinNode);                      
+                }
+                rootNode.Nodes.Add(targetNode);                
             }
             mtree_proteins.Nodes.Add(rootNode);
             SetNodeSelectImage(rootNode);

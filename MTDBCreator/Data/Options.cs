@@ -30,7 +30,8 @@ namespace MTDBCreator.Data
 		    MaxRankForExport                = 2 ; 
 		    MinObservationsForExport        = 2 ; 
 		    MinXCorrForAlignment            = 3.0 ;
-
+            MsgfFDR                         = .01;
+            MsgfSpectralEValue              = .05;
             Regression          = RegressionTypeIdentifier.MIXTURE_REGRESSION;
             TargetFilterType    = FilterType.BottomUp; 
 		}
@@ -196,7 +197,55 @@ namespace MTDBCreator.Data
             get;
             set;
         }
-	
+        public double MsgfSpectralEValue
+        {
+            get;
+            set;
+        }
+        public double MsgfFDR
+        {
+            get;
+            set;
+        }
+
+        public bool IsToBeExported(MsgfPlusResult result)
+        {
+
+            if (result.Fdr > MsgfFDR)
+            {
+                return false;
+            }
+            if (result.SpectralProbability > MsgfSpectralEValue)
+            {
+                return false;
+            }
+
+
+            if (result.NumTrypticEnds == 2)
+            {
+                if (!ExportTryptic)
+                    return false;
+                else
+                    return true;
+            }
+            if (result.NumTrypticEnds == 1)
+            {
+                if (!ExportPartiallyTryptic)
+                    return false;
+                else
+                    return true;
+            }
+            if (result.NumTrypticEnds == 0)
+            {
+                if (!ExportNonTryptic)
+                    return false;
+                else
+                    return true;
+            }
+
+            return true;
+        }
+
 		public bool IsToBeExported(SequestResult seqResult)
 		{
 			short charge = seqResult.Charge ;
@@ -289,6 +338,12 @@ namespace MTDBCreator.Data
             if (xtandem != null)
             {
                 return !IsToBeExported(xtandem);
+            }
+
+            MsgfPlusResult msgfResult = t as MsgfPlusResult;
+            if (msgfResult != null)
+            {
+                return !IsToBeExported(msgfResult);
             }
 
             return true;

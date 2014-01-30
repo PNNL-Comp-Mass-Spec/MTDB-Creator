@@ -137,31 +137,35 @@ namespace MTDBCreator
                     massTagDatabase.AddResults( analysis.Targets, 
                                                 options.Regression, 
                                                 predictor);
+                    massTagDatabase.AddMetaData(analysis);
 
-                    
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
 
                     if (AnalysisCompleted != null)                    
                         AnalysisCompleted(this, new AnalysisCompletedEventArgs(analysisNumber++, analysisDescriptions.Count, analysis));                    
                 }
-                catch (IOException)
+                catch (IOException ex)
                 {
                     analysis.ProcessedState = ProcessingState.NotProcessed;
                     success = false;
-                    OnError(string.Format("Failed to open the analysis file {0}", analysis.FilePath));
+                    OnError(string.Format("Failed to open the analysis file {0} - {1}", analysis.FilePath, ex.Message));
                     break;
                 }
-                catch (AnalysisToolException)
+                catch (AnalysisToolException ex)
                 {
                     analysis.ProcessedState = ProcessingState.NotProcessed;
                     success = false;
-                    OnError(string.Format("The analysis failed for {0}", analysis.Name));
+                    OnError(string.Format("The analysis failed for {0} - {1}", analysis.Name, ex.Message));
                     break;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     analysis.ProcessedState = ProcessingState.NotProcessed;
                     success = false;
-                    OnError(string.Format("The analysis failed for {0}", analysis.Name));
+                    OnError(string.Format("The analysis failed for {0} - {1}", analysis.Name, ex.Message));
                     break;
                 }
             }
@@ -263,23 +267,46 @@ namespace MTDBCreator
 
             IRegressionAlgorithm    regressor   = RegressorFactory.CreateRegressor(RegressorType.LcmsRegressor, options.Regression);            
             Analysis results                    = reader.Read(analysis.FilePath, analysis.Name);
-            
-            analysis.Proteins                   = results.Proteins; 
-            analysis.Targets                    = results.Targets;            
+
+
+            List<Target> targets = new List<Target>();
+            Dictionary<string, Protein> proteins = new Dictionary<string, Protein>();     
+            foreach (var target in results.Targets)
+            {
+                if (options.ShouldFilter(target))
+                    continue;
+
+                targets.Add(target);                
+               
+                foreach (var protein in target.Proteins)
+                {
+                    if (!proteins.ContainsKey(protein.Reference))
+                    {
+                        analysis.Proteins.Add(protein);
+                        proteins.Add(protein.Reference, protein);
+                    }
+                }                                    
+            }
+            analysis.AddTargets(targets);
             
             // Calculate the regression based on the target data
             List<float> predicted               = new List<float>();
             List<float> scans                   = new List<float>();
             
+            int maxScan = 0;
+            int minScan = 0;
+
+
+
             foreach (Target target in analysis.Targets)
             {
-                // Also make sure that we dont use this if we arent going to export it also.
-                if (options.ShouldFilter(target))
-                    continue;
 
                 // Filter the target here...based on use for alignment.
                 if (filter.ShouldFilter(target))
                     continue;
+
+                maxScan = Math.Max(maxScan, target.Scan);
+                minScan = Math.Min(minScan, target.Scan);
 
                 target.IsPredicted  = true;
                 target.NetPredicted = predictor.GetElutionTime(target.CleanSequence);
@@ -287,7 +314,23 @@ namespace MTDBCreator
                 predicted.Add(Convert.ToSingle(target.NetPredicted));
             }
             analysis.RegressionResults           = regressor.CalculateRegression(scans, predicted);
-            analysis.RegressionResults.Regressor = regressor;
+            //analysis.RegressionResults.Regressor = regressor;
+
+            analysis.RegressionResults.MinScan = minScan;
+            analysis.RegressionResults.MaxScan = maxScan;
+
+            // Make the regression line data.
+            int  scan  = 0;
+            int delta  = 5;
+            while (scan <= maxScan)
+            {                
+                double y = regressor.GetTransformedNET(scan);
+                scan    += delta;
+
+                analysis.RegressionResults.XValues.Add(Convert.ToDouble(scan));
+                analysis.RegressionResults.YValues.Add(y);
+            }
+
 
             // Then make sure we align all against the predicted self
             regressor.ApplyTransformation(analysis.Targets);

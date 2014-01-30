@@ -9,6 +9,7 @@ namespace MTDBCreator.Data
     {
         Sequest,
         XTandem,
+        MsgfPlus,
         NotSupported
     }
 }

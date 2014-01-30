@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MTDBCreator.Algorithms;
 using MTDBCreator.Data;
+using System;
 
 namespace MTDBCreator
 {
@@ -21,7 +22,8 @@ namespace MTDBCreator
 		/// Constructor
 		/// </summary>
 		public MassTagDatabase()
-		{									
+        {
+            MetaData = new List<Analysis>();				
 			m_massTags   = new List<ConsensusTarget>();			
             m_massTagMap = new Dictionary<string, ConsensusTarget>(); 
             Proteins     = new List<Protein>();
@@ -33,6 +35,7 @@ namespace MTDBCreator
         /// <param name="filter"></param>
         public MassTagDatabase(MassTagDatabase database, ITargetFilter filter)
         {
+            MetaData     = new List<Analysis>();
             m_massTags   = new List<ConsensusTarget>();
             m_massTagMap = new Dictionary<string, ConsensusTarget>();            
             Proteins     = new List<Protein>();
@@ -53,6 +56,12 @@ namespace MTDBCreator
             }
         }
 
+        public void AddMetaData(Analysis analysis)
+        {
+            Analysis tempAnalysis = new Analysis(analysis);
+            MetaData.Add(tempAnalysis);
+            
+        }
 
 		#region Insert Methods               
         /// <summary>
@@ -64,8 +73,8 @@ namespace MTDBCreator
                                     IRetentionTimePredictor predictor)
 		{					
 			foreach(Target target in targets)
-            {                				                
-				string peptideWithMod   = target.CleanSequence + target.SequenceData.ModificationDescription ; 				
+            {
+                string peptideWithMod   = target.Sequence + target.SequenceData.ModificationDescription; 				
 				double highNorm         = target.HighNormalizedScore; 
 				
                 // Here we see if the mass tag has already been added to the database
@@ -86,6 +95,7 @@ namespace MTDBCreator
                     target.Proteins.ForEach(x => consensusTarget.AddProtein(x));
                     target.ParentTarget = consensusTarget;
                     consensusTarget.Targets.Add(target);
+                    
 
                     // Increment the number of observations
                     consensusTarget.NumberOfObservations++;                        					
@@ -93,8 +103,8 @@ namespace MTDBCreator
 				else
 				{
 					// Otherwise we create a new mass tag entry into the database.
-					ConsensusTarget consensusTarget                     = new ConsensusTarget() ; 
-					consensusTarget.MonoisotopicMass            = target.MonoisotopicMass; 
+					ConsensusTarget consensusTarget             = new ConsensusTarget() ; 
+					consensusTarget.MonoisotopicMass            = target.MonoisotopicMass - (target.Charge * ConsensusTarget.PROTON_MASS); 
 					consensusTarget.Id                          = m_massTags.Count ; 
 					consensusTarget.LogEValue                   = target.LogPeptideEValue ; 
 					consensusTarget.HighNormalizedScore         = highNorm ; 
@@ -103,13 +113,22 @@ namespace MTDBCreator
                     consensusTarget.ModificationDescription     = target.SequenceData.ModificationDescription; 
 					consensusTarget.MultipleProteins            = target.MultiProteinCount ; 
 					consensusTarget.PmtQualityScore             = 0 ; 
-					consensusTarget.Sequence                    = peptideWithMod; 
-					consensusTarget.CleanSequence               = Target.CleanPeptide(consensusTarget.Sequence);                    
-                    consensusTarget.NetPredicted                = predictor.GetElutionTime(target.CleanSequence);                    					
+					consensusTarget.Sequence                    = target.Sequence;
+                    try
+                    {
+                        consensusTarget.CleanSequence = Target.CleanPeptide(consensusTarget.Sequence);
+                    }
+                    catch(Exception ex)
+                    {
+                        int x = 9;
+                        x++;
+                        if (x < 8)
+                        {
+                        }
+                    }
+                    consensusTarget.NetPredicted                         = predictor.GetElutionTime(target.CleanSequence);                    					
                     consensusTarget.PeptideObservationCountPassingFilter = 0;                    
-                    consensusTarget.Targets.Add(target);
-                    target.Proteins.ForEach(x => consensusTarget.AddProtein(x));
-                    
+                    consensusTarget.Targets.Add(target);                   
 
                     // Then link the child target to these parents
                     target.ParentTarget = consensusTarget;
@@ -117,7 +136,25 @@ namespace MTDBCreator
 					m_massTags.Add(consensusTarget) ; 	
 				    m_massTagMap.Add(peptideWithMod, consensusTarget);
 				}				
-			}			
+
+
+			}
+
+            
+            foreach (var consensusTarget in m_massTags)
+            {
+                Dictionary<string, Protein> proteins = new Dictionary<string, Protein>();
+                foreach (var target in consensusTarget.Targets)
+                {
+                    foreach (var protein in target.Proteins)
+                    {
+                        if (!proteins.ContainsKey(protein.Reference))
+                        {
+                            consensusTarget.AddProtein(protein);
+                        }
+                    }
+                }
+            }
 		}
         /// <summary>
         /// Adds a list of peptide results to the database.
@@ -138,8 +175,7 @@ namespace MTDBCreator
 		public void FinalizeDatabase()
 		{
             m_massTags.ForEach(x => x.CalculateStatistics());
-
-            AggregateProteins();
+            AggregateProteins();            
 		}
         /// <summary>
         /// Aggregate the proteins based on the data from the mass tags
@@ -227,5 +263,7 @@ namespace MTDBCreator
         }
 
         #endregion
+
+        public ICollection<Analysis> MetaData { get; private set; }
     }
 }

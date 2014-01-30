@@ -9,6 +9,7 @@ namespace MTDBCreator
 	/// </summary>
 	public class ConsensusTarget
 	{
+        public const double PROTON_MASS = 1.00727649;
         public const double DEFAULT_XCORR = 100;
         public const double DEFAULT_MIN_LOG_EVAL = 100;
 
@@ -16,6 +17,7 @@ namespace MTDBCreator
         /// Manages list of proteins
         /// </summary>
         private Dictionary<string, Protein> m_proteinMap;
+        
 
         public ConsensusTarget()
         {
@@ -102,9 +104,23 @@ namespace MTDBCreator
         {
             double sumSquare    = 0 ; 
 			double sum          = 0 ; 
-			double min_ganet    = double.MaxValue ; 
-			double max_ganet    = double.MinValue ;
+			double min_ganet    = double.MaxValue; 
+			double max_ganet    = double.MinValue;
+            double massSum      = double.MinValue;
+
             int numObservations = Targets.Count;
+
+            if (numObservations < 2)
+            {                
+                GaNetAverage    = (numObservations == 0 ? 0 : Targets[0].NetAligned);
+			    GaNetStdev      = 0;
+			    GaNetStderr     = 0;
+			    GaNetMinium     = GaNetAverage;
+			    GaNetMax        = GaNetAverage;
+                return;
+            }
+            double minSpecProbability = double.MaxValue;
+
 			foreach(Target target in Targets)
 			{
                 float val = (float)target.NetAligned;
@@ -112,17 +128,26 @@ namespace MTDBCreator
 					max_ganet = val ; 
 				if (val < min_ganet)
 					min_ganet = val ; 
-				sum += val ; 
-				sumSquare += val * val ; 
+				sum += val ;
+
+                minSpecProbability = Math.Min(minSpecProbability, target.SpectralProbability);
+                massSum += (target.MonoisotopicMass - (target.Charge * PROTON_MASS));
 			}
+            
+            double mean = sum / numObservations;
+            foreach (Target target in Targets)
+            {
+                float val = (float)target.NetAligned;
+                sumSquare += Math.Pow(val - mean, 2);
+            }
 
-			double std = 0 ; 
-			if (numObservations > 1)
-                std = Math.Sqrt((numObservations * sumSquare - sum * sum) / (numObservations * numObservations - 1));
-
+			double std      = Math.Sqrt(sumSquare / numObservations);            
             int massTagId   = Id;
 			GaNetCount      = numObservations;
-            GaNetAverage    = sum / numObservations;
+            GaNetAverage    = mean;
+            
+            std = 0;
+            this.MonoisotopicMass = massSum / numObservations;
 			GaNetStdev      = std;
 			GaNetStderr     = std / Math.Sqrt(numObservations); 
 			GaNetMinium     = min_ganet;
@@ -132,5 +157,60 @@ namespace MTDBCreator
         public int ConformerId { get; set; } 
 
         public double DriftTime { get; set; }
+
+        public double MinimumSpecProbability { get; set; }
+    }
+
+    public class StringCache
+    {
+        private static StringCache m_cache;
+
+        private PeptideFlyweightMapper m_uniquePeptides;
+        private PeptideFlyweightMapper m_uniqueCleanPeptides;
+        private PeptideFlyweightMapper m_uniqueProteins;
+
+        StringCache()
+        {
+            m_uniqueCleanPeptides   = new PeptideFlyweightMapper();
+            m_uniquePeptides        = new PeptideFlyweightMapper();
+            m_uniqueProteins        = new PeptideFlyweightMapper();
+            
+        }
+
+        public PeptideFlyweightMapper UniquePeptides
+        {
+            get
+            {
+                return m_uniquePeptides;
+            }
+        }
+
+        public PeptideFlyweightMapper UniqueCleanPeptides
+        {
+            get
+            {
+                return m_uniqueCleanPeptides;
+            }
+        }
+
+        public PeptideFlyweightMapper UniqueProteins
+        {
+            get
+            {
+                return m_uniqueProteins;
+            }
+        }
+
+        public static StringCache Cache
+        {
+            get
+            {
+                if (m_cache == null)
+                {
+                    m_cache = new StringCache();
+                }
+                return m_cache;
+            }
+        }
     }
 }

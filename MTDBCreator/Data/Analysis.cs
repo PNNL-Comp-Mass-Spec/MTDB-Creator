@@ -17,6 +17,8 @@ namespace MTDBCreator.Data
     /// </summary>
     public class Analysis
     {
+        private int m_featureCount;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -25,9 +27,23 @@ namespace MTDBCreator.Data
             RegressionResults   = null;
             Targets             = new List<Target>();
             Proteins            = new List<Protein>();
-            ProcessedState         = ProcessingState.NotProcessed;
+            ProcessedState      = ProcessingState.NotProcessed;
             Id                  = 0;
+            m_featureCount      = 0;
+            CreationDate        = DateTime.Now;
         }
+
+        public Analysis(Analysis analysis)
+        {
+            m_featureCount = analysis.NumberOfUniqueMassTags;
+            Name           = analysis.Name;
+            FilePath       = analysis.FilePath;
+            CreationDate   = DateTime.Now;
+            Id             = analysis.Id;
+            m_featureCount = 0;
+            ProcessedState = analysis.ProcessedState;
+        }
+        public DateTime CreationDate { get; private set; }
         /// <summary>
         /// Gets or sets the ID of the analysis.
         /// </summary>
@@ -47,7 +63,7 @@ namespace MTDBCreator.Data
         {
             get
             {
-                return Targets.Count;
+                return m_featureCount;
             }
         }
         /// <summary>
@@ -57,7 +73,13 @@ namespace MTDBCreator.Data
         /// <summary>
         /// Gets or sets the targets discovered by this tool
         /// </summary>
-        public List<Target> Targets { get; set; }
+        public List<Target> Targets { get; private set; }
+
+        public void AddTargets(List<Target> targets)
+        {
+            Targets         = targets;
+            m_featureCount  = targets.Count;
+        }
 
         /// <summary>
         /// Gets or sets the file path of the analysis.
@@ -78,6 +100,7 @@ namespace MTDBCreator.Data
             Proteins.Clear();
             RegressionResults = null;
             ProcessedState = ProcessingState.NotProcessed;
+            m_featureCount = 0;
         }
     }
 }

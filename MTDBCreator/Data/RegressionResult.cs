@@ -39,9 +39,18 @@ namespace MTDBCreator
             NETRSquared          = 0;
             NETIntercept         = 0;
             NumberUniqueMassTags = 0;
+
+            XValues = new List<double>();
+            YValues = new List<double>();
         }
 
-        public IRegressionAlgorithm Regressor{ get; set; }
+        public int MinScan { get; set; }
+        public int MaxScan { get; set; }
+
+        public List<double> XValues { get; set; }
+        public List<double> YValues { get; set; }
+
+        //public IRegressionAlgorithm Regressor{ get; set; }
         public string DatasetName { get; set; }
         public double NETSlope { get; set; }
         public double NETIntercept { get; set; }

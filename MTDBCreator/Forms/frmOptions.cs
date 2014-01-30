@@ -74,6 +74,11 @@ namespace MTDBCreator
         private TextBox mtextBoxMinXCorrForExportTrypticsCS1;
         private Label labelXCorrForExportCS1;
         private Label description;
+        private GroupBox groupBox6;
+        private Label label1;
+        private TextBox mtextbox_msgfSpectralProbability;
+        private Label label3;
+        private TextBox mtextbox_msgfPlusFDR;
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
@@ -203,6 +208,11 @@ namespace MTDBCreator
             this.mtextBoxDelCN = new System.Windows.Forms.TextBox();
             this.mlabelDelCN = new System.Windows.Forms.Label();
             this.mcheckBoxDelCN = new System.Windows.Forms.CheckBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.mtextbox_msgfSpectralProbability = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.mtextbox_msgfPlusFDR = new System.Windows.Forms.TextBox();
             this.panelOKCancel.SuspendLayout();
             this.mpanelMain.SuspendLayout();
             this.mtabControlOptions.SuspendLayout();
@@ -220,6 +230,7 @@ namespace MTDBCreator
             this.mgroupBoxXCorrThresholds.SuspendLayout();
             this.mgroupBoxXCorrThresholdsPartiallyTryptic.SuspendLayout();
             this.mgroupBoxDelCN.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelOKCancel
@@ -538,6 +549,7 @@ namespace MTDBCreator
             // groupBox5
             // 
             this.groupBox5.BackColor = System.Drawing.Color.White;
+            this.groupBox5.Controls.Add(this.groupBox6);
             this.groupBox5.Controls.Add(this.groupBoxXTandem);
             this.groupBox5.Controls.Add(this.groupBox2);
             this.groupBox5.Controls.Add(this.mgroupBoxDelCN);
@@ -551,15 +563,14 @@ namespace MTDBCreator
             // 
             // groupBoxXTandem
             // 
-            this.groupBoxXTandem.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxXTandem.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxXTandem.BackColor = System.Drawing.Color.White;
             this.groupBoxXTandem.Controls.Add(this.labelMaxLogEValForExport);
             this.groupBoxXTandem.Controls.Add(this.mtextBoxMaxLogEvalForExport);
             this.groupBoxXTandem.Location = new System.Drawing.Point(14, 395);
             this.groupBoxXTandem.Name = "groupBoxXTandem";
-            this.groupBoxXTandem.Size = new System.Drawing.Size(458, 194);
+            this.groupBoxXTandem.Size = new System.Drawing.Size(458, 58);
             this.groupBoxXTandem.TabIndex = 14;
             this.groupBoxXTandem.TabStop = false;
             this.groupBoxXTandem.Text = "X!Tandem";
@@ -575,7 +586,7 @@ namespace MTDBCreator
             // 
             // mtextBoxMaxLogEvalForExport
             // 
-            this.mtextBoxMaxLogEvalForExport.Location = new System.Drawing.Point(176, 23);
+            this.mtextBoxMaxLogEvalForExport.Location = new System.Drawing.Point(227, 23);
             this.mtextBoxMaxLogEvalForExport.Name = "mtextBoxMaxLogEvalForExport";
             this.mtextBoxMaxLogEvalForExport.Size = new System.Drawing.Size(38, 20);
             this.mtextBoxMaxLogEvalForExport.TabIndex = 1;
@@ -851,7 +862,7 @@ namespace MTDBCreator
             // 
             // mtextBoxDelCN
             // 
-            this.mtextBoxDelCN.Location = new System.Drawing.Point(176, 43);
+            this.mtextBoxDelCN.Location = new System.Drawing.Point(227, 43);
             this.mtextBoxDelCN.Name = "mtextBoxDelCN";
             this.mtextBoxDelCN.Size = new System.Drawing.Size(38, 20);
             this.mtextBoxDelCN.TabIndex = 2;
@@ -874,6 +885,60 @@ namespace MTDBCreator
             this.mcheckBoxDelCN.Size = new System.Drawing.Size(144, 21);
             this.mcheckBoxDelCN.TabIndex = 0;
             this.mcheckBoxDelCN.Text = "Use DelCN Threshold";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.BackColor = System.Drawing.Color.White;
+            this.groupBox6.Controls.Add(this.mtextbox_msgfPlusFDR);
+            this.groupBox6.Controls.Add(this.label3);
+            this.groupBox6.Controls.Add(this.label1);
+            this.groupBox6.Controls.Add(this.mtextbox_msgfSpectralProbability);
+            this.groupBox6.Location = new System.Drawing.Point(14, 459);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(458, 164);
+            this.groupBox6.TabIndex = 15;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "MSGF+";
+            this.groupBox6.Enter += new System.EventHandler(this.groupBox6_Enter);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(13, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(208, 24);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Spectral  Probability (EVal) for export:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // mtextbox_msgfSpectralProbability
+            // 
+            this.mtextbox_msgfSpectralProbability.Location = new System.Drawing.Point(227, 20);
+            this.mtextbox_msgfSpectralProbability.Name = "mtextbox_msgfSpectralProbability";
+            this.mtextbox_msgfSpectralProbability.Size = new System.Drawing.Size(38, 20);
+            this.mtextbox_msgfSpectralProbability.TabIndex = 1;
+            this.mtextbox_msgfSpectralProbability.Text = "1";
+            this.mtextbox_msgfSpectralProbability.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(13, 44);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(208, 24);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "FDR";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // mtextbox_msgfPlusFDR
+            // 
+            this.mtextbox_msgfPlusFDR.Location = new System.Drawing.Point(227, 48);
+            this.mtextbox_msgfPlusFDR.Name = "mtextbox_msgfPlusFDR";
+            this.mtextbox_msgfPlusFDR.Size = new System.Drawing.Size(38, 20);
+            this.mtextbox_msgfPlusFDR.TabIndex = 3;
+            this.mtextbox_msgfPlusFDR.Text = "10";
+            this.mtextbox_msgfPlusFDR.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // frmOptions
             // 
@@ -912,6 +977,8 @@ namespace MTDBCreator
             this.mgroupBoxXCorrThresholdsPartiallyTryptic.PerformLayout();
             this.mgroupBoxDelCN.ResumeLayout(false);
             this.mgroupBoxDelCN.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -1149,6 +1216,39 @@ namespace MTDBCreator
 			}
 		}
 
+        public double MsgfSpectralEValue
+        {
+            get
+            {
+                double fdr = 100;
+                if (double.TryParse(mtextbox_msgfSpectralProbability.Text, out fdr))
+                {
+                    return fdr ;
+                }
+                return fdr ;
+            }
+            set
+            {
+                mtextbox_msgfPlusFDR.Text = value.ToString();
+            }
+        }
+        public double MsgfFDR
+        {
+            get
+            {
+                double fdr = 100;
+                if (double.TryParse(mtextbox_msgfPlusFDR.Text, out fdr))
+                {
+                    return fdr / 100; ;
+                }
+                return fdr / 100;
+            }
+            set
+            {
+                mtextbox_msgfPlusFDR.Text = (value * 100).ToString();
+            }
+        }
+
 		public Options Options
 		{
 			set
@@ -1168,7 +1268,9 @@ namespace MTDBCreator
 				MinObservationsForExport = value.MinObservationsForExport ; 
 				//TODO: BLL Put the retention time predictor type back in!
 				RegressionType  = value.Regression ; 
-				RegressionOrder = value.RegressionOrder ; 
+				RegressionOrder = value.RegressionOrder ;
+                MsgfFDR = value.MsgfFDR;
+                MsgfSpectralEValue = value.MsgfSpectralEValue;
 			}
 			get
 			{
@@ -1186,7 +1288,10 @@ namespace MTDBCreator
 				options.MaxLogEValForXTandemExport = MaxLogEValForXTandemExport ; 
 				options.MaxLogEValForXTandemAlignment = MaxLogEValForXTandemAlignment ; 
 				options.MaxModificationsForAlignment = MaxModificationsForAlignment ; 
-				options.MinObservationsForExport = MinObservationsForExport ; 				
+				options.MinObservationsForExport = MinObservationsForExport ;
+                options.MsgfSpectralEValue = MsgfSpectralEValue;
+                options.MsgfFDR = MsgfFDR;
+
                 if (mradioButtonKangas.Checked)
                     options.PredictorType = Data.RetentionTimePredictionType.Kangas;
                 else
@@ -1307,6 +1412,11 @@ namespace MTDBCreator
 		{
 			UpdatePredictionReference();
 		}
+
+        private void groupBox6_Enter(object sender, EventArgs e)
+        {
+
+        }
 
 
 	}

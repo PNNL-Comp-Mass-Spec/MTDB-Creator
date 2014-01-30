@@ -24,10 +24,24 @@ namespace MTDBCreator.Data
         /// Protein Accession ID
         /// </summary>
         public int Id { get; set; }
+
+        private int m_proteinId;
+
+
         /// <summary>
         /// Protein Sequence
         /// </summary>
-        public string Reference { get; set; }
+        public string Reference
+        {
+            get
+            {
+                return StringCache.Cache.UniqueProteins.GetString(m_proteinId);
+            }
+            set
+            {
+                m_proteinId = StringCache.Cache.UniqueProteins.AddString(value);
+            }
+        }
         /// <summary>
         /// 
         /// </summary>

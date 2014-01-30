@@ -25,6 +25,9 @@ namespace MTDBCreator.IO
                 case SupportedTools.XTandem:
                     reader = new XTandemAnalysisReader();
                     break;
+                case SupportedTools.MsgfPlus:
+                    reader = new MsgfPlusAnalysisReader();
+                    break;
                 case SupportedTools.NotSupported:
                     break;
                 default:

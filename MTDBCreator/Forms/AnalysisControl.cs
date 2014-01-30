@@ -298,8 +298,8 @@ namespace MTDBCreator.Forms
                     {
                         if (analysis.ProcessedState == ProcessingState.Processed)
                         {
-                            IRegressionAlgorithm regressor = analysis.RegressionResults.Regressor;
-                            float xFrom = sender.ViewPort.X;
+                           // IRegressionAlgorithm regressor = analysis.RegressionResults.Regressor;
+                            float xFrom  = sender.ViewPort.X;
                             float xFinal = sender.ViewPort.Right;
 
                             clsColorIterator iterator = new clsColorIterator();
@@ -314,12 +314,12 @@ namespace MTDBCreator.Forms
                                     float step = (xFinal - xFrom) / numDivisions;
                                     for (; xFrom < xFinal; xFrom += step)
                                     {
-                                        float yFrom = Convert.ToSingle(regressor.GetTransformedNET(Convert.ToInt32(xFrom)));
-                                        float xTo = xFrom + step;
-                                        float yTo = Convert.ToSingle(regressor.GetTransformedNET(Convert.ToInt32(xTo)));
+                               //         float yFrom = Convert.ToSingle(regressor.GetTransformedNET(Convert.ToInt32(xFrom)));
+                                //       float xTo = xFrom + step;
+                             //           float yTo = Convert.ToSingle(regressor.GetTransformedNET(Convert.ToInt32(xTo)));
 
-                                        args.Graphics.DrawLine(mpen_line, sender.GetScreenPixelX(xFrom), sender.GetScreenPixelY(yFrom),
-                                            sender.GetScreenPixelX(xTo), sender.GetScreenPixelY(yTo));
+                            //            args.Graphics.DrawLine(mpen_line, sender.GetScreenPixelX(xFrom), sender.GetScreenPixelY(yFrom),
+                              //              sender.GetScreenPixelX(xTo), sender.GetScreenPixelY(yTo));
                                     }
                                 }
                                 else
@@ -484,6 +484,8 @@ namespace MTDBCreator.Forms
             {
                 DatabaseCreated(sender, new DatabaseCreatedEventArgs(e.Database));
             }
+
+            m_database.ConsensusTargets.ForEach(x => x.Targets.Clear());
         }
         /// <summary>
         /// Saves the database to file.
@@ -496,10 +498,10 @@ namespace MTDBCreator.Forms
 
             OnStatus("Filtering Database For Export Based on Options.");
             // Here we make sure that we filter the database...
-            MassTagDatabase filteredDatabase = new MassTagDatabase(database, m_options);
+            //MassTagDatabase filteredDatabase = new MassTagDatabase(database, m_options);
 
             OnStatus("Saving Database.");
-            writer.WriteDatabase(filteredDatabase, path);
+            writer.WriteDatabase(database, path);
 
             OnStatus("Database Saved.");
             mbutton_showDatabase.Visible = true;
