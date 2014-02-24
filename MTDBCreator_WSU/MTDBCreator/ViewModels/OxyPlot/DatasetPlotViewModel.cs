@@ -229,8 +229,8 @@ namespace MTDBCreator.ViewModels
                 {
                     plotModel.Series.Add(MakeAnalysisScatterSeries(analysisJobItem, options));
                 }
+             
             }
-
             plotModel.RefreshPlot(true);
         }
 

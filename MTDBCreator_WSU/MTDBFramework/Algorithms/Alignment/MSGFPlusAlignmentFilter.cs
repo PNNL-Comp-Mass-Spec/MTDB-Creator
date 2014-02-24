@@ -6,11 +6,11 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Algorithms.Alignment
 {
-    public class XTandemAlignmentFilter : ITargetFilter
+    public class MSGFPlusAlignmentFilter : ITargetFilter
     {
         public Options FilterOptions { get; set; }
 
-        public XTandemAlignmentFilter(Options options)
+        public MSGFPlusAlignmentFilter(Options options)
         {
             this.FilterOptions = options;
         }

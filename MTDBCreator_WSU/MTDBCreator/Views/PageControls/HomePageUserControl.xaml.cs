@@ -93,6 +93,17 @@ namespace MTDBCreator.PageControls
             }
         }
 
+        private void NewMassTagOpenButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddDataWindow addDataWindow = new AddDataWindow(null)
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            addDataWindow.ShowDialog();
+
+        }
+
         private void NewAnalysisJobButton_Click(object sender, RoutedEventArgs e)
         {
             AddDataWindow addDataJobWindow = new AddDataWindow(null)

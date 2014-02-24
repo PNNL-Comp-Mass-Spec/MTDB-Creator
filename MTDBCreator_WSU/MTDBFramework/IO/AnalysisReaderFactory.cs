@@ -16,6 +16,7 @@ namespace MTDBFramework.IO
             {
                 case LcmsIdentificationTool.MsgfPlus:
                     //TODO: MsgfPlusTargetFilter
+                    reader = new MsgfPlusAnalysisReader(options);
                     break;
                 case LcmsIdentificationTool.Sequest:
                     reader = new SequestAnalysisReader(options);

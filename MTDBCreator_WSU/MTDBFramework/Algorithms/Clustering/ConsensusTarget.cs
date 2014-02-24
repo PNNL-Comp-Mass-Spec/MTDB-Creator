@@ -122,6 +122,50 @@ namespace MTDBFramework.Algorithms.Clustering
             target.Parent = this;
         }
 
+        ///<summary>
+        /// Calculates the average mass based on the theoretical value for each Target
+        /// </summary>
+        public double TheoreticalMassAvg(List<Target> Targets)
+        {
+            double sum = 0;
+            int count = 0;
+            if (Targets.Count == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                foreach(Target t in Targets)
+                {
+                    sum += t.MonoisotopicMass;
+                }
+                sum /= count;
+                return sum;
+            }
+        }
+
+        ///<summary>
+        /// Calculates the average mass based on the theoretical value for each Target
+        /// </summary>
+        public double ObservedMassAvg(List<Target> Targets)
+        {
+            double sum = 0;
+            int count = 0;
+            if (Targets.Count == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                foreach (Target t in Targets)
+                {
+                    sum += t.ObservedMonoisotopicMass;
+                }
+                sum /= count;
+                return sum;
+            }
+        }
+
         /// <summary>
         /// Calculate average mass & net and stdev mass & net for each Target.
         /// </summary>

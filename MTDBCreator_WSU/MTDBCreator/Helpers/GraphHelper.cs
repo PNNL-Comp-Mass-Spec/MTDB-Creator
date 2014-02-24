@@ -24,48 +24,44 @@ namespace MTDBCreator.Helpers
             List<Color> alreadyChoosenColors = new List<Color>();
             Color tmpColor = Colors.Black;
 
-            for (int i = 0; i < 20; i++)
+            bool chooseAnotherColor = true;
+            while (chooseAnotherColor)
             {
-                bool chooseAnotherColor = true;
-                while (chooseAnotherColor)
+                // create a random color by generating three random channels
+                int redColor = random.Next(0, 255);
+                int greenColor = random.Next(0, 255);
+                int blueColor = random.Next(0, 255);
+                tmpColor = Color.FromArgb(255, Convert.ToByte(redColor), Convert.ToByte(greenColor), Convert.ToByte(blueColor));
+
+                // check if a similar color has already been created
+                chooseAnotherColor = false;
+
+                foreach (Color c in alreadyChoosenColors)
                 {
-                    // create a random color by generating three random channels
-                    int redColor = random.Next(0, 255);
-                    int greenColor = random.Next(0, 255);
-                    int blueColor = random.Next(0, 255);
-                    tmpColor = Color.FromArgb(255, Convert.ToByte(redColor), Convert.ToByte(greenColor), Convert.ToByte(blueColor));
-
-                    // check if a similar color has already been created
-                    chooseAnotherColor = false;
-
-                    foreach (Color c in alreadyChoosenColors)
+                    int delta = c.R * DELTA_PERCENT / 100;
+                    if (c.R - delta <= tmpColor.R && tmpColor.R <= c.R + delta)
                     {
-                        int delta = c.R * DELTA_PERCENT / 100;
-                        if (c.R - delta <= tmpColor.R && tmpColor.R <= c.R + delta)
-                        {
-                            chooseAnotherColor = true;
-                            break;
-                        }
+                        chooseAnotherColor = true;
+                        break;
+                    }
 
-                        delta = c.G * DELTA_PERCENT / 100;
-                        if (c.G - delta <= tmpColor.G && tmpColor.G <= c.G + delta)
-                        {
-                            chooseAnotherColor = true;
-                            break;
-                        }
+                    delta = c.G * DELTA_PERCENT / 100;
+                    if (c.G - delta <= tmpColor.G && tmpColor.G <= c.G + delta)
+                    {
+                        chooseAnotherColor = true;
+                        break;
+                    }
 
-                        delta = c.B * DELTA_PERCENT / 100;
-                        if (c.B - delta <= tmpColor.B && tmpColor.B <= c.B + delta)
-                        {
-                            chooseAnotherColor = true;
-                            break;
-                        }
+                    delta = c.B * DELTA_PERCENT / 100;
+                    if (c.B - delta <= tmpColor.B && tmpColor.B <= c.B + delta)
+                    {
+                        chooseAnotherColor = true;
+                        break;
                     }
                 }
-                alreadyChoosenColors.Add(tmpColor);
-                // you can safely use the tmpColor here
-                return tmpColor;
             }
+            alreadyChoosenColors.Add(tmpColor);
+            // you can safely use the tmpColor here
             return tmpColor;
         }
 

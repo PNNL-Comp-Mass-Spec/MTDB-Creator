@@ -12,8 +12,9 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id).GeneratedBy.Identity();
-            Map(x => x.PeptideInfoCleanPeptide);
-            Map(x => x.PeptideInfoSequence);
+            Map(x => x./*PeptideInfo*/CleanPeptide);
+            Map(x => x.Peptide/*InfoSequence*/);
+            Map(x => x.PeptideWithNumericMods);
         }
          
     }

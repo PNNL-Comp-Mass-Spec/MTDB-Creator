@@ -65,7 +65,6 @@
 
             <TextBlock Text="Start" Style="{StaticResource LeftPanelSubTitleStyle}"/>
             <Button Content="New Analysis Job" Style="{StaticResource LeftPanelHyperLinkButtonStyle}" Click="NewAnalysisJobButton_Click" />
-            <Button Content="Open a Mass-Tag Database File" Style="{StaticResource LeftPanelHyperLinkButtonStyle}"/>
 
             <StackPanel Orientation="Vertical" Style="{StaticResource LeftSubPanelStyle}">
                 <TextBlock Text="Recent Created Jobs" Style="{StaticResource LeftPanelNormalTextStyle}"/>

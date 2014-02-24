@@ -18,7 +18,7 @@ namespace MTDBFramework.Database
             Map(x => x.StdevNet);
             Map(x => x.Mass);
             Map(x => x.StdevMass);
-            References(x => x.Dataset).Cascade.SaveUpdate();
+            //References(x => x.Dataset).Cascade.SaveUpdate();
             HasMany(x => x.Targets).Cascade.SaveUpdate();
         }
     }

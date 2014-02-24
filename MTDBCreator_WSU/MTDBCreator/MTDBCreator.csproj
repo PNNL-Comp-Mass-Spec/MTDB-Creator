@@ -116,6 +116,7 @@
     <Compile Include="Helpers\BackgroundWork\AnalysisJobBackgroundWorkHelper.cs" />
     <Compile Include="Helpers\BackgroundWork\MTDBProcessorBackgroundWorkHelper.cs" />
     <Compile Include="Helpers\BackgroundWork\IBackgroundWorkHelper.cs" />
+    <Compile Include="Helpers\BackgroundWork\MTDBReaderBackgroundWorkHelper.cs" />
     <Compile Include="Helpers\BackgroundWork\MTDBWriterBackgroundWorkHelper.cs" />
     <Compile Include="Helpers\Dialog\FileDialogFormatInfo.cs" />
     <Compile Include="Helpers\Dialog\FileDialogFormatInfoFactory.cs" />

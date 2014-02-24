@@ -17,10 +17,10 @@ namespace MTDBFramework.Algorithms.Alignment
 
         public bool ShouldFilter(Target target)
         {
-            if (target.IsSeqInfoExist != 1)
-            {
-                return true;
-            }
+            //if (target.IsSeqInfoExist != 1)
+            //{
+            //    return true;
+            //}
 
             // In the alignment we will only use the unmodified peptides
             if (target.ModificationCount > this.FilterOptions.MaxModsForAlignment)

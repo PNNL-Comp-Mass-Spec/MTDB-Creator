@@ -132,6 +132,21 @@ namespace MTDBCreator.ViewModels
             }
         }
 
+        private void ReadDatabase()
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            dlg.Filter = "Mass Tag Database (*.db)|*.db|AllFile (*.*)|*.*";
+            dlg.Title = "Load MTDB";
+
+            dlg.RestoreDirectory = true;
+
+            if(dlg.ShowDialog() == true)
+            {
+                this.AnalysisJobViewModel.ProcessAnalysisDatabase();//dlg.FileName);
+            }
+        }
+
         #endregion
 
         #region Public Methods

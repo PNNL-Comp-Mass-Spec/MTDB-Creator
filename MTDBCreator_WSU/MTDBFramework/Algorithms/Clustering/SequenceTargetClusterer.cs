@@ -17,7 +17,7 @@ namespace MTDBFramework.Algorithms.Clustering
             foreach (Target t in targets)
             {
                 string sequence = t.Sequence;
-
+                 
                 if (!targetMap.ContainsKey(sequence))
                 {
                     targetMap.Add(sequence, new ConsensusTarget());

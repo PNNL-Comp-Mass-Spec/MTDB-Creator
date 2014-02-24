@@ -33,6 +33,8 @@ namespace MTDBFramework.Data
         private double m_MaxLogEValForXTandemExport;
         private double m_MaxLogEValForMSAlignAlignment;
         private short m_MaxRankForExport;
+        private double m_MsgfFDR;
+        private double m_MsgfSpectralEValue;
 
         #endregion
 
@@ -279,6 +281,33 @@ namespace MTDBFramework.Data
             }
         }
 
+        // MSGF+
+        public double MsgfSpectralEValue
+        {
+            get
+            {
+                return m_MsgfSpectralEValue;
+            }
+            set
+            {
+                m_MsgfSpectralEValue = value;
+                OnPropertyChanged("MsgfSpectralEValue");
+            }
+        }
+
+        public double MsgfFDR
+        {
+            get
+            {
+                return m_MsgfFDR;
+            }
+            set
+            {
+                m_MsgfFDR = value;
+                OnPropertyChanged("MsgfFDR");
+            }
+        }
+
         // Other
         public short MaxRankForExport
         {
@@ -325,6 +354,9 @@ namespace MTDBFramework.Data
             MaxLogEValForMSAlignAlignment = 1E-4;
 
             MaxRankForExport = 2;
+
+            MsgfFDR = .01;
+            MsgfSpectralEValue = .05;
         }
     }
 }

@@ -12,8 +12,9 @@ namespace MTDBFramework.Database
         {
         }
         public int Id { get; set; }
-        public string PeptideInfoCleanPeptide { get; set; }
-        public string PeptideInfoSequence { get; set; }
+        public string CleanPeptide { get; set; }
+        public string Peptide { get; set; }
+        public string PeptideWithNumericMods { get; set; }
         //Added Target List
         public IList<Target> Targets { get; set; }
     }

@@ -12,21 +12,28 @@ namespace MTDBFramework.Database
     {
         public TargetDatabase Read(string path)
         {
-            //DatabaseCreatorFactory.DbFile = path;
-            //var sessionFactory = DatabaseCreatorFactory.CreateSessionFactory();
-            //TargetDatabase reader = new TargetDatabase();
+            DatabaseCreatorFactory.DbFile = path;
+            var sessionFactory = DatabaseCreatorFactory.CreateSessionFactory();
+            TargetDatabase reader = new TargetDatabase();
 
-            //List<ConsensusTarget> readConsensus = new List<ConsensusTarget>();
-            //List<Target>          readTarget    = new List<Target>();
-            //using(var session = sessionFactory.OpenSession())
-            //{
-            //    using(var transact = session.BeginTransaction())
-            //    {
-            //        session.CreateCriteria<ConsensusTarget>().List(readConsensus);
-            //    }
-            //}
+            List<ConsensusTarget> readConsensus = new List<ConsensusTarget>();
+            List<Target>          readTarget    = new List<Target>();
+            using(var session = sessionFactory.OpenSession())
+            {
+                using(var transact = session.BeginTransaction())
+                {
+                    session.CreateCriteria<ConsensusTarget>().List(readConsensus);
+                }
+            }
+            foreach(ConsensusTarget target in readConsensus)
+            {
+                reader.ConsensusTargets.Add(target);
+            }
+
+            return reader;
+
             //reader.ConsensusTargets = readConsensus;
-            return null;
+            //return null;
         }
     }
 }

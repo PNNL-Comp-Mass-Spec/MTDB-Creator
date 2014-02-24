@@ -412,8 +412,8 @@ namespace Regressor.Algorithms
             }
 
             const double percentToIgnore = 0.4;
-            var lowerX = minScan;
-            var upperX = maxScan - (maxScan - minScan) * percentToIgnore;
+            var lowerX = minScan + (maxScan - minScan) * (percentToIgnore / 2.0);
+            var upperX = maxScan - (maxScan - minScan) * (percentToIgnore / 2.0);
 
             for (int ptNum = 0; ptNum < x.Length; ptNum++)
             {

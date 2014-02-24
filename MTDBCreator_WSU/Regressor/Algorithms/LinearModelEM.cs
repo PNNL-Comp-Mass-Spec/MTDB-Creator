@@ -93,8 +93,9 @@ namespace Regressor.Algorithms
                 throw new InvalidOperationException();
             }
 
-            RegressionResult.Slope = beta.At(0, 0);
-            RegressionResult.Intercept = beta.At(1, 0);
+            
+            RegressionResult.Slope = beta.At(0, 0); // Create slope
+            RegressionResult.Intercept = beta.At(1, 0); // Create intercept
             var numPoints = _mobjX.RowCount;
             var maxDiff = -1 * double.MaxValue;
             var minDiff = double.MaxValue;
@@ -110,8 +111,7 @@ namespace Regressor.Algorithms
                 if (_mobjY.At(index, 0) > maxY)
                     maxY = _mobjY.At(index, 0);
             }
-
-            _mdblUnifU = 1.0 / (maxDiff - minDiff);
+            //_mdblUnifU = 1.0 / (maxDiff - minDiff);
             _mdblUnifU = 1.0 / maxY;
         }
 
@@ -160,16 +160,24 @@ namespace Regressor.Algorithms
                     maxScan = val;
             }
 
-            const double percentToIgnore = 0.4;
-            var lowerX = minScan;
-            var upperX = maxScan - (maxScan - minScan) * percentToIgnore;
+            const double percentToIgnore = 0.0;
+
+            /*Old regression model*/
+            // var lowerX = minScan;
+            // var upperX = maxScan - (maxScan - minScan) * percentToIgnore;
+
+            /*New regression model*/
+            var lowerX = minScan + (minScan + maxScan) * (percentToIgnore / 2.0);
+            var upperX = maxScan - (maxScan - minScan) * (percentToIgnore / 2.0);
 
             for (int ptNum = 0; ptNum < x.Length; ptNum++)
             {
-                var pt = new RegressionPts {MdblX = x[ptNum], MdblY = y[ptNum]};
-
-                if (pt.MdblX > lowerX && pt.MdblX < upperX)
-                    RegressionPoints.Add(pt);
+//                if (Math.Abs(x[ptNum] - y[ptNum]) < 0.2)
+                {
+                    var pt = new RegressionPts { MdblX = x[ptNum], MdblY = y[ptNum] };
+                    if (pt.MdblX > lowerX && pt.MdblX < upperX)
+                        RegressionPoints.Add(pt);
+                }
             }
         }
 

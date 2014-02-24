@@ -39,6 +39,7 @@ namespace MTDBFramework.IO
 
             AnalysisReaderHelper.CalculateObservedNet(results);
 
+
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MSAlign, results);
         }
 
@@ -85,8 +86,8 @@ namespace MTDBFramework.IO
             // TODO
             result.PeptideInfo = new TargetPeptideInfo()
             {
-                PeptideInfoSequence = result.Sequence,
-                PeptideInfoCleanPeptide = result.Sequence
+                Peptide/*InfoSequence*/ = result.Sequence,
+                /*PeptideInfo*/CleanPeptide = result.Sequence
             };
 
             return result;

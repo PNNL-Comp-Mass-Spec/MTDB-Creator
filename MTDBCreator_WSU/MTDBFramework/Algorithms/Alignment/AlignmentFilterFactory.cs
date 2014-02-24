@@ -16,6 +16,7 @@ namespace MTDBFramework.Algorithms.Alignment
             {
                 case LcmsIdentificationTool.MsgfPlus:
                     //TODO: MsgfPlusTargetFilter
+                    alignmentFilter = new MSGFPlusAlignmentFilter(options);
                     break;
                 case LcmsIdentificationTool.Sequest:
                     alignmentFilter = new SequestAlignmentFilter(options);

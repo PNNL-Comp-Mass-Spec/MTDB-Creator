@@ -28,17 +28,24 @@ namespace MTDBFramework.IO
             int current = 0;
             int total = analysisJobItems.Count();
 
+            List<AnalysisJobItem> phrps = new List<AnalysisJobItem>();
+            List<AnalysisJobItem> jobs = new List<AnalysisJobItem>();
+
+
             foreach (AnalysisJobItem jobItem in analysisJobItems)
             {
                 OnProgressChanged(new MTDBProgressChangedEventArgs(current, total, jobItem));
 
-                IAnalysisReader analysisReader = AnalysisReaderFactory.Create(jobItem.Format, this.ProcessorOptions);
+                // Legacy code from before implementation of clsPHRPReader
+                // IAnalysisReader analysisReader = AnalysisReaderFactory.Create(jobItem.Format, this.ProcessorOptions);
+
+                IPHRPReader analysisReader = PHRPReaderFactory.Create(jobItem.FilePath, this.ProcessorOptions);
 
                 jobItem.DataSet = analysisReader.Read(jobItem.FilePath);
 
                 current++;
             }
-
+            
             return analysisJobItems;
         }
 

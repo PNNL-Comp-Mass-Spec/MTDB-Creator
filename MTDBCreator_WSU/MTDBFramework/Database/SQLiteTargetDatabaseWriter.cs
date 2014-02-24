@@ -41,11 +41,11 @@ namespace MTDBFramework.Database
                     {
                         foreach (Target t in consensusTarget.Targets)
                         {
-                            if (!uniquePeptides.ContainsKey(t.PeptideInfo.PeptideInfoSequence))
+                            if (!uniquePeptides.ContainsKey(t.PeptideInfo.Peptide/*InfoSequence*/))
                             {
-                                uniquePeptides.Add(t.PeptideInfo.PeptideInfoSequence, t.PeptideInfo);
+                                uniquePeptides.Add(t.PeptideInfo.Peptide/*InfoSequence*/, t.PeptideInfo);
                             }
-                            t.PeptideInfo = uniquePeptides[t.PeptideInfo.PeptideInfoSequence];
+                            t.PeptideInfo = uniquePeptides[t.PeptideInfo.Peptide/*InfoSequence*/];
                             if (!uniqueDataSets.ContainsKey(t.DataSet.Path))
                             {
                                 uniqueDataSets.Add(t.DataSet.Path, t.DataSet);

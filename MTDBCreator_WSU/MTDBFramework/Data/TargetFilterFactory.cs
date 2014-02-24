@@ -10,6 +10,7 @@
             {
                 case LcmsIdentificationTool.MsgfPlus:
                     //TODO: MsgfPlusTargetFilter
+                    targetFilter = new MSGFPlusTargetFilter(options);
                     break;
                 case LcmsIdentificationTool.Sequest:
                     targetFilter = new SequestTargetFilter(options);

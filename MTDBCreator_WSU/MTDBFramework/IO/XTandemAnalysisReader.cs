@@ -7,6 +7,7 @@ using System.IO;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
+using PHRPReader;
 
 #endregion
 
@@ -47,7 +48,6 @@ namespace MTDBFramework.IO
             }
 
             // Get Targets
-
             using (StreamReader reader = new StreamReader(path))
             {
                 this.SetHeaderIndices(reader.ReadLine());
@@ -77,6 +77,7 @@ namespace MTDBFramework.IO
             AnalysisReaderHelper.CalculateObservedNet(results);
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(this.ReaderOptions.PredictorType), results);
 
+            List<XTandemResult> regResults = new List<XTandemResult>();
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.XTandem, results);
         }
 
@@ -116,7 +117,7 @@ namespace MTDBFramework.IO
 
             result.Scan = Convert.ToInt32(lineCells[actualHeaderMaps[DefaultHeaders.Scan]]);
             result.Charge = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.Charge]]);
-            result.MonoisotopicMass = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.Peptide_MH]]);
+            result.MonoisotopicMass = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.Peptide_MH]]) - 1.00727649;
             result.MultiProteinCount = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.Multiple_Protein_Count]]);
             result.Sequence = lineCells[actualHeaderMaps[DefaultHeaders.Peptide_Sequence]];
             result.CleanPeptide = Target.CleanSequence(result.Sequence);
@@ -124,15 +125,19 @@ namespace MTDBFramework.IO
             result.AnalysisId = Convert.ToInt32(lineCells[actualHeaderMaps[DefaultHeaders.Result_ID]]);
             result.PeptideInfo = new TargetPeptideInfo()
             {
-                PeptideInfoCleanPeptide = result.CleanPeptide,
-                PeptideInfoSequence = result.Sequence
+                Peptide/*InfoSequence*/ = result.Sequence,
+                /*PeptideInfo*/CleanPeptide = result.Sequence
             };
             // Fields in XTandemResult
 
-            result.GroupId = Convert.ToInt32(lineCells[actualHeaderMaps[DefaultHeaders.Group_ID]]);
-            result.BScore = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.b_score]]);
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.Group_ID))
+            {
+                result.GroupId = Convert.ToInt32(lineCells[actualHeaderMaps[DefaultHeaders.Group_ID]]);
+            }
+
+                result.BScore = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.b_score]]);
             result.DeltaCn2 = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.DeltaCn2]]);
-            result.DeltaMass = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.Delta_Mass]]);
+            result.DelM = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.Delta_Mass]]);
             result.LogIntensity = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.Peptide_Intensity_Log]]);
             result.LogPeptideEValue = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.Peptide_Expectation_Value_Log]]);
             result.NumberYIons = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.y_ions]]);

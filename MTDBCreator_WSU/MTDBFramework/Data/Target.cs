@@ -24,6 +24,7 @@ namespace MTDBFramework.Data
         private int m_AnalysisId;
         private short m_MultiProteinCount;
         private double m_MonoisotopicMass;
+        private double m_observedMonoMass;
 
         private ConsensusTarget m_Parent;
 
@@ -35,11 +36,15 @@ namespace MTDBFramework.Data
         private string m_Sequence;
         private string m_CleanPeptide;
 
+        private double m_delM;
+        private double m_delM_PPM;
+
         // SequenceInfo fields
         private short m_IsSeqInfoExist;
         private short m_ModificationCount;
         private string m_ModificationDescription;
         private double m_SeqInfoMonoisotopicMass;
+        private string m_SeqWithNumericMods;
 
         #endregion
 
@@ -126,7 +131,17 @@ namespace MTDBFramework.Data
             get { return m_MonoisotopicMass; }
             set
             {
-                m_MonoisotopicMass = value; 
+                m_MonoisotopicMass = value;
+                OnPropertyChanged("MonoisotopicMass");
+            }
+        }
+
+        public double ObservedMonoisotopicMass
+        {
+            get { return m_observedMonoMass; }
+            set
+            {
+                m_observedMonoMass = value;
                 OnPropertyChanged("MonoisotopicMass");
             }
         }
@@ -203,6 +218,31 @@ namespace MTDBFramework.Data
             }
         }
 
+        public double DelM
+        {
+            get
+            {
+                return m_delM;
+            }
+            set
+            {
+                m_delM = value;
+                OnPropertyChanged("DelM");
+            }
+        }
+        public double DelM_PPM
+        {
+            get
+            {
+                return m_delM_PPM;
+            }
+            set
+            {
+                m_delM_PPM = value;
+                OnPropertyChanged("DelM_PPM");
+            }
+        }
+
         // SequenceInfo
 
         public short IsSeqInfoExist
@@ -244,6 +284,18 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("SeqInfoMonoisotopicMass");
             }
         }
+
+        public string SeqWithNumericMods
+        {
+            get { return m_SeqWithNumericMods; }
+            set
+            {
+                m_SeqWithNumericMods = value;
+                OnPropertyChanged("SeqWithNumericMods");
+            }
+        }
+
+        public double SpectralProbability { get; set; }
 
         #endregion
 

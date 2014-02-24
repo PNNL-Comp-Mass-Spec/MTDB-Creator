@@ -13,7 +13,7 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id).GeneratedBy.Assigned();
-            Map(x => x.MonoisotopicMass);
+            Map(x => x.ObservedMonoisotopicMass);
             Map(x => x.Charge);
             Map(x => x.ObservedNet);
             Map(x => x.PredictedNet);
@@ -21,6 +21,10 @@ namespace MTDBFramework.Database
             Map(x => x.MultiProteinCount);
             Map(x => x.Scan);
             Map(x => x.ModificationCount);
+            Map(x => x.ModificationDescription);
+            Map(x => x.DelM);
+            Map(x => x.DelM_PPM);
+            
             //TODO
             //References(x => x.Parent);
             References(x => x.DataSet).Cascade.SaveUpdate();

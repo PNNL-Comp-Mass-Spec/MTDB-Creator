@@ -108,31 +108,80 @@ namespace MTDBFramework.IO
             result.AnalysisId = Convert.ToInt32(lineCells[actualHeaderMaps[DefaultHeaders.HitNum]]);
             result.Scan = Convert.ToInt32(lineCells[actualHeaderMaps[DefaultHeaders.ScanNum]]);
             result.Charge = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.ChargeState]]);
-            result.MonoisotopicMass = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.MH]]);
+            result.MonoisotopicMass = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.MH]]) - 1.00727649;
             result.MultiProteinCount = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.MultiProtein]]);
             result.Sequence = lineCells[actualHeaderMaps[DefaultHeaders.Peptide]];
             result.CleanPeptide = Target.CleanSequence(result.Sequence);
             result.Mz = result.MonoisotopicMass / result.Charge;
             result.PeptideInfo = new TargetPeptideInfo()
             {
-                PeptideInfoCleanPeptide = result.CleanPeptide,
-                PeptideInfoSequence = result.Sequence
+                Peptide/*InfoSequence*/ = result.Sequence,
+                /*PeptideInfo*/CleanPeptide = result.Sequence
             };
              // Fields in SequestResult
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.ScanCount))
+            {
+                result.ScanCount = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.ScanCount]]);
+            }
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.XCorr))
+            {
+                result.XCorr = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.XCorr]]);
+            }
 
-            result.ScanCount = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.ScanCount]]);
-            result.XCorr = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.XCorr]]);
-            result.DelCn = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.DelCn]]);
-            result.Sp = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.Sp]]);
-            result.Reference = lineCells[actualHeaderMaps[DefaultHeaders.Reference]];
-            result.DelCn2 = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.DelCn2]]);
-            result.RankSp = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.RankSp]]);
-            result.RankXc = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.RankXc]]);
-            result.DelM = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.DelM]]);
-            result.XcRatio = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.XcRatio]]);
-            result.PassFilt = Convert.ToBoolean(Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.PassFilt]]));
-            result.MScore = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.MScore]]);
-            result.NumTrypticEnds = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.NumTrypticEnds]]);
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.DelCn))
+            {
+                result.DelCn = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.DelCn]]);
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.Sp))
+            {
+                result.Sp = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.Sp]]);
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.Reference))
+            {
+                result.Reference = lineCells[actualHeaderMaps[DefaultHeaders.Reference]];
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.DelCn2))
+            {
+                result.DelCn2 = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.DelCn2]]);
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.RankSp))
+            {
+                result.RankSp = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.RankSp]]);
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.RankXc))
+            {
+                result.RankXc = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.RankXc]]);
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.DelM))
+            {
+                result.DelM = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.DelM]]);
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.XcRatio))
+            {
+                result.XcRatio = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.XcRatio]]);
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.PassFilt))
+            {
+                result.PassFilt = Convert.ToBoolean(Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.PassFilt]]));
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.MScore))
+            {
+                result.MScore = Convert.ToDouble(lineCells[actualHeaderMaps[DefaultHeaders.MScore]]);
+            }
+
+            if (actualHeaderMaps.ContainsKey(DefaultHeaders.NumTrypticEnds))
+            {
+                result.NumTrypticEnds = Convert.ToInt16(lineCells[actualHeaderMaps[DefaultHeaders.NumTrypticEnds]]);
+            } 
 
             result.FScore = SequestResult.CalculatePeptideProphetDistriminantScore(result);
 

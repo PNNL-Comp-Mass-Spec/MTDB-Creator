@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id).GeneratedBy.Identity();
-            Map(x => x.Path);
+            Map(x => x.Name);
 
         }
     }

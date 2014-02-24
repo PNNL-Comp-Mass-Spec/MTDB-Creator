@@ -1,5 +1,6 @@
 ﻿#region Namespaces
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -53,18 +54,18 @@ namespace MTDBFramework.Algorithms
                         }
                     }
                 }
+                    epicTargets.AddRange(filteredTargets);
 
-                epicTargets.AddRange(filteredTargets);
-
-                if (this.ProcessorOptions.TargetFilterType != TargetWorkflowType.TopDown)
-                {
-                    IRegressorAlgorithm<LinearRegressionResult> regressor = LinearRegressorFactory.Create(this.ProcessorOptions.RegressionType);
-                    dataSet.RegressionResult = regressor.CalculateRegression(alignedTargets.Select(t => (double)t.Scan).ToList(), alignedTargets.Select(t => t.PredictedNet).ToList());
-                }
-                else
-                {
-                    dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
-                }
+                    if (this.ProcessorOptions.TargetFilterType != TargetWorkflowType.TopDown)
+                    {
+                        IRegressorAlgorithm<LinearRegressionResult> regressor = LinearRegressorFactory.Create(this.ProcessorOptions.RegressionType);
+                        dataSet.RegressionResult = regressor.CalculateRegression(alignedTargets.Select(t => (double)t.Scan).ToList(), alignedTargets.Select(t => t.PredictedNet).ToList());
+                    }
+                    else
+                    {
+                        dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
+                    }
+                
             }
 
             targetDatabase.ConsensusTargets = new ObservableCollection<ConsensusTarget>(clusterer.Cluster(epicTargets));

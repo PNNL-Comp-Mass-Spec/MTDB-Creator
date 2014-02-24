@@ -77,6 +77,7 @@ namespace MTDBCreator.Windows
                 {
                     RestoreDirectory = true,
 
+                    Multiselect = true,
                     Title = formatInfo.Title,
                     Filter = formatInfo.Filter
                 };
