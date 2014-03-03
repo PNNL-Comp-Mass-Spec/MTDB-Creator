@@ -142,7 +142,7 @@
     <Compile Include="IO\MSGFPlusAnalysisReader.cs" />
     <Compile Include="IO\MsgfPlusResultsReader.cs" />
     <Compile Include="IO\MSGFPlusPHRPReader.cs" />
-    <Compile Include="IO\MZIdentReader.cs" />
+    <Compile Include="IO\MZIdentMLReader.cs" />
     <Compile Include="IO\SequestPHRPReader.cs" />
     <Compile Include="IO\XTandemPHRPReader.cs" />
     <Compile Include="IO\PHRPReaderFactory.cs" />

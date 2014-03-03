@@ -22,7 +22,7 @@ namespace MTDBFramework.Data
             {
                 return true;
             }
-
+            
             if(result.Sequence == null)
             {
                 return true;

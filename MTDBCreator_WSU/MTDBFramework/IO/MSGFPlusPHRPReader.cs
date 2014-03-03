@@ -44,7 +44,6 @@ namespace MTDBFramework.IO
                 result.Scan = reader.CurrentPSM.ScanNumber;
                 result.Sequence = reader.CurrentPSM.Peptide;
                 result.Mz = PHRPReader.clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge);
-                //result.Mz = result.MonoisotopicMass / result.Charge;
 
                 result.PeptideInfo = new TargetPeptideInfo()
                 {

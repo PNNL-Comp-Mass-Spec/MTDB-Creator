@@ -27,6 +27,9 @@ namespace MTDBFramework.IO
                 case LcmsIdentificationTool.MSAlign:
                     reader = new MSAlignAnalysisReader(options);
                     break;
+                case LcmsIdentificationTool.MzIdentMl:
+                    //reader = new MZIdentReader(options);
+                    break;
             }
 
             return reader;

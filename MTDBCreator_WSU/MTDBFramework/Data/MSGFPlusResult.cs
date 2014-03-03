@@ -7,9 +7,6 @@ namespace MTDBFramework.Data
 {
     public class MSGFPlusResult : Target
     {
-        //private double m_delM;
-        //private double m_delM_PPM;
-        //private int m_specIndex;
         private double m_precursorMonoMass;
         private double m_precursorMZ;
         private string m_reference;
@@ -24,30 +21,6 @@ namespace MTDBFramework.Data
         private double m_pepQValue;
         private int m_isotopeError;
 
-        //public double DelM
-        //{
-        //    get
-        //    {
-        //        return m_delM;
-        //    }
-        //    set
-        //    {
-        //        m_delM = value;
-        //        OnPropertyChanged("DelM");
-        //    }
-        //}
-        //public double DelM_PPM
-        //{
-        //    get
-        //    {
-        //        return m_delM_PPM;
-        //    }
-        //    set
-        //    {
-        //        m_delM_PPM = value;
-        //        OnPropertyChanged("DelM_PPM");
-        //    }
-        //}
         public double PrecursorMonoMass
         {
             get
@@ -203,6 +176,71 @@ namespace MTDBFramework.Data
                 m_isotopeError = value;
                 OnPropertyChanged("IsotopeError");
             }
+        }
+
+        public static short CalculateTrypticState(string peptide)
+        {
+            short trypticState = 0;
+            char[] peptideChar = peptide.ToCharArray();
+            int startIndex = 2;
+            int stopIndex = peptideChar.Length - 3;
+
+            if (peptideChar[1] != '.')
+            {
+                startIndex = 0;
+
+                throw new ApplicationException(String.Format("Peptide {0} does not have a . in the second position", peptide));
+            }
+
+            if (peptideChar[stopIndex + 1] != '.')
+            {
+                stopIndex = peptideChar.Length - 1;
+
+                throw new ApplicationException(String.Format("Peptide {0} does not have a . in the second last position", peptide));
+            }
+
+            if (peptideChar[stopIndex] == 'R' || peptideChar[stopIndex] == 'K')
+            {
+                trypticState++;
+
+                if (peptideChar[peptideChar.Length - 1] == 'P')
+                {
+                    trypticState--;
+                }
+            }
+            else if (!Char.IsLetter(peptideChar[stopIndex]))
+            {
+                if (peptideChar[stopIndex - 1] == 'R' || peptideChar[stopIndex - 1] == 'K')
+                {
+                    trypticState++;
+
+                    if (peptideChar[peptideChar.Length - 1] == 'P')
+                    {
+                        trypticState--;
+                    }
+                }
+            }
+
+            if (peptideChar[peptideChar.Length - 1] == '-' && trypticState == 0)
+            {
+                trypticState++;
+            }
+
+            if (peptideChar[0] == 'R' || peptideChar[0] == 'K')
+            {
+                trypticState++;
+
+                if (peptideChar[startIndex] == 'P')
+                {
+                    trypticState--;
+                }
+            }
+            else if (peptideChar[0] == '-')
+            {
+                trypticState++;
+            }
+
+            return trypticState;
         }
     }	
 }
