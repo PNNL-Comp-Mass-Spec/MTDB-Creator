@@ -24,7 +24,8 @@ namespace MTDBFramework.Algorithms.Clustering
         private int m_Id;
         private double m_Net; 
         private double m_StdevNet;
-        private double m_Mass;
+        private double m_PredictedNet;
+        private double m_TheoreticalMonoIsotopicMass;
         private double m_StdevMass;
         private string m_Sequence;
         private TargetDataSet m_Dataset;
@@ -63,13 +64,23 @@ namespace MTDBFramework.Algorithms.Clustering
             }
         }
 
-        public double Mass
+        public double PredictedNet
         {
-            get { return m_Mass; }
+            get { return m_PredictedNet; }
             set
             {
-                m_Mass = value;
-                OnPropertyChanged("Mass");
+                m_PredictedNet = value;
+                OnPropertyChanged("PredictedNet");
+            }
+        }
+
+        public double TheoreticalMonoIsotopicMass
+        {
+            get { return m_TheoreticalMonoIsotopicMass; }
+            set
+            {
+                m_TheoreticalMonoIsotopicMass = value;
+                OnPropertyChanged("TheoreticalMonoIsotopicMass");
             }
         }
 
@@ -119,9 +130,12 @@ namespace MTDBFramework.Algorithms.Clustering
         {
             Targets.Add(target);
 
+            this.Sequence = target.Sequence;
+            this.PredictedNet = target.PredictedNet;
+
             target.Parent = this;
         }
-
+/*
         ///<summary>
         /// Calculates the average mass based on the theoretical value for each Target
         /// </summary>
@@ -165,7 +179,7 @@ namespace MTDBFramework.Algorithms.Clustering
                 return sum;
             }
         }
-
+        */
         /// <summary>
         /// Calculate average mass & net and stdev mass & net for each Target.
         /// </summary>
@@ -174,10 +188,10 @@ namespace MTDBFramework.Algorithms.Clustering
             List<double> massesList = Targets.Select(c => c.MonoisotopicMass).ToList();
             List<double> netList = Targets.Select(c => c.ObservedNet).ToList();
 
-            this.Mass = massesList.Average();
+            this.TheoreticalMonoIsotopicMass = massesList.Average();
             this.Net = netList.Average();
 
-            this.StdevMass = massesList.StandardDeviation();
+            //this.StdevMass = massesList.StandardDeviation();
             this.StdevNet = netList.StandardDeviation();
         }
     }

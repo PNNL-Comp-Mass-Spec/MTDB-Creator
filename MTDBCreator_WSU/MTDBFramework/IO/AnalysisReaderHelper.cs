@@ -68,6 +68,14 @@ namespace MTDBFramework.IO
             }
         }
 
+		// Entry point for calculating the predicted NET.
+		// Accepts a Retention time predictor and an IEnumerable of Targets
+		// For each target, it passes the clean peptide sequence through the peptideCache alongside
+		// the predictor to determine the predicted NET. If the peptide has been seen before, it has
+		// already been added into a dictionary and so it simply looks up the relevant NET for the
+		// peptide and returns that. Otherwise, it passes the peptide through the predictor's
+		// GetElutionTime method, adds that value to the peptide cache with the sequence as the key
+		// so that if it is seen again it will get the value faster.
         public static void CalculatePredictedNet(IRetentionTimePredictor predictor, IEnumerable<Target> targets)
         {
             CacheAccessor pepCache = new CacheAccessor();

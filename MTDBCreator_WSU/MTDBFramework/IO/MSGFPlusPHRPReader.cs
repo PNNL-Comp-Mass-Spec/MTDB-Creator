@@ -9,6 +9,9 @@ using PHRPReader;
 
 namespace MTDBFramework.IO
 {
+    /// <summary>
+    /// Summary Description for MSGFPlusPHRP Reader
+    /// </summary>
     class MSGFPlusPHRPReader: IPHRPReader
     {
         public Options ReaderOptions { get; set; }
@@ -23,11 +26,7 @@ namespace MTDBFramework.IO
             List<MSGFPlusResult> results = new List<MSGFPlusResult>();
             MSGFPlusTargetFilter filter = new MSGFPlusTargetFilter(this.ReaderOptions);
 
-            // Get Result to Sequence Map
-            ResultToSequenceMapReader resultToSequenceMapReader = new ResultToSequenceMapReader();
-            Dictionary<int, int> resultToSequenceDictionary = new Dictionary<int, int>();
-
-            // Get the Targets
+            // Get the Targets using PHRPReader which looks at the path that was passed in
             var reader = new PHRPReader.clsPHRPReader(path);
             while (reader.CanRead)
             {
@@ -59,6 +58,7 @@ namespace MTDBFramework.IO
                 {
                     result.Reference += proteinName;
                 }
+                result.SpecProb = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["MSGFDB_SpecProb"]);
                 result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
                 result.Fdr = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["FDR"]);
                 result.DeNovoScore = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["DeNovoScore"]);
@@ -75,6 +75,7 @@ namespace MTDBFramework.IO
                     result.DelM_PPM = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
                 }
                 
+				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
                 if (!filter.ShouldFilter(result))
                 {
                     result.DataSet = new TargetDataSet() { Path = path };

@@ -18,8 +18,6 @@ namespace MTDBFramework.Data
         private double m_DelCn2;
         private short m_RankSp;
         private short m_RankXc;
-        //private double m_DelM;
-        //private double m_DelM_PPM;
         private double m_XcRatio;
         private bool m_PassFilt;
         private double m_FScore;
@@ -109,29 +107,6 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("RankXc");
             }
         }
-
-        //public double DelM
-        //{
-        //    get { return m_DelM; }
-        //    set
-        //    {
-        //        m_DelM = value;
-        //        OnPropertyChanged("DelM");
-        //    }
-        //}
-
-        //public double DelM_PPM
-        //{
-        //    get
-        //    {
-        //        return m_DelM_PPM;
-        //    }
-        //    set
-        //    {
-        //        m_DelM_PPM = value;
-        //        OnPropertyChanged("DelM_PPM");
-        //    }
-        //}
 
         public double XcRatio
         {

@@ -11,7 +11,7 @@ namespace MTDBCreator.ViewModels.TreeView
         private IEnumerable<Target> m_Targets;
 
         public TargetCollectionTreeNodeViewModel(IEnumerable<Target> targets, TreeNodeViewModel parent)
-            : base(String.Format("Targets ({0})", targets.Count().ToString()), true, parent)
+            : base(String.Format("Evidence ({0})", targets.Count().ToString()), true, parent)
         {
             m_Targets = targets;
         }

@@ -16,9 +16,10 @@ namespace MTDBFramework.Database
             Id(x => x.Id).GeneratedBy.Assigned();
             Map(x => x.Net);
             Map(x => x.StdevNet);
-            Map(x => x.Mass);
-            Map(x => x.StdevMass);
-            //References(x => x.Dataset).Cascade.SaveUpdate();
+            Map(x => x.PredictedNet);
+            Map(x => x.TheoreticalMonoIsotopicMass);
+            Map(x => x.Sequence);
+
             HasMany(x => x.Targets).Cascade.SaveUpdate();
         }
     }

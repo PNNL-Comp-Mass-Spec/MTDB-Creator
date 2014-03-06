@@ -14,7 +14,12 @@ namespace MTDBFramework.Database
 
         }
         public int Id { get; set; }
+
+        // Path only used to get the name of the data set for the database
         public string Path { get; set; }
+        
+        // Remove the appropriate extention ("_syn.txt" checked last to prevent potential overlap)
+        // Strips extra information from the path name and returns the dataset name itself
         public string Name 
         {
             get 

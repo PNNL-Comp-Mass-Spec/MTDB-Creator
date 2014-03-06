@@ -20,10 +20,11 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             base.LoadChildNodes();
 
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Average Mass: ", m_ConsensusTarget.Mass.ToString()), this));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Theoretical Monoisotopic Mass: ", m_ConsensusTarget.TheoreticalMonoIsotopicMass.ToString()), this));
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Average Net: ", m_ConsensusTarget.Net.ToString()), this));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Stdev Mass: ", m_ConsensusTarget.StdevMass.ToString()), this));
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Stdev Net: ", m_ConsensusTarget.StdevNet.ToString()), this));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Predicted NET: ", m_ConsensusTarget.PredictedNet.ToString()), this));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Peptide Sequence: ", m_ConsensusTarget.Sequence), this));
 
             m_ChildNodes.Add(new TargetCollectionTreeNodeViewModel(m_ConsensusTarget.Targets, this));
         }

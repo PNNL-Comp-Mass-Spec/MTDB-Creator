@@ -21,6 +21,9 @@ namespace MTDBFramework.IO
             this.ProcessorOptions = options;
         }
 
+		// Entry point for processing analysis job items. Accepts a IEnumerable of Analysis Job Items
+		// and returns the same.
+		// It will Analyse each one individually depending on the file type using PHRP Reader
         public IEnumerable<AnalysisJobItem> Process(IEnumerable<AnalysisJobItem> analysisJobItems)
         {
             // analysisJobItems should have LcmsDataSet field be null
@@ -41,6 +44,7 @@ namespace MTDBFramework.IO
 
                 IPHRPReader analysisReader = PHRPReaderFactory.Create(jobItem.FilePath, this.ProcessorOptions);
 
+				// Reads the jobItem using the reader returned by the Reader Factory
                 jobItem.DataSet = analysisReader.Read(jobItem.FilePath);
 
                 current++;

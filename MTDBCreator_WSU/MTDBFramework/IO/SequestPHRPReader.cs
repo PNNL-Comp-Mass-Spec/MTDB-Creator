@@ -9,6 +9,9 @@ using PHRPReader;
 
 namespace MTDBFramework.IO
 {
+    /// <summary>
+    /// Summary Description for SequestPHRP Reader
+    /// </summary>
     class SequestPHRPReader : IPHRPReader
     {
         public Options ReaderOptions { get; set; }
@@ -23,11 +26,7 @@ namespace MTDBFramework.IO
             List<SequestResult> results = new List<SequestResult>();
             SequestTargetFilter filter = new SequestTargetFilter(this.ReaderOptions);
 
-            // Get Result to Sequence Map
-            ResultToSequenceMapReader resultToSequenceMapReader = new ResultToSequenceMapReader();
-            Dictionary<int, int> resultToSequenceDictionary = new Dictionary<int, int>();
-
-            // Get the Targets
+            // Get the Targets using PHRPReader which looks at the path that was passed in
             var reader = new PHRPReader.clsPHRPReader(path);
             while (reader.CanRead)
             {
@@ -44,7 +43,10 @@ namespace MTDBFramework.IO
                 result.Scan = reader.CurrentPSM.ScanNumber;
                 result.Sequence = reader.CurrentPSM.Peptide;
                 result.Mz = PHRPReader.clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge);
-                //result.Mz = result.MonoisotopicMass / result.Charge;
+                if (reader.CurrentPSM.MSGFSpecProb.Length != 0)
+                {
+                    result.SpecProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
+                }
 
                 result.PeptideInfo = new TargetPeptideInfo()
                 {
@@ -69,6 +71,7 @@ namespace MTDBFramework.IO
 
                 result.FScore = SequestResult.CalculatePeptideProphetDistriminantScore(result);
 
+				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
                 if (!filter.ShouldFilter(result))
                 {
                     result.DataSet = new TargetDataSet() { Path = path };

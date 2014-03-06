@@ -28,6 +28,8 @@ namespace MTDBFramework.IO
 
         private class SpectrumIDItem
         {
+		
+			#region Spectrum ID Private Variables
             string m_specItemID;
             bool m_passThreshold;
             int m_rank;
@@ -44,7 +46,10 @@ namespace MTDBFramework.IO
             double m_pepQValue;
             int m_isoError;
             int m_scanNum;
+			#endregion
 
+			#region Spectrum ID Public Properties
+			
             public string SpecItemID
             {
                 get { return m_specItemID; }
@@ -125,11 +130,12 @@ namespace MTDBFramework.IO
                 get { return m_scanNum; }
                 set { m_scanNum = value; }
             }
+			#endregion
+			
         }
 
         private class SpectrumIDResult
         {
-            int m_index;
             public List<SpectrumIDItem> items;
 
             public SpectrumIDResult()
@@ -260,6 +266,24 @@ namespace MTDBFramework.IO
             }
         }
 
+		// Entry point for MZIdentMLReaders
+		// Accepts a string "Path" and returns an LCMSDataSet
+		// 
+		// XML Reader parses an MZIdentML file, storing Peptide data, such as sequence,
+		// number, and type of modifications, as a PeptideRef, Database Information holds
+		// the length of the peptide and the protein description, Peptide Evidence holds the pre,
+		// post, start and end for the peptide for Tryptic End calculations. The element that holds
+		// the most information is the Spectrum ID Item, which has the calculated mz, experimental mz,
+		// charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue, MSGF QValue,
+		// MSGR PepQValue, Scan number as well as which peptide it is and which evidences it has from
+		// the analysis run.
+		//
+		// After the XML Reader, it then goes through each Spectrum ID item and maps the appropriate values
+		// to the appropriate variables as a MSGF+ result. If the result passes the filter for MSGF+, it
+		// then adds the data for if there are modifications and adds the result to a running list of results.
+		// When all the results are tabulated, it passes them through to the AnalysisHelper class to calculate
+		// both the observed and the predicted NETs and then returns an LCMSDataSet of the results with the MZIdent tool
+		
         public LcmsDataSet Read(string path)
         {
             XmlReaderSettings XSettings = new XmlReaderSettings();
@@ -387,6 +411,8 @@ namespace MTDBFramework.IO
             MSGFPlusTargetFilter filter = new MSGFPlusTargetFilter(this.ReaderOptions);
             MSGFPlusResult result = new MSGFPlusResult();
             int i = 1;
+			
+			// Go through each Spectrum ID and map it to an MSGF+ result
             foreach(KeyValuePair<string, SpectrumIDItem> item in specItems)
             {
                 result.AnalysisId = i;
@@ -448,6 +474,7 @@ namespace MTDBFramework.IO
                 };
                 i++;
 
+				// If it passes the filter, it needs to be added to the final results
                 if (!filter.ShouldFilter(result))
                 {
                     result.DataSet = new TargetDataSet() { Path = path };
@@ -479,6 +506,7 @@ namespace MTDBFramework.IO
                 }
             }
 
+			// Calculate NET for the results
             AnalysisReaderHelper.CalculateObservedNet(results);
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(this.ReaderOptions.PredictorType), results);
 

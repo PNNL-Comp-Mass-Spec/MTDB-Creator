@@ -9,6 +9,9 @@ using PHRPReader;
 
 namespace MTDBFramework.IO
 {
+    /// <summary>
+    /// Summary Description for XTandemPHRP Reader
+    /// </summary>
     class XTandemPHRPReader : IPHRPReader
     {
         public Options ReaderOptions { get; set; }
@@ -23,16 +26,7 @@ namespace MTDBFramework.IO
             List<XTandemResult> results = new List<XTandemResult>();
             XTandemTargetFilter filter = new XTandemTargetFilter(this.ReaderOptions);
 
-            // Get Result to Sequence Map
-            ResultToSequenceMapReader resultToSequenceMapReader = new ResultToSequenceMapReader();
-            Dictionary<int, int> resultToSequenceDictionary = new Dictionary<int, int>();
-
-            //foreach (ResultToSequenceMap map in resultToSequenceMapReader.Read(path.Insert(path.LastIndexOf(".txt"), "_ResultToSeqMap")))
-            //{
-            //    resultToSequenceDictionary.Add(map.ResultId, map.UniqueSequenceId);
-            //}
-
-            // Get the Targets
+            // Get the Targets using PHRPReader which looks at the path that was passed in
             var reader = new PHRPReader.clsPHRPReader(path);
             while (reader.CanRead)
             {
@@ -69,8 +63,10 @@ namespace MTDBFramework.IO
                 result.Mz = PHRPReader.clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge); 
                 result.DelM_PPM = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
 
+				
                 double highNorm = 0;
 
+                // Not sure where these magic numbers come from. It's a deep thing... -Brian
                 if (result.Charge == 1)
                 {
                     highNorm = 0.082 * result.PeptideHyperscore;
@@ -86,6 +82,7 @@ namespace MTDBFramework.IO
 
                 result.HighNormalizedScore = highNorm;
 
+				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
                 if (!filter.ShouldFilter(result))
                 {
                     result.DataSet = new TargetDataSet() { Path = path };
@@ -93,7 +90,6 @@ namespace MTDBFramework.IO
                     result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
                     
-
                     if (result.ModificationCount != 0)
                     {
                         foreach (clsAminoAcidModInfo info in reader.CurrentPSM.ModifiedResidues)

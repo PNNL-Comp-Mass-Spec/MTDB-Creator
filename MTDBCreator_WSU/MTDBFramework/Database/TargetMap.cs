@@ -9,11 +9,11 @@ namespace MTDBFramework.Database
 {
     public class TargetMap : ClassMap<Target>
     {
+        //This is our map for the Target class. Note the "Not.LazyLoad"
         public TargetMap()
         {
             Not.LazyLoad();
             Id(x => x.Id).GeneratedBy.Assigned();
-            Map(x => x.ObservedMonoisotopicMass);
             Map(x => x.Charge);
             Map(x => x.ObservedNet);
             Map(x => x.PredictedNet);
@@ -24,9 +24,8 @@ namespace MTDBFramework.Database
             Map(x => x.ModificationDescription);
             Map(x => x.DelM);
             Map(x => x.DelM_PPM);
-            
-            //TODO
-            //References(x => x.Parent);
+            Map(x => x.SpecProb);
+
             References(x => x.DataSet).Cascade.SaveUpdate();
             References(x => x.PeptideInfo).Cascade.SaveUpdate();
         }

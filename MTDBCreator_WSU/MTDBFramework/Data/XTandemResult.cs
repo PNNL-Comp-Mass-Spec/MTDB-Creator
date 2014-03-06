@@ -13,8 +13,6 @@ namespace MTDBFramework.Data
         private int m_GroupId;
         private double m_BScore;
         private double m_DeltaCn2;
-        //private double m_DeltaMass;
-        //private double m_DeltaM_PPM;
         private double m_LogIntensity;
         private double m_LogPeptideEValue;
         private short m_NumberYIons;
@@ -66,32 +64,6 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("DeltaCn2");
             }
         }
-
-        //public double DeltaMass
-        //{
-        //    get
-        //    {
-        //        return m_DeltaMass;
-        //    }
-        //    set
-        //    {
-        //        m_DeltaMass = value;
-        //        OnPropertyChanged("DeltaMass");
-        //    }
-        //}
-
-        //public double DeltaM_PMM
-        //{
-        //    get
-        //    {
-        //        return m_DeltaM_PPM;
-        //    }
-        //    set
-        //    {
-        //        m_DeltaM_PPM = value;
-        //        OnPropertyChanged("DeltaM_PMM");
-        //    }
-        //}
 
         public double LogIntensity
         {

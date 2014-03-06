@@ -39,6 +39,8 @@ namespace MTDBFramework.Data
         private double m_delM;
         private double m_delM_PPM;
 
+        private double m_specProb;
+
         // SequenceInfo fields
         private short m_IsSeqInfoExist;
         private short m_ModificationCount;
@@ -193,6 +195,16 @@ namespace MTDBFramework.Data
             {
                 m_Mz = value;
                 OnPropertyChanged("Mz");
+            }
+        }
+
+        public double SpecProb
+        {
+            get { return m_specProb; }
+            set
+            {
+                m_specProb = value;
+                OnPropertyChanged("SpecProb");
             }
         }
 

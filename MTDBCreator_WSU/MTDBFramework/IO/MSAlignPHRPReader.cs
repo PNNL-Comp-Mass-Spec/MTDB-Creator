@@ -9,6 +9,9 @@ using PHRPReader;
 
 namespace MTDBFramework.IO
 {
+    /// <summary>
+    /// Summary Description for MSAlignPHRP Reader
+    /// </summary>
     class MSAlignPHRPReader : IPHRPReader
     {
         public Options ReaderOptions { get; set; }
@@ -23,11 +26,7 @@ namespace MTDBFramework.IO
             List<MSAlignResult> results = new List<MSAlignResult>();
             MSAlignTargetFilter filter = new MSAlignTargetFilter(this.ReaderOptions);
 
-            // Get Result to Sequence Map
-            ResultToSequenceMapReader resultToSequenceMapReader = new ResultToSequenceMapReader();
-            Dictionary<int, int> resultToSequenceDictionary = new Dictionary<int, int>();
-
-            // Get the Targets
+            // Get the Targets using PHRPReader which looks at the path that was passed in
             var reader = new PHRPReader.clsPHRPReader(path);
             while (reader.CanRead)
             {
@@ -44,7 +43,6 @@ namespace MTDBFramework.IO
                 result.Scan = reader.CurrentPSM.ScanNumber;
                 result.Sequence = reader.CurrentPSM.Peptide;
                 result.Mz = PHRPReader.clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge);
-                //result.Mz = result.MonoisotopicMass / result.Charge;
                 result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
                 if (reader.CurrentPSM.MassErrorPPM.Length != 0)
                 {
@@ -60,6 +58,7 @@ namespace MTDBFramework.IO
 
                 result.EScore = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["EValue"]);
 
+				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
                 if (!filter.ShouldFilter(result))
                 {
                     result.DataSet = new TargetDataSet() { Path = path };

@@ -107,7 +107,7 @@ namespace MTDBCreator.ViewModels
 
             foreach (ConsensusTarget ct in targetDatabase.ConsensusTargets)
             {
-                scatterSeries.Points.Add(new ScatterPoint(ct.Mass, ct.Targets.Count));
+                scatterSeries.Points.Add(new ScatterPoint(ct.TheoreticalMonoIsotopicMass, ct.Targets.Count));
             }
 
             return scatterSeries;

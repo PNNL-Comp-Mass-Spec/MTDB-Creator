@@ -15,6 +15,7 @@ namespace MTDBFramework.Database
         public string CleanPeptide { get; set; }
         public string Peptide { get; set; }
         public string PeptideWithNumericMods { get; set; }
+
         //Added Target List
         public IList<Target> Targets { get; set; }
     }
