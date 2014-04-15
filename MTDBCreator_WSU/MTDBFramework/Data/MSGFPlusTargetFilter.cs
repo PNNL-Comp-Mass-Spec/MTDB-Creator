@@ -14,9 +14,9 @@ namespace MTDBFramework.Data
             this.FilterOptions = options;
         }
 
-        public bool ShouldFilter(Target target)
+        public bool ShouldFilter(Evidence evidence)
         {
-            MSGFPlusResult result = target as MSGFPlusResult;
+            MSGFPlusResult result = evidence as MSGFPlusResult;
 
             if (result == null)
             {

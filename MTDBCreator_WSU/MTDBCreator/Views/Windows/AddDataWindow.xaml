@@ -88,6 +88,11 @@
                                 <Image Source="/Images/Menus/AnalysisFile.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
+                        <MenuItem Name="MZIdentMLMenuItem" Header="_MZIdentML..." Tag="MZIdentML" Click="AddFileMenuItem_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/Menus/AnalysisFile.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <Separator/>
                         <MenuItem Name ="DatasetDescriptionMenuItem" Header="_Dataset Description File..." Tag="Description" Click="AddFileMenuItem_Click">
                             <MenuItem.Icon>

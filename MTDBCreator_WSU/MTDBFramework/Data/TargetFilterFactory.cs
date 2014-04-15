@@ -12,6 +12,10 @@
                     //TODO: MsgfPlusTargetFilter
                     targetFilter = new MSGFPlusTargetFilter(options);
                     break;
+                case LcmsIdentificationTool.MzIdentMl:
+                    //TODO: MsgfPlusTargetFilter
+                    targetFilter = new MSGFPlusTargetFilter(options);
+                    break;
                 case LcmsIdentificationTool.Sequest:
                     targetFilter = new SequestTargetFilter(options);
                     break;

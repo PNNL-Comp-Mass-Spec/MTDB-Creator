@@ -11,7 +11,7 @@ namespace MTDBCreator.ViewModels.TreeView
         private ConsensusTarget m_ConsensusTarget;
 
         public ConsensusTargetTreeNodeViewModel(ConsensusTarget ct, TreeNodeViewModel parent)
-            : base(String.Format("Consensus Target ({0})", ct.Targets.Count), true, parent)
+            : base(String.Format("Consensus Target ({0})", ct.Evidences.Count), true, parent)
         {
             m_ConsensusTarget = ct;
         }
@@ -26,7 +26,7 @@ namespace MTDBCreator.ViewModels.TreeView
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Predicted NET: ", m_ConsensusTarget.PredictedNet.ToString()), this));
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Peptide Sequence: ", m_ConsensusTarget.Sequence), this));
 
-            m_ChildNodes.Add(new TargetCollectionTreeNodeViewModel(m_ConsensusTarget.Targets, this));
+            m_ChildNodes.Add(new TargetCollectionTreeNodeViewModel(m_ConsensusTarget.Evidences, this));
         }
     }
 }

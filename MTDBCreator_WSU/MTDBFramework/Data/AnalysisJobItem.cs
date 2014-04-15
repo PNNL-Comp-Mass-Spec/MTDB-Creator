@@ -100,7 +100,7 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return this.DataSet == null ? 0 : this.DataSet.Targets.Count;
+                return this.DataSet == null ? 0 : this.DataSet.Evidences.Count;
             }
         }
 

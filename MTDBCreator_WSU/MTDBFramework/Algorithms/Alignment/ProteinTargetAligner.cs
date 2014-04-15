@@ -10,9 +10,9 @@ namespace MTDBFramework.Algorithms.Alignment
 {
     public class ProteinTargetAligner : ITargetAligner
     {
-        public LinearRegressionResult AlignTargets(List<Target> targets, List<Target> baseline)
+        public LinearRegressionResult AlignTargets(List<Evidence> evidences, List<Evidence> baseline)
         {
-            targets.ForEach(x => x.PredictedNet = x.ObservedNet);
+            evidences.ForEach(x => x.PredictedNet = x.ObservedNet);
 
             return new LinearRegressionResult();
         }

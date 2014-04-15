@@ -86,7 +86,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
             {
                 case MTDBCreationProgressType.ConsensusTarget:
                     {
-                        this.HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Analysis Targets...{0}%", WindowHelper.GetPercentage(e.Current, e.Total).ToString()) });
+                        this.HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Analysis Evidences...{0}%", WindowHelper.GetPercentage(e.Current, e.Total).ToString()) });
 
                         break;
                     }

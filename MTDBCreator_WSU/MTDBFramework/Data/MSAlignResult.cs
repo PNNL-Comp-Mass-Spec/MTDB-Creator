@@ -6,7 +6,7 @@ using System;
 
 namespace MTDBFramework.Data
 {
-    public class MSAlignResult : Target
+    public class MSAlignResult : Evidence
     {
         #region Private Fields
 

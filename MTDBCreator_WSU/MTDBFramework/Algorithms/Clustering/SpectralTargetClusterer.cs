@@ -10,7 +10,7 @@ namespace MTDBFramework.Algorithms.Clustering
 {
     public class SpectralTargetClusterer : ITargetClusterer
     {
-        public IEnumerable<ConsensusTarget> Cluster(IEnumerable<Target> targets)
+        public IEnumerable<ConsensusTarget> Cluster(IEnumerable<Evidence> evidences)
         {
             throw new NotImplementedException();
         }

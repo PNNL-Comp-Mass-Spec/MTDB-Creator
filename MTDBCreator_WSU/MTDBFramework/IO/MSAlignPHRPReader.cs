@@ -26,7 +26,9 @@ namespace MTDBFramework.IO
             List<MSAlignResult> results = new List<MSAlignResult>();
             MSAlignTargetFilter filter = new MSAlignTargetFilter(this.ReaderOptions);
 
-            // Get the Targets using PHRPReader which looks at the path that was passed in
+            Dictionary<int, ProteinInformation> proteinInfos = new Dictionary<int, ProteinInformation>();
+
+            // Get the Evidences using PHRPReader which looks at the path that was passed in
             var reader = new PHRPReader.clsPHRPReader(path);
             while (reader.CanRead)
             {
@@ -65,7 +67,26 @@ namespace MTDBFramework.IO
 
                     result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
-                    
+
+                    foreach (var protein in reader.CurrentPSM.ProteinDetails)
+                    {
+                        ProteinInformation Protein = new ProteinInformation();
+                        Protein.ProteinName = protein.ProteinName;
+                        Protein.CleavageState = protein.CleavageState;
+                        Protein.TerminusState = protein.TerminusState;
+                        Protein.ResidueStart = protein.ResidueStart;
+                        Protein.ResidueEnd = protein.ResidueEnd;
+
+                        if (proteinInfos.ContainsValue(Protein))
+                        {
+                            result.Proteins.Add(Protein);
+                        }
+                        else
+                        {
+                            proteinInfos.Add((proteinInfos.Count + 1), Protein);
+                            result.Proteins.Add(Protein);
+                        }
+                    }
 
                     if (result.ModificationCount != 0)
                     {

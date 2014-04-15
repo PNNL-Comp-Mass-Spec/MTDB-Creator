@@ -57,33 +57,33 @@ namespace MTDBFramework.IO
 
     public static class AnalysisReaderHelper
     {
-        public static void CalculateObservedNet(IEnumerable<Target> targets)
+        public static void CalculateObservedNet(IEnumerable<Evidence> evidences)
         {
-            double maxScan = targets.Max(result => result.Scan);
-            double minScan = targets.Min(result => result.Scan);
+            double maxScan = evidences.Max(result => result.Scan);
+            double minScan = evidences.Min(result => result.Scan);
 
-            foreach (Target target in targets)
+            foreach (Evidence evidence in evidences)
             {
-                target.ObservedNet = (target.Scan - minScan) / (maxScan - minScan);
+                evidence.ObservedNet = (evidence.Scan - minScan) / (maxScan - minScan);
             }
         }
 
 		// Entry point for calculating the predicted NET.
-		// Accepts a Retention time predictor and an IEnumerable of Targets
-		// For each target, it passes the clean peptide sequence through the peptideCache alongside
+		// Accepts a Retention time predictor and an IEnumerable of Evidences
+		// For each evidence, it passes the clean peptide sequence through the peptideCache alongside
 		// the predictor to determine the predicted NET. If the peptide has been seen before, it has
 		// already been added into a dictionary and so it simply looks up the relevant NET for the
 		// peptide and returns that. Otherwise, it passes the peptide through the predictor's
 		// GetElutionTime method, adds that value to the peptide cache with the sequence as the key
 		// so that if it is seen again it will get the value faster.
-        public static void CalculatePredictedNet(IRetentionTimePredictor predictor, IEnumerable<Target> targets)
+        public static void CalculatePredictedNet(IRetentionTimePredictor predictor, IEnumerable<Evidence> evidences)
         {
             CacheAccessor pepCache = new CacheAccessor();
-            foreach (Target target in targets)
+            foreach (Evidence evidence in evidences)
             {
-                target.PredictedNet = pepCache.PredictPeptide(target.CleanPeptide, predictor);
+                evidence.PredictedNet = pepCache.PredictPeptide(evidence.CleanPeptide, predictor);
                 // Old version of predicting the NET not utilizing the peptide cache
-                // target.PredictedNet = predictor.GetElutionTime(target.CleanPeptide);
+                // evidence.PredictedNet = predictor.GetElutionTime(evidence.CleanPeptide);
             }
         }
     }

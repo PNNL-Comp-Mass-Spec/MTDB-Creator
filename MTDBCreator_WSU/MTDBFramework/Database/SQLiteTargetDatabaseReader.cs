@@ -17,7 +17,7 @@ namespace MTDBFramework.Database
             TargetDatabase reader = new TargetDatabase();
 
             List<ConsensusTarget> readConsensus = new List<ConsensusTarget>();
-            List<Target>          readTarget    = new List<Target>();
+            List<Evidence>          readTarget    = new List<Evidence>();
             using(var session = sessionFactory.OpenSession())
             {
                 using(var transact = session.BeginTransaction())
@@ -25,9 +25,9 @@ namespace MTDBFramework.Database
                     session.CreateCriteria<ConsensusTarget>().List(readConsensus);
                 }
             }
-            foreach(ConsensusTarget target in readConsensus)
+            foreach(ConsensusTarget evidence in readConsensus)
             {
-                reader.ConsensusTargets.Add(target);
+                reader.ConsensusTargets.Add(evidence);
             }
 
             return reader;

@@ -3,14 +3,14 @@
 using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
-using NHibernate.Hql.Classic;
 using PNNLOmics.Data;
+using System.Collections.Generic;
 
 #endregion
 
 namespace MTDBFramework.Data
 {
-    public class Target : ObservableObject
+    public class Evidence : ObservableObject
     {
         #region Private Fields
 
@@ -40,6 +40,8 @@ namespace MTDBFramework.Data
         private double m_delM_PPM;
 
         private double m_specProb;
+
+        private IList<ProteinInformation> m_proteins;
 
         // SequenceInfo fields
         private short m_IsSeqInfoExist;
@@ -309,7 +311,23 @@ namespace MTDBFramework.Data
 
         public double SpectralProbability { get; set; }
 
+        public IList<ProteinInformation> Proteins
+        {
+            get { return m_proteins; }
+            set { m_proteins = value; }
+        }
+
+        public Evidence()
+        {
+            m_proteins = new List<ProteinInformation>();
+        }
+
         #endregion
+
+        public void AddProtein(ProteinInformation protein)
+        {
+            Proteins.Add(protein);
+        }
 
         public static string CleanSequence(string sequence)
         {

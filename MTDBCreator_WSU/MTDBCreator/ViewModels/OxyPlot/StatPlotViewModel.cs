@@ -107,7 +107,7 @@ namespace MTDBCreator.ViewModels
 
             foreach (ConsensusTarget ct in targetDatabase.ConsensusTargets)
             {
-                scatterSeries.Points.Add(new ScatterPoint(ct.TheoreticalMonoIsotopicMass, ct.Targets.Count));
+                scatterSeries.Points.Add(new ScatterPoint(ct.TheoreticalMonoIsotopicMass, ct.Evidences.Count));
             }
 
             return scatterSeries;
@@ -119,7 +119,7 @@ namespace MTDBCreator.ViewModels
 
             foreach (ConsensusTarget ct in targetDatabase.ConsensusTargets)
             {
-                scatterSeries.Points.Add(new ScatterPoint(ct.Net, ct.Targets.Count));
+                scatterSeries.Points.Add(new ScatterPoint(ct.Net, ct.Evidences.Count));
             }
 
             return scatterSeries;

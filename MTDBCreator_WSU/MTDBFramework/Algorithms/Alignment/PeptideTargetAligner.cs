@@ -24,18 +24,18 @@ namespace MTDBFramework.Algorithms.Alignment
             this.Options = options;
         }
 
-        public LinearRegressionResult AlignTargets(List<Target> targets, List<Target> baseline)
+        public LinearRegressionResult AlignTargets(List<Evidence> evidences, List<Evidence> baseline)
         {
             List<double> observed = new List<double>();
             List<double> predicted = new List<double>();
 
-            foreach (Target target in baseline)
+            foreach (Evidence evidence in baseline)
             {
                 Predictor = RetentionTimePredictorFactory.CreatePredictor(Options.PredictorType);
-                target.PredictedNet = Predictor.GetElutionTime(Target.CleanSequence(target.Sequence));
+                evidence.PredictedNet = Predictor.GetElutionTime(Evidence.CleanSequence(evidence.Sequence));
 
-                observed.Add(target.ObservedNet);
-                predicted.Add(target.PredictedNet);
+                observed.Add(evidence.ObservedNet);
+                predicted.Add(evidence.PredictedNet);
             }
 
             // TODO:
@@ -50,9 +50,9 @@ namespace MTDBFramework.Algorithms.Alignment
 
             LinearRegressionResult result = Regressor.CalculateRegression(observed, predicted);
 
-            foreach (Target target in targets)
+            foreach (Evidence evidence in evidences)
             {
-                target.ObservedNet = Regressor.Transform(result, target.ObservedNet);
+                evidence.ObservedNet = Regressor.Transform(result, evidence.ObservedNet);
             }
 
             return result;

@@ -32,17 +32,17 @@ namespace MTDBFramework.Algorithms
             ITargetAligner aligner = TargetAlignmentFactory.Create(this.ProcessorOptions);
             ITargetClusterer clusterer = TargetClustererFactory.Create(this.ProcessorOptions.TargetFilterType);
 
-            List<Target> epicTargets = new List<Target>();
+            List<Evidence> epicTargets = new List<Evidence>();
 
             foreach (LcmsDataSet dataSet in dataSets)
             {
                 ITargetFilter targetFilter = TargetFilterFactory.Create(dataSet.Tool, this.ProcessorOptions);
                 ITargetFilter alignmentFilter = AlignmentFilterFactory.Create(dataSet.Tool, this.ProcessorOptions);
 
-                List<Target> filteredTargets = new List<Target>();
-                List<Target> alignedTargets = new List<Target>();
+                List<Evidence> filteredTargets = new List<Evidence>();
+                List<Evidence> alignedTargets = new List<Evidence>();
 
-                foreach (Target t in dataSet.Targets)
+                foreach (Evidence t in dataSet.Evidences)
                 {
                     if (!targetFilter.ShouldFilter(t))
                     {
@@ -70,17 +70,38 @@ namespace MTDBFramework.Algorithms
 
             targetDatabase.ConsensusTargets = new ObservableCollection<ConsensusTarget>(clusterer.Cluster(epicTargets));
 
-            int i = 0, j = 0;
+            int i = 0, j = 0;//, k = 0;
+
+            //Dictionary<string, int> proteins = new Dictionary<string, int>();
 
             foreach (ConsensusTarget consensusTarget in targetDatabase.ConsensusTargets)
             {
                 consensusTarget.Id = ++i;
 
-                foreach (Target t in consensusTarget.Targets)
+                foreach (Evidence t in consensusTarget.Evidences)
                 {
                     t.Id = ++j;
+                    /*foreach (ProteinInformation p in t.Proteins)
+                    {
+                        if (!proteins.ContainsKey(p.ProteinName))
+                        {
+                            p.Id = ++k;
+                            proteins.Add(p.ProteinName, k);
+                        }
+                    }*/
                 }
-
+                //foreach (ProteinInformation p in consensusTarget.Proteins)
+                //{
+                //    if (!proteins.ContainsKey(p.ProteinName))
+                //    {
+                //        p.Id = ++k;
+                //        proteins.Add(p.ProteinName, k);
+                //    }
+                //    else
+                //    {
+                //        p.Id = proteins[p.ProteinName];
+                //    }
+                //}
                 consensusTarget.CalculateStatistics();
             }
 

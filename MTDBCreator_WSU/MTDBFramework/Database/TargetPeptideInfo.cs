@@ -17,6 +17,6 @@ namespace MTDBFramework.Database
         public string PeptideWithNumericMods { get; set; }
 
         //Added Target List
-        public IList<Target> Targets { get; set; }
+        public IList<Evidence> Evidences { get; set; }
     }
 }

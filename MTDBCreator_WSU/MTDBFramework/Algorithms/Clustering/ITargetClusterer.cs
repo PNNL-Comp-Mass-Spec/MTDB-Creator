@@ -9,6 +9,6 @@ namespace MTDBFramework.Algorithms.Clustering
 {
     public interface ITargetClusterer
     {
-        IEnumerable<ConsensusTarget> Cluster(IEnumerable<Target> targets);
+        IEnumerable<ConsensusTarget> Cluster(IEnumerable<Evidence> evidences);
     }
 }

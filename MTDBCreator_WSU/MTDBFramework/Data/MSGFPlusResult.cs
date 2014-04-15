@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MTDBFramework.Data
 {
-    public class MSGFPlusResult : Target
+    public class MSGFPlusResult : Evidence
     {
         private double m_precursorMonoMass;
         private double m_precursorMZ;

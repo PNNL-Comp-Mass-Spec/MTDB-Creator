@@ -29,7 +29,7 @@ namespace MTDBCreator.PageControls
     /// You will also need to add a project reference from the project where the XAML file lives
     /// to this project and Rebuild to avoid compilation errors:
     ///
-    ///     Right click on the target project in the Solution Explorer and
+    ///     Right click on the evidence project in the Solution Explorer and
     ///     "Add Reference"->"Projects"->[Browse to and select this project]
     ///
     ///

@@ -7,10 +7,10 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Database
 {
-    public class TargetMap : ClassMap<Target>
+    public class EvidenceMap : ClassMap<Evidence>
     {
-        //This is our map for the Target class. Note the "Not.LazyLoad"
-        public TargetMap()
+        //This is our map for the evidence class. Note the "Not.LazyLoad"
+        public EvidenceMap()
         {
             Not.LazyLoad();
             Id(x => x.Id).GeneratedBy.Assigned();
@@ -25,6 +25,8 @@ namespace MTDBFramework.Database
             Map(x => x.DelM);
             Map(x => x.DelM_PPM);
             Map(x => x.SpecProb);
+
+            //HasMany(x => x.Proteins).Cascade.SaveUpdate();
 
             References(x => x.DataSet).Cascade.SaveUpdate();
             References(x => x.PeptideInfo).Cascade.SaveUpdate();

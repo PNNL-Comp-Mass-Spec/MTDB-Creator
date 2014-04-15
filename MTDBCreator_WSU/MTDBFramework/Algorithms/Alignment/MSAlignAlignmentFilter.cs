@@ -15,10 +15,10 @@ namespace MTDBFramework.Algorithms.Alignment
             this.FilterOptions = options;
         }
 
-        public bool ShouldFilter(Target target)
+        public bool ShouldFilter(Evidence evidence)
         {
             // In the alignment we will only use the unmodified peptides
-            if (target.ModificationCount > this.FilterOptions.MaxModsForAlignment)
+            if (evidence.ModificationCount > this.FilterOptions.MaxModsForAlignment)
             {
                 return true;
             }

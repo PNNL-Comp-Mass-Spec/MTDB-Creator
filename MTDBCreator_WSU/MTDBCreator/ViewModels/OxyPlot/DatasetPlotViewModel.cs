@@ -164,15 +164,15 @@ namespace MTDBCreator.ViewModels
                 Tag = analysisJobItem,
             };
 
-            foreach (Target target in analysisJobItem.DataSet.Targets)
+            foreach (Evidence evidence in analysisJobItem.DataSet.Evidences)
             {
                 ITargetFilter filter = AlignmentFilterFactory.Create(analysisJobItem.Format, options);
 
-                if (!filter.ShouldFilter(target))
+                if (!filter.ShouldFilter(evidence))
                 {
-                    ScatterPoint scatterPoint = new ScatterPoint(target.Scan, target.PredictedNet)
+                    ScatterPoint scatterPoint = new ScatterPoint(evidence.Scan, evidence.PredictedNet)
                     {
-                        Tag = target
+                        Tag = evidence
                     };
 
                     scatterSeries.Points.Add(scatterPoint);

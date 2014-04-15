@@ -45,15 +45,25 @@
     <OutputPath>bin\AnyCPU\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentNHibernate">
-      <HintPath>..\packages\FluentNHibernate.1.3.0.733\lib\FluentNHibernate.dll</HintPath>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.2\lib\net40\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics, Version=2.6.1.30, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MathNet.Numerics.2.6.1\lib\net40\MathNet.Numerics.dll</HintPath>
+      <HintPath>..\packages\MathNet.Numerics.2.6.2\lib\net40\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics.IO">
+      <HintPath>..\packages\MathNet.Numerics.2.6.2\lib\net40\MathNet.Numerics.IO.dll</HintPath>
     </Reference>
     <Reference Include="NETPrediction, Version=1.3.5042.24371, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -62,23 +72,34 @@
     <Reference Include="NHibernate">
       <HintPath>..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="PHRPReader, Version=1.1.5154.18590, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="PHRPReader, Version=1.1.5192.34732, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Users\dega126\Desktop\PHRPReader.dll</HintPath>
+      <HintPath>..\libs\PHRPReader.dll</HintPath>
     </Reference>
-    <Reference Include="PNNLOmics">
+    <Reference Include="PNNLOmics, Version=1.0.5196.41680, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\PNNLOmics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\packages\System.Data.SQLite.1.0.88.0\lib\net40\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite, Version=1.0.92.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.92.0\lib\net40\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.EF6">
+      <HintPath>..\packages\System.Data.SQLite.EF6.1.0.92.0\lib\net40\System.Data.SQLite.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.92.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\System.Data.SQLite.Linq.1.0.92.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.XML" />
-    <Reference Include="ThermoRawFileReaderDLL">
-      <HintPath>..\..\..\..\Users\dega126\Desktop\PHRPReader\Lib\ThermoRawFileReaderDLL.dll</HintPath>
+    <Reference Include="ThermoRawFileReaderDLL, Version=1.1.5049.29983, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\ThermoRawFileReaderDLL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +129,7 @@
     <Compile Include="Database\ITargetDatabaseReader.cs" />
     <Compile Include="Database\ITargetDatabaseWriter.cs" />
     <Compile Include="Database\OptionsMap.cs" />
+    <Compile Include="Database\ProteinInformationMap.cs" />
     <Compile Include="Database\SQLiteTargetDatabaseReader.cs" />
     <Compile Include="Database\SQLiteTargetDatabaseWriter.cs" />
     <Compile Include="Database\TargetDatasetMap.cs" />
@@ -118,6 +140,7 @@
     <Compile Include="Data\MSAlignTargetFilter.cs" />
     <Compile Include="Data\MSGFPlusResult.cs" />
     <Compile Include="Data\MSGFPlusTargetFilter.cs" />
+    <Compile Include="Data\ProteinInformation.cs" />
     <Compile Include="Data\SequenceInfo.cs" />
     <Compile Include="Data\SequenceToProteinMap.cs" />
     <Compile Include="Data\ITargetFilter.cs" />
@@ -126,7 +149,7 @@
     <Compile Include="Data\ResultToSequenceMap.cs" />
     <Compile Include="Data\SequestResult.cs" />
     <Compile Include="Data\SequestTargetFilter.cs" />
-    <Compile Include="Data\Target.cs" />
+    <Compile Include="Data\Evidence.cs" />
     <Compile Include="Algorithms\Alignment\TargetAlignmentFactory.cs" />
     <Compile Include="Database\TargetDataSet.cs" />
     <Compile Include="Data\TargetFilterFactory.cs" />
@@ -162,9 +185,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

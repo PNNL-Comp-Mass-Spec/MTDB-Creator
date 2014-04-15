@@ -8,25 +8,25 @@ namespace MTDBCreator.ViewModels.TreeView
 {
     public class TargetTreeNodeViewModel : TreeNodeViewModel
     {
-        private Target m_Target;
+        private Evidence m_Evidence;
 
-        public TargetTreeNodeViewModel(Target t, TreeNodeViewModel parent)
+        public TargetTreeNodeViewModel(Evidence t, TreeNodeViewModel parent)
             : base(t.Sequence, true, parent)
         {
-            m_Target = t;
+            m_Evidence = t;
         }
 
         public override void LoadChildNodes()
         {
             base.LoadChildNodes();
 
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Scan: ", m_Target.Scan.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Charge: ", m_Target.Charge.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Mass: ", m_Target.MonoisotopicMass.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Observed Net: ", m_Target.ObservedNet.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Predicted Net: ", m_Target.PredictedNet.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Sequence: ", m_Target.Sequence)));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Clean Peptide: ", m_Target.CleanPeptide)));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Scan: ", m_Evidence.Scan.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Charge: ", m_Evidence.Charge.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Mass: ", m_Evidence.MonoisotopicMass.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Observed Net: ", m_Evidence.ObservedNet.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Predicted Net: ", m_Evidence.PredictedNet.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Sequence: ", m_Evidence.Sequence)));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Clean Peptide: ", m_Evidence.CleanPeptide)));
         }
     }
 }

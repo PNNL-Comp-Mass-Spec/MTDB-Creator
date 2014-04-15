@@ -10,7 +10,7 @@ namespace MTDBFramework.Algorithms.Alignment
 {
     public class SpectralTargetAligner : ITargetAligner
     {
-        public LinearRegressionResult AlignTargets(List<Target> targets, List<Target> baseline)
+        public LinearRegressionResult AlignTargets(List<Evidence> evidences, List<Evidence> baseline)
         {
             baseline.ForEach(x => x.PredictedNet = x.ObservedNet);
 

@@ -4,6 +4,6 @@
     {
         Options FilterOptions { get; set; }
 
-        bool ShouldFilter(Target target);
+        bool ShouldFilter(Evidence evidence);
     }
 }

@@ -9,9 +9,9 @@
             this.FilterOptions = options;
         }
 
-        public bool ShouldFilter(Target target)
+        public bool ShouldFilter(Evidence evidence)
         {
-            SequestResult result = target as SequestResult;
+            SequestResult result = evidence as SequestResult;
 
             if (result == null)
             {

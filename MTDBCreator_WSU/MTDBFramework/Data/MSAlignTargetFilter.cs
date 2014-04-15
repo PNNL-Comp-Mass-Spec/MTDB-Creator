@@ -14,9 +14,9 @@ namespace MTDBFramework.Data
             this.FilterOptions = options;
         }
 
-        public bool ShouldFilter(Target target)
+        public bool ShouldFilter(Evidence evidence)
         {
-            MSAlignResult result = target as MSAlignResult;
+            MSAlignResult result = evidence as MSAlignResult;
 
             if (result == null)
             {

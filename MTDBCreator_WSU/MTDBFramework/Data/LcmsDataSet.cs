@@ -42,7 +42,7 @@ namespace MTDBFramework.Data
             }
         }
 
-        public ObservableCollection<Target> Targets { get; set; }
+        public ObservableCollection<Evidence> Evidences { get; set; }
 
         public LinearRegressionResult RegressionResult
         {
@@ -60,15 +60,15 @@ namespace MTDBFramework.Data
         {
             this.Name = String.Empty;
             this.Tool = LcmsIdentificationTool.Raw;
-            this.Targets = new ObservableCollection<Target>();
+            this.Evidences = new ObservableCollection<Evidence>();
             this.RegressionResult = new LinearRegressionResult();
         }
 
-        public LcmsDataSet(string name, LcmsIdentificationTool tool, IEnumerable<Target> targets)
+        public LcmsDataSet(string name, LcmsIdentificationTool tool, IEnumerable<Evidence> evidences)
         {
             this.Name = name;
             this.Tool = tool;
-            this.Targets = new ObservableCollection<Target>(targets);
+            this.Evidences = new ObservableCollection<Evidence>(evidences);
             this.RegressionResult = new LinearRegressionResult();
         }
     }

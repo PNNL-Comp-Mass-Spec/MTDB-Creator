@@ -13,14 +13,19 @@ namespace MTDBFramework.Database
         public ConsensusTargetMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).GeneratedBy.Assigned();
+            Id(x => x.Id)
+                .Column("ConsensusId").GeneratedBy.Assigned();
             Map(x => x.Net);
             Map(x => x.StdevNet);
             Map(x => x.PredictedNet);
             Map(x => x.TheoreticalMonoIsotopicMass);
             Map(x => x.Sequence);
 
-            HasMany(x => x.Targets).Cascade.SaveUpdate();
+            HasMany(x => x.Evidences).Cascade.All();
+            HasManyToMany(x => x.Proteins).Table("ConsensusProteins")
+                                          .ParentKeyColumn("ConsensusId")
+                                          .ChildKeyColumn("ProteinID")
+                                          .Cascade.All();
         }
     }
 }

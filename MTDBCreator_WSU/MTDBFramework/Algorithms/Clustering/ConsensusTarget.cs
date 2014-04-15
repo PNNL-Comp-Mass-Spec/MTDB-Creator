@@ -8,6 +8,7 @@ using MTDBFramework.Database;
 using MathNet.Numerics.Statistics;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
+using PNNLOmics.Data;
 
 #endregion
 
@@ -17,7 +18,8 @@ namespace MTDBFramework.Algorithms.Clustering
     {
         public ConsensusTarget()
         {
-            Targets = new List<Target>();
+            Evidences = new List<Evidence>();
+            Proteins = new List<ProteinInformation>();
         }
 
         #region Private fields
@@ -29,7 +31,8 @@ namespace MTDBFramework.Algorithms.Clustering
         private double m_StdevMass;
         private string m_Sequence;
         private TargetDataSet m_Dataset;
-        private IList<Target> m_Targets;
+        private IList<Evidence> m_Evidences;
+        private IList<ProteinInformation> m_Proteins; 
         #endregion
 
         #region Public Properties
@@ -114,42 +117,58 @@ namespace MTDBFramework.Algorithms.Clustering
             }
         }
 
-        public IList<Target> Targets
+        public IList<Evidence> Evidences
         {
-            get { return m_Targets; }
+            get { return m_Evidences; }
             set
             {
-                m_Targets = value;
-                OnPropertyChanged("Targets");
+                m_Evidences = value;
+                OnPropertyChanged("Evidences");
             }
         }
 
+        public IList<ProteinInformation> Proteins
+        {
+            get { return m_Proteins; }
+            set
+            {
+                m_Proteins = value;
+                OnPropertyChanged("Proteins");
+            }
+        }
         #endregion
 
-        public void AddTarget(Target target)
+        public void AddTarget(Evidence evidence)
         {
-            Targets.Add(target);
+            Evidences.Add(evidence);
 
-            this.Sequence = target.Sequence;
-            this.PredictedNet = target.PredictedNet;
+            this.Sequence = evidence.Sequence;
+            this.PredictedNet = evidence.PredictedNet;
 
-            target.Parent = this;
+            evidence.Parent = this;
+        }
+
+        public void AddProtein(ProteinInformation protein)
+        {
+            Proteins.Add(protein);
+
+            protein.Consensus.Add(this);
         }
 /*
         ///<summary>
         /// Calculates the average mass based on the theoretical value for each Target
         /// </summary>
-        public double TheoreticalMassAvg(List<Target> Targets)
+        public double TheoreticalMassAvg(List<Target> Evidences)
         {
             double sum = 0;
             int count = 0;
-            if (Targets.Count == 0)
+            if (Evidences.Count == 0)
             {
                 return 0;
             }
             else
             {
-                foreach(Target t in Targets)
+                foreach(Target t in Evidences)
                 {
                     sum += t.MonoisotopicMass;
                 }
@@ -161,17 +180,17 @@ namespace MTDBFramework.Algorithms.Clustering
         ///<summary>
         /// Calculates the average mass based on the theoretical value for each Target
         /// </summary>
-        public double ObservedMassAvg(List<Target> Targets)
+        public double ObservedMassAvg(List<Target> Evidences)
         {
             double sum = 0;
             int count = 0;
-            if (Targets.Count == 0)
+            if (Evidences.Count == 0)
             {
                 return 0;
             }
             else
             {
-                foreach (Target t in Targets)
+                foreach (Target t in Evidences)
                 {
                     sum += t.ObservedMonoisotopicMass;
                 }
@@ -185,8 +204,8 @@ namespace MTDBFramework.Algorithms.Clustering
         /// </summary>
         public void CalculateStatistics()
         {
-            List<double> massesList = Targets.Select(c => c.MonoisotopicMass).ToList();
-            List<double> netList = Targets.Select(c => c.ObservedNet).ToList();
+            List<double> massesList = Evidences.Select(c => c.MonoisotopicMass).ToList();
+            List<double> netList = Evidences.Select(c => c.ObservedNet).ToList();
 
             this.TheoreticalMonoIsotopicMass = massesList.Average();
             this.Net = netList.Average();

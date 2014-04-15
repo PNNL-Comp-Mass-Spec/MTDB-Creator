@@ -9,9 +9,9 @@
             this.FilterOptions = options;
         }
 
-        public bool ShouldFilter(Target target)
+        public bool ShouldFilter(Evidence evidence)
         {
-            XTandemResult result = target as XTandemResult;
+            XTandemResult result = evidence as XTandemResult;
 
             if (result == null)
             {

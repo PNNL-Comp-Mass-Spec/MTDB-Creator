@@ -6,7 +6,7 @@ using System;
 
 namespace MTDBFramework.Data
 {
-    public class XTandemResult : Target
+    public class XTandemResult : Evidence
     {
         #region Private Fields
 

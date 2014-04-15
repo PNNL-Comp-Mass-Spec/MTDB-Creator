@@ -18,6 +18,10 @@ namespace MTDBFramework.Algorithms.Alignment
                     //TODO: MsgfPlusTargetFilter
                     alignmentFilter = new MSGFPlusAlignmentFilter(options);
                     break;
+                case LcmsIdentificationTool.MzIdentMl:
+                    //TODO: MsgfPlusTargetFilter
+                    alignmentFilter = new MSGFPlusAlignmentFilter(options);
+                    break;
                 case LcmsIdentificationTool.Sequest:
                     alignmentFilter = new SequestAlignmentFilter(options);
                     break;

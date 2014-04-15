@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
@@ -12,7 +11,7 @@ namespace MTDBFramework.IO
     /// <summary>
     /// Summary Description for MSGFPlusPHRP Reader
     /// </summary>
-    class MSGFPlusPHRPReader: IPHRPReader
+    public class MSGFPlusPHRPReader : IPHRPReader
     {
         public Options ReaderOptions { get; set; }
 
@@ -26,17 +25,25 @@ namespace MTDBFramework.IO
             List<MSGFPlusResult> results = new List<MSGFPlusResult>();
             MSGFPlusTargetFilter filter = new MSGFPlusTargetFilter(this.ReaderOptions);
 
-            // Get the Targets using PHRPReader which looks at the path that was passed in
+            Dictionary<int, ProteinInformation> proteinInfos = new Dictionary<int, ProteinInformation>();
+
+            // Get the Evidences using PHRPReader which looks at the path that was passed in
             var reader = new PHRPReader.clsPHRPReader(path);
+            //foreach(var protein in reader.SeqToProteinMap)
+
             while (reader.CanRead)
             {
-                MSGFPlusResult result = new MSGFPlusResult();
                 reader.MoveNext();
-
+                if(reader.CurrentPSM.SeqID == 0)
+                {
+                    continue;
+                }
+                MSGFPlusResult result = new MSGFPlusResult();
+                
                 result.AnalysisId = reader.CurrentPSM.ResultID;
                 result.Charge = reader.CurrentPSM.Charge;
-                result.CleanPeptide = reader.CurrentPSM.PeptideCleanSequence;
-                result.SeqWithNumericMods = reader.CurrentPSM.PeptideWithNumericMods;
+                result.CleanPeptide = reader.CurrentPSM.PeptideCleanSequence;                    
+                result.SeqWithNumericMods= reader.CurrentPSM.PeptideWithNumericMods;                
                 result.MonoisotopicMass = reader.CurrentPSM.PeptideMonoisotopicMass;
                 result.ObservedMonoisotopicMass = reader.CurrentPSM.PrecursorNeutralMass;
                 result.MultiProteinCount = (short)reader.CurrentPSM.Proteins.Count;
@@ -50,7 +57,6 @@ namespace MTDBFramework.IO
                     CleanPeptide = result.CleanPeptide,
                     PeptideWithNumericMods = result.SeqWithNumericMods
                 };
-
                 result.PrecursorMonoMass = reader.CurrentPSM.PrecursorNeutralMass;
                 result.PrecursorMZ = result.PrecursorMonoMass / result.Charge;
                 result.Reference = null;
@@ -74,16 +80,34 @@ namespace MTDBFramework.IO
                 {
                     result.DelM_PPM = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
                 }
-                
+                result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
 				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
                 if (!filter.ShouldFilter(result))
                 {
                     result.DataSet = new TargetDataSet() { Path = path };
 
-                    result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
-                    
 
+                    foreach (var protein in reader.CurrentPSM.ProteinDetails)
+                    {
+                        ProteinInformation Protein = new ProteinInformation();
+                        Protein.ProteinName = protein.ProteinName;
+                        Protein.CleavageState = protein.CleavageState;
+                        Protein.TerminusState = protein.TerminusState;
+                        Protein.ResidueStart = protein.ResidueStart;
+                        Protein.ResidueEnd = protein.ResidueEnd;
+
+                        if (proteinInfos.ContainsValue(Protein))
+                        {
+                            result.Proteins.Add(Protein);
+                        }
+                        else
+                        {
+                            proteinInfos.Add((proteinInfos.Count + 1), Protein);
+                            result.Proteins.Add(Protein);
+                        }
+                    }
+                    
                     if (result.ModificationCount != 0)
                     {
                         foreach (clsAminoAcidModInfo info in reader.CurrentPSM.ModifiedResidues)
@@ -92,10 +116,10 @@ namespace MTDBFramework.IO
                             result.ModificationDescription += info.ModDefinition.MassCorrectionTag + ":" + info.ResidueLocInPeptide + " ";
                         }
                     }
-
                     results.Add(result);
                 }
             }
+
             AnalysisReaderHelper.CalculateObservedNet(results);
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(this.ReaderOptions.PredictorType), results);
 

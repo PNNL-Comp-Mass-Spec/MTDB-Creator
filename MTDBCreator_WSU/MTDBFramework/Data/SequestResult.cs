@@ -6,7 +6,7 @@ using System;
 
 namespace MTDBFramework.Data
 {
-    public class SequestResult : Target
+    public class SequestResult : Evidence
     {
         #region Private Fields
 
