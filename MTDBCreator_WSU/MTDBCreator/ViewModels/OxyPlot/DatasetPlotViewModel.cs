@@ -231,7 +231,8 @@ namespace MTDBCreator.ViewModels
                 }
              
             }
-            plotModel.RefreshPlot(true);
+            plotModel.Update(true);
+            //plotModel.RefreshPlot(true);
         }
 
         public void FillAnalysisAnnotations(PlotModel plotModel, IEnumerable<AnalysisJobItem> analysisJobItems)
@@ -245,8 +246,8 @@ namespace MTDBCreator.ViewModels
                     plotModel.Annotations.Add(MakeRegressionLineAnnotation(analysisJobItem));
                 }
             }
-
-            plotModel.RefreshPlot(true);
+            plotModel.Update(true);
+            //plotModel.RefreshPlot(true);
         }
 
         #endregion
