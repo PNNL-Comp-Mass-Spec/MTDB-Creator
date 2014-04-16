@@ -11,31 +11,31 @@ namespace MTDBFramework.IO
 {
     public static class PeptideCache
     {
-        private static Dictionary<string, double> m_cache;
+        private static readonly Dictionary<string, double> Cache;
 
         static PeptideCache()
         {
-            m_cache = new Dictionary<string, double>();
+            Cache = new Dictionary<string, double>();
         }
 
         public static void Clear()
         {
-            m_cache.Clear();
+            Cache.Clear();
         }
 
         public static bool HasValue(string peptide)
         {
-            return m_cache.ContainsKey(peptide);
+            return Cache.ContainsKey(peptide);
         }
 
         public static void Add(string peptide, double net)
         {
-            m_cache.Add(peptide, net);
+            Cache.Add(peptide, net);
         }
 
         public static double RetrieveValue(string peptide)
         {
-            return m_cache[peptide];
+            return Cache[peptide];
         }
     }
 
@@ -43,11 +43,10 @@ namespace MTDBFramework.IO
     {
         public double PredictPeptide(string peptide, IRetentionTimePredictor predictor)
         {
-            double net = 0;
-            bool hasBeenPredicted = PeptideCache.HasValue(peptide);
+            var hasBeenPredicted = PeptideCache.HasValue(peptide);
             if (!hasBeenPredicted)
             {
-                net = predictor.GetElutionTime(peptide);
+                var net = predictor.GetElutionTime(peptide);
                 PeptideCache.Add(peptide, net);
                 return net;
             }
@@ -57,7 +56,7 @@ namespace MTDBFramework.IO
 
     public static class AnalysisReaderHelper
     {
-        public static void CalculateObservedNet(IEnumerable<Evidence> evidences)
+        public static void CalculateObservedNet(IEnumerable<Evidence> evidences )
         {
             double maxScan = evidences.Max(result => result.Scan);
             double minScan = evidences.Min(result => result.Scan);
@@ -66,6 +65,7 @@ namespace MTDBFramework.IO
             {
                 evidence.ObservedNet = (evidence.Scan - minScan) / (maxScan - minScan);
             }
+            
         }
 
 		// Entry point for calculating the predicted NET.
@@ -78,7 +78,7 @@ namespace MTDBFramework.IO
 		// so that if it is seen again it will get the value faster.
         public static void CalculatePredictedNet(IRetentionTimePredictor predictor, IEnumerable<Evidence> evidences)
         {
-            CacheAccessor pepCache = new CacheAccessor();
+            var pepCache = new CacheAccessor();
             foreach (Evidence evidence in evidences)
             {
                 evidence.PredictedNet = pepCache.PredictPeptide(evidence.CleanPeptide, predictor);

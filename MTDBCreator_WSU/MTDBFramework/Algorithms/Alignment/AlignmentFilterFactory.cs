@@ -16,11 +16,11 @@ namespace MTDBFramework.Algorithms.Alignment
             {
                 case LcmsIdentificationTool.MsgfPlus:
                     //TODO: MsgfPlusTargetFilter
-                    alignmentFilter = new MSGFPlusAlignmentFilter(options);
+                    alignmentFilter = new MsgfPlusAlignmentFilter(options);
                     break;
-                case LcmsIdentificationTool.MzIdentMl:
+                case LcmsIdentificationTool.MZIdentML:
                     //TODO: MsgfPlusTargetFilter
-                    alignmentFilter = new MSGFPlusAlignmentFilter(options);
+                    alignmentFilter = new MsgfPlusAlignmentFilter(options);
                     break;
                 case LcmsIdentificationTool.Sequest:
                     alignmentFilter = new SequestAlignmentFilter(options);
@@ -29,7 +29,7 @@ namespace MTDBFramework.Algorithms.Alignment
                     alignmentFilter = new XTandemAlignmentFilter(options);
                     break;
                 case LcmsIdentificationTool.MSAlign:
-                    alignmentFilter = new MSAlignAlignmentFilter(options);
+                    alignmentFilter = new MsAlignAlignmentFilter(options);
                     break;
             }
 

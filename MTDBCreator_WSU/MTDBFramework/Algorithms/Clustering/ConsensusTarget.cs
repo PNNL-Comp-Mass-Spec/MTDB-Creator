@@ -1,14 +1,11 @@
 ﻿#region Namespaces
 
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MTDBFramework.Database;
 using MathNet.Numerics.Statistics;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
-using PNNLOmics.Data;
 
 #endregion
 
@@ -23,116 +20,105 @@ namespace MTDBFramework.Algorithms.Clustering
         }
 
         #region Private fields
-        private int m_Id;
-        private double m_Net; 
-        private double m_StdevNet;
-        private double m_PredictedNet;
-        private double m_TheoreticalMonoIsotopicMass;
-        private double m_StdevMass;
-        private string m_Sequence;
-        private TargetDataSet m_Dataset;
-        private IList<Evidence> m_Evidences;
-        private IList<ProteinInformation> m_Proteins; 
+        private int m_id;
+        private double m_net; 
+        private double m_stdevNet;
+        private double m_predictedNet;
+        private double m_theoreticalMonoIsotopicMass;
+        private string m_sequence;
+        private TargetDataSet m_dataset;
+        private IList<Evidence> m_evidences;
+        private IList<ProteinInformation> m_proteins; 
         #endregion
 
         #region Public Properties
 
         public int Id
         {
-            get { return m_Id; }
+            get { return m_id; }
             set
             {
-                m_Id = value;
+                m_id = value;
                 OnPropertyChanged("Id");
             }
         }
 
         public double Net
         {
-            get { return m_Net; }
+            get { return m_net; }
             set
             {
-                m_Net = value;
+                m_net = value;
                 OnPropertyChanged("Net");
             }
         }
 
         public double StdevNet
         {
-            get { return m_StdevNet; }
+            get { return m_stdevNet; }
             set
             {
-                m_StdevNet = value;
+                m_stdevNet = value;
                 OnPropertyChanged("StdevNet");
             }
         }
 
         public double PredictedNet
         {
-            get { return m_PredictedNet; }
+            get { return m_predictedNet; }
             set
             {
-                m_PredictedNet = value;
+                m_predictedNet = value;
                 OnPropertyChanged("PredictedNet");
             }
         }
 
         public double TheoreticalMonoIsotopicMass
         {
-            get { return m_TheoreticalMonoIsotopicMass; }
+            get { return m_theoreticalMonoIsotopicMass; }
             set
             {
-                m_TheoreticalMonoIsotopicMass = value;
+                m_theoreticalMonoIsotopicMass = value;
                 OnPropertyChanged("TheoreticalMonoIsotopicMass");
-            }
-        }
-
-        public double StdevMass
-        {
-            get { return m_StdevMass; }
-            set
-            {
-                m_StdevMass = value;
-                OnPropertyChanged("StdevMass");
             }
         }
 
         public string Sequence
         {
-            get { return m_Sequence; }
+            get { return m_sequence; }
             set
             {
-                m_Sequence = value;
+                m_sequence = value;
                 OnPropertyChanged("Sequence");
             }
         }
 
         public TargetDataSet Dataset
         {
-            get { return m_Dataset; }
+            get { return m_dataset; }
             set
             {
-                m_Dataset = value;
+                m_dataset = value;
                 OnPropertyChanged("Dataset");
             }
         }
 
         public IList<Evidence> Evidences
         {
-            get { return m_Evidences; }
+            get { return m_evidences; }
             set
             {
-                m_Evidences = value;
+                m_evidences = value;
                 OnPropertyChanged("Evidences");
             }
         }
 
         public IList<ProteinInformation> Proteins
         {
-            get { return m_Proteins; }
+            get { return m_proteins; }
             set
             {
-                m_Proteins = value;
+                m_proteins = value;
                 OnPropertyChanged("Proteins");
             }
         }
@@ -142,8 +128,8 @@ namespace MTDBFramework.Algorithms.Clustering
         {
             Evidences.Add(evidence);
 
-            this.Sequence = evidence.Sequence;
-            this.PredictedNet = evidence.PredictedNet;
+            Sequence = evidence.Sequence;
+            PredictedNet = evidence.PredictedNet;
 
             evidence.Parent = this;
         }
@@ -154,51 +140,7 @@ namespace MTDBFramework.Algorithms.Clustering
 
             protein.Consensus.Add(this);
         }
-/*
-        ///<summary>
-        /// Calculates the average mass based on the theoretical value for each Target
-        /// </summary>
-        public double TheoreticalMassAvg(List<Target> Evidences)
-        {
-            double sum = 0;
-            int count = 0;
-            if (Evidences.Count == 0)
-            {
-                return 0;
-            }
-            else
-            {
-                foreach(Target t in Evidences)
-                {
-                    sum += t.MonoisotopicMass;
-                }
-                sum /= count;
-                return sum;
-            }
-        }
 
-        ///<summary>
-        /// Calculates the average mass based on the theoretical value for each Target
-        /// </summary>
-        public double ObservedMassAvg(List<Target> Evidences)
-        {
-            double sum = 0;
-            int count = 0;
-            if (Evidences.Count == 0)
-            {
-                return 0;
-            }
-            else
-            {
-                foreach (Target t in Evidences)
-                {
-                    sum += t.ObservedMonoisotopicMass;
-                }
-                sum /= count;
-                return sum;
-            }
-        }
-        */
         /// <summary>
         /// Calculate average mass & net and stdev mass & net for each Target.
         /// </summary>
@@ -207,11 +149,10 @@ namespace MTDBFramework.Algorithms.Clustering
             List<double> massesList = Evidences.Select(c => c.MonoisotopicMass).ToList();
             List<double> netList = Evidences.Select(c => c.ObservedNet).ToList();
 
-            this.TheoreticalMonoIsotopicMass = massesList.Average();
-            this.Net = netList.Average();
+            TheoreticalMonoIsotopicMass = massesList.Average();
+            Net = netList.Average();
 
-            //this.StdevMass = massesList.StandardDeviation();
-            this.StdevNet = netList.StandardDeviation();
+            StdevNet = netList.StandardDeviation();
         }
     }
 }

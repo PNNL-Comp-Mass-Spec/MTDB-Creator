@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MTDBFramework.Data
+﻿namespace MTDBFramework.Data
 {
-    public class MSGFPlusTargetFilter : ITargetFilter
+    public class MsgfPlusTargetFilter : ITargetFilter
     {
         public Options FilterOptions { get; set; }
 
-        public MSGFPlusTargetFilter(Options options)
+        public MsgfPlusTargetFilter(Options options)
         {
-            this.FilterOptions = options;
+            FilterOptions = options;
         }
 
         public bool ShouldFilter(Evidence evidence)
         {
-            MSGFPlusResult result = evidence as MSGFPlusResult;
+            var result = evidence as MsgfPlusResult;
 
             if (result == null)
             {
@@ -33,7 +28,7 @@ namespace MTDBFramework.Data
                 return true;
             }
 
-            if(result.Fdr > FilterOptions.MsgfFDR)
+            if(result.Fdr > FilterOptions.MsgfFdr)
             {
                 return true;
             }

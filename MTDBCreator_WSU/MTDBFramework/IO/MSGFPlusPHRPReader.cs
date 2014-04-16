@@ -11,24 +11,24 @@ namespace MTDBFramework.IO
     /// <summary>
     /// Summary Description for MSGFPlusPHRP Reader
     /// </summary>
-    public class MSGFPlusPHRPReader : IPHRPReader
+    public class MsgfPlusPhrpReader : IPhrpReader
     {
         public Options ReaderOptions { get; set; }
 
-        public MSGFPlusPHRPReader(Options options)
+        public MsgfPlusPhrpReader(Options options)
         {
-            this.ReaderOptions = options;
+            ReaderOptions = options;
         }
 
         public LcmsDataSet Read(string path)
         {
-            List<MSGFPlusResult> results = new List<MSGFPlusResult>();
-            MSGFPlusTargetFilter filter = new MSGFPlusTargetFilter(this.ReaderOptions);
+            var results = new List<MsgfPlusResult>();
+            var filter = new MsgfPlusTargetFilter(ReaderOptions);
 
-            Dictionary<int, ProteinInformation> proteinInfos = new Dictionary<int, ProteinInformation>();
+            var proteinInfos = new Dictionary<int, ProteinInformation>();
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in
-            var reader = new PHRPReader.clsPHRPReader(path);
+            var reader = new clsPHRPReader(path);
             //foreach(var protein in reader.SeqToProteinMap)
 
             while (reader.CanRead)
@@ -38,27 +38,30 @@ namespace MTDBFramework.IO
                 {
                     continue;
                 }
-                MSGFPlusResult result = new MSGFPlusResult();
-                
-                result.AnalysisId = reader.CurrentPSM.ResultID;
-                result.Charge = reader.CurrentPSM.Charge;
-                result.CleanPeptide = reader.CurrentPSM.PeptideCleanSequence;                    
-                result.SeqWithNumericMods= reader.CurrentPSM.PeptideWithNumericMods;                
-                result.MonoisotopicMass = reader.CurrentPSM.PeptideMonoisotopicMass;
-                result.ObservedMonoisotopicMass = reader.CurrentPSM.PrecursorNeutralMass;
-                result.MultiProteinCount = (short)reader.CurrentPSM.Proteins.Count;
-                result.Scan = reader.CurrentPSM.ScanNumber;
-                result.Sequence = reader.CurrentPSM.Peptide;
-                result.Mz = PHRPReader.clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge);
+                var result = new MsgfPlusResult
+                {
+                    AnalysisId = reader.CurrentPSM.ResultID,
+                    Charge = reader.CurrentPSM.Charge,
+                    CleanPeptide = reader.CurrentPSM.PeptideCleanSequence,
+                    SeqWithNumericMods = reader.CurrentPSM.PeptideWithNumericMods,
+                    MonoisotopicMass = reader.CurrentPSM.PeptideMonoisotopicMass,
+                    ObservedMonoisotopicMass = reader.CurrentPSM.PrecursorNeutralMass,
+                    MultiProteinCount = (short) reader.CurrentPSM.Proteins.Count,
+                    Scan = reader.CurrentPSM.ScanNumber,
+                    Sequence = reader.CurrentPSM.Peptide,
+                    Mz =
+                        clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0,
+                            reader.CurrentPSM.Charge)
+                };
 
-                result.PeptideInfo = new TargetPeptideInfo()
+                result.PeptideInfo = new TargetPeptideInfo
                 {
                     Peptide = result.Sequence,
                     CleanPeptide = result.CleanPeptide,
                     PeptideWithNumericMods = result.SeqWithNumericMods
                 };
                 result.PrecursorMonoMass = reader.CurrentPSM.PrecursorNeutralMass;
-                result.PrecursorMZ = result.PrecursorMonoMass / result.Charge;
+                result.PrecursorMz = result.PrecursorMonoMass / result.Charge;
                 result.Reference = null;
                 foreach (var proteinName in reader.CurrentPSM.Proteins)
                 {
@@ -68,7 +71,7 @@ namespace MTDBFramework.IO
                 result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
                 result.Fdr = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["FDR"]);
                 result.DeNovoScore = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["DeNovoScore"]);
-                result.MSGFScore = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["MSGFScore"]);
+                result.MsgfScore = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["MSGFScore"]);
                 result.SpecEValue = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["MSGFDB_SpecEValue"]);
                 result.RankSpecEValue = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["Rank_MSGFDB_SpecEValue"]);
                 result.EValue = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["Evalue"]);
@@ -78,33 +81,35 @@ namespace MTDBFramework.IO
                 result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
                 if (reader.CurrentPSM.MassErrorPPM.Length != 0)
                 {
-                    result.DelM_PPM = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
+                    result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
                 }
                 result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
 				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
                 if (!filter.ShouldFilter(result))
                 {
-                    result.DataSet = new TargetDataSet() { Path = path };
+                    result.DataSet = new TargetDataSet { Path = path };
 
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
 
-                    foreach (var protein in reader.CurrentPSM.ProteinDetails)
+                    foreach (var p in reader.CurrentPSM.ProteinDetails)
                     {
-                        ProteinInformation Protein = new ProteinInformation();
-                        Protein.ProteinName = protein.ProteinName;
-                        Protein.CleavageState = protein.CleavageState;
-                        Protein.TerminusState = protein.TerminusState;
-                        Protein.ResidueStart = protein.ResidueStart;
-                        Protein.ResidueEnd = protein.ResidueEnd;
-
-                        if (proteinInfos.ContainsValue(Protein))
+                        var protein = new ProteinInformation
                         {
-                            result.Proteins.Add(Protein);
+                            ProteinName = p.ProteinName,
+                            CleavageState = p.CleavageState,
+                            TerminusState = p.TerminusState,
+                            ResidueStart = p.ResidueStart,
+                            ResidueEnd = p.ResidueEnd
+                        };
+
+                        if (proteinInfos.ContainsValue(protein))
+                        {
+                            result.Proteins.Add(protein);
                         }
                         else
                         {
-                            proteinInfos.Add((proteinInfos.Count + 1), Protein);
-                            result.Proteins.Add(Protein);
+                            proteinInfos.Add((proteinInfos.Count + 1), protein);
+                            result.Proteins.Add(protein);
                         }
                     }
                     
@@ -121,7 +126,7 @@ namespace MTDBFramework.IO
             }
 
             AnalysisReaderHelper.CalculateObservedNet(results);
-            AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(this.ReaderOptions.PredictorType), results);
+            AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MsgfPlus, results);
         }

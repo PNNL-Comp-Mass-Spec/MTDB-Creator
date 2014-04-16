@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MTDBFramework.Data;
+﻿using MTDBFramework.Data;
 
 namespace MTDBFramework.Algorithms.Alignment
 {
-    public class MSAlignAlignmentFilter : ITargetFilter
+    public class MsAlignAlignmentFilter : ITargetFilter
     {
         public Options FilterOptions { get; set; }
 
-        public MSAlignAlignmentFilter(Options options)
+        public MsAlignAlignmentFilter(Options options)
         {
-            this.FilterOptions = options;
+            FilterOptions = options;
         }
 
         public bool ShouldFilter(Evidence evidence)
         {
             // In the alignment we will only use the unmodified peptides
-            if (evidence.ModificationCount > this.FilterOptions.MaxModsForAlignment)
+            if (evidence.ModificationCount > FilterOptions.MaxModsForAlignment)
             {
                 return true;
             }

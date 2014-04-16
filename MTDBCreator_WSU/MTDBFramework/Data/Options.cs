@@ -1,6 +1,5 @@
 ﻿#region Namespaces
 
-using System;
 using MTDBFramework.Algorithms;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.UI;
@@ -14,27 +13,27 @@ namespace MTDBFramework.Data
     {
         #region Private Fields
 
-        private RegressionType m_RegressionType ;
-        private short m_RegressionOrder;
-        private TargetWorkflowType m_TargetFilterType;
-        private RetentionTimePredictionType m_PredictorType;
-        private int m_MaxModsForAlignment;
-        private short m_MinObservationsForExport;
-        private bool m_ExportTryptic;
-        private bool m_ExportPartiallyTryptic;
-        private bool m_ExportNonTryptic;
-        private double[] m_MinXCorrForExportTrytpic;
-        private double[] m_MinXCorrForExportPartiallyTrytpic;
-        private double[] m_MinXCorrForExportNonTrytpic;
-        private double m_MinXCorrForAlignment;
-        private bool m_UseDelCN;
-        private double m_MaxDelCN;
-        private double m_MaxLogEValForXTandemAlignment;
-        private double m_MaxLogEValForXTandemExport;
-        private double m_MaxLogEValForMSAlignAlignment;
-        private short m_MaxRankForExport;
-        private double m_MsgfFDR;
-        private double m_MsgfSpectralEValue;
+        private RegressionType m_regressionType ;
+        private short m_regressionOrder;
+        private TargetWorkflowType m_targetFilterType;
+        private RetentionTimePredictionType m_predictorType;
+        private int m_maxModsForAlignment;
+        private short m_minObservationsForExport;
+        private bool m_exportTryptic;
+        private bool m_exportPartiallyTryptic;
+        private bool m_exportNonTryptic;
+        private double[] m_minXCorrForExportTrytpic;
+        private double[] m_minXCorrForExportPartiallyTrytpic;
+        private double[] m_minXCorrForExportNonTrytpic;
+        private double m_minXCorrForAlignment;
+        private bool m_useDelCn;
+        private double m_maxDelCn;
+        private double m_maxLogEValForXTandemAlignment;
+        private double m_maxLogEValForXTandemExport;
+        private double m_maxLogEValForMsAlignAlignment;
+        private short m_maxRankForExport;
+        private double m_msgfFdr;
+        private double m_msgfSpectralEValue;
 
         #endregion
 
@@ -46,11 +45,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_RegressionType;
+                return m_regressionType;
             }
             set
             {
-                m_RegressionType = value;
+                m_regressionType = value;
                 OnPropertyChanged("RegressionType");
             }
         }
@@ -59,11 +58,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_RegressionOrder;
+                return m_regressionOrder;
             }
             set
             {
-                m_RegressionOrder = value;
+                m_regressionOrder = value;
                 OnPropertyChanged("RegressionOrder");
             }
         }
@@ -73,11 +72,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_TargetFilterType;
+                return m_targetFilterType;
             }
             set
             {
-                m_TargetFilterType = value;
+                m_targetFilterType = value;
                 OnPropertyChanged("TargetFilterType");
             }
         }
@@ -86,11 +85,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_PredictorType;
+                return m_predictorType;
             }
             set
             {
-                m_PredictorType = value;
+                m_predictorType = value;
                 OnPropertyChanged("PredictorType");
             } 
         }
@@ -100,11 +99,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_MaxModsForAlignment;
+                return m_maxModsForAlignment;
             }
             set
             {
-                m_MaxModsForAlignment = value;
+                m_maxModsForAlignment = value;
                 OnPropertyChanged("MaxModsForAlignment");
             }  
         }
@@ -113,11 +112,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_MinObservationsForExport;
+                return m_minObservationsForExport;
             }
             set
             {
-                m_MinObservationsForExport = value;
+                m_minObservationsForExport = value;
                 OnPropertyChanged("MinObservationsForExport");
             }
         }
@@ -126,11 +125,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_ExportTryptic;
+                return m_exportTryptic;
             }
             set
             {
-                m_ExportTryptic = value;
+                m_exportTryptic = value;
                 OnPropertyChanged("ExportTryptic");
             } 
         }
@@ -139,11 +138,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_ExportPartiallyTryptic;
+                return m_exportPartiallyTryptic;
             }
             set
             {
-                m_ExportPartiallyTryptic = value;
+                m_exportPartiallyTryptic = value;
                 OnPropertyChanged("ExportPartiallyTryptic");
             } 
         }
@@ -152,11 +151,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_ExportNonTryptic;
+                return m_exportNonTryptic;
             }
             set
             {
-                m_ExportNonTryptic = value;
+                m_exportNonTryptic = value;
                 OnPropertyChanged("ExportNonTryptic");
             }
         }
@@ -165,11 +164,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_MinXCorrForExportTrytpic;
+                return m_minXCorrForExportTrytpic;
             }
             set
             {
-                m_MinXCorrForExportTrytpic = value;
+                m_minXCorrForExportTrytpic = value;
                 OnPropertyChanged("MinXCorrForExportTrytpic");
             }
         }
@@ -178,11 +177,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_MinXCorrForExportPartiallyTrytpic;
+                return m_minXCorrForExportPartiallyTrytpic;
             }
             set
             {
-                m_MinXCorrForExportPartiallyTrytpic = value;
+                m_minXCorrForExportPartiallyTrytpic = value;
                 OnPropertyChanged("MinXCorrForExportPartiallyTrytpic");
             }
         }
@@ -191,11 +190,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_MinXCorrForExportNonTrytpic;
+                return m_minXCorrForExportNonTrytpic;
             }
             set
             {
-                m_MinXCorrForExportNonTrytpic = value;
+                m_minXCorrForExportNonTrytpic = value;
                 OnPropertyChanged("MinXCorrForExportNonTrytpic");
             }
         }
@@ -205,37 +204,37 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_MinXCorrForAlignment;
+                return m_minXCorrForAlignment;
             }
             set
             {
-                m_MinXCorrForAlignment = value;
+                m_minXCorrForAlignment = value;
                 OnPropertyChanged("MinXCorrForAlignment");
             }
         }
 
-        public bool UseDelCN
+        public bool UseDelCn
         {
             get
             {
-                return m_UseDelCN;
+                return m_useDelCn;
             }
             set
             {
-                m_UseDelCN = value;
+                m_useDelCn = value;
                 OnPropertyChanged("UseDelCN");
             }
         }
 
-        public double MaxDelCN
+        public double MaxDelCn
         {
             get
             {
-                return m_MaxDelCN;
+                return m_maxDelCn;
             }
             set
             {
-                m_MaxDelCN = value;
+                m_maxDelCn = value;
                 OnPropertyChanged("MaxDelCN");
             }
         }
@@ -245,11 +244,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_MaxLogEValForXTandemAlignment;
+                return m_maxLogEValForXTandemAlignment;
             }
             set
             {
-                m_MaxLogEValForXTandemAlignment = value;
+                m_maxLogEValForXTandemAlignment = value;
                 OnPropertyChanged("MaxLogEValForXTandemAlignment");
             }
         }
@@ -258,25 +257,25 @@ namespace MTDBFramework.Data
 {
             get
             {
-                return m_MaxLogEValForXTandemExport;
+                return m_maxLogEValForXTandemExport;
             }
             set
             {
-                m_MaxLogEValForXTandemExport = value;
+                m_maxLogEValForXTandemExport = value;
                 OnPropertyChanged("MaxLogEValForXTandemExport");
             }
         }
 
         // MSAlign
-        public double MaxLogEValForMSAlignAlignment
+        public double MaxLogEValForMsAlignAlignment
         {
             get
             {
-                return m_MaxLogEValForMSAlignAlignment;
+                return m_maxLogEValForMsAlignAlignment;
             }
             set
             {
-                m_MaxLogEValForMSAlignAlignment = value;
+                m_maxLogEValForMsAlignAlignment = value;
                 OnPropertyChanged("MaxLogEValForMSAlignAlignment");
             }
         }
@@ -286,24 +285,24 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_MsgfSpectralEValue;
+                return m_msgfSpectralEValue;
             }
             set
             {
-                m_MsgfSpectralEValue = value;
+                m_msgfSpectralEValue = value;
                 OnPropertyChanged("MsgfSpectralEValue");
             }
         }
 
-        public double MsgfFDR
+        public double MsgfFdr
         {
             get
             {
-                return m_MsgfFDR;
+                return m_msgfFdr;
             }
             set
             {
-                m_MsgfFDR = value;
+                m_msgfFdr = value;
                 OnPropertyChanged("MsgfFDR");
             }
         }
@@ -313,11 +312,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_MaxRankForExport;
+                return m_maxRankForExport;
             }
             set
             {
-                m_MaxRankForExport = value;
+                m_maxRankForExport = value;
                 OnPropertyChanged("MaxRankForExport");
             }
         }
@@ -329,7 +328,7 @@ namespace MTDBFramework.Data
             RegressionType = RegressionType.LinearEm;
             RegressionOrder = 1;
 
-            TargetFilterType = TargetWorkflowType.BottomUp;
+            TargetFilterType = TargetWorkflowType.BOTTOM_UP;
 
             PredictorType = RetentionTimePredictionType.Kangas;
 
@@ -340,22 +339,22 @@ namespace MTDBFramework.Data
             ExportPartiallyTryptic = true;
             ExportNonTryptic = true;
 
-            MinXCorrForExportTrytpic = new double[] { 1.5, 2.0, 2.5 };
-            MinXCorrForExportPartiallyTrytpic = new double[] { 1.5, 2.0, 2.5 };
-            MinXCorrForExportNonTrytpic = new double[] { 3.0, 3.5, 4.0 };
+            MinXCorrForExportTrytpic = new [] { 1.5, 2.0, 2.5 };
+            MinXCorrForExportPartiallyTrytpic = new [] { 1.5, 2.0, 2.5 };
+            MinXCorrForExportNonTrytpic = new [] { 3.0, 3.5, 4.0 };
 
             MinXCorrForAlignment = 3.0;
-            UseDelCN = true;
-            MaxDelCN = 0.1;
+            UseDelCn = true;
+            MaxDelCn = 0.1;
 
             MaxLogEValForXTandemAlignment = -2.0;
             MaxLogEValForXTandemExport = -2.0;
 
-            MaxLogEValForMSAlignAlignment = 1E-4;
+            MaxLogEValForMsAlignAlignment = 1E-4;
 
             MaxRankForExport = 2;
 
-            MsgfFDR = .01;
+            MsgfFdr = .01;
             MsgfSpectralEValue = .05;
         }
     }

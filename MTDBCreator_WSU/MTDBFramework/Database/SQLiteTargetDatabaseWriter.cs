@@ -1,21 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
 
 namespace MTDBFramework.Database
 {
-    public class SQLiteTargetDatabaseWriter : ITargetDatabaseWriter
+    public class SqLiteTargetDatabaseWriter : ITargetDatabaseWriter
     {
 
         // TODO: Implement these (or maybe dictionaries)
-        private Dictionary<string, TargetPeptideInfo> uniquePeptides = new Dictionary<string, TargetPeptideInfo>();
-        private Dictionary<string, TargetDataSet> uniqueDataSets = new Dictionary<string, TargetDataSet>();
-        
-        // Testing adding a table for the protein references
-        private Dictionary<string, ProteinInformation> uniqueProteins = new Dictionary<string, ProteinInformation>();
+        private readonly Dictionary<string, TargetPeptideInfo> m_uniquePeptides = new Dictionary<string, TargetPeptideInfo>();
+        private readonly Dictionary<string, TargetDataSet> m_uniqueDataSets = new Dictionary<string, TargetDataSet>();
 
         public void Write(TargetDatabase database, Options options, string path)
         {
@@ -43,48 +38,27 @@ namespace MTDBFramework.Database
                         consensusTarget.Id = ++current;
                         foreach (Evidence t in consensusTarget.Evidences)
                         {
-                            /*foreach(ProteinInformation protein in t.Proteins)
+                            if (!m_uniquePeptides.ContainsKey(t.PeptideInfo.Peptide))
                             {
-                                if(!uniqueProteins.ContainsKey(protein.ProteinName))
-                                {
-                                    uniqueProteins.Add(protein.ProteinName, protein);                                    
-                                }
-                                Proteins.Add(protein);
-
-                            }*/
-                            if (!uniquePeptides.ContainsKey(t.PeptideInfo.Peptide/*InfoSequence*/))
-                            {
-                                uniquePeptides.Add(t.PeptideInfo.Peptide/*InfoSequence*/, t.PeptideInfo);
+                                m_uniquePeptides.Add(t.PeptideInfo.Peptide, t.PeptideInfo);
                             }
-                            t.PeptideInfo = uniquePeptides[t.PeptideInfo.Peptide/*InfoSequence*/];
-                            if (!uniqueDataSets.ContainsKey(t.DataSet.Path))
+                            t.PeptideInfo = m_uniquePeptides[t.PeptideInfo.Peptide];
+                            if (!m_uniqueDataSets.ContainsKey(t.DataSet.Path))
                             {
-                                uniqueDataSets.Add(t.DataSet.Path, t.DataSet);
+                                m_uniqueDataSets.Add(t.DataSet.Path, t.DataSet);
                             }
-                            t.DataSet = uniqueDataSets[t.DataSet.Path];
+                            t.DataSet = m_uniqueDataSets[t.DataSet.Path];
                             t.Parent = consensusTarget;
                             
                         }
                         consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
-                        //foreach (ProteinInformation p in consensusTarget.Proteins)
-                        //{
-                        //    if (!uniqueProteins.ContainsKey(p.ProteinName))
-                        //    {
-                        //        p.Id = ++protNum;
-                        //        uniqueProteins.Add(p.ProteinName, p);
-                        //    }
-                        //    else
-                        //    {
-                        //        p.Id = uniqueProteins[p.ProteinName].Id;
-                        //    }
-                        //}
-
+                        
                         session.SaveOrUpdate(consensusTarget);
                     }
                     current = -1;
                     total = 0;
 
-                    OnProgressChanged(new MTDBProgressChangedEventArgs(current, total, MTDBCreationProgressType.Commit.ToString()));
+                    OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, MtdbCreationProgressType.COMMIT.ToString()));
 
                     transaction.Commit();
                     session.Close();
@@ -93,9 +67,9 @@ namespace MTDBFramework.Database
         }
         #region Events
 
-        public event MTDBProgressChangedEventHandler ProgressChanged;
+        public event MtdbProgressChangedEventHandler ProgressChanged;
 
-        protected void OnProgressChanged(MTDBProgressChangedEventArgs e)
+        protected void OnProgressChanged(MtdbProgressChangedEventArgs e)
         {
             if (ProgressChanged != null)
             {

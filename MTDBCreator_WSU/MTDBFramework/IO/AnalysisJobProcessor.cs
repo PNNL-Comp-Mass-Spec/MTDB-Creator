@@ -1,12 +1,9 @@
 ﻿#region Namespaces
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
-using Regressor.Algorithms;
 
 #endregion
 
@@ -18,7 +15,7 @@ namespace MTDBFramework.IO
 
         public AnalysisJobProcessor(Options options)
         {
-            this.ProcessorOptions = options;
+            ProcessorOptions = options;
         }
 
 		// Entry point for processing analysis job items. Accepts a IEnumerable of Analysis Job Items
@@ -31,18 +28,14 @@ namespace MTDBFramework.IO
             int current = 0;
             int total = analysisJobItems.Count();
 
-            List<AnalysisJobItem> phrps = new List<AnalysisJobItem>();
-            List<AnalysisJobItem> jobs = new List<AnalysisJobItem>();
-
-
             foreach (AnalysisJobItem jobItem in analysisJobItems)
             {
-                OnProgressChanged(new MTDBProgressChangedEventArgs(current, total, jobItem));
+                OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, jobItem));
 
                 // Legacy code from before implementation of clsPHRPReader
                 // IAnalysisReader analysisReader = AnalysisReaderFactory.Create(jobItem.Format, this.ProcessorOptions);
 
-                IPHRPReader analysisReader = PHRPReaderFactory.Create(jobItem.FilePath, this.ProcessorOptions);
+                IPhrpReader analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
 
 				// Reads the jobItem using the reader returned by the Reader Factory
                 jobItem.DataSet = analysisReader.Read(jobItem.FilePath);
@@ -55,9 +48,9 @@ namespace MTDBFramework.IO
 
         #region Events
 
-        public event MTDBProgressChangedEventHandler ProgressChanged;
+        public event MtdbProgressChangedEventHandler ProgressChanged;
 
-        protected void OnProgressChanged(MTDBProgressChangedEventArgs e)
+        protected void OnProgressChanged(MtdbProgressChangedEventArgs e)
         {
             if (ProgressChanged != null)
             {

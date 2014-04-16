@@ -24,7 +24,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            MTDBProcessor mtdbProcessor = new MTDBProcessor(this.m_AnalysisJobViewModel.Options);
+            MtdbProcessor mtdbProcessor = new MtdbProcessor(this.m_AnalysisJobViewModel.Options);
 
             this.HostProcessWindow.MainBackgroundWorker.ReportProgress(0);
 

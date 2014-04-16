@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using FluentNHibernate.Conventions.AcceptanceCriteria;
+﻿using System.ComponentModel;
 
 namespace MTDBFramework.UI
 {
@@ -20,9 +17,9 @@ namespace MTDBFramework.UI
         /// <param name="propertyName">The property that has a new value.</param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (this.PropertyChanged != null)
+            if (PropertyChanged != null)
             {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 

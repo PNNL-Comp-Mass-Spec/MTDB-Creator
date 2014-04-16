@@ -10,10 +10,10 @@ namespace Regressor.Algorithms
     {
         public LinearRegressionResult()
         {
-            this.Slope = 1;
-            this.Intercept = 0;
-            this.RSquared = 1;
-            this.Coefficients = new double[] { 0.0, 1.0 };
+            Slope = 1;
+            Intercept = 0;
+            RSquared = 1;
+            Coefficients = new [] { 0.0, 1.0 };
         }
 
         public double RSquared { get; set; }

@@ -8,16 +8,16 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Database
 {
-    public class SQLiteTargetDatabaseReader : ITargetDatabaseReader
+    public class SqLiteTargetDatabaseReader : ITargetDatabaseReader
     {
         public TargetDatabase Read(string path)
         {
             DatabaseCreatorFactory.DbFile = path;
             var sessionFactory = DatabaseCreatorFactory.CreateSessionFactory();
-            TargetDatabase reader = new TargetDatabase();
+            var reader = new TargetDatabase();
 
-            List<ConsensusTarget> readConsensus = new List<ConsensusTarget>();
-            List<Evidence>          readTarget    = new List<Evidence>();
+            var readConsensus = new List<ConsensusTarget>();
+            var          readTarget    = new List<Evidence>();
             using(var session = sessionFactory.OpenSession())
             {
                 using(var transact = session.BeginTransaction())
@@ -31,9 +31,6 @@ namespace MTDBFramework.Database
             }
 
             return reader;
-
-            //reader.ConsensusTargets = readConsensus;
-            //return null;
         }
     }
 }

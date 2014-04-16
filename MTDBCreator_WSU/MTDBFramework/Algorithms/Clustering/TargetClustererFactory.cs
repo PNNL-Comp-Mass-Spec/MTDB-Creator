@@ -8,13 +8,13 @@
 
             switch (workflowType)
             {
-                case TargetWorkflowType.TopDown:
+                case TargetWorkflowType.TOP_DOWN:
                     clusterer = new SequenceTargetClusterer();
                     break;
-                case TargetWorkflowType.BottomUp:
+                case TargetWorkflowType.BOTTOM_UP:
                     clusterer = new SequenceTargetClusterer();
                     break;
-                case TargetWorkflowType.Spectral:
+                case TargetWorkflowType.SPECTRAL:
                     clusterer = new SpectralTargetClusterer();
                     break;
             }

@@ -10,13 +10,13 @@ namespace MTDBFramework.Algorithms.Alignment
 
             switch (options.TargetFilterType)
             {
-                case TargetWorkflowType.TopDown:
+                case TargetWorkflowType.TOP_DOWN:
                     aligner = new ProteinTargetAligner();
                     break;
-                case TargetWorkflowType.BottomUp:
+                case TargetWorkflowType.BOTTOM_UP:
                     aligner = new PeptideTargetAligner(options);
                     break;
-                case TargetWorkflowType.Spectral:
+                case TargetWorkflowType.SPECTRAL:
                     aligner = new SpectralTargetAligner();
                     break;
             }

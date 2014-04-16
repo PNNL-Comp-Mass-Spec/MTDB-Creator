@@ -81,7 +81,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         public ProcessWindow HostProcessWindow { get; set; }
 
-        private void analysisJobProcessor_ProgressChanged(object sender, MTDBProgressChangedEventArgs e)
+        private void analysisJobProcessor_ProgressChanged(object sender, MtdbProgressChangedEventArgs e)
         {
             AnalysisJobItem analysisJobItem = e.UserObject as AnalysisJobItem;
 

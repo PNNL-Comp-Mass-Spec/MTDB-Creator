@@ -2,7 +2,7 @@
 {
     public abstract class TableDataReaderBase<T>
     {
-        protected readonly string[] Delimiters = new string[] { "\t" };
+        protected readonly string[] Delimiters = { "\t" };
 
         /// <summary>
         /// Set header indices according to the actual header sequence from the analysis file

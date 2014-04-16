@@ -1,6 +1,5 @@
 ﻿#region Namespaces
 
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MTDBFramework.Algorithms.Clustering;
 

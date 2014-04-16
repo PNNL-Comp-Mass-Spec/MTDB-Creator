@@ -10,11 +10,11 @@
             {
                 case LcmsIdentificationTool.MsgfPlus:
                     //TODO: MsgfPlusTargetFilter
-                    targetFilter = new MSGFPlusTargetFilter(options);
+                    targetFilter = new MsgfPlusTargetFilter(options);
                     break;
-                case LcmsIdentificationTool.MzIdentMl:
+                case LcmsIdentificationTool.MZIdentML:
                     //TODO: MsgfPlusTargetFilter
-                    targetFilter = new MSGFPlusTargetFilter(options);
+                    targetFilter = new MsgfPlusTargetFilter(options);
                     break;
                 case LcmsIdentificationTool.Sequest:
                     targetFilter = new SequestTargetFilter(options);
@@ -23,7 +23,7 @@
                     targetFilter = new XTandemTargetFilter(options);
                     break;
                 case LcmsIdentificationTool.MSAlign:
-                    targetFilter = new MSAlignTargetFilter(options);
+                    targetFilter = new MsAlignTargetFilter(options);
                     break;
             }
 

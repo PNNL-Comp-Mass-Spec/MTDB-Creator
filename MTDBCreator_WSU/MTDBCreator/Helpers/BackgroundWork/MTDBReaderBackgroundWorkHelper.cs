@@ -28,7 +28,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            SQLiteTargetDatabaseReader targetDatabaseReader = new SQLiteTargetDatabaseReader();
+            SqLiteTargetDatabaseReader targetDatabaseReader = new SqLiteTargetDatabaseReader();
 
             m_Database = targetDatabaseReader.Read(this.m_DatabaseFileName);
         }

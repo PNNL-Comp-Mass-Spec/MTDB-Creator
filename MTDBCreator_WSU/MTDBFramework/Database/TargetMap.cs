@@ -23,10 +23,8 @@ namespace MTDBFramework.Database
             Map(x => x.ModificationCount);
             Map(x => x.ModificationDescription);
             Map(x => x.DelM);
-            Map(x => x.DelM_PPM);
+            Map(x => x.DelMPpm);
             Map(x => x.SpecProb);
-
-            //HasMany(x => x.Proteins).Cascade.SaveUpdate();
 
             References(x => x.DataSet).Cascade.SaveUpdate();
             References(x => x.PeptideInfo).Cascade.SaveUpdate();

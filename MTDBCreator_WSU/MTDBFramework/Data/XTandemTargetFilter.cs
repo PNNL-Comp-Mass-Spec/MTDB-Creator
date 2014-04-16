@@ -6,19 +6,19 @@
 
         public XTandemTargetFilter(Options options)
         {
-            this.FilterOptions = options;
+            FilterOptions = options;
         }
 
         public bool ShouldFilter(Evidence evidence)
         {
-            XTandemResult result = evidence as XTandemResult;
+            var result = evidence as XTandemResult;
 
             if (result == null)
             {
                 return true;
             }
 
-            if (result.LogPeptideEValue > this.FilterOptions.MaxLogEValForXTandemAlignment)
+            if (result.LogPeptideEValue > FilterOptions.MaxLogEValForXTandemAlignment)
             {
                 return true;
             }

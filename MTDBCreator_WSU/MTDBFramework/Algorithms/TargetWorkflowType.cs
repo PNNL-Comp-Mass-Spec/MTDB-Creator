@@ -3,8 +3,8 @@ namespace MTDBFramework.Algorithms
 {
     public enum TargetWorkflowType
     {
-        TopDown,
-        BottomUp,
-        Spectral
+        TOP_DOWN,
+        BOTTOM_UP,
+        SPECTRAL
     }
 }

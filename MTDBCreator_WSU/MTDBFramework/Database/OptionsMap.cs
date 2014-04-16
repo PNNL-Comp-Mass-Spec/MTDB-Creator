@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using FluentNHibernate.Mapping;
-using MTDBFramework.Algorithms;
+﻿using FluentNHibernate.Mapping;
 using MTDBFramework.Data;
-using Regressor.Algorithms;
+
 
 namespace MTDBFramework.Database
 {
@@ -42,8 +37,8 @@ namespace MTDBFramework.Database
 
             //// Sequest
             Map(x => x.MinXCorrForAlignment);
-            Map(x => x.UseDelCN);
-            Map(x => x.MaxDelCN);
+            Map(x => x.UseDelCn);
+            Map(x => x.MaxDelCn);
 
             //// Xtandem
             Map(x => x.MaxLogEValForXTandemAlignment);

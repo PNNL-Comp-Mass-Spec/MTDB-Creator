@@ -6,24 +6,19 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Algorithms.Alignment
 {
-    public class MSGFPlusAlignmentFilter : ITargetFilter
+    public class MsgfPlusAlignmentFilter : ITargetFilter
     {
         public Options FilterOptions { get; set; }
 
-        public MSGFPlusAlignmentFilter(Options options)
+        public MsgfPlusAlignmentFilter(Options options)
         {
-            this.FilterOptions = options;
+            FilterOptions = options;
         }
 
         public bool ShouldFilter(Evidence evidence)
         {
-            //if (evidence.IsSeqInfoExist != 1)
-            //{
-            //    return true;
-            //}
-
             // In the alignment we will only use the unmodified peptides
-            if (evidence.ModificationCount > this.FilterOptions.MaxModsForAlignment)
+            if (evidence.ModificationCount > FilterOptions.MaxModsForAlignment)
             {
                 return true;
             }

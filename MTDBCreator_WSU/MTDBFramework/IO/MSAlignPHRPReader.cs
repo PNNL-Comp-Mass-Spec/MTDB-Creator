@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
@@ -12,27 +11,27 @@ namespace MTDBFramework.IO
     /// <summary>
     /// Summary Description for MSAlignPHRP Reader
     /// </summary>
-    class MSAlignPHRPReader : IPHRPReader
+    class MsAlignPhrpReader : IPhrpReader
     {
         public Options ReaderOptions { get; set; }
 
-        public MSAlignPHRPReader(Options options)
+        public MsAlignPhrpReader(Options options)
         {
-            this.ReaderOptions = options;
+            ReaderOptions = options;
         }
 
         public LcmsDataSet Read(string path)
         {
-            List<MSAlignResult> results = new List<MSAlignResult>();
-            MSAlignTargetFilter filter = new MSAlignTargetFilter(this.ReaderOptions);
+            var results = new List<MsAlignResult>();
+            var filter = new MsAlignTargetFilter(ReaderOptions);
 
-            Dictionary<int, ProteinInformation> proteinInfos = new Dictionary<int, ProteinInformation>();
+            var proteinInfos = new Dictionary<int, ProteinInformation>();
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in
-            var reader = new PHRPReader.clsPHRPReader(path);
+            var reader = new clsPHRPReader(path);
             while (reader.CanRead)
             {
-                MSAlignResult result = new MSAlignResult();
+                var result = new MsAlignResult();
                 reader.MoveNext();
 
                 result.AnalysisId = reader.CurrentPSM.ResultID;
@@ -44,14 +43,14 @@ namespace MTDBFramework.IO
                 result.MultiProteinCount = (short)reader.CurrentPSM.Proteins.Count;
                 result.Scan = reader.CurrentPSM.ScanNumber;
                 result.Sequence = reader.CurrentPSM.Peptide;
-                result.Mz = PHRPReader.clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge);
+                result.Mz = clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge);
                 result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
                 if (reader.CurrentPSM.MassErrorPPM.Length != 0)
                 {
-                    result.DelM_PPM = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
+                    result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
                 }
 
-                result.PeptideInfo = new TargetPeptideInfo()
+                result.PeptideInfo = new TargetPeptideInfo
                 {
                     Peptide = result.Sequence,
                     CleanPeptide = result.CleanPeptide,
@@ -63,28 +62,30 @@ namespace MTDBFramework.IO
 				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
                 if (!filter.ShouldFilter(result))
                 {
-                    result.DataSet = new TargetDataSet() { Path = path };
+                    result.DataSet = new TargetDataSet { Path = path };
 
                     result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
 
-                    foreach (var protein in reader.CurrentPSM.ProteinDetails)
+                    foreach (var p in reader.CurrentPSM.ProteinDetails)
                     {
-                        ProteinInformation Protein = new ProteinInformation();
-                        Protein.ProteinName = protein.ProteinName;
-                        Protein.CleavageState = protein.CleavageState;
-                        Protein.TerminusState = protein.TerminusState;
-                        Protein.ResidueStart = protein.ResidueStart;
-                        Protein.ResidueEnd = protein.ResidueEnd;
-
-                        if (proteinInfos.ContainsValue(Protein))
+                        var protein = new ProteinInformation
                         {
-                            result.Proteins.Add(Protein);
+                            ProteinName = p.ProteinName,
+                            CleavageState = p.CleavageState,
+                            TerminusState = p.TerminusState,
+                            ResidueStart = p.ResidueStart,
+                            ResidueEnd = p.ResidueEnd
+                        };
+
+                        if (proteinInfos.ContainsValue(protein))
+                        {
+                            result.Proteins.Add(protein);
                         }
                         else
                         {
-                            proteinInfos.Add((proteinInfos.Count + 1), Protein);
-                            result.Proteins.Add(Protein);
+                            proteinInfos.Add((proteinInfos.Count + 1), protein);
+                            result.Proteins.Add(protein);
                         }
                     }
 
@@ -101,7 +102,7 @@ namespace MTDBFramework.IO
                 }
             }
             AnalysisReaderHelper.CalculateObservedNet(results);
-            AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(this.ReaderOptions.PredictorType), results);
+            AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MSAlign, results);
         }

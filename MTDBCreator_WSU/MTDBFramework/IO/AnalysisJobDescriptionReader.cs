@@ -15,15 +15,15 @@ namespace MTDBFramework.IO
         {
             // ArgumentNullException?
 
-            List<AnalysisJobItem> analysisJobItems = new List<AnalysisJobItem>();
+            var analysisJobItems = new List<AnalysisJobItem>();
 
-            using (StreamReader reader = new StreamReader(path))
+            using (var reader = new StreamReader(path))
             {
-                this.SetHeaderIndices(reader.ReadLine());
+                SetHeaderIndices(reader.ReadLine());
 
                 for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
                 {
-                    analysisJobItems.Add(this.ProcessLine(line));
+                    analysisJobItems.Add(ProcessLine(line));
 
                     if (analysisJobItems[analysisJobItems.Count - 1].FilePath.StartsWith(@"."))
                     {
@@ -39,34 +39,34 @@ namespace MTDBFramework.IO
 
         protected override void SetHeaderIndices(string actualHeader)
         {
-            string[] actualHeaders = actualHeader.Split(this.Delimiters, StringSplitOptions.None);
+            string[] actualHeaders = actualHeader.Split(Delimiters, StringSplitOptions.None);
 
             for (int i = 0; i < actualHeaders.Length; i++)
             {
-                actualHeaderMaps.Add((DefaultHeaders)Enum.Parse(typeof(DefaultHeaders), actualHeaders[i]), i);
+                m_actualHeaderMaps.Add((DefaultHeaders)Enum.Parse(typeof(DefaultHeaders), actualHeaders[i]), i);
             }
         }
 
         protected override AnalysisJobItem ProcessLine(string line)
         {
-            string[] lineCells = line.Split(this.Delimiters, StringSplitOptions.None);
+            string[] lineCells = line.Split(Delimiters, StringSplitOptions.None);
 
-            AnalysisJobItem jobItem = new AnalysisJobItem
+            var jobItem = new AnalysisJobItem
                 (
-                Path.Combine(lineCells[actualHeaderMaps[DefaultHeaders.BaseFolder]], lineCells[actualHeaderMaps[DefaultHeaders.FileName]]),
-                (LcmsIdentificationTool)Enum.Parse(typeof(LcmsIdentificationTool), lineCells[actualHeaderMaps[DefaultHeaders.Tool]], true)
+                Path.Combine(lineCells[m_actualHeaderMaps[DefaultHeaders.BASE_FOLDER]], lineCells[m_actualHeaderMaps[DefaultHeaders.FILE_NAME]]),
+                (LcmsIdentificationTool)Enum.Parse(typeof(LcmsIdentificationTool), lineCells[m_actualHeaderMaps[DefaultHeaders.TOOL]], true)
                 );
 
             return jobItem;
         }
 
-        private readonly Dictionary<DefaultHeaders, int> actualHeaderMaps = new Dictionary<DefaultHeaders, int>();
+        private readonly Dictionary<DefaultHeaders, int> m_actualHeaderMaps = new Dictionary<DefaultHeaders, int>();
 
         private enum DefaultHeaders
         {
-            Tool,
-            FileName,
-            BaseFolder
+            TOOL,
+            FILE_NAME,
+            BASE_FOLDER
         }
     }
 }

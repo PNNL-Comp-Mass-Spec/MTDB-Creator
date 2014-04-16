@@ -92,7 +92,7 @@ namespace MTDBCreator.Windows
 
                             if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
                             {
-                                this.AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TopDown;
+                                this.AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
                             }
                         }
                     }

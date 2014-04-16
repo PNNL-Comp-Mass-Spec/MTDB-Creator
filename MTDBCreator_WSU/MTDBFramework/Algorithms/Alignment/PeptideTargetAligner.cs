@@ -21,13 +21,13 @@ namespace MTDBFramework.Algorithms.Alignment
 
         public PeptideTargetAligner(Options options)
         {
-            this.Options = options;
+            Options = options;
         }
 
         public LinearRegressionResult AlignTargets(List<Evidence> evidences, List<Evidence> baseline)
         {
-            List<double> observed = new List<double>();
-            List<double> predicted = new List<double>();
+            var observed = new List<double>();
+            var predicted = new List<double>();
 
             foreach (Evidence evidence in baseline)
             {
@@ -45,7 +45,7 @@ namespace MTDBFramework.Algorithms.Alignment
             }
             else if (Options.RegressionType == RegressionType.MixtureRegression)
             {
-                Regressor = new MixtureModelEM();
+                Regressor = new MixtureModelEm();
             }
 
             LinearRegressionResult result = Regressor.CalculateRegression(observed, predicted);

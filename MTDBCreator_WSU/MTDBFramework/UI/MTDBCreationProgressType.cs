@@ -1,11 +1,11 @@
 ﻿namespace MTDBFramework.UI
 {
-    public enum MTDBCreationProgressType
+    public enum MtdbCreationProgressType
     {
-        ConsensusTarget,
-        Sequence,
-        Peptide,
-        AnalysisSource,
-        Commit
+        CONSENSUS_TARGET,
+        SEQUENCE,
+        PEPTIDE,
+        ANALYSIS_SOURCE,
+        COMMIT
     }
 }

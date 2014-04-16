@@ -6,9 +6,9 @@
         XTandem,
         MSAlign,
         MsgfPlus,
-        MzIdentMl,
+        MZIdentML,
         Raw,
         Description,
-        NotSupported
+        NOT_SUPPORTED
     }
 }

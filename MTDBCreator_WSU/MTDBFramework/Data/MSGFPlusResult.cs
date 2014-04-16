@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace MTDBFramework.Data
 {
-    public class MSGFPlusResult : Evidence
+    public class MsgfPlusResult : Evidence
     {
         private double m_precursorMonoMass;
-        private double m_precursorMZ;
+        private double m_precursorMz;
         private string m_reference;
         private short m_numTrypticEnds;
         private double m_fdr;
         private int m_deNovoScore;
         private int m_msgfScore;
         private double m_specEValue;
-        private int m_rank_specEValue;
+        private int m_rankSpecEValue;
         private double m_eValue;
         private double m_qValue;
         private double m_pepQValue;
@@ -33,15 +30,15 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("PrecursorMonoMass");
             }
         }
-        public double PrecursorMZ 
+        public double PrecursorMz 
         {
             get
             {
-                return m_precursorMZ;
+                return m_precursorMz;
             }
             set
             {
-                 m_precursorMZ = value;
+                 m_precursorMz = value;
                 OnPropertyChanged("PrecursorMZ");
             }
         }
@@ -93,7 +90,7 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("DeNovoScore");
             }
         }
-        public int MSGFScore
+        public int MsgfScore
         {
             get
             {
@@ -121,11 +118,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_rank_specEValue;
+                return m_rankSpecEValue;
             }
             set
             {
-                m_rank_specEValue = value;
+                m_rankSpecEValue = value;
                 OnPropertyChanged("Rank_SpecEValue");
             }
         }

@@ -14,9 +14,9 @@ namespace MTDBFramework.Data
     {
         #region Private Fields
 
-        private string m_Name;
-        private LcmsIdentificationTool m_Tool;
-        private LinearRegressionResult m_RegressionResult;
+        private string m_name;
+        private LcmsIdentificationTool m_tool;
+        private LinearRegressionResult m_regressionResult;
 
         #endregion
 
@@ -24,20 +24,20 @@ namespace MTDBFramework.Data
 
         public string Name
         {
-            get { return m_Name; }
+            get { return m_name; }
             set
             {
-                m_Name = value;
+                m_name = value;
                 OnPropertyChanged("Name");
             }
         }
 
         public LcmsIdentificationTool Tool
         {
-            get { return m_Tool; }
+            get { return m_tool; }
             set
             {
-                m_Tool = value;
+                m_tool = value;
                 OnPropertyChanged("Tool");
             }
         }
@@ -46,10 +46,10 @@ namespace MTDBFramework.Data
 
         public LinearRegressionResult RegressionResult
         {
-            get { return m_RegressionResult; }
+            get { return m_regressionResult; }
             set
             {
-                m_RegressionResult = value;
+                m_regressionResult = value;
                 OnPropertyChanged("RegressionResult");
             }
         }
@@ -58,18 +58,18 @@ namespace MTDBFramework.Data
 
         public LcmsDataSet()
         {
-            this.Name = String.Empty;
-            this.Tool = LcmsIdentificationTool.Raw;
-            this.Evidences = new ObservableCollection<Evidence>();
-            this.RegressionResult = new LinearRegressionResult();
+            Name = String.Empty;
+            Tool = LcmsIdentificationTool.Raw;
+            Evidences = new ObservableCollection<Evidence>();
+            RegressionResult = new LinearRegressionResult();
         }
 
         public LcmsDataSet(string name, LcmsIdentificationTool tool, IEnumerable<Evidence> evidences)
         {
-            this.Name = name;
-            this.Tool = tool;
-            this.Evidences = new ObservableCollection<Evidence>(evidences);
-            this.RegressionResult = new LinearRegressionResult();
+            Name = name;
+            Tool = tool;
+            Evidences = new ObservableCollection<Evidence>(evidences);
+            RegressionResult = new LinearRegressionResult();
         }
     }
 }

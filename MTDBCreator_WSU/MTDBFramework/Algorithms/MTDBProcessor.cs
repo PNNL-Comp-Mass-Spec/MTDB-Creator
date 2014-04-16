@@ -1,6 +1,5 @@
 ﻿#region Namespaces
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,33 +13,33 @@ using Regressor.Algorithms;
 
 namespace MTDBFramework.Algorithms
 {
-    public class MTDBProcessor : IProcessor
+    public class MtdbProcessor : IProcessor
     {
         public Options ProcessorOptions { get; set; }
 
-        public MTDBProcessor(Options options)
+        public MtdbProcessor(Options options)
         {
-            this.ProcessorOptions = options;
+            ProcessorOptions = options;
         }
 
         public TargetDatabase Process(IEnumerable<LcmsDataSet> dataSets)
         {
             // Deal with DataSetId - Auto increments - Not in this class only
 
-            TargetDatabase targetDatabase = new TargetDatabase();
+            var targetDatabase = new TargetDatabase();
 
-            ITargetAligner aligner = TargetAlignmentFactory.Create(this.ProcessorOptions);
-            ITargetClusterer clusterer = TargetClustererFactory.Create(this.ProcessorOptions.TargetFilterType);
+            ITargetAligner aligner = TargetAlignmentFactory.Create(ProcessorOptions);
+            ITargetClusterer clusterer = TargetClustererFactory.Create(ProcessorOptions.TargetFilterType);
 
-            List<Evidence> epicTargets = new List<Evidence>();
+            var epicTargets = new List<Evidence>();
 
             foreach (LcmsDataSet dataSet in dataSets)
             {
-                ITargetFilter targetFilter = TargetFilterFactory.Create(dataSet.Tool, this.ProcessorOptions);
-                ITargetFilter alignmentFilter = AlignmentFilterFactory.Create(dataSet.Tool, this.ProcessorOptions);
+                ITargetFilter targetFilter = TargetFilterFactory.Create(dataSet.Tool, ProcessorOptions);
+                ITargetFilter alignmentFilter = AlignmentFilterFactory.Create(dataSet.Tool, ProcessorOptions);
 
-                List<Evidence> filteredTargets = new List<Evidence>();
-                List<Evidence> alignedTargets = new List<Evidence>();
+                var filteredTargets = new List<Evidence>();
+                var alignedTargets = new List<Evidence>();
 
                 foreach (Evidence t in dataSet.Evidences)
                 {
@@ -56,9 +55,9 @@ namespace MTDBFramework.Algorithms
                 }
                     epicTargets.AddRange(filteredTargets);
 
-                    if (this.ProcessorOptions.TargetFilterType != TargetWorkflowType.TopDown)
+                    if (ProcessorOptions.TargetFilterType != TargetWorkflowType.TOP_DOWN)
                     {
-                        IRegressorAlgorithm<LinearRegressionResult> regressor = LinearRegressorFactory.Create(this.ProcessorOptions.RegressionType);
+                        IRegressorAlgorithm<LinearRegressionResult> regressor = LinearRegressorFactory.Create(ProcessorOptions.RegressionType);
                         dataSet.RegressionResult = regressor.CalculateRegression(alignedTargets.Select(t => (double)t.Scan).ToList(), alignedTargets.Select(t => t.PredictedNet).ToList());
                     }
                     else
@@ -70,9 +69,7 @@ namespace MTDBFramework.Algorithms
 
             targetDatabase.ConsensusTargets = new ObservableCollection<ConsensusTarget>(clusterer.Cluster(epicTargets));
 
-            int i = 0, j = 0;//, k = 0;
-
-            //Dictionary<string, int> proteins = new Dictionary<string, int>();
+            int i = 0, j = 0;
 
             foreach (ConsensusTarget consensusTarget in targetDatabase.ConsensusTargets)
             {
@@ -81,27 +78,7 @@ namespace MTDBFramework.Algorithms
                 foreach (Evidence t in consensusTarget.Evidences)
                 {
                     t.Id = ++j;
-                    /*foreach (ProteinInformation p in t.Proteins)
-                    {
-                        if (!proteins.ContainsKey(p.ProteinName))
-                        {
-                            p.Id = ++k;
-                            proteins.Add(p.ProteinName, k);
-                        }
-                    }*/
                 }
-                //foreach (ProteinInformation p in consensusTarget.Proteins)
-                //{
-                //    if (!proteins.ContainsKey(p.ProteinName))
-                //    {
-                //        p.Id = ++k;
-                //        proteins.Add(p.ProteinName, k);
-                //    }
-                //    else
-                //    {
-                //        p.Id = proteins[p.ProteinName];
-                //    }
-                //}
                 consensusTarget.CalculateStatistics();
             }
 

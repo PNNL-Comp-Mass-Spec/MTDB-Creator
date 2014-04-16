@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using MTDBFramework.Algorithms.RetentionTimePrediction;
-using MTDBFramework.Data;
-using MTDBFramework.Database;
+﻿using MTDBFramework.Data;
 using PHRPReader;
 
 namespace MTDBFramework.IO
 {
-    public static class PHRPReaderFactory
+    public static class PhrpReaderFactory
     {
 		// Entry point for creating an LCMS Dataset using the PHRP Reader. Takes the options from
 		// the Analysis Job Processor's options and the file path for the job item and returns a reader
@@ -17,33 +12,33 @@ namespace MTDBFramework.IO
 		// it determines the type of reader to return based on the extension of the file, using that to 
 		// determine if it is a Sequest, XTandem, MSAlign or MSGF+ file
 		// The if statement is due to the PHRP Reader not meaning to be used on .mzid files
-        public static IPHRPReader Create(string path, Options options)
+        public static IPhrpReader Create(string path, Options options)
         {
-            IPHRPReader reader = null;
-            var ResultType = clsPHRPReader.AutoDetermineResultType(path);
+            IPhrpReader reader = null;
+            var resultType = clsPHRPReader.AutoDetermineResultType(path);
 
             if (path.EndsWith("msgfplus.mzid"))
 			{
-			    reader = new MZIdentMLReader(options);
+			    reader = new MzIdentMlReader(options);
 				return reader;
 			}
 
-            switch (ResultType)
+            switch (resultType)
             {
                 case clsPHRPReader.ePeptideHitResultType.XTandem:
-                    reader = new XTandemPHRPReader(options);
+                    reader = new XTandemPhrpReader(options);
                     break;
 
                 case clsPHRPReader.ePeptideHitResultType.Sequest:
-                    reader = new SequestPHRPReader(options);
+                    reader = new SequestPhrpReader(options);
                     break;
                     
                 case clsPHRPReader.ePeptideHitResultType.MSGFDB:
-                    reader = new MSGFPlusPHRPReader(options);
+                    reader = new MsgfPlusPhrpReader(options);
                     break;
                     
                 case clsPHRPReader.ePeptideHitResultType.MSAlign:
-                    reader = new MSAlignPHRPReader(options);
+                    reader = new MsAlignPhrpReader(options);
                     break;
 					
 					

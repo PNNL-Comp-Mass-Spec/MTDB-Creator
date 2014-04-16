@@ -6,19 +6,19 @@ using System;
 
 namespace MTDBFramework.UI
 {
-    public class MTDBProgressChangedEventArgs : EventArgs
+    public class MtdbProgressChangedEventArgs : EventArgs
     {
-        public MTDBProgressChangedEventArgs(int current, int total)
+        public MtdbProgressChangedEventArgs(int current, int total)
             : base()
         {
-            this.Current = current;
-            this.Total = total;
+            Current = current;
+            Total = total;
         }
 
-        public MTDBProgressChangedEventArgs(int current, int total, object userObject)
+        public MtdbProgressChangedEventArgs(int current, int total, object userObject)
             : this(current, total)
         {
-            this.UserObject = userObject;
+            UserObject = userObject;
         }
 
         public int Current { get; private set; }
@@ -26,5 +26,5 @@ namespace MTDBFramework.UI
         public object UserObject { get; private set; }
     }
 
-    public delegate void MTDBProgressChangedEventHandler(object sender, MTDBProgressChangedEventArgs e);
+    public delegate void MtdbProgressChangedEventHandler(object sender, MtdbProgressChangedEventArgs e);
 }

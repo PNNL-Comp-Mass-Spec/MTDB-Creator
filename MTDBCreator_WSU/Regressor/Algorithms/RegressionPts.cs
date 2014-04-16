@@ -10,8 +10,8 @@ namespace Regressor.Algorithms
     {
 		public double MdblX; 
 		public double MdblY;
-        public double massError;
-        public double netError; 
+        public double MassError;
+        public double NetError; 
 
 		public void Set(double x, double y)
 		{
@@ -19,11 +19,11 @@ namespace Regressor.Algorithms
 			MdblY = y ; 
 		}
 
-        public void Set(double x, double mass_error, double net_eror)
+        public void Set(double x, double massError, double netError)
         {
             MdblX = x;
-            massError = mass_error;
-            netError = net_eror;
+            MassError = massError;
+            NetError = netError;
         }
 
         public int CompareTo(Object obj)
@@ -34,7 +34,7 @@ namespace Regressor.Algorithms
 
         public bool Equals(RegressionPts other)
         {
-            return (MdblX == other.MdblX);
+            return (Math.Abs(MdblX - other.MdblX) < double.Epsilon);
         }
     }
 }

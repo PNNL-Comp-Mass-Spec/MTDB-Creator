@@ -10,19 +10,19 @@ namespace MTDBFramework.Data
     {
         #region Private Fields
 
-        private short m_ScanCount;
-        private double m_XCorr;
-        private double m_DelCn;
-        private double m_Sp;
-        private string m_Reference;
-        private double m_DelCn2;
-        private short m_RankSp;
-        private short m_RankXc;
-        private double m_XcRatio;
-        private bool m_PassFilt;
-        private double m_FScore;
-        private double m_MScore;
-        private short m_NumTrypticEnds;
+        private short m_scanCount;
+        private double m_xCorr;
+        private double m_delCn;
+        private double m_sp;
+        private string m_reference;
+        private double m_delCn2;
+        private short m_rankSp;
+        private short m_rankXc;
+        private double m_xcRatio;
+        private bool m_passFilt;
+        private double m_fScore;
+        private double m_mScore;
+        private short m_numTrypticEnds;
 
         #endregion
 
@@ -30,130 +30,130 @@ namespace MTDBFramework.Data
 
         public short ScanCount
         {
-            get { return m_ScanCount; }
+            get { return m_scanCount; }
             set
             {
-                m_ScanCount = value;
+                m_scanCount = value;
                 OnPropertyChanged("ScanCount");
             }
         }
 
         public double XCorr
         {
-            get { return m_XCorr; }
+            get { return m_xCorr; }
             set
             {
-                m_XCorr = value;
+                m_xCorr = value;
                 OnPropertyChanged("XCorr");
             }
         }
 
         public double DelCn
         {
-            get { return m_DelCn; }
+            get { return m_delCn; }
             set
             {
-                m_DelCn = value;
+                m_delCn = value;
                 OnPropertyChanged("DelCn");
             }
         }
 
         public double Sp
         {
-            get { return m_Sp; }
+            get { return m_sp; }
             set
             {
-                m_Sp = value;
+                m_sp = value;
                 OnPropertyChanged("Sp");
             }
         }
 
         public string Reference
         {
-            get { return m_Reference; }
+            get { return m_reference; }
             set
             {
-                m_Reference = value;
+                m_reference = value;
                 OnPropertyChanged("Reference");
             }
         }
 
         public double DelCn2
         {
-            get { return m_DelCn2; }
+            get { return m_delCn2; }
             set
             {
-                m_DelCn2 = value;
+                m_delCn2 = value;
                 OnPropertyChanged("DelCn2");
             }
         }
 
         public short RankSp
         {
-            get { return m_RankSp; }
+            get { return m_rankSp; }
             set
             {
-                m_RankSp = value;
+                m_rankSp = value;
                 OnPropertyChanged("RankSp");
             }
         }
 
         public short RankXc
         {
-            get { return m_RankXc; }
+            get { return m_rankXc; }
             set
             {
-                m_RankXc = value;
+                m_rankXc = value;
                 OnPropertyChanged("RankXc");
             }
         }
 
         public double XcRatio
         {
-            get { return m_XcRatio; }
+            get { return m_xcRatio; }
             set
             {
-                m_XcRatio = value; 
+                m_xcRatio = value; 
                 OnPropertyChanged("XcRatio");
             }
         }
 
         public bool PassFilt
         {
-            get { return m_PassFilt; }
+            get { return m_passFilt; }
             set
             {
-                m_PassFilt = value;
+                m_passFilt = value;
                 OnPropertyChanged("PassFilt");
             }
         }
 
         public double FScore
         {
-            get { return m_FScore; }
+            get { return m_fScore; }
             set
             {
-                m_FScore = value;
+                m_fScore = value;
                 OnPropertyChanged("FScore");
             }
         }
 
         public double MScore
         {
-            get { return m_MScore; }
+            get { return m_mScore; }
             set
             {
-                m_MScore = value;
+                m_mScore = value;
                 OnPropertyChanged("MScore");
             }
         }
 
         public short NumTrypticEnds
         {
-            get { return m_NumTrypticEnds; }
+            get { return m_numTrypticEnds; }
             set
             {
-                m_NumTrypticEnds = value;
+                m_numTrypticEnds = value;
                 OnPropertyChanged("NumTrypticEnds");
             }
         }

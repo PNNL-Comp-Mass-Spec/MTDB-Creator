@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace MTDBFramework.Data
+﻿namespace MTDBFramework.Data
 {
     public class SequenceInfo
     {
@@ -11,7 +9,7 @@ namespace MTDBFramework.Data
 
         public override string ToString()
         {
-            return this.ModificationDescription;
+            return ModificationDescription;
         }
     }
 }

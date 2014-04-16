@@ -1,19 +1,11 @@
 ﻿#region Namespaces
 
-using System;
-using System.Collections.Generic;
 using System.IO;
-using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using FluentNHibernate.Conventions;
-using FluentNHibernate.Conventions.Instances;
-using MTDBFramework.Algorithms.Clustering;
-using MTDBFramework.Data;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
-using PNNLOmics.Data;
 
 #endregion
 
@@ -23,7 +15,6 @@ namespace MTDBFramework.Database
     {
 
         public static string DbFile = "SQLiteTest.db"; //This is a default path
-        private ISessionFactory sessionFactory = CreateSessionFactory();
 
         public static ISessionFactory CreateSessionFactory()
         {

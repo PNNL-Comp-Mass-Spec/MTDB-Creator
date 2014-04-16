@@ -100,8 +100,8 @@ namespace MTDBCreator.ViewModels
             Options.MinXCorrForExportNonTrytpic[2] = Convert.ToDouble(options[20]);
 
             // Sequest dlCN
-            Options.UseDelCN = (Convert.ToBoolean(options[21])) ? true : false;
-            Options.MaxDelCN = Convert.ToDouble(options[22]);
+            Options.UseDelCn = (Convert.ToBoolean(options[21])) ? true : false;
+            Options.MaxDelCn = Convert.ToDouble(options[22]);
 
             // X!Tandem Export
             Options.MaxLogEValForXTandemExport = Convert.ToDouble(options[23]);

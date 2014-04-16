@@ -2,7 +2,6 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using MTDBFramework.UI;
 
 #endregion
@@ -13,12 +12,12 @@ namespace MTDBFramework.Data
     {
         #region Private Fields
 
-        private string m_Title;
-        private string m_FileName;
-        private string m_BaseFolder;
-        private string m_FilePath;
-        private LcmsIdentificationTool m_Format;
-        private LcmsDataSet m_DataSet;
+        private string m_title;
+        private string m_fileName;
+        private string m_baseFolder;
+        private string m_filePath;
+        private LcmsIdentificationTool m_format;
+        private LcmsDataSet m_dataSet;
 
         #endregion
 
@@ -26,60 +25,60 @@ namespace MTDBFramework.Data
 
         public string Title
         {
-            get { return m_Title; }
+            get { return m_title; }
             set
             {
-                m_Title = value;
+                m_title = value;
                 OnPropertyChanged("Title");
             }
         }
 
         public string FileName
         {
-            get { return m_FileName; }
+            get { return m_fileName; }
             set
             {
-                m_FileName = value;
+                m_fileName = value;
                 OnPropertyChanged("FileName");
             }
         }
 
         public string BaseFolder
         {
-            get { return m_BaseFolder; }
+            get { return m_baseFolder; }
             set
             {
-                m_BaseFolder = value;
+                m_baseFolder = value;
                 OnPropertyChanged("BaseFolder");
             }
         }
 
         public string FilePath
         {
-            get { return m_FilePath; }
+            get { return m_filePath; }
             set
             {
-                m_FilePath = value;
+                m_filePath = value;
                 OnPropertyChanged("FilePath");
             }
         }
 
         public LcmsIdentificationTool Format
         {
-            get { return m_Format; }
+            get { return m_format; }
             set
             {
-                m_Format = value;
+                m_format = value;
                 OnPropertyChanged("Format");
             }
         }
 
         public LcmsDataSet DataSet
         {
-            get { return m_DataSet; }
+            get { return m_dataSet; }
             set
             {
-                m_DataSet = value;
+                m_dataSet = value;
                 OnPropertyChanged("DataSet");
             }
         }
@@ -88,28 +87,20 @@ namespace MTDBFramework.Data
 
         public AnalysisJobItem(string path, LcmsIdentificationTool format)
         {
-            this.FileName = Path.GetFileName(path);
-            this.BaseFolder = Path.GetDirectoryName(path);
-            this.FilePath = path;
-            this.Format = format;
+            FileName = Path.GetFileName(path);
+            BaseFolder = Path.GetDirectoryName(path);
+            FilePath = path;
+            Format = format;
 
-            this.Title = this.FileName.Replace(this.FileName.Substring(this.FileName.LastIndexOf('_')), String.Empty);
+            Title = FileName.Replace(FileName.Substring(FileName.LastIndexOf('_')), String.Empty);
         }
 
         public int TargetCount
         {
             get
             {
-                return this.DataSet == null ? 0 : this.DataSet.Evidences.Count;
+                return DataSet == null ? 0 : DataSet.Evidences.Count;
             }
         }
-
-        //public int ProteinCount
-        //{
-        //    get
-        //    {
-        //        return 0;
-        //    }
-        //}
     }
 }

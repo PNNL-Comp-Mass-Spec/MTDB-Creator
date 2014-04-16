@@ -11,8 +11,8 @@ namespace MTDBFramework.Algorithms.Clustering
     {
         public IEnumerable<ConsensusTarget> Cluster(IEnumerable<Evidence> evidences)
         {
-            List<ConsensusTarget> consensusTargetList = new List<ConsensusTarget>();
-            Dictionary<string, ConsensusTarget> targetMap = new Dictionary<string, ConsensusTarget>();
+            var consensusTargetList = new List<ConsensusTarget>();
+            var targetMap = new Dictionary<string, ConsensusTarget>();
 
             foreach (Evidence t in evidences)
             {
@@ -30,7 +30,6 @@ namespace MTDBFramework.Algorithms.Clustering
                     {
                         targetMap[sequence].AddProtein(protein);
                     }
-                    //protein.Consensus.Add(targetMap[sequence]);
                 }
             }
 

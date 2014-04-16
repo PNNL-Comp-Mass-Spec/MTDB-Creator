@@ -6,19 +6,19 @@
 
         public SequestTargetFilter(Options options)
         {
-            this.FilterOptions = options;
+            FilterOptions = options;
         }
 
         public bool ShouldFilter(Evidence evidence)
         {
-            SequestResult result = evidence as SequestResult;
+            var result = evidence as SequestResult;
 
             if (result == null)
             {
                 return true;
             }
 
-            if (result.XCorr < this.FilterOptions.MinXCorrForAlignment)
+            if (result.XCorr < FilterOptions.MinXCorrForAlignment)
             {
                 return true;
             }

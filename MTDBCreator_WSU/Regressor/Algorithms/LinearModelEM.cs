@@ -11,18 +11,18 @@ namespace Regressor.Algorithms
 {
     public class LinearModelEm : IRegressorAlgorithm<LinearRegressionResult>
     {
-        private DenseMatrix _mobjX;
-        private DenseMatrix _mobjXTranspose;
-        private DenseMatrix _mobjY;
-        private DenseMatrix _mobjWeights;
+        private DenseMatrix m_x;
+        private DenseMatrix m_xTranspose;
+        private DenseMatrix m_y;
+        private DenseMatrix m_weights;
 
-        private double _mdblUnifU;
-        private double _mdblStdev;
+        private double m_unifU;
+        private double m_stdev;
         private const int NumIterationsToPerform = 20;
 
         private void CalculateProbabilitiesAndWeightMatrix()
         {
-            int numPoints = _mobjX.RowCount;
+            int numPoints = m_x.RowCount;
             double normalProbSum = 0;
             double sumSquareDiff = 0;
             double sumSquareDiffForRsq = 0;
@@ -31,42 +31,39 @@ namespace Regressor.Algorithms
 
             for (int index = 0; index < numPoints; index++)
             {
-                double diff = _mobjY.At(index, 0) - (RegressionResult.Slope * _mobjX.At(index, 0) + RegressionResult.Intercept);
-                double exponent = Math.Exp(-0.5 * (diff / _mdblStdev) * (diff / _mdblStdev));
-                double normalizer = _mdblStdev * Math.Sqrt(2 * Math.PI);
+                double diff = m_y.At(index, 0) - (RegressionResult.Slope * m_x.At(index, 0) + RegressionResult.Intercept);
+                double exponent = Math.Exp(-0.5 * (diff / m_stdev) * (diff / m_stdev));
+                double normalizer = m_stdev * Math.Sqrt(2 * Math.PI);
                 double probNormalConditional = exponent / normalizer;
-                double probNormalPosterior = (PercentNormal * probNormalConditional) / (PercentNormal * probNormalConditional + (1 - PercentNormal) * _mdblUnifU);
-                _mobjWeights.At(index, index, probNormalPosterior);
+                double probNormalPosterior = (PercentNormal * probNormalConditional) / (PercentNormal * probNormalConditional + (1 - PercentNormal) * m_unifU);
+                m_weights.At(index, index, probNormalPosterior);
                 normalProbSum += probNormalPosterior;
                 sumSquareDiff += probNormalPosterior * diff * diff;
                 sumSquareDiffForRsq += diff * diff;
-                sumSquareY += (_mobjY.At(index, 0) * _mobjY.At(index, 0));
-                sumY += _mobjY.At(index, 0);
+                sumSquareY += (m_y.At(index, 0) * m_y.At(index, 0));
+                sumY += m_y.At(index, 0);
             }
 
             PercentNormal = normalProbSum / numPoints;
-            _mdblStdev = Math.Sqrt(sumSquareDiff / (normalProbSum));
+            m_stdev = Math.Sqrt(sumSquareDiff / (normalProbSum));
             double yVar = sumSquareY - sumY * sumY / numPoints;
-            if (yVar == 0)
+            if (Math.Abs(yVar) < double.Epsilon)
             {
                 RegressionResult.RSquared = 0;
                 throw new Exception("All y values are the same");
             }
-            else
-            {
-                RegressionResult.RSquared = 1 - sumSquareDiffForRsq / yVar;
-            }
+            RegressionResult.RSquared = 1 - sumSquareDiffForRsq / yVar;
         }
 
         private void CalculateSlopeInterceptEstimates()
         {
-            var wx = _mobjWeights.Multiply(_mobjX) as DenseMatrix;
+            var wx = m_weights.Multiply(m_x) as DenseMatrix;
 
             if (wx == null)
             {
                 throw new InvalidOperationException();
             }
-            var xprimeWx = _mobjXTranspose.Multiply(wx) as DenseMatrix; 
+            var xprimeWx = m_xTranspose.Multiply(wx) as DenseMatrix; 
             if (xprimeWx == null)
             {
                 throw new InvalidOperationException();
@@ -76,13 +73,12 @@ namespace Regressor.Algorithms
             {
                 throw new InvalidOperationException();
             }
-            DenseMatrix wy;
-            wy = _mobjWeights.Multiply(_mobjY) as DenseMatrix;
+            var wy = m_weights.Multiply(m_y) as DenseMatrix;
             if (wy == null)
             {
                 throw new InvalidOperationException();
             }
-            var xprimeWy = _mobjXTranspose.Multiply(wy) as DenseMatrix;
+            var xprimeWy = m_xTranspose.Multiply(wy) as DenseMatrix;
             if (xprimeWy == null)
             {
                 throw new InvalidOperationException();
@@ -96,38 +92,37 @@ namespace Regressor.Algorithms
             
             RegressionResult.Slope = beta.At(0, 0); // Create slope
             RegressionResult.Intercept = beta.At(1, 0); // Create intercept
-            var numPoints = _mobjX.RowCount;
+            var numPoints = m_x.RowCount;
             var maxDiff = -1 * double.MaxValue;
             var minDiff = double.MaxValue;
             var maxY = -1 * double.MaxValue;
 
             for (int index = 0; index < numPoints; index++)
             {
-                double diff = _mobjY.At(index, 0) - (RegressionResult.Slope * _mobjX.At(index, 0) + RegressionResult.Intercept);
+                double diff = m_y.At(index, 0) - (RegressionResult.Slope * m_x.At(index, 0) + RegressionResult.Intercept);
                 if (diff > maxDiff)
                     maxDiff = diff;
                 if (diff < minDiff)
                     minDiff = diff;
-                if (_mobjY.At(index, 0) > maxY)
-                    maxY = _mobjY.At(index, 0);
+                if (m_y.At(index, 0) > maxY)
+                    maxY = m_y.At(index, 0);
             }
             //_mdblUnifU = 1.0 / (maxDiff - minDiff);
-            _mdblUnifU = 1.0 / maxY;
+            m_unifU = 1.0 / maxY;
         }
 
-        private double CalculateInitialStdev()
+        private void CalculateInitialStdev()
         {
-            int numPoints = _mobjX.RowCount;
+            int numPoints = m_x.RowCount;
 
-            _mdblStdev = 0;
+            m_stdev = 0;
             for (int index = 0; index < numPoints; index++)
             {
-                double diff = _mobjY.At(index, 0) - (RegressionResult.Slope * _mobjX.At(index, 0) + RegressionResult.Intercept);
-                _mdblStdev += diff * diff;
+                double diff = m_y.At(index, 0) - (RegressionResult.Slope * m_x.At(index, 0) + RegressionResult.Intercept);
+                m_stdev += diff * diff;
             }
-            _mdblStdev /= numPoints;
-            _mdblStdev = Math.Sqrt(_mdblStdev);
-            return _mdblStdev;
+            m_stdev /= numPoints;
+            m_stdev = Math.Sqrt(m_stdev);
         }
 
         public List<RegressionPts> RegressionPoints { get; set; }
@@ -193,33 +188,33 @@ namespace Regressor.Algorithms
             SetPoints(observed.ToArray(), predicted.ToArray());
             int numPoints = RegressionPoints.Count;
 
-            _mobjX = new DenseMatrix(numPoints, 2);
-            _mobjY = new DenseMatrix(numPoints, 1);
-            _mobjWeights = new DenseMatrix(numPoints, numPoints);
+            m_x = new DenseMatrix(numPoints, 2);
+            m_y = new DenseMatrix(numPoints, 1);
+            m_weights = new DenseMatrix(numPoints, numPoints);
             PercentNormal = 0.5;
 
             // set up X, Y and weights vector. 
             double sumX = 0;
-            double sumXX = 0;
+            double sumXx = 0;
 
             for (int index = 0; index < numPoints; index++)
             {
                 RegressionPts currentPoint = RegressionPoints[index];
 
-                _mobjX.At(index, 0, currentPoint.MdblX);
+                m_x.At(index, 0, currentPoint.MdblX);
                 sumX += currentPoint.MdblX;
-                sumXX += (currentPoint.MdblX * currentPoint.MdblX);
-                _mobjX.At(index, 1, 1);
+                sumXx += (currentPoint.MdblX * currentPoint.MdblX);
+                m_x.At(index, 1, 1);
 
-                _mobjY.At(index, 0, currentPoint.MdblY);
+                m_y.At(index, 0, currentPoint.MdblY);
                 for (int colNum = 0; colNum < numPoints; colNum++)
                 {
-                    _mobjWeights.At(index, colNum, 0);
+                    m_weights.At(index, colNum, 0);
                 }
-                _mobjWeights.At(index, index, 1);
+                m_weights.At(index, index, 1);
             }
 
-            if (sumX * sumX == numPoints * sumXX)
+            if (Math.Abs(sumX * sumX - numPoints * sumXx) < double.Epsilon)
             {
                 RegressionResult.Intercept = 0;
                 RegressionResult.Slope = 0;
@@ -227,7 +222,7 @@ namespace Regressor.Algorithms
                 throw new Exception("All X values cannot be same for linear regression");
             }
 
-            _mobjXTranspose = _mobjX.Transpose() as DenseMatrix;
+            m_xTranspose = m_x.Transpose() as DenseMatrix;
             CalculateSlopeInterceptEstimates();
             CalculateInitialStdev();
             CalculateProbabilitiesAndWeightMatrix();

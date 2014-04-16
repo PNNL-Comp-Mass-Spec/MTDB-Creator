@@ -6,7 +6,7 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.IO
 {
-    public interface IPHRPReader
+    public interface IPhrpReader
     {
         Options ReaderOptions { get; set; }
 

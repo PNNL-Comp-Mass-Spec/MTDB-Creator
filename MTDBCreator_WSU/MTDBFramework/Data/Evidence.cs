@@ -14,41 +14,41 @@ namespace MTDBFramework.Data
     {
         #region Private Fields
 
-        private MSSpectra m_Spectrum;
+        private MSSpectra m_spectrum;
 
-        private TargetDataSet m_DataSet;
-        private TargetPeptideInfo m_PeptideInfo;
+        private TargetDataSet m_dataSet;
+        private TargetPeptideInfo m_peptideInfo;
 
-        private int m_Id;
-        private int m_Scan;
-        private int m_AnalysisId;
-        private short m_MultiProteinCount;
-        private double m_MonoisotopicMass;
+        private int m_id;
+        private int m_scan;
+        private int m_analysisId;
+        private short m_multiProteinCount;
+        private double m_monoisotopicMass;
         private double m_observedMonoMass;
 
-        private ConsensusTarget m_Parent;
+        private ConsensusTarget m_parent;
 
-        private short m_Charge;
-        private double m_ObservedNet;
-        private double m_PredictedNet;
-        private double m_Mz;
+        private short m_charge;
+        private double m_observedNet;
+        private double m_predictedNet;
+        private double m_mz;
 
-        private string m_Sequence;
-        private string m_CleanPeptide;
+        private string m_sequence;
+        private string m_cleanPeptide;
 
         private double m_delM;
-        private double m_delM_PPM;
+        private double m_delMPpm;
 
         private double m_specProb;
 
         private IList<ProteinInformation> m_proteins;
 
         // SequenceInfo fields
-        private short m_IsSeqInfoExist;
-        private short m_ModificationCount;
-        private string m_ModificationDescription;
-        private double m_SeqInfoMonoisotopicMass;
-        private string m_SeqWithNumericMods;
+        private short m_isSeqInfoExist;
+        private short m_modificationCount;
+        private string m_modificationDescription;
+        private double m_seqInfoMonoisotopicMass;
+        private string m_seqWithNumericMods;
 
         #endregion
 
@@ -59,11 +59,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_Spectrum;
+                return m_spectrum;
             }
             set
             {
-                m_Spectrum = value;
+                m_spectrum = value;
                 OnPropertyChanged("Spectrum");
             }
         }
@@ -71,10 +71,10 @@ namespace MTDBFramework.Data
         //For 3NF:
         public TargetDataSet DataSet
         {
-            get { return m_DataSet; }
+            get { return m_dataSet; }
             set
             {
-                m_DataSet = value;
+                m_dataSet = value;
                 OnPropertyChanged("DataSet");
             }
         }
@@ -82,60 +82,60 @@ namespace MTDBFramework.Data
         // Metadata
         public TargetPeptideInfo PeptideInfo
         {
-            get { return m_PeptideInfo; }
+            get { return m_peptideInfo; }
             set
             {
-                m_PeptideInfo = value;
+                m_peptideInfo = value;
                 OnPropertyChanged("PeptideInfo");
             }
         }
 
         public int Id
         {
-            get { return m_Id; }
+            get { return m_id; }
             set
             {
-                m_Id = value; 
+                m_id = value; 
                 OnPropertyChanged("Id");
             }
         }
 
         public int Scan
         {
-            get { return m_Scan; }
+            get { return m_scan; }
             set
             {
-                m_Scan = value; 
+                m_scan = value; 
                 OnPropertyChanged("Scan");
             }
         }
 
         public int AnalysisId
         {
-            get { return m_AnalysisId; }
+            get { return m_analysisId; }
             set
             {
-                m_AnalysisId = value; 
+                m_analysisId = value; 
                 OnPropertyChanged("AnalysisId");
             }
         }
 
         public short MultiProteinCount
         {
-            get { return m_MultiProteinCount; }
+            get { return m_multiProteinCount; }
             set
             {
-                m_MultiProteinCount = value; 
+                m_multiProteinCount = value; 
                 OnPropertyChanged("MultiProteinCount");
             }
         }
 
         public double MonoisotopicMass
         {
-            get { return m_MonoisotopicMass; }
+            get { return m_monoisotopicMass; }
             set
             {
-                m_MonoisotopicMass = value;
+                m_monoisotopicMass = value;
                 OnPropertyChanged("MonoisotopicMass");
             }
         }
@@ -152,50 +152,50 @@ namespace MTDBFramework.Data
 
         public ConsensusTarget Parent
         {
-            get { return m_Parent; }
+            get { return m_parent; }
             set
             {
-                m_Parent = value; 
+                m_parent = value; 
                 OnPropertyChanged("Parent");
             }
         }
 
         public short Charge
         {
-            get { return m_Charge; }
+            get { return m_charge; }
             set
             {
-                m_Charge = value;
+                m_charge = value;
                 OnPropertyChanged("Charge");
             }
         }
 
         public double ObservedNet
         {
-            get { return m_ObservedNet; }
+            get { return m_observedNet; }
             set
             {
-                m_ObservedNet = value;
+                m_observedNet = value;
                 OnPropertyChanged("ObservedNet");
             }
         }
 
         public double PredictedNet
         {
-            get { return m_PredictedNet; }
+            get { return m_predictedNet; }
             set
             {
-                m_PredictedNet = value;
+                m_predictedNet = value;
                 OnPropertyChanged("PredictedNet");
             }
         }
 
         public double Mz
         {
-            get { return m_Mz; }
+            get { return m_mz; }
             set
             {
-                m_Mz = value;
+                m_mz = value;
                 OnPropertyChanged("Mz");
             }
         }
@@ -214,20 +214,20 @@ namespace MTDBFramework.Data
 
         public string Sequence
         {
-            get { return m_Sequence; }
+            get { return m_sequence; }
             set
             {
-                m_Sequence = value;
+                m_sequence = value;
                 OnPropertyChanged("Sequence");
             }
         }
 
         public string CleanPeptide
         {
-            get { return m_CleanPeptide; }
+            get { return m_cleanPeptide; }
             set
             {
-                m_CleanPeptide = value;
+                m_cleanPeptide = value;
                 OnPropertyChanged("CleanPeptide");
             }
         }
@@ -244,15 +244,15 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("DelM");
             }
         }
-        public double DelM_PPM
+        public double DelMPpm
         {
             get
             {
-                return m_delM_PPM;
+                return m_delMPpm;
             }
             set
             {
-                m_delM_PPM = value;
+                m_delMPpm = value;
                 OnPropertyChanged("DelM_PPM");
             }
         }
@@ -261,50 +261,50 @@ namespace MTDBFramework.Data
 
         public short IsSeqInfoExist
         {
-            get { return m_IsSeqInfoExist; }
+            get { return m_isSeqInfoExist; }
             set
             {
-                m_IsSeqInfoExist = value;
+                m_isSeqInfoExist = value;
                 OnPropertyChanged("IsSeqInfoExist");
             }
         }
 
         public short ModificationCount
         {
-            get { return m_ModificationCount; }
+            get { return m_modificationCount; }
             set
             {
-                m_ModificationCount = value;
+                m_modificationCount = value;
                 OnPropertyChanged("ModificationCount");
             }
         }
 
         public string ModificationDescription
         {
-            get { return m_ModificationDescription; }
+            get { return m_modificationDescription; }
             set
             {
-                m_ModificationDescription = value;
+                m_modificationDescription = value;
                 OnPropertyChanged("ModificationDescription");
             }
         }
 
         public double SeqInfoMonoisotopicMass
         {
-            get { return m_SeqInfoMonoisotopicMass; }
+            get { return m_seqInfoMonoisotopicMass; }
             set
             {
-                m_SeqInfoMonoisotopicMass = value;
+                m_seqInfoMonoisotopicMass = value;
                 OnPropertyChanged("SeqInfoMonoisotopicMass");
             }
         }
 
         public string SeqWithNumericMods
         {
-            get { return m_SeqWithNumericMods; }
+            get { return m_seqWithNumericMods; }
             set
             {
-                m_SeqWithNumericMods = value;
+                m_seqWithNumericMods = value;
                 OnPropertyChanged("SeqWithNumericMods");
             }
         }
@@ -314,7 +314,11 @@ namespace MTDBFramework.Data
         public IList<ProteinInformation> Proteins
         {
             get { return m_proteins; }
-            set { m_proteins = value; }
+            set
+            {
+                m_proteins = value;
+                OnPropertyChanged("Proteins");
+            }
         }
 
         public Evidence()
@@ -363,14 +367,14 @@ namespace MTDBFramework.Data
                 peptideChar[copyToIndex++] = peptideChar[copyFromIndex++];
             }
 
-            string cleanPeptide = new string(peptideChar, startIndex, copyToIndex - startIndex);
+            var cleanPeptide = new string(peptideChar, startIndex, copyToIndex - startIndex);
 
             return cleanPeptide;
         }
 
         public override string ToString()
         {
-            return this.Sequence;
+            return Sequence;
         }
     }
 }

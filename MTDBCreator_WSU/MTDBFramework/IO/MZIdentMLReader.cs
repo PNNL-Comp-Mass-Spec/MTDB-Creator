@@ -9,195 +9,95 @@ using PHRPReader;
 
 namespace MTDBFramework.IO
 {
-    public class MZIdentMLReader : IPHRPReader
+    public class MzIdentMlReader : IPhrpReader
     {
         public Options ReaderOptions { get; set; }
 
-        public MZIdentMLReader(Options options)
+        public MzIdentMlReader(Options options)
         {
             ReaderOptions = options;
         }
 
-        private Dictionary<string, DatabaseSequence> database = new Dictionary<string, DatabaseSequence>();
-        private Dictionary<string, PeptideRef> peptides = new Dictionary<string, PeptideRef>();
-        private Dictionary<string, PeptideEvidence> evidences = new Dictionary<string, PeptideEvidence>();
-        private Dictionary<string, SpectrumIDItem> specItems = new Dictionary<string, SpectrumIDItem>();
+        private readonly Dictionary<string, DatabaseSequence> m_database = new Dictionary<string, DatabaseSequence>();
+        private readonly Dictionary<string, PeptideRef> m_peptides = new Dictionary<string, PeptideRef>();
+        private readonly Dictionary<string, PeptideEvidence> m_evidences = new Dictionary<string, PeptideEvidence>();
+        private readonly Dictionary<string, SpectrumIdItem> m_specItems = new Dictionary<string, SpectrumIdItem>();
 
-        private class SpectrumIDItem
+        private class SpectrumIdItem
         {
-		
-			#region Spectrum ID Private Fields
-            string m_specItemID;
-            bool m_passThreshold;
-            int m_rank;
-            PeptideRef m_peptide;
-            double m_calMZ;
-            double m_experimentalMZ;
-            int m_charge;
-            List<PeptideEvidence> m_pepEvidence;
-            int m_pepEvCount;
-            int m_rawScore;
-            int m_deNovoScore;
-            double m_specEV;
-            double m_EValue;
-            double m_QValue;
-            double m_pepQValue;
-            int m_isoError;
-            int m_scanNum;
-			#endregion
-
 			#region Spectrum ID Public Properties
 			
-            public SpectrumIDItem()
+            public SpectrumIdItem()
             {
-                m_pepEvidence = new List<PeptideEvidence>();
+                PepEvidence = new List<PeptideEvidence>();
             }
 
-            public string SpecItemID
-            {
-                get { return m_specItemID; }
-                set { m_specItemID = value; }
-            }
-            public bool PassThreshold
-            {
-                get { return m_passThreshold; }
-                set { m_passThreshold = value; }
-            }
-            public int Rank
-            {
-                get { return m_rank; }
-                set { m_rank = value; }
-            }
-            public PeptideRef Peptide
-            {
-                get { return m_peptide; }
-                set { m_peptide = value; }
-            }
-            public double CalMZ
-            {
-                get { return m_calMZ; }
-                set { m_calMZ = value; }
-            }
-            public double ExperimentalMZ
-            {
-                get { return m_experimentalMZ; }
-                set { m_experimentalMZ = value; }
-            }
-            public int Charge
-            {
-                get { return m_charge; }
-                set { m_charge = value; }
-            }
-            public List<PeptideEvidence> PepEvidence
-            {
-                get { return m_pepEvidence; }
-                set { m_pepEvidence = value; }
-            }
-            public int PepEvCount
-            {
-                get { return m_pepEvCount; }
-                set { m_pepEvCount = value; }
-            }
-            public int RawScore
-            {
-                get { return m_rawScore; }
-                set { m_rawScore = value; }
-            }
-            public int DeNovoScore
-            {
-                get { return m_deNovoScore; }
-                set { m_deNovoScore = value; }
-            }
-            public double SpecEV
-            {
-                get { return m_specEV; }
-                set { m_specEV = value; }
-            }
-            public double EValue
-            {
-                get { return m_EValue; }
-                set { m_EValue = value; }
-            }
-            public double QValue
-            {
-                get { return m_QValue; }
-                set { m_QValue = value; }
-            }
-            public double PepQValue
-            {
-                get { return m_pepQValue; }
-                set { m_pepQValue = value; }
-            }
-            public int IsoError
-            {
-                get { return m_isoError; }
-                set { m_isoError = value; }
-            }
-            public int ScanNum
-            {
-                get { return m_scanNum; }
-                set { m_scanNum = value; }
-            }
-			#endregion
+            public string SpecItemId { get; set; }
+
+            public bool PassThreshold { get; set; }
+
+            public int Rank { get; set; }
+
+            public PeptideRef Peptide { get; set; }
+
+            public double CalMz { get; set; }
+
+            public double ExperimentalMz { get; set; }
+
+            public int Charge { get; set; }
+
+            public List<PeptideEvidence> PepEvidence { get; private set; }
+
+            public int PepEvCount { get; set; }
+
+            public int RawScore { get; set; }
+
+            public int DeNovoScore { get; set; }
+
+            public double SpecEv { get; set; }
+
+            public double EValue { get; set; }
+
+            public double QValue { get; set; }
+
+            public double PepQValue { get; set; }
+
+            public int IsoError { get; set; }
+
+            public int ScanNum { get; set; }
+
+            #endregion
 			
         }
 
         private class DatabaseSequence
         {
-            string m_accession;
-            int m_length;
-            string m_proteinDescription;
+            public string Accession { get; set; }
 
-            public string Accession
-            {
-                get { return m_accession; }
-                set { m_accession = value; }
-            }
-            public int Length
-            {
-                get { return m_length; }
-                set { m_length = value; }
-            }
-            public string ProteinDescription
-            {
-                get { return m_proteinDescription; }
-                set { m_proteinDescription = value; }
-            }
+            public int Length { get; set; }
+
+            public string ProteinDescription { get; set; }
         }
 
         private class Modification
         {
-            double m_mass;
-            string m_tag;
+            public double Mass { get; set; }
 
-            public double Mass
-            {
-                get { return m_mass; }
-                set { m_mass = value; }
-            }
-            public string Tag
-            {
-                get { return m_tag; }
-                set { m_tag = value; }
-            }
+            public string Tag { get; set; }
         }
 
         private class PeptideRef
         {
-            string m_sequence;
-            Dictionary<int, Modification> m_mods;
+            readonly Dictionary<int, Modification> m_mods;
 
             public PeptideRef()
             {
                 m_mods = new Dictionary<int, Modification>();
             }
-            public string Sequence
-            {
-                get { return m_sequence; }
-                set { m_sequence = value; }
-            }
 
-            public void modsAdd(int location, Modification mod)
+            public string Sequence { get; set; }
+
+            public void ModsAdd(int location, Modification mod)
             {
                 m_mods.Add(location, mod);
             }
@@ -211,49 +111,19 @@ namespace MTDBFramework.IO
 
         private class PeptideEvidence
         {
-            bool m_isDecoy;
-            string m_post;
-            string m_pre;
-            int m_end;
-            int m_start;
-            PeptideRef m_peptide;
-            DatabaseSequence m_dBSeq;
+            public bool IsDecoy { get; set; }
 
-            public bool IsDecoy
-            {
-                get { return m_isDecoy; }
-                set { m_isDecoy = value; }
-            }
-            public string Post
-            {
-                get { return m_post; }
-                set { m_post = value; }
-            }
-            public string Pre
-            {
-                get { return m_pre; }
-                set { m_pre = value; }
-            }
-            public int End
-            {
-                get { return m_end; }
-                set { m_end = value; }
-            }
-            public int Start
-            {
-                get { return m_start; }
-                set { m_start = value; }
-            }
-            public PeptideRef PeptideRef
-            {
-                get { return m_peptide; }
-                set { m_peptide = value; }
-            }
-            public DatabaseSequence DBSeq
-            {
-                get { return m_dBSeq; }
-                set { m_dBSeq = value; }
-            }
+            public string Post { get; set; }
+
+            public string Pre { get; set; }
+
+            public int End { get; set; }
+
+            public int Start { get; set; }
+
+            public PeptideRef PeptideRef { get; set; }
+
+            public DatabaseSequence DBSeq { get; set; }
         }
 
 		// Entry point for MZIdentMLReaders
@@ -276,15 +146,9 @@ namespace MTDBFramework.IO
 		
         public LcmsDataSet Read(string path)
         {
-            XmlReaderSettings XSettings = new XmlReaderSettings();
-            XSettings.IgnoreWhitespace = true;
-            string id;
-            DatabaseSequence dbSeq;
-            PeptideRef pepRef;
-            PeptideEvidence pepEvidence;
-            SpectrumIDItem specItem;
-            StreamReader sr = new StreamReader(path);
-            using (XmlReader reader = XmlReader.Create(sr, XSettings))
+            var xSettings = new XmlReaderSettings {IgnoreWhitespace = true};
+            var sr = new StreamReader(path);
+            using (XmlReader reader = XmlReader.Create(sr, xSettings))
             {
                 reader.Read();
                 while (reader.Read())
@@ -293,9 +157,10 @@ namespace MTDBFramework.IO
                     switch (reader.NodeType)
                     {
                         case XmlNodeType.Element:
+                            string id;
                             if (reader.Name == "Peptide")
                             {
-                                pepRef = new PeptideRef();
+                                var pepRef = new PeptideRef();
                                 id = reader.GetAttribute("id");
                                 reader.ReadToDescendant("PeptideSequence");
                                 reader.Read();
@@ -309,65 +174,80 @@ namespace MTDBFramework.IO
                                     if (reader.NodeType != XmlNodeType.EndElement && reader.Name == "Modification")
                                     {
 
-                                        Modification mod = new Modification();
-                                        mod.Mass = Convert.ToDouble(reader.GetAttribute("monoisotopicMassDelta"));
-                                        KeyValuePair<int, Modification> Mods = new KeyValuePair<int, Modification>(Convert.ToInt32(reader.GetAttribute("location")),
+                                        var mod = new Modification
+                                        {
+                                            Mass = Convert.ToDouble(reader.GetAttribute("monoisotopicMassDelta"))
+                                        };
+                                        var mods = new KeyValuePair<int, Modification>(Convert.ToInt32(reader.GetAttribute("location")),
                                                                                                                      mod);
                                         // Read down to get the name of the modification, then add the modification to the peptide reference
                                         reader.Read();
 
                                         mod.Tag = reader.GetAttribute("name");
-                                        pepRef.modsAdd(Mods.Key, Mods.Value);
+                                        pepRef.ModsAdd(mods.Key, mods.Value);
 
                                     }
                                     reader.Read();
                                 }
-                                peptides.Add(id, pepRef);
+                                if (id != null)
+                                {
+                                    m_peptides.Add(id, pepRef);
+                                }
                             }
                             else if (reader.Name == "DBSequence")
                             {
-                                dbSeq = new DatabaseSequence();
-                                dbSeq.Length = Convert.ToInt32(reader.GetAttribute("length"));
-                                dbSeq.Accession = reader.GetAttribute("accession");
+                                var dbSeq = new DatabaseSequence
+                                {
+                                    Length = Convert.ToInt32(reader.GetAttribute("length")),
+                                    Accession = reader.GetAttribute("accession")
+                                };
                                 id = reader.GetAttribute("id");
                                 reader.ReadToDescendant("cvParam");
                                 dbSeq.ProteinDescription = reader.GetAttribute("value");//.Split(' ')[0];
-                                database.Add(id, dbSeq);
+                                if (id != null)
+                                {
+                                    m_database.Add(id, dbSeq);
+                                }
                             }
                             else if (reader.Name == "PeptideEvidence")
                             {
-                                pepEvidence = new PeptideEvidence();
-                                pepEvidence.IsDecoy = Convert.ToBoolean(reader.GetAttribute("isDecoy"));
-                                pepEvidence.Post = reader.GetAttribute("post");
-                                pepEvidence.Pre = reader.GetAttribute("pre");
-                                pepEvidence.End = Convert.ToInt32(reader.GetAttribute("end"));
-                                pepEvidence.Start = Convert.ToInt32(reader.GetAttribute("start"));
-                                pepEvidence.PeptideRef = peptides[reader.GetAttribute("peptide_ref")];
-                                pepEvidence.DBSeq = database[reader.GetAttribute("dBSequence_ref")];
-                                evidences.Add(reader.GetAttribute("id"), pepEvidence);
+                                var pepEvidence = new PeptideEvidence
+                                {
+                                    IsDecoy = Convert.ToBoolean(reader.GetAttribute("isDecoy")),
+                                    Post = reader.GetAttribute("post"),
+                                    Pre = reader.GetAttribute("pre"),
+                                    End = Convert.ToInt32(reader.GetAttribute("end")),
+                                    Start = Convert.ToInt32(reader.GetAttribute("start")),
+                                    PeptideRef = m_peptides[reader.GetAttribute("peptide_ref")],
+                                    DBSeq = m_database[reader.GetAttribute("dBSequence_ref")]
+                                };
+                                m_evidences.Add(reader.GetAttribute("id"), pepEvidence);
                             }
                             else if (reader.Name == "SpectrumIdentificationResult")
                             {
-                                List<SpectrumIDItem> specRes = new List<SpectrumIDItem>();
+                                var specRes = new List<SpectrumIdItem>();
 
                                 while (reader.NodeType != XmlNodeType.EndElement || reader.Name != "SpectrumIdentificationResult")
                                 {
                                     if (reader.NodeType != XmlNodeType.EndElement &&
                                         reader.Name == "SpectrumIdentificationItem")
                                     {
-                                        specItem = new SpectrumIDItem();
-                                        specItem.PepEvCount = 0;
-                                        specItem.SpecItemID = reader.GetAttribute("id");
-                                        specItem.PassThreshold = Convert.ToBoolean(reader.GetAttribute("passThreshold"));
-                                        specItem.Rank = Convert.ToInt32(reader.GetAttribute("rank"));
-                                        specItem.Peptide = peptides[reader.GetAttribute("peptide_ref")];
-                                        specItem.CalMZ = Convert.ToDouble(reader.GetAttribute("calculatedMassToCharge"));
-                                        specItem.ExperimentalMZ = Convert.ToDouble(reader.GetAttribute("experimentalMassToCharge"));
-                                        specItem.Charge = Convert.ToInt32(reader.GetAttribute("chargeState"));
+                                        var specItem = new SpectrumIdItem
+                                        {
+                                            PepEvCount = 0,
+                                            SpecItemId = reader.GetAttribute("id"),
+                                            PassThreshold = Convert.ToBoolean(reader.GetAttribute("passThreshold")),
+                                            Rank = Convert.ToInt32(reader.GetAttribute("rank")),
+                                            Peptide = m_peptides[reader.GetAttribute("peptide_ref")],
+                                            CalMz = Convert.ToDouble(reader.GetAttribute("calculatedMassToCharge")),
+                                            ExperimentalMz =
+                                                Convert.ToDouble(reader.GetAttribute("experimentalMassToCharge")),
+                                            Charge = Convert.ToInt32(reader.GetAttribute("chargeState"))
+                                        };
                                         reader.ReadToDescendant("PeptideEvidenceRef");                                        
                                         do
                                         {                                                                                       
-                                            specItem.PepEvidence.Add(evidences[reader.GetAttribute("peptideEvidence_ref")]);
+                                            specItem.PepEvidence.Add(m_evidences[reader.GetAttribute("peptideEvidence_ref")]);
                                             specItem.PepEvCount++;                                            
                                             reader.Read();
                                         }
@@ -376,7 +256,7 @@ namespace MTDBFramework.IO
                                         reader.ReadToFollowing("cvParam");
                                         specItem.DeNovoScore = Convert.ToInt32(reader.GetAttribute("value"));
                                         reader.ReadToFollowing("cvParam");
-                                        specItem.SpecEV = Convert.ToDouble(reader.GetAttribute("value"));
+                                        specItem.SpecEv = Convert.ToDouble(reader.GetAttribute("value"));
                                         reader.ReadToFollowing("cvParam");
                                         specItem.EValue = Convert.ToDouble(reader.GetAttribute("value"));
                                         reader.ReadToFollowing("cvParam");
@@ -393,7 +273,7 @@ namespace MTDBFramework.IO
                                         foreach (var item in specRes)
                                         {
                                             item.ScanNum = Convert.ToInt32(reader.GetAttribute("value"));
-                                            specItems.Add(item.SpecItemID, item);
+                                            m_specItems.Add(item.SpecItemId, item);
                                         }
                                     }
                                 }
@@ -402,224 +282,172 @@ namespace MTDBFramework.IO
                     }
                 }
             }
-            List<MSGFPlusResult> results = new List<MSGFPlusResult>();
-            MSGFPlusTargetFilter filter = new MSGFPlusTargetFilter(ReaderOptions);
+            var results = new List<MsgfPlusResult>();
+            var filter = new MsgfPlusTargetFilter(ReaderOptions);
             
             int i = 1;
 			// Go through each Spectrum ID and map it to an MSGF+ result
-            foreach (KeyValuePair<string, SpectrumIDItem> item in specItems)
+            foreach (KeyValuePair<string, SpectrumIdItem> item in m_specItems)
             {
-                MSGFPlusResult result = new MSGFPlusResult();
-                result.AnalysisId = i;
-                result.Charge = Convert.ToInt16(item.Value.Charge);
-                result.CleanPeptide = item.Value.Peptide.Sequence;
-                result.DeNovoScore = item.Value.DeNovoScore;
-                result.EValue = item.Value.EValue;
-                result.Fdr = item.Value.QValue;
-                result.IsotopeError = item.Value.IsoError;
-
-                result.MSGFScore = item.Value.RawScore;
-                result.MultiProteinCount = Convert.ToInt16(item.Value.PepEvCount);
-
-                result.MonoisotopicMass = clsPeptideMassCalculator.ConvoluteMass(item.Value.CalMZ, item.Value.Charge, 0);
-                result.PepQValue = item.Value.PepQValue;
-                result.ObservedMonoisotopicMass = clsPeptideMassCalculator.ConvoluteMass(item.Value.ExperimentalMZ, item.Value.Charge, 0);
+                var result = new MsgfPlusResult
+                {
+                    AnalysisId = i,
+                    Charge = Convert.ToInt16(item.Value.Charge),
+                    CleanPeptide = item.Value.Peptide.Sequence,
+                    DeNovoScore = item.Value.DeNovoScore,
+                    EValue = item.Value.EValue,
+                    Fdr = item.Value.QValue,
+                    IsotopeError = item.Value.IsoError,
+                    MsgfScore = item.Value.RawScore,
+                    MultiProteinCount = Convert.ToInt16(item.Value.PepEvCount),
+                    MonoisotopicMass = clsPeptideMassCalculator.ConvoluteMass(item.Value.CalMz, item.Value.Charge, 0),
+                    PepQValue = item.Value.PepQValue,
+                    ObservedMonoisotopicMass =
+                        clsPeptideMassCalculator.ConvoluteMass(item.Value.ExperimentalMz, item.Value.Charge, 0)
+                };
 
                 result.DelM = result.ObservedMonoisotopicMass - result.MonoisotopicMass;
-                result.DelM_PPM = clsPeptideMassCalculator.MassToPPM(result.DelM, result.ObservedMonoisotopicMass);
+                result.DelMPpm = clsPeptideMassCalculator.MassToPPM(result.DelM, result.ObservedMonoisotopicMass);
 
                 result.Mz = clsPeptideMassCalculator.ConvoluteMass(result.ObservedMonoisotopicMass, 0, result.Charge);
-                result.PrecursorMZ = item.Value.ExperimentalMZ;
+                result.PrecursorMz = item.Value.ExperimentalMz;
 
                 result.QValue = item.Value.QValue;
                 result.Scan = item.Value.ScanNum;
 
-                result.SpecEValue = item.Value.SpecEV;
-                result.SpecProb = item.Value.SpecEV;
+                result.SpecEValue = item.Value.SpecEv;
+                result.SpecProb = item.Value.SpecEv;
                 result.ModificationCount = Convert.ToInt16(item.Value.Peptide.Mods.Count);
 
                 var evidence = item.Value.PepEvidence[0];
 
-                //foreach (var thing in item.Value.PepEvidence)
-                //{
-                //    var protein = new ProteinInformation();
-                //    protein.ProteinName = thing.DBSeq.Accession;
-                //    protein.ResidueStart = thing.Start;
-                //    protein.ResidueEnd = thing.End;
-                //    int termNumber = 0;
-                //    if (evidence.Pre[0] == '-')
-                //    {
-                //        if (evidence.Post[0] == '-')
-                //        {
-                //            protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNandCCTerminus;
-                //            protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
-                //        }
-                //        else
-                //        {
-                //            protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNTerminus;
+                result.Sequence = evidence.Pre + "." + item.Value.Peptide.Sequence + "." + evidence.Post;
+                result.NumTrypticEnds = MsgfPlusResult.CalculateTrypticState(result.Sequence);
+                result.SeqWithNumericMods = null;
 
-                //        }
-                //    }
-                //    else if (evidence.Post[0] == '-')
-                //    {
-                //        protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinCTerminus;
-                //    }
-                //    else
-                //    {
-                //        protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.None;
-                //    }
-                //    result.Proteins.Add(protein);
-                //}
+                result.Reference = evidence.DBSeq.Accession;
 
-                //List<string> refSeen = new List<string>();
-                //foreach (var evidence in item.Value.PepEvidence)
-                //{
-                    result.Sequence = evidence.Pre + "." + item.Value.Peptide.Sequence + "." + evidence.Post;
-                    result.NumTrypticEnds = MSGFPlusResult.CalculateTrypticState(result.Sequence);
-                    result.SeqWithNumericMods = null;
-                    /*foreach(var refs in refSeen)
+                if (item.Value.Peptide.Mods.Count != 0)
+                {
+                    int j = 0;
+                    string numModSeq = evidence.Pre + ".";
+                    foreach (KeyValuePair<int, Modification> mod in item.Value.Peptide.Mods)
                     {
-                        if(evidence.DBSeq.Accession.Contains(refs) || refs.Contains(evidence.DBSeq.Accession))
+                        if (mod.Value.Tag != "Carbamidomethyl")
                         {
-                            seen = true;
-                            break;
+                            for (; j < mod.Key; j++)
+                            {
+                                numModSeq = numModSeq + item.Value.Peptide.Sequence[j];
+                            }
+                            if (mod.Value.Mass > 0)
+                            {
+                                numModSeq += "+";
+                            }
+                            else
+                            {
+                                numModSeq += "-";
+                            }
+                            numModSeq = numModSeq + mod.Value.Mass;
                         }
                     }
-                    if(seen)
+                    for (; j < item.Value.Peptide.Sequence.Length; j++)
                     {
-                        continue;
+                        numModSeq = numModSeq + item.Value.Peptide.Sequence[j];
                     }
-                    refSeen.Add(evidence.DBSeq.Accession);
-                     */
-                    result.Reference = evidence.DBSeq.Accession;
+                    numModSeq = numModSeq + "." + evidence.Post;
+                    result.SeqWithNumericMods = numModSeq;
+                }
+                else
+                {
+                    result.SeqWithNumericMods = result.Sequence;
+                }
 
-                    if (item.Value.Peptide.Mods.Count != 0)
+                result.PeptideInfo = new TargetPeptideInfo
+                {
+                    Peptide = result.Sequence,
+                    CleanPeptide = result.CleanPeptide,
+                    PeptideWithNumericMods = result.SeqWithNumericMods
+                };
+                i++;
+
+                // If it passes the filter, it needs to be added to the final results
+                if (!filter.ShouldFilter(result))
+                {
+                    result.DataSet = new TargetDataSet { Path = path };
+                    result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
+                    result.ModificationDescription = null;
+
+                    foreach (var thing in item.Value.PepEvidence)
                     {
-                        string numModSeq = null;
-                        int j = 0;
-                        numModSeq = evidence.Pre + ".";
+                        var protein = new ProteinInformation
+                        {
+                            ProteinName = thing.DBSeq.Accession,
+                            ResidueStart = thing.Start,
+                            ResidueEnd = thing.End
+                        };
+                        if (evidence.Pre[0] == '-')
+                        {
+                            if (evidence.Post[0] == '-')
+                            {
+                                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNandCCTerminus;
+                                protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
+                            }
+                            else
+                            {
+                                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNTerminus;
+
+                            }
+                        }
+                        else if (evidence.Post[0] == '-')
+                        {
+                            protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinCTerminus;
+                        }
+                        else
+                        {
+                            protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.None;
+                        }
+                        switch (result.NumTrypticEnds)
+                        {
+                            case 0:
+                                protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.NonSpecific;
+                                break;
+                            case 1:
+                                protein.CleavageState =
+                                    clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Partial;
+                                break;
+                            case 2:
+                                protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
+                                break;
+                            default:
+                                //ERROR!!! Should never be more than 2 or less than 0 tryptic ends!\
+                                break;
+                        }
+                        result.Proteins.Add(protein);
+                    }
+
+                    if (result.ModificationCount != 0)
+                    {
+
                         foreach (KeyValuePair<int, Modification> mod in item.Value.Peptide.Mods)
                         {
                             if (mod.Value.Tag != "Carbamidomethyl")
                             {
-                                for (; j < mod.Key; j++)
-                                {
-                                    numModSeq = numModSeq + item.Value.Peptide.Sequence[j];
-                                }
-                                if(mod.Value.Mass > 0)    
-                                {
-                                        numModSeq += "+";
-                                }
-                                else
-                                {
-                                    numModSeq += "-";
-                                }
-                                numModSeq = numModSeq + mod.Value.Mass;
-                                //numModSeq = numModSeqPre;
 
+                                result.SeqInfoMonoisotopicMass += mod.Value.Mass;
                             }
+
+                            result.ModificationDescription += mod.Value.Tag + ":" + mod.Key + "  ";
                         }
-                        for (; j < item.Value.Peptide.Sequence.Length; j++)
-                        {
-                            numModSeq = numModSeq + item.Value.Peptide.Sequence[j];
-                        }
-                        numModSeq = numModSeq + "." + evidence.Post;
-                        result.SeqWithNumericMods = numModSeq;
                     }
-                    else
-                    {
-                        result.SeqWithNumericMods = result.Sequence;
-                    }
-
-                    result.PeptideInfo = new TargetPeptideInfo
-                    {
-                        Peptide = result.Sequence,
-                        CleanPeptide = result.CleanPeptide,
-                        PeptideWithNumericMods = result.SeqWithNumericMods
-                    };
-                    i++;
-
-                    // If it passes the filter, it needs to be added to the final results
-                    if (!filter.ShouldFilter(result))
-                    {
-                        result.DataSet = new TargetDataSet { Path = path };
-                        result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
-                        result.ModificationDescription = null;
-
-                        foreach (var thing in item.Value.PepEvidence)
-                        {
-                            var protein = new ProteinInformation
-                            {
-                                ProteinName = thing.DBSeq.Accession,
-                                ResidueStart = thing.Start,
-                                ResidueEnd = thing.End
-                            };
-                            if (evidence.Pre[0] == '-')
-                            {
-                                if (evidence.Post[0] == '-')
-                                {
-                                    protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNandCCTerminus;
-                                    protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
-                                }
-                                else
-                                {
-                                    protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNTerminus;
-
-                                }
-                            }
-                            else if (evidence.Post[0] == '-')
-                            {
-                                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinCTerminus;
-                            }
-                            else
-                            {
-                                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.None;
-                            }
-                            switch (result.NumTrypticEnds)
-                            {
-                                case 0:
-                                    protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.NonSpecific;
-                                    break;
-                                case 1:
-                                    protein.CleavageState =
-                                        clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Partial;
-                                    break;
-                                case 2:
-                                    protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
-                                    break;
-                                default:
-                                    //ERROR!!! Should never be more than 2 or less than 0 tryptic ends!\
-                                    break;
-                            }
-                            result.Proteins.Add(protein);
-                        }
-
-                        if (result.ModificationCount != 0)
-                        {
-                            
-                            foreach (KeyValuePair<int, Modification> mod in item.Value.Peptide.Mods)
-                            {
-                                if (mod.Value.Tag != "Carbamidomethyl")
-                                {
-                                    
-                                    result.SeqInfoMonoisotopicMass += mod.Value.Mass;
-                                }
-
-                                result.ModificationDescription += mod.Value.Tag + ":" + mod.Key + "  ";
-                            }
-                        }
-                        results.Add(result);
-                    }
-                //}
+                    results.Add(result);
+                }
             }
-
-
 
             // Calculate NET for the results
             AnalysisReaderHelper.CalculateObservedNet(results);
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
 
-            return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MzIdentMl, results);
+            return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MZIdentML, results);
         }
     }
 }

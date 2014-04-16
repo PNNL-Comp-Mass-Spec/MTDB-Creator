@@ -10,17 +10,17 @@ namespace MTDBFramework.Data
     {
         #region Private Fields
 
-        private int m_GroupId;
-        private double m_BScore;
-        private double m_DeltaCn2;
-        private double m_LogIntensity;
-        private double m_LogPeptideEValue;
-        private short m_NumberYIons;
-        private short m_NumberBIons;
-        private double m_PeptideHyperscore;
-        private double m_YScore;
-        private short m_TrypticState;
-        private double m_HighNormalizedScore;
+        private int m_groupId;
+        private double m_bScore;
+        private double m_deltaCn2;
+        private double m_logIntensity;
+        private double m_logPeptideEValue;
+        private short m_numberYIons;
+        private short m_numberBIons;
+        private double m_peptideHyperscore;
+        private double m_yScore;
+        private short m_trypticState;
+        private double m_highNormalizedScore;
 
         #endregion
 
@@ -30,11 +30,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_GroupId;
+                return m_groupId;
             }
             set
             {
-                m_GroupId = value;
+                m_groupId = value;
                 OnPropertyChanged("GroupId");
             }
         }
@@ -43,11 +43,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_BScore;
+                return m_bScore;
             }
             set
             {
-                m_BScore = value;
+                m_bScore = value;
                 OnPropertyChanged("BScore");
             }
         }
@@ -56,11 +56,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_DeltaCn2;
+                return m_deltaCn2;
             }
             set
             {
-                m_DeltaCn2 = value;
+                m_deltaCn2 = value;
                 OnPropertyChanged("DeltaCn2");
             }
         }
@@ -69,11 +69,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_LogIntensity;
+                return m_logIntensity;
             }
             set
             {
-                m_LogIntensity = value;
+                m_logIntensity = value;
                 OnPropertyChanged("LogIntensity");
             }
         }
@@ -82,11 +82,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_LogPeptideEValue;
+                return m_logPeptideEValue;
             }
             set
             {
-                m_LogPeptideEValue = value;
+                m_logPeptideEValue = value;
                 OnPropertyChanged("LogPeptideEValue");
             }
         }
@@ -95,11 +95,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_NumberYIons;
+                return m_numberYIons;
             }
             set
             {
-                m_NumberYIons = value;
+                m_numberYIons = value;
                 OnPropertyChanged("NumberYIons");
             }
         }
@@ -108,11 +108,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_NumberBIons;
+                return m_numberBIons;
             }
             set
             {
-                m_NumberBIons = value;
+                m_numberBIons = value;
                 OnPropertyChanged("NumberBIons");
             }
         }
@@ -121,11 +121,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_PeptideHyperscore;
+                return m_peptideHyperscore;
             }
             set
             {
-                m_PeptideHyperscore = value;
+                m_peptideHyperscore = value;
                 OnPropertyChanged("PeptideHyperscore");
             }
         }
@@ -134,11 +134,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_YScore;
+                return m_yScore;
             }
             set
             {
-                m_YScore = value;
+                m_yScore = value;
                 OnPropertyChanged("YScore");
             }
         }
@@ -147,11 +147,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_TrypticState;
+                return m_trypticState;
             }
             set
             {
-                m_TrypticState = value;
+                m_trypticState = value;
                 OnPropertyChanged("TrypticState");
             }
         }
@@ -160,11 +160,11 @@ namespace MTDBFramework.Data
         {
             get
             {
-                return m_HighNormalizedScore;
+                return m_highNormalizedScore;
             }
             set
             {
-                m_HighNormalizedScore = value;
+                m_highNormalizedScore = value;
                 OnPropertyChanged("HighNormalizedScore");
             }
         }
