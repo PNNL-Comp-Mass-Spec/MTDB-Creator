@@ -17,6 +17,7 @@ namespace MTDBFramework.Algorithms.Clustering
         {
             Evidences = new List<Evidence>();
             Proteins = new List<ProteinInformation>();
+            Charges = new List<int>();
         }
 
         #region Private fields
@@ -28,7 +29,8 @@ namespace MTDBFramework.Algorithms.Clustering
         private string m_sequence;
         private TargetDataSet m_dataset;
         private IList<Evidence> m_evidences;
-        private IList<ProteinInformation> m_proteins; 
+        private IList<ProteinInformation> m_proteins;
+        private IList<int> m_charges; 
         #endregion
 
         #region Public Properties
@@ -120,6 +122,16 @@ namespace MTDBFramework.Algorithms.Clustering
             {
                 m_proteins = value;
                 OnPropertyChanged("Proteins");
+            }
+        }
+
+        public IList<int> Charges
+        {
+            get { return m_charges; }
+            set
+            {
+                m_charges = value;
+                OnPropertyChanged("Charges");
             }
         }
         #endregion

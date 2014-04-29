@@ -24,6 +24,12 @@ namespace MTDBFramework.Algorithms.Clustering
                 }
 
                 targetMap[sequence].AddTarget(t);
+
+                if (!targetMap[sequence].Charges.Contains(t.Charge))
+                {
+                    targetMap[sequence].Charges.Add(t.Charge);
+                }
+
                 foreach (ProteinInformation protein in t.Proteins)
                 {
                     if (!targetMap[sequence].Proteins.Contains(protein))
