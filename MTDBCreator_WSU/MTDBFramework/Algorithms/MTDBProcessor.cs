@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Algorithms.Clustering;
@@ -145,10 +146,30 @@ namespace MTDBFramework.Algorithms
                 }
                 //Convert the list of evidences to UMCLights for LCMS to use as alignee
                 //Align the LCMS
-                Console.WriteLine("Aligning\n");
                 var options = new LcmsWarpAlignmentOptions{AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP};
                 alignmentData.Add(lcmsAligner.AlignFeatures(massTagLightTargets, umcDataset, options));
-                Console.WriteLine("Aligning\n");
+            }
+            int alignmentNum = 1;
+            foreach (var alignment in alignmentData)
+            {
+                
+                string filePath = string.Format("C:\\alignmentResults\\results{0}.csv", alignmentNum);
+
+                using (var write = new StreamWriter(filePath))
+                {
+                    write.WriteLine("Linear Net Rsquared, Alignment Time Scan, Alignment Scan Output, Alignment Net Output");
+                    write.WriteLine(string.Format("{0}, {1}, {2}, {3}", alignment.NetRsquared,
+                        alignment.AlignmentFunction.NetFuncTimeInput[0],
+                        alignment.AlignmentFunction.NetFuncTimeOutput[0], 
+                        alignment.AlignmentFunction.NetFuncNetOutput[0]));
+                    for (int line = 1; line < alignment.AlignmentFunction.NetFuncTimeInput.Count; line++)
+                    {
+                        write.WriteLine(string.Format(", {0}, {1}, {2}", 
+                         alignment.AlignmentFunction.NetFuncTimeInput[line],
+                         alignment.AlignmentFunction.NetFuncTimeOutput[line],
+                         alignment.AlignmentFunction.NetFuncNetOutput[line])); 
+                    }
+                }
             }
 
             return targetDatabase;
