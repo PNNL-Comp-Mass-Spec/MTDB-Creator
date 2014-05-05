@@ -7,7 +7,6 @@
 */*/obj/
 */*/bin/
 packages/
-data/QC_Shew_DeconTools/
 */builds
-MTDBCreator_WSU/MTDBCreatorInstall/Application Files/
-MTDBCreator_WSU/MTDBCreatorInstall/setup.exe
+MTDBCreatorInstall/Application Files/
+MTDBCreatorInstall/setup.exe
