@@ -1,7 +1,6 @@
 ﻿#region Namespaces
 
 using System.Collections.Generic;
-using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Data;
 
 #endregion
@@ -25,7 +24,7 @@ namespace MTDBFramework.Database
                     session.CreateCriteria<ConsensusTarget>().List(readConsensus);
                 }
             }
-            foreach(ConsensusTarget evidence in readConsensus)
+            foreach(var evidence in readConsensus)
             {
                 reader.ConsensusTargets.Add(evidence);
             }

@@ -1,7 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
 using MTDBFramework.Data;
 
-
 namespace MTDBFramework.Database
 {
     class OptionsMap : ClassMap<Options>

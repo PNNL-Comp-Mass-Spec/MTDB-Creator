@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Microsoft.Win32;
 using MTDBCreator.Commands;
-using MTDBCreator.Helpers.BackgroundWork;
-using MTDBCreator.Windows;
-using MTDBFramework.Database;
 using MTDBFramework.UI;
 
 namespace MTDBCreator.ViewModels
@@ -16,28 +9,37 @@ namespace MTDBCreator.ViewModels
     {
         #region Private Fields
 
-        private ICommand m_CreateDatabaseCommand;
-        private ICommand m_RefreshCommand;
+        private SaveFileDialog m_saveDatabaseDialog; 
+        private ICommand m_createDatabaseCommand;
+        private ICommand m_refreshCommand;
 
-        private AnalysisJobViewModel m_AnalysisJobViewModel;
-        private DatasetPlotViewModel m_DatasetPlotViewModel;
-        private StatPlotViewModel m_StatPlotViewModel;
-        private TargetTreeViewModel m_TargetTreeViewModel;
+        private AnalysisJobViewModel m_analysisJobViewModel;
+        private DatasetPlotViewModel m_datasetPlotViewModel;
+        private StatPlotViewModel m_statPlotViewModel;
+        private TargetTreeViewModel m_targetTreeViewModel;
 
         #endregion
 
         #region Public Properties
 
+        public WorkspaceViewModel()
+        {
+            m_saveDatabaseDialog        = new SaveFileDialog();
+            m_saveDatabaseDialog.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
+            m_saveDatabaseDialog.Title  = "Save to MTDB";
+            m_saveDatabaseDialog.RestoreDirectory = true;
+        }
+
         public ICommand CreateDatabaseCommand
         {
             get
             {
-                if (m_CreateDatabaseCommand == null)
+                if (m_createDatabaseCommand == null)
                 {
-                    m_CreateDatabaseCommand = new RelayCommand(param => CreateDatabase());
+                    m_createDatabaseCommand = new RelayCommand(param => CreateDatabase());
                 }
 
-                return m_CreateDatabaseCommand;
+                return m_createDatabaseCommand;
             }
         }
 
@@ -45,12 +47,12 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                if (m_RefreshCommand == null)
+                if (m_refreshCommand == null)
                 {
-                    m_RefreshCommand = new RelayCommand(param => Refresh());
+                    m_refreshCommand = new RelayCommand(param => Refresh());
                 }
 
-                return m_RefreshCommand;
+                return m_refreshCommand;
             }
         }
 
@@ -58,11 +60,11 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                return m_AnalysisJobViewModel;
+                return m_analysisJobViewModel;
             }
             set
             {
-                m_AnalysisJobViewModel = value;
+                m_analysisJobViewModel = value;
                 OnPropertyChanged("AnalysisJobViewModel");
             }
         }
@@ -71,11 +73,11 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                return m_DatasetPlotViewModel;
+                return m_datasetPlotViewModel;
             }
             private set
             {
-                m_DatasetPlotViewModel = value;
+                m_datasetPlotViewModel = value;
                 OnPropertyChanged("DatasetPlotViewModel");
             }
         }
@@ -84,11 +86,11 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                return m_StatPlotViewModel;
+                return m_statPlotViewModel;
             }
             private set
             {
-                m_StatPlotViewModel = value;
+                m_statPlotViewModel = value;
                 OnPropertyChanged("StatPlotViewModel");
             }
         }
@@ -97,11 +99,11 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                return m_TargetTreeViewModel;
+                return m_targetTreeViewModel;
             }
             private set
             {
-                m_TargetTreeViewModel = value;
+                m_targetTreeViewModel = value;
                 OnPropertyChanged("TargetTreeViewModel");
             }
         }
@@ -112,38 +114,34 @@ namespace MTDBCreator.ViewModels
 
         private void Refresh()
         {
-            this.AnalysisJobViewModel.ProcessAnalysisTargets();
-            this.AnalysisJobViewModel.ProcessAnalysisDatabase();
+            AnalysisJobViewModel.ProcessAnalysisTargets();
+            AnalysisJobViewModel.ProcessAnalysisDatabase();
 
-            this.UpdateDataViewModels();
+            UpdateDataViewModels();
         }
 
         private void CreateDatabase()
         {
-            SaveFileDialog dlg = new SaveFileDialog();
 
-            dlg.Filter = "Mass Tag Database (*.db)|*.db|All Files (*.*)|*.*";
-            dlg.Title = "Save to MTDB";
-            dlg.RestoreDirectory = true;
 
-            if (dlg.ShowDialog() == true)
+            if (m_saveDatabaseDialog.ShowDialog() == true)
             {
-                this.AnalysisJobViewModel.SaveAnalysisDatabase(dlg.FileName);
+                AnalysisJobViewModel.SaveAnalysisDatabase(m_saveDatabaseDialog.FileName);
             }
         }
 
         private void ReadDatabase()
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            var dlg = new OpenFileDialog();
 
-            dlg.Filter = "Mass Tag Database (*.db)|*.db|AllFile (*.*)|*.*";
+            dlg.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|AllFile (*.*)|*.*";
             dlg.Title = "Load MTDB";
 
             dlg.RestoreDirectory = true;
 
             if(dlg.ShowDialog() == true)
             {
-                this.AnalysisJobViewModel.ProcessAnalysisDatabase();//dlg.FileName);
+                AnalysisJobViewModel.ProcessAnalysisDatabase();//dlg.FileName);
             }
         }
 
@@ -153,24 +151,24 @@ namespace MTDBCreator.ViewModels
 
         public void UpdateDataViewModels()
         {
-            if (this.DatasetPlotViewModel == null)
+            if (DatasetPlotViewModel == null)
             {
-                this.DatasetPlotViewModel = new DatasetPlotViewModel(this.AnalysisJobViewModel);
+                DatasetPlotViewModel = new DatasetPlotViewModel(AnalysisJobViewModel);
             }
             else
             {
-                this.DatasetPlotViewModel.UpdatePlotViewModel(this.AnalysisJobViewModel);
+                DatasetPlotViewModel.UpdatePlotViewModel(AnalysisJobViewModel);
             }
 
-            this.TargetTreeViewModel = new TargetTreeViewModel(this.AnalysisJobViewModel);
-            this.StatPlotViewModel = new StatPlotViewModel(this.AnalysisJobViewModel);
+            TargetTreeViewModel = new TargetTreeViewModel(AnalysisJobViewModel);
+            StatPlotViewModel = new StatPlotViewModel(AnalysisJobViewModel);
         }
 
         #endregion
 
         public WorkspaceViewModel(AnalysisJobViewModel analysisJobViewModel)
         {
-            this.AnalysisJobViewModel = analysisJobViewModel;
+            AnalysisJobViewModel = analysisJobViewModel;
 
             UpdateDataViewModels();
         }

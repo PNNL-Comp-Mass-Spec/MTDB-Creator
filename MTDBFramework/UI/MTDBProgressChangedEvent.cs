@@ -9,7 +9,6 @@ namespace MTDBFramework.UI
     public class MtdbProgressChangedEventArgs : EventArgs
     {
         public MtdbProgressChangedEventArgs(int current, int total)
-            : base()
         {
             Current = current;
             Total = total;

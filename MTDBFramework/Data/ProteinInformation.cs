@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MTDBFramework.Algorithms.Clustering;
 using PHRPReader;
 
 namespace MTDBFramework.Data

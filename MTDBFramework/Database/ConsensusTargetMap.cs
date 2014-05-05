@@ -1,7 +1,7 @@
 ﻿#region Namespaces
 
 using FluentNHibernate.Mapping;
-using MTDBFramework.Algorithms.Clustering;
+using MTDBFramework.Data;
 
 #endregion
 

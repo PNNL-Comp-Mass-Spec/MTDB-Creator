@@ -1,36 +1,37 @@
 ﻿#region Namespaces
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Windows;
 using MTDBFramework.Algorithms;
-using MTDBFramework.Data;
 using MTDBFramework.Database;
 
 #endregion
 
 namespace MTDBCreator.Helpers.BackgroundWork
 {
-    public class MTDBProcessorBackgroundWorkHelper : IBackgroundWorkHelper
+    public sealed class MtdbProcessorBackgroundWorkHelper : IBackgroundWorkHelper
     {
-        public MTDBProcessorBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel)
+        private readonly AnalysisJobViewModel m_AnalysisJobViewModel;
+
+        public MtdbProcessorBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel)
         {
-            this.m_AnalysisJobViewModel = analysisJobViewModel;
+            m_AnalysisJobViewModel = analysisJobViewModel;
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            MtdbProcessor mtdbProcessor = new MtdbProcessor(this.m_AnalysisJobViewModel.Options);
-
-            this.HostProcessWindow.MainBackgroundWorker.ReportProgress(0);
+            var mtdbProcessor = new MtdbProcessor(m_AnalysisJobViewModel.Options);
+            mtdbProcessor.AlignmentComplete +=  mtdbProcessor_AlignmentComplete;
+            HostProcessWindow.MainBackgroundWorker.ReportProgress(0);
 
             try
             {
-                e.Result = mtdbProcessor.Process(this.m_AnalysisJobViewModel.AnalysisJobItems.Select(job => job.DataSet).ToList());
+
+                e.Result = mtdbProcessor.Process(m_AnalysisJobViewModel.AnalysisJobItems.Select(job => job.DataSet).ToList());
             }
             catch (Exception ex)
             {
@@ -38,16 +39,44 @@ namespace MTDBCreator.Helpers.BackgroundWork
             }
         }
 
+        private void mtdbProcessor_AlignmentComplete(object sender, AlignmentCompleteArgs e)
+        {            
+            //TODO: Mike cleanup....
+
+            //int alignmentNum = 1;
+            //foreach (var alignment in alignmentData)
+            //{
+
+            //    string filePath = string.Format("C:\\alignmentResults\\results{0}.csv", alignmentNum);
+
+            //    using (var write = new StreamWriter(filePath))
+            //    {
+            //        write.WriteLine("Linear Net Rsquared, Alignment Time Scan, Alignment Scan Output, Alignment Net Output");
+            //        write.WriteLine(string.Format("{0}, {1}, {2}, {3}", alignment.NetRsquared,
+            //            alignment.AlignmentFunction.NetFuncTimeInput[0],
+            //            alignment.AlignmentFunction.NetFuncTimeOutput[0],
+            //            alignment.AlignmentFunction.NetFuncNetOutput[0]));
+            //        for (int line = 1; line < alignment.AlignmentFunction.NetFuncTimeInput.Count; line++)
+            //        {
+            //            write.WriteLine(string.Format(", {0}, {1}, {2}",
+            //             alignment.AlignmentFunction.NetFuncTimeInput[line],
+            //             alignment.AlignmentFunction.NetFuncTimeOutput[line],
+            //             alignment.AlignmentFunction.NetFuncNetOutput[line]));
+            //        }
+            //    }
+            //}
+        }
+
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            this.HostProcessWindow.Status = "Processing Data...";
+            HostProcessWindow.Status = "Processing Data...";
         }
 
         public void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Result is Exception)
             {
-                Exception ex = e.Result as Exception;
+                var ex = e.Result as Exception;
 
                 ErrorHelper.WriteExceptionTraceInformation(ex);
 
@@ -55,24 +84,18 @@ namespace MTDBCreator.Helpers.BackgroundWork
             }
             else
             {
-                this.m_AnalysisJobViewModel.Database = e.Result as TargetDatabase;
+                m_AnalysisJobViewModel.Database = e.Result as TargetDatabase;
             }
 
-            this.HostProcessWindow.DialogResult = !(e.Result is Exception);
-            this.HostProcessWindow.Close();
+            HostProcessWindow.DialogResult = !(e.Result is Exception);
+            HostProcessWindow.Close();
         }
 
-        public object Argument
-        {
-            get { return this.m_AnalysisJobViewModel; }
-        }
         public object Result
         {
-            get { return this.m_AnalysisJobViewModel.Database; }
+            get { return m_AnalysisJobViewModel.Database; }
         }
 
-        public ProcessWindow HostProcessWindow { get; set; }
-
-        private AnalysisJobViewModel m_AnalysisJobViewModel { get; set; }
+        public ProcessWindow HostProcessWindow { get; set; }        
     }
 }

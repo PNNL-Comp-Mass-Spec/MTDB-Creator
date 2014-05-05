@@ -174,9 +174,9 @@ namespace MTDBFramework.Data
         public static short CalculateTrypticState(string peptide)
         {
             short trypticState = 0;
-            char[] peptideChar = peptide.ToCharArray();
-            int startIndex = 2;
-            int stopIndex = peptideChar.Length - 3;
+            var peptideChar = peptide.ToCharArray();
+            var startIndex = 2;
+            var stopIndex = peptideChar.Length - 3;
 
             if (peptideChar[1] != '.')
             {

@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Algorithms.Clustering;
@@ -19,12 +18,15 @@ namespace MTDBFramework.Algorithms
 {
     public class MtdbProcessor : IProcessor
     {
-        public Options ProcessorOptions { get; set; }
-
+        public event EventHandler<AlignmentCompleteArgs> AlignmentComplete;
+        
         public MtdbProcessor(Options options)
         {
             ProcessorOptions = options;
         }
+
+        public Options ProcessorOptions { get; set; }
+
 
         public TargetDatabase Process(IEnumerable<LcmsDataSet> dataSets)
         {
@@ -32,22 +34,22 @@ namespace MTDBFramework.Algorithms
 
             var targetDatabase = new TargetDatabase();
 
-            ITargetAligner aligner = TargetAlignmentFactory.Create(ProcessorOptions);
-            ITargetClusterer clusterer = TargetClustererFactory.Create(ProcessorOptions.TargetFilterType);
+            var aligner = TargetAlignmentFactory.Create(ProcessorOptions);
+            var clusterer = TargetClustererFactory.Create(ProcessorOptions.TargetFilterType);
 
             var epicTargets = new List<Evidence>();
 
             
 
-            foreach (LcmsDataSet dataSet in dataSets)
+            foreach (var dataSet in dataSets)
             {
-                ITargetFilter targetFilter = TargetFilterFactory.Create(dataSet.Tool, ProcessorOptions);
-                ITargetFilter alignmentFilter = AlignmentFilterFactory.Create(dataSet.Tool, ProcessorOptions);
+                var targetFilter = TargetFilterFactory.Create(dataSet.Tool, ProcessorOptions);
+                var alignmentFilter = AlignmentFilterFactory.Create(dataSet.Tool, ProcessorOptions);
 
                 var filteredTargets = new List<Evidence>();
                 var alignedTargets = new List<Evidence>();
 
-                foreach (Evidence t in dataSet.Evidences)
+                foreach (var t in dataSet.Evidences)
                 {
                     if (!targetFilter.ShouldFilter(t))
                     {
@@ -64,7 +66,7 @@ namespace MTDBFramework.Algorithms
 
                 if (ProcessorOptions.TargetFilterType != TargetWorkflowType.TOP_DOWN)
                 {
-                    IRegressorAlgorithm<LinearRegressionResult> regressor = LinearRegressorFactory.Create(ProcessorOptions.RegressionType);
+                    var regressor = LinearRegressorFactory.Create(ProcessorOptions.RegressionType);
                     dataSet.RegressionResult = regressor.CalculateRegression(alignedTargets.Select(t => (double)t.Scan).ToList(), alignedTargets.Select(t => t.PredictedNet).ToList());
                 }
                 else
@@ -81,11 +83,11 @@ namespace MTDBFramework.Algorithms
 
             int i = 0, j = 0;
 
-            foreach (ConsensusTarget consensusTarget in targetDatabase.ConsensusTargets)
+            foreach (var consensusTarget in targetDatabase.ConsensusTargets)
             {
                 consensusTarget.Id = ++i;
 
-                foreach (Evidence t in consensusTarget.Evidences)
+                foreach (var t in consensusTarget.Evidences)
                 {
                     t.Id = ++j;
                 }
@@ -149,29 +151,12 @@ namespace MTDBFramework.Algorithms
                 var options = new LcmsWarpAlignmentOptions{AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP};
                 alignmentData.Add(lcmsAligner.AlignFeatures(massTagLightTargets, umcDataset, options));
             }
-            int alignmentNum = 1;
-            foreach (var alignment in alignmentData)
+
+            if (AlignmentComplete != null)                
             {
-                
-                string filePath = string.Format("C:\\alignmentResults\\results{0}.csv", alignmentNum);
-
-                using (var write = new StreamWriter(filePath))
-                {
-                    write.WriteLine("Linear Net Rsquared, Alignment Time Scan, Alignment Scan Output, Alignment Net Output");
-                    write.WriteLine(string.Format("{0}, {1}, {2}, {3}", alignment.NetRsquared,
-                        alignment.AlignmentFunction.NetFuncTimeInput[0],
-                        alignment.AlignmentFunction.NetFuncTimeOutput[0], 
-                        alignment.AlignmentFunction.NetFuncNetOutput[0]));
-                    for (int line = 1; line < alignment.AlignmentFunction.NetFuncTimeInput.Count; line++)
-                    {
-                        write.WriteLine(string.Format(", {0}, {1}, {2}", 
-                         alignment.AlignmentFunction.NetFuncTimeInput[line],
-                         alignment.AlignmentFunction.NetFuncTimeOutput[line],
-                         alignment.AlignmentFunction.NetFuncNetOutput[line])); 
-                    }
-                }
+                AlignmentComplete(this, new AlignmentCompleteArgs(alignmentData));
             }
-
+          
             return targetDatabase;
         }
     }

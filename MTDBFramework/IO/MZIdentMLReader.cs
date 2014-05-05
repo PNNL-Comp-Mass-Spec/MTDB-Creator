@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
-using MTDBFramework.Algorithms.RetentionTimePrediction;
 using PHRPReader;
 
 namespace MTDBFramework.IO
@@ -148,7 +148,7 @@ namespace MTDBFramework.IO
         {
             var xSettings = new XmlReaderSettings {IgnoreWhitespace = true};
             var sr = new StreamReader(path);
-            using (XmlReader reader = XmlReader.Create(sr, xSettings))
+            using (var reader = XmlReader.Create(sr, xSettings))
             {
                 reader.Read();
                 while (reader.Read())
@@ -285,9 +285,9 @@ namespace MTDBFramework.IO
             var results = new List<MsgfPlusResult>();
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
             
-            int i = 1;
+            var i = 1;
 			// Go through each Spectrum ID and map it to an MSGF+ result
-            foreach (KeyValuePair<string, SpectrumIdItem> item in m_specItems)
+            foreach (var item in m_specItems)
             {
                 var result = new MsgfPlusResult
                 {
@@ -329,9 +329,9 @@ namespace MTDBFramework.IO
 
                 if (item.Value.Peptide.Mods.Count != 0)
                 {
-                    int j = 0;
-                    string numModSeq = evidence.Pre + ".";
-                    foreach (KeyValuePair<int, Modification> mod in item.Value.Peptide.Mods)
+                    var j = 0;
+                    var numModSeq = evidence.Pre + ".";
+                    foreach (var mod in item.Value.Peptide.Mods)
                     {
                         if (mod.Value.Tag != "Carbamidomethyl")
                         {
@@ -428,7 +428,7 @@ namespace MTDBFramework.IO
                     if (result.ModificationCount != 0)
                     {
 
-                        foreach (KeyValuePair<int, Modification> mod in item.Value.Peptide.Mods)
+                        foreach (var mod in item.Value.Peptide.Mods)
                         {
                             if (mod.Value.Tag != "Carbamidomethyl")
                             {

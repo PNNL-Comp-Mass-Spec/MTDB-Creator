@@ -257,6 +257,7 @@ namespace Regressor.Algorithms
         public LinearRegressionResult CalculateRegression(IEnumerable<double> observed, IEnumerable<double> predicted)
         {
             SetPoints(observed as double[], predicted as double[]);
+
             RegressionPoints.Sort();
             DistinctRegressionPoints = new List<RegressionPts>(RegressionPoints.Distinct());
 

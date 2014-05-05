@@ -123,6 +123,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\AlignmentCompleteArgs.cs" />
     <Compile Include="Algorithms\Alignment\AlignmentFilterFactory.cs" />
     <Compile Include="Algorithms\Alignment\MSAlignAlignmentFilter.cs" />
     <Compile Include="Algorithms\Alignment\MSGFPlusAlignmentFilter.cs" />
@@ -130,7 +131,6 @@
     <Compile Include="Algorithms\Alignment\SequestAlignmentFilter.cs" />
     <Compile Include="Algorithms\Alignment\SpectralTargetAligner.cs" />
     <Compile Include="Algorithms\Alignment\IAligner.cs" />
-    <Compile Include="Algorithms\Clustering\ConsensusTarget.cs" />
     <Compile Include="Algorithms\Clustering\ITargetClusterer.cs" />
     <Compile Include="Algorithms\Clustering\SequenceTargetClusterer.cs" />
     <Compile Include="Algorithms\Clustering\SpectralTargetClusterer.cs" />
@@ -156,6 +156,7 @@
     <Compile Include="Database\TargetMap.cs" />
     <Compile Include="Database\TargetPeptideInfoMap.cs" />
     <Compile Include="Data\AnalysisJobItem.cs" />
+    <Compile Include="Data\ConsensusTarget.cs" />
     <Compile Include="Data\MSAlignResult.cs" />
     <Compile Include="Data\MSAlignTargetFilter.cs" />
     <Compile Include="Data\MSGFPlusResult.cs" />

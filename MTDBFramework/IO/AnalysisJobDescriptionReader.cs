@@ -21,7 +21,7 @@ namespace MTDBFramework.IO
             {
                 SetHeaderIndices(reader.ReadLine());
 
-                for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+                for (var line = reader.ReadLine(); line != null; line = reader.ReadLine())
                 {
                     analysisJobItems.Add(ProcessLine(line));
 
@@ -39,9 +39,9 @@ namespace MTDBFramework.IO
 
         protected override void SetHeaderIndices(string actualHeader)
         {
-            string[] actualHeaders = actualHeader.Split(Delimiters, StringSplitOptions.None);
+            var actualHeaders = actualHeader.Split(Delimiters, StringSplitOptions.None);
 
-            for (int i = 0; i < actualHeaders.Length; i++)
+            for (var i = 0; i < actualHeaders.Length; i++)
             {
                 m_actualHeaderMaps.Add((DefaultHeaders)Enum.Parse(typeof(DefaultHeaders), actualHeaders[i]), i);
             }
@@ -49,7 +49,7 @@ namespace MTDBFramework.IO
 
         protected override AnalysisJobItem ProcessLine(string line)
         {
-            string[] lineCells = line.Split(Delimiters, StringSplitOptions.None);
+            var lineCells = line.Split(Delimiters, StringSplitOptions.None);
 
             var jobItem = new AnalysisJobItem
                 (

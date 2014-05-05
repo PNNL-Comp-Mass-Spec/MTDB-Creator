@@ -1,7 +1,7 @@
 ﻿#region Namespaces
 
 using System.Collections.ObjectModel;
-using MTDBFramework.Algorithms.Clustering;
+using MTDBFramework.Data;
 
 #endregion
 

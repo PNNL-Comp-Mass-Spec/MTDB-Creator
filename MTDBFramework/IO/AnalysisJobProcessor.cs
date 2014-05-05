@@ -25,17 +25,17 @@ namespace MTDBFramework.IO
         {
             // analysisJobItems should have LcmsDataSet field be null
 
-            int current = 0;
-            int total = analysisJobItems.Count();
+            var current = 0;
+            var total = analysisJobItems.Count();
 
-            foreach (AnalysisJobItem jobItem in analysisJobItems)
+            foreach (var jobItem in analysisJobItems)
             {
                 OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, jobItem));
 
                 // Legacy code from before implementation of clsPHRPReader
                 // IAnalysisReader analysisReader = AnalysisReaderFactory.Create(jobItem.Format, this.ProcessorOptions);
 
-                IPhrpReader analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
+                var analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
 
 				// Reads the jobItem using the reader returned by the Reader Factory
                 jobItem.DataSet = analysisReader.Read(jobItem.FilePath);

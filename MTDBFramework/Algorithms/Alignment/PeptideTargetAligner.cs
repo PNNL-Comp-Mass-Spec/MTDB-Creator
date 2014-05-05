@@ -29,7 +29,7 @@ namespace MTDBFramework.Algorithms.Alignment
             var observed = new List<double>();
             var predicted = new List<double>();
 
-            foreach (Evidence evidence in baseline)
+            foreach (var evidence in baseline)
             {
                 Predictor = RetentionTimePredictorFactory.CreatePredictor(Options.PredictorType);
                 evidence.PredictedNet = Predictor.GetElutionTime(Evidence.CleanSequence(evidence.Sequence));
@@ -48,9 +48,9 @@ namespace MTDBFramework.Algorithms.Alignment
                 Regressor = new MixtureModelEm();
             }
 
-            LinearRegressionResult result = Regressor.CalculateRegression(observed, predicted);
+            var result = Regressor.CalculateRegression(observed, predicted);
 
-            foreach (Evidence evidence in evidences)
+            foreach (var evidence in evidences)
             {
                 evidence.ObservedNet = Regressor.Transform(result, evidence.ObservedNet);
             }

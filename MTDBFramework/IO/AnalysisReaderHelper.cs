@@ -61,7 +61,7 @@ namespace MTDBFramework.IO
             double maxScan = evidences.Max(result => result.Scan);
             double minScan = evidences.Min(result => result.Scan);
 
-            foreach (Evidence evidence in evidences)
+            foreach (var evidence in evidences)
             {
                 evidence.ObservedNet = (evidence.Scan - minScan) / (maxScan - minScan);
             }
@@ -79,7 +79,7 @@ namespace MTDBFramework.IO
         public static void CalculatePredictedNet(IRetentionTimePredictor predictor, IEnumerable<Evidence> evidences)
         {
             var pepCache = new CacheAccessor();
-            foreach (Evidence evidence in evidences)
+            foreach (var evidence in evidences)
             {
                 evidence.PredictedNet = pepCache.PredictPeptide(evidence.CleanPeptide, predictor);
                 // Old version of predicting the NET not utilizing the peptide cache

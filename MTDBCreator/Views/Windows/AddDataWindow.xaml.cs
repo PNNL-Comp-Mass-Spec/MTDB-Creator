@@ -1,16 +1,12 @@
 ﻿#region Namespaces
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Practices.Prism;
 using Microsoft.Win32;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
-using MTDBCreator.Helpers.BackgroundWork;
 using MTDBCreator.Helpers.Dialog;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Views;
@@ -36,17 +32,17 @@ namespace MTDBCreator.Windows
         public AddDataWindow(WorkspaceViewModel workspaceViewModel)
             : this()
         {
-            this.DataContext = new AnalysisJobViewModel();
-            this.WorkspaceViewModel = workspaceViewModel;
+            DataContext = new AnalysisJobViewModel();
+            WorkspaceViewModel = workspaceViewModel;
 
-            this.AnalysisJobViewModel.AnalysisJobProcessed += AnalysisJobViewModel_AnalysisJobProcessed;
+            AnalysisJobViewModel.AnalysisJobProcessed += AnalysisJobViewModel_AnalysisJobProcessed;
 
             if (workspaceViewModel != null)
             {
-                this.AnalysisJobTitleTextBox.IsEnabled = false;
-                this.OptionsButton.Visibility = Visibility.Hidden;
+                AnalysisJobTitleTextBox.IsEnabled = false;
+                OptionsButton.Visibility = Visibility.Hidden;
 
-                this.AnalysisJobViewModel.Title = workspaceViewModel.AnalysisJobViewModel.Title;
+                AnalysisJobViewModel.Title = workspaceViewModel.AnalysisJobViewModel.Title;
             }
         }
 
@@ -54,7 +50,7 @@ namespace MTDBCreator.Windows
         {
             get
             {
-                return this.DataContext as AnalysisJobViewModel;
+                return DataContext as AnalysisJobViewModel;
             }
         }
 
@@ -67,13 +63,13 @@ namespace MTDBCreator.Windows
 
         private void AddFileMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            MenuItem addFileMenuItem = e.Source as MenuItem;
+            var addFileMenuItem = e.Source as MenuItem;
 
             if (addFileMenuItem != null)
             {
-                FileDialogFormatInfo formatInfo = FileDialogFormatInfoFactory.Create(addFileMenuItem.Tag.ToString());
+                var formatInfo = FileDialogFormatInfoFactory.Create(addFileMenuItem.Tag.ToString());
 
-                OpenFileDialog openFileDialog = new OpenFileDialog()
+                var openFileDialog = new OpenFileDialog
                 {
                     RestoreDirectory = true,
 
@@ -86,27 +82,27 @@ namespace MTDBCreator.Windows
                 {
                     if (formatInfo.Format != LcmsIdentificationTool.Description)
                     {
-                        foreach (string fileName in openFileDialog.FileNames)
+                        foreach (var fileName in openFileDialog.FileNames)
                         {
-                            this.AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(fileName, formatInfo.Format));
+                            AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(fileName, formatInfo.Format));
 
                             if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
                             {
-                                this.AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
+                                AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
                             }
                         }
                     }
                     else
                     {
-                        AnalysisJobDescriptionReader analysisJobDescriptionReader = new AnalysisJobDescriptionReader();
+                        var analysisJobDescriptionReader = new AnalysisJobDescriptionReader();
 
-                        foreach (string fileName in openFileDialog.FileNames)
+                        foreach (var fileName in openFileDialog.FileNames)
                         {
                             try
                             {
-                                foreach (AnalysisJobItem analysisJobItem in analysisJobDescriptionReader.Read(fileName))
+                                foreach (var analysisJobItem in analysisJobDescriptionReader.Read(fileName))
                                 {
-                                    this.AnalysisJobViewModel.AnalysisJobItems.Add(analysisJobItem);
+                                    AnalysisJobViewModel.AnalysisJobItems.Add(analysisJobItem);
                                 }
                             }
                             catch
@@ -127,64 +123,64 @@ namespace MTDBCreator.Windows
 
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            OptionsWindow options = new OptionsWindow(this.AnalysisJobViewModel.Options);
+            var options = new OptionsWindow(AnalysisJobViewModel.Options);
             options.ShowDialog();
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
+            Hide();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void AnalysisJobViewModel_AnalysisJobProcessed(object sender, MTDBResultChangedEventArgs e)
         {
             if (e.Result == null)
             {
-                this.ShowDialog();
+                ShowDialog();
             }
             else
             {
                 if (e.Result is ObservableCollection<AnalysisJobItem>)
                 {
-                    if (this.WorkspaceViewModel != null)
+                    if (WorkspaceViewModel != null)
                     {
-                        foreach (AnalysisJobItem analysisJobItem in this.AnalysisJobViewModel.AnalysisJobItems)
+                        foreach (var analysisJobItem in AnalysisJobViewModel.AnalysisJobItems)
                         {
-                            this.WorkspaceViewModel.AnalysisJobViewModel.AnalysisJobItems.Add(analysisJobItem);
+                            WorkspaceViewModel.AnalysisJobViewModel.AnalysisJobItems.Add(analysisJobItem);
                         }
 
-                        this.WorkspaceViewModel.AnalysisJobViewModel.ProcessAnalysisDatabase();
-                        this.WorkspaceViewModel.UpdateDataViewModels();
+                        WorkspaceViewModel.AnalysisJobViewModel.ProcessAnalysisDatabase();
+                        WorkspaceViewModel.UpdateDataViewModels();
 
-                        RecentAnalysisJobHelper.AddRecentAnalysisJob(this.WorkspaceViewModel.AnalysisJobViewModel);
+                        RecentAnalysisJobHelper.AddRecentAnalysisJob(WorkspaceViewModel.AnalysisJobViewModel);
 
-                        this.Close();
+                        Close();
                     }
                 }
                 else if (e.Result is TargetDatabase)
                 {
-                    MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+                    var mainWindow = Application.Current.MainWindow as MainWindow;
 
                     if (mainWindow != null)
                     {
-                        mainWindow.NewWorkspacePage(this.AnalysisJobViewModel);
+                        mainWindow.NewWorkspacePage(AnalysisJobViewModel);
 
-                        RecentAnalysisJobHelper.AddRecentAnalysisJob(this.AnalysisJobViewModel);
+                        RecentAnalysisJobHelper.AddRecentAnalysisJob(AnalysisJobViewModel);
                     }
 
-                    this.Close();
+                    Close();
                 }
             }
         }
 
         private void AddDataWindow_Closed(object sender, EventArgs e)
         {
-            this.AnalysisJobViewModel.AnalysisJobProcessed -= this.AnalysisJobViewModel_AnalysisJobProcessed;
+            AnalysisJobViewModel.AnalysisJobProcessed -= AnalysisJobViewModel_AnalysisJobProcessed;
         }
     }
 }

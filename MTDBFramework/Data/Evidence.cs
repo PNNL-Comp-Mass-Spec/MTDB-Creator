@@ -1,10 +1,9 @@
 ﻿#region Namespaces
 
-using MTDBFramework.Algorithms.Clustering;
+using System.Collections.Generic;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
 using PNNLOmics.Data;
-using System.Collections.Generic;
 
 #endregion
 
@@ -335,9 +334,9 @@ namespace MTDBFramework.Data
 
         public static string CleanSequence(string sequence)
         {
-            char[] peptideChar = sequence.ToCharArray();
-            int startIndex = 2;
-            int stopIndex = peptideChar.Length - 3;
+            var peptideChar = sequence.ToCharArray();
+            var startIndex = 2;
+            var stopIndex = peptideChar.Length - 3;
 
             if (peptideChar[1] != '.')
             {
@@ -349,8 +348,8 @@ namespace MTDBFramework.Data
                 stopIndex = peptideChar.Length - 1;
             }
 
-            int copyToIndex = startIndex;
-            int copyFromIndex = startIndex;
+            var copyToIndex = startIndex;
+            var copyFromIndex = startIndex;
 
             while (copyFromIndex <= stopIndex)
             {

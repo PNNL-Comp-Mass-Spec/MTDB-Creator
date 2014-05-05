@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
 
@@ -30,13 +29,13 @@ namespace MTDBFramework.Database
                      * Additionally, these objects are saved before the Evidences are, because these objects need to already
                      * exist in order to properly generate the relation. 
                      * */
-                    int current = 0;
-                    int total = database.ConsensusTargets.Count;
+                    var current = 0;
+                    var total = database.ConsensusTargets.Count;
                     session.Save(options);
-                    foreach (ConsensusTarget consensusTarget in database.ConsensusTargets)
+                    foreach (var consensusTarget in database.ConsensusTargets)
                     {
                         consensusTarget.Id = ++current;
-                        foreach (Evidence t in consensusTarget.Evidences)
+                        foreach (var t in consensusTarget.Evidences)
                         {
                             if (!m_uniquePeptides.ContainsKey(t.PeptideInfo.Peptide))
                             {

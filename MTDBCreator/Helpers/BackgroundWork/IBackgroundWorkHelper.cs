@@ -13,7 +13,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
         void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e);
         void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e);
 
-        object Argument { get; }
         object Result { get; }
 
         ProcessWindow HostProcessWindow { get; set; }

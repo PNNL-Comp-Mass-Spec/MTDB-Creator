@@ -172,36 +172,36 @@ namespace MTDBFramework.Data
 
         public static double CalculatePeptideProphetDistriminantScore(SequestResult result)
         {
-            short charge = result.Charge;
+            var charge = result.Charge;
 
             if (charge > MaxChargeForScore)
             {
                 charge = MaxChargeForScore;
             }
 
-            double constant = Consts[charge - 1];
-            double xcorr = XCorrs[charge - 1];
-            double delta = Deltas[charge - 1];
-            double logRank = Ranks[charge - 1];
-            double absMassDiff = MassDiffs[charge - 1];
-            int maxPeptideLength = MaxPeptideLens[charge - 1];
-            int numFrags = NumFrags[charge - 1];
+            var constant = Consts[charge - 1];
+            var xcorr = XCorrs[charge - 1];
+            var delta = Deltas[charge - 1];
+            var logRank = Ranks[charge - 1];
+            var absMassDiff = MassDiffs[charge - 1];
+            var maxPeptideLength = MaxPeptideLens[charge - 1];
+            var numFrags = NumFrags[charge - 1];
 
-            int cleanPeptideLength = result.CleanPeptide.Length;
+            var cleanPeptideLength = result.CleanPeptide.Length;
 
             if (cleanPeptideLength > maxPeptideLength)
             {
                 cleanPeptideLength = maxPeptideLength;
             }
 
-            double lgXcorr = Math.Log(result.XcRatio);
-            double lgCleanPeptideLength = Math.Log((float)(1.0 * cleanPeptideLength * numFrags));
-            double adjustedXCorr = lgXcorr / lgCleanPeptideLength;
+            var lgXcorr = Math.Log(result.XcRatio);
+            var lgCleanPeptideLength = Math.Log((float)(1.0 * cleanPeptideLength * numFrags));
+            var adjustedXCorr = lgXcorr / lgCleanPeptideLength;
 
-            double tot = constant;
+            var tot = constant;
             tot += xcorr * adjustedXCorr;
             tot += delta * result.DelCn2;
-            double lgRankSp = Math.Log(1.0 * result.RankSp);
+            var lgRankSp = Math.Log(1.0 * result.RankSp);
             tot += logRank * lgRankSp;
             tot += absMassDiff * Math.Abs(result.DelM);
 

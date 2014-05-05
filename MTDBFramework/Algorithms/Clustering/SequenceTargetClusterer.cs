@@ -14,9 +14,9 @@ namespace MTDBFramework.Algorithms.Clustering
             var consensusTargetList = new List<ConsensusTarget>();
             var targetMap = new Dictionary<string, ConsensusTarget>();
 
-            foreach (Evidence t in evidences)
+            foreach (var t in evidences)
             {
-                string sequence = t.Sequence;
+                var sequence = t.Sequence;
                  
                 if (!targetMap.ContainsKey(sequence))
                 {
@@ -30,7 +30,7 @@ namespace MTDBFramework.Algorithms.Clustering
                     targetMap[sequence].Charges.Add(t.Charge);
                 }
 
-                foreach (ProteinInformation protein in t.Proteins)
+                foreach (var protein in t.Proteins)
                 {
                     if (!targetMap[sequence].Proteins.Contains(protein))
                     {
@@ -39,7 +39,7 @@ namespace MTDBFramework.Algorithms.Clustering
                 }
             }
 
-            foreach (ConsensusTarget consensusTarget in targetMap.Values)
+            foreach (var consensusTarget in targetMap.Values)
             {
                 consensusTarget.CalculateStatistics();
 

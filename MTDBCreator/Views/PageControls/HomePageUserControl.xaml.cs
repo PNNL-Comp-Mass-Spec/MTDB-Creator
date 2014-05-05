@@ -1,7 +1,5 @@
 ﻿#region Namespaces
 
-using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using MTDBCreator.Helpers;
@@ -9,7 +7,6 @@ using MTDBCreator.Helpers.BackgroundWork;
 using MTDBCreator.Properties;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Windows;
-using MTDBFramework.Data;
 
 #endregion
 
@@ -33,17 +30,17 @@ namespace MTDBCreator.PageControls
 
             if (Settings.Default.RecentAnalysisJobs.Count > 0)
             {
-                foreach (string s in Settings.Default.RecentAnalysisJobs)
+                foreach (var s in Settings.Default.RecentAnalysisJobs)
                 {
-                    TextBlock itemTextBlock = new TextBlock()
+                    var itemTextBlock = new TextBlock
                     {
                         Text = RecentAnalysisJobHelper.GetRecentAnalysisJobTitle(s),
                         TextTrimming = TextTrimming.CharacterEllipsis
                     };
 
-                    Button newRecentItemButton = new Button()
+                    var newRecentItemButton = new Button
                     {
-                        Style = (Style)this.FindResource("LeftPanelHyperLinkButtonStyle"),
+                        Style = (Style)FindResource("LeftPanelHyperLinkButtonStyle"),
                         Content = itemTextBlock,
                         Tag = s
                     };
@@ -55,10 +52,10 @@ namespace MTDBCreator.PageControls
             }
             else
             {
-                TextBlock itemTextBlock = new TextBlock()
+                var itemTextBlock = new TextBlock
                 {
                     Text = "(No jobs opened recently)",
-                    Style = (Style)this.FindResource("LeftPanelDescriptionStyle")
+                    Style = (Style)FindResource("LeftPanelDescriptionStyle")
                 };
 
                 RecentAnalysisJobStackPanel.Children.Add(itemTextBlock);
@@ -68,21 +65,21 @@ namespace MTDBCreator.PageControls
 
         private void newRecentItemButton_Click(object sender, RoutedEventArgs e)
         {
-            Button newRecentItemButton = e.OriginalSource as Button;
+            var newRecentItemButton = e.OriginalSource as Button;
 
             if (newRecentItemButton != null)
             {
-                MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+                var mainWindow = Application.Current.MainWindow as MainWindow;
 
                 if (mainWindow != null && newRecentItemButton.Tag != null)
                 {
-                    AnalysisJobViewModel analysisJobViewModel = RecentAnalysisJobHelper.GetRecentAnalysisJobItem(newRecentItemButton.Tag.ToString());
+                    var analysisJobViewModel = RecentAnalysisJobHelper.GetRecentAnalysisJobItem(newRecentItemButton.Tag.ToString());
 
-                    object result = BackgroundWorkProcessHelper.Process(new AnalysisJobBackgroundWorkHelper(analysisJobViewModel));
+                    var result = BackgroundWorkProcessHelper.Process(new AnalysisJobBackgroundWorkHelper(analysisJobViewModel));
 
                     if (result != null)
                     {
-                        result = BackgroundWorkProcessHelper.Process(new MTDBProcessorBackgroundWorkHelper(analysisJobViewModel));
+                        result = BackgroundWorkProcessHelper.Process(new MtdbProcessorBackgroundWorkHelper(analysisJobViewModel));
 
                         if (analysisJobViewModel.Database != null)
                         {
@@ -95,7 +92,7 @@ namespace MTDBCreator.PageControls
 
         private void NewMassTagOpenButton_Click(object sender, RoutedEventArgs e)
         {
-            AddDataWindow addDataWindow = new AddDataWindow(null)
+            var addDataWindow = new AddDataWindow(null)
             {
                 Owner = Application.Current.MainWindow
             };
@@ -106,7 +103,7 @@ namespace MTDBCreator.PageControls
 
         private void NewAnalysisJobButton_Click(object sender, RoutedEventArgs e)
         {
-            AddDataWindow addDataJobWindow = new AddDataWindow(null)
+            var addDataJobWindow = new AddDataWindow(null)
             {
                 Owner = Application.Current.MainWindow
             };

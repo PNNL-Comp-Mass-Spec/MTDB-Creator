@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
-using System.Windows.Media;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.BackgroundWork;
-using MTDBCreator.Properties;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
 
 namespace MTDBCreator.ViewModels
 {
-    public class AnalysisJobViewModel : ObservableObject
+    public sealed class AnalysisJobViewModel : ObservableObject
     {
         #region Private Fields
 
-        private string m_Title = "NewJob";
+        private string m_title = "NewJob";
 
-        private ObservableCollection<AnalysisJobItem> m_AnalysisJobItems;
-        private TargetDatabase m_Database;
-        private Options m_Options;
+        private ObservableCollection<AnalysisJobItem> m_analysisJobItems;
+        private TargetDatabase m_database;
+        private Options m_options;
 
-        private ICommand m_ProcessAnalysisJobCommand;
-        private ICommand m_RemoveAnalysisJobCommand;
+        private ICommand m_processAnalysisJobCommand;
+        private ICommand m_removeAnalysisJobCommand;
 
         #endregion
 
@@ -39,11 +35,11 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                return m_Title;
+                return m_title;
             }
             set
             {
-                m_Title = value;
+                m_title = value;
                 OnPropertyChanged("Title");
             }
         }
@@ -52,21 +48,21 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                return m_Options;
+                return m_options;
             }
-            set
+            private set
             {
-                m_Options = value;
+                m_options = value;
                 OnPropertyChanged("Options");
             }
         }
 
         public TargetDatabase Database
         {
-            get { return m_Database; }
+            get { return m_database; }
             set
             {
-                m_Database = value;
+                m_database = value;
                 OnPropertyChanged("Database");
             }
         }
@@ -75,12 +71,12 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                if (m_ProcessAnalysisJobCommand == null)
+                if (m_processAnalysisJobCommand == null)
                 {
-                    m_ProcessAnalysisJobCommand = new RelayCommand(param => ProcessAnalysisJob(param));
+                    m_processAnalysisJobCommand = new RelayCommand(param => ProcessAnalysisJob(param));
                 }
 
-                return m_ProcessAnalysisJobCommand;
+                return m_processAnalysisJobCommand;
             }
         }
 
@@ -88,12 +84,12 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                if (m_RemoveAnalysisJobCommand == null)
+                if (m_removeAnalysisJobCommand == null)
                 {
-                    m_RemoveAnalysisJobCommand = new RelayCommand(items => RemoveAnalysisJob(items));
+                    m_removeAnalysisJobCommand = new RelayCommand(items => RemoveAnalysisJob(items));
                 }
 
-                return m_RemoveAnalysisJobCommand;
+                return m_removeAnalysisJobCommand;
             }
         }
 
@@ -101,11 +97,11 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                return m_AnalysisJobItems;
+                return m_analysisJobItems;
             }
             set
             {
-                m_AnalysisJobItems = value;
+                m_analysisJobItems = value;
                 OnPropertyChanged("AnalysisJobItems");
             }
         }
@@ -116,7 +112,7 @@ namespace MTDBCreator.ViewModels
 
         private void ProcessAnalysisJob(object param)
         {
-            object result = ProcessAnalysisTargets();
+            var result = ProcessAnalysisTargets();
 
             OnAnalysisJobProcessed(new MTDBResultChangedEventArgs(result));
 
@@ -134,7 +130,7 @@ namespace MTDBCreator.ViewModels
 
             if (items.Any())
             {
-                foreach (AnalysisJobItem analysisJobItem in items)
+                foreach (var analysisJobItem in items)
                 {
                     AnalysisJobItems.Remove(analysisJobItem);
                 }
@@ -152,7 +148,7 @@ namespace MTDBCreator.ViewModels
 
         public object ProcessAnalysisDatabase()
         {
-            return BackgroundWorkProcessHelper.Process(new MTDBProcessorBackgroundWorkHelper(this));
+            return BackgroundWorkProcessHelper.Process(new MtdbProcessorBackgroundWorkHelper(this));
         }
 
         public object SaveAnalysisDatabase(string fileName)
@@ -166,7 +162,7 @@ namespace MTDBCreator.ViewModels
 
         public event MTDBResultChangedEventHandler AnalysisJobProcessed;
 
-        protected void OnAnalysisJobProcessed(MTDBResultChangedEventArgs e)
+        private void OnAnalysisJobProcessed(MTDBResultChangedEventArgs e)
         {
             if (AnalysisJobProcessed != null)
             {
@@ -178,10 +174,10 @@ namespace MTDBCreator.ViewModels
 
         public AnalysisJobViewModel()
         {
-            this.Id = RecentAnalysisJobHelper.RecentAnalysisJobCount;
+            Id = RecentAnalysisJobHelper.RecentAnalysisJobCount;
 
-            this.AnalysisJobItems = new ObservableCollection<AnalysisJobItem>();
-            this.Options = new Options();
+            AnalysisJobItems = new ObservableCollection<AnalysisJobItem>();
+            Options = new Options();
         }
     }
 }

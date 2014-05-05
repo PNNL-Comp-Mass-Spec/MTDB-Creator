@@ -1,15 +1,11 @@
-﻿#region Namespaces
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using MTDBFramework.Database;
 using MathNet.Numerics.Statistics;
-using MTDBFramework.Data;
+using MTDBFramework.Database;
 using MTDBFramework.UI;
 
-#endregion
 
-namespace MTDBFramework.Algorithms.Clustering
+namespace MTDBFramework.Data
 {
     public class ConsensusTarget : ObservableObject
     {
@@ -158,8 +154,8 @@ namespace MTDBFramework.Algorithms.Clustering
         /// </summary>
         public void CalculateStatistics()
         {
-            List<double> massesList = Evidences.Select(c => c.MonoisotopicMass).ToList();
-            List<double> netList = Evidences.Select(c => c.ObservedNet).ToList();
+            var massesList = Evidences.Select(c => c.MonoisotopicMass).ToList();
+            var netList = Evidences.Select(c => c.ObservedNet).ToList();
 
             TheoreticalMonoIsotopicMass = massesList.Average();
             Net = netList.Average();

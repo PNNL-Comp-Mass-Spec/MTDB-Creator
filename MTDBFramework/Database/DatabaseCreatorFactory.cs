@@ -14,7 +14,7 @@ namespace MTDBFramework.Database
     public class DatabaseCreatorFactory
     {
 
-        public static string DbFile = "SQLiteTest.db"; //This is a default path
+        public static string DbFile = "SQLiteTest.mtdb"; //This is a default path
 
         public static ISessionFactory CreateSessionFactory()
         {

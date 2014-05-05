@@ -91,7 +91,7 @@ namespace MTDBFramework.IO
 
                     if (result.ModificationCount != 0)
                     {
-                        foreach (clsAminoAcidModInfo info in reader.CurrentPSM.ModifiedResidues)
+                        foreach (var info in reader.CurrentPSM.ModifiedResidues)
                         {
                             result.SeqInfoMonoisotopicMass += info.ModDefinition.ModificationMass;
                             result.ModificationDescription += info.ModDefinition.MassCorrectionTag + ":" + info.ResidueLocInPeptide + " ";

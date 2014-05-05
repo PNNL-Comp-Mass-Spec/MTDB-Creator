@@ -189,8 +189,7 @@
                                      IsReadOnly="True"
                                      Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" 
                                      Text="{Binding Path=PredictionText}"
-                                     TextWrapping="Wrap">
-                            </TextBox>
+                                     TextWrapping="Wrap" />
                         </Grid>
                     </GroupBox>
                 </StackPanel>
@@ -360,8 +359,7 @@
                                       Margin="0,8,0,8" Grid.Row="1" Grid.Column="2"
                                       PreviewTextInput="Control_PreviewTextInput"
                                       IsEnabled="{Binding ElementName=SequestDelCnCheckBox, Path=IsChecked}"
-                                      Text="{Binding Path=Options.MaxDelCN, UpdateSourceTrigger=Explicit}">
-                            </TextBox>
+                                      Text="{Binding Path=Options.MaxDelCN, UpdateSourceTrigger=Explicit}" />
                         </Grid>
                     </GroupBox>
 
@@ -383,8 +381,7 @@
                             <TextBox  x:Name="MaxLogEForExporTextBox"
                                       Margin="0,10,0,6" Grid.Row="1" Grid.Column="2"
                                       PreviewTextInput="Control_PreviewTextInput"
-                                      Text="{Binding Path=Options.MaxLogEValForXTandemExport, UpdateSourceTrigger=Explicit}">
-                            </TextBox>
+                                      Text="{Binding Path=Options.MaxLogEValForXTandemExport, UpdateSourceTrigger=Explicit}" />
                         </Grid>
                     </GroupBox>
                 </StackPanel>

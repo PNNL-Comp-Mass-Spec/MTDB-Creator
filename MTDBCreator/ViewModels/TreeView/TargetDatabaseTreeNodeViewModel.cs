@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MTDBFramework.Algorithms.Clustering;
+using MTDBFramework.Data;
 using MTDBFramework.Database;
 
 namespace MTDBCreator.ViewModels.TreeView
@@ -16,14 +13,14 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             m_TargetDatabase = database;
 
-            this.IsExpanded = true;
+            IsExpanded = true;
         }
 
         public override void LoadChildNodes()
         {
             base.LoadChildNodes();
 
-            foreach (ConsensusTarget ct in m_TargetDatabase.ConsensusTargets)
+            foreach (var ct in m_TargetDatabase.ConsensusTargets)
             {
                 m_ChildNodes.Add(new ConsensusTargetTreeNodeViewModel(ct, this));
             }
