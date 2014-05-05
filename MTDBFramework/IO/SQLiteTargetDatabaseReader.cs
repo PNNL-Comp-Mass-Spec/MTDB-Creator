@@ -2,10 +2,11 @@
 
 using System.Collections.Generic;
 using MTDBFramework.Data;
+using MTDBFramework.Database;
 
 #endregion
 
-namespace MTDBFramework.Database
+namespace MTDBFramework.IO
 {
     public class SqLiteTargetDatabaseReader : ITargetDatabaseReader
     {
@@ -16,11 +17,10 @@ namespace MTDBFramework.Database
             var reader = new TargetDatabase();
 
             var readConsensus = new List<ConsensusTarget>();
-            var          readTarget    = new List<Evidence>();
             using(var session = sessionFactory.OpenSession())
             {
                 using(var transact = session.BeginTransaction())
-                {
+                {                    
                     session.CreateCriteria<ConsensusTarget>().List(readConsensus);
                 }
             }

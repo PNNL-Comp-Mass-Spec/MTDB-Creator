@@ -3,7 +3,6 @@
 using System.Configuration;
 using System.Windows;
 using MTDBCreator.Properties;
-using MTDBFramework.Data;
 
 #endregion
 

@@ -1,24 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Media;
-using MTDBCreator.Helpers;
-using MTDBFramework.Algorithms.Alignment;
-using MTDBFramework.Algorithms.Clustering;
-using MTDBFramework.Data;
+﻿using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using OxyPlot.Annotations;
-using OxyPlot.Wpf;
-using Axis = OxyPlot.Axes.Axis;
-using LinearAxis = OxyPlot.Axes.LinearAxis;
-using ScatterSeries = OxyPlot.Series.ScatterSeries;
 
 namespace MTDBCreator.ViewModels
 {
@@ -29,10 +14,10 @@ namespace MTDBCreator.ViewModels
 
         public StatPlotViewModel(AnalysisJobViewModel analysisJobViewModel)
         {
-            this.StdevMassPlotModel = MakePlotModel("Stdev Mass");
-            this.StdevNETPlotModel = MakePlotModel("Stdev NET");
+            StdevMassPlotModel = MakePlotModel("Stdev Mass");
+            StdevNETPlotModel = MakePlotModel("Stdev NET");
 
-            foreach (Axis axis in this.StdevMassPlotModel.Axes)
+            foreach (var axis in StdevMassPlotModel.Axes)
             {
                 switch (axis.Position)
                 {
@@ -45,9 +30,9 @@ namespace MTDBCreator.ViewModels
                 }
             }
 
-            this.StdevMassPlotModel.Series.Add(MakeStdevMassScatterSeries(analysisJobViewModel.Database));
+            StdevMassPlotModel.Series.Add(MakeStdevMassScatterSeries(analysisJobViewModel.Database));
 
-            foreach (Axis axis in this.StdevNETPlotModel.Axes)
+            foreach (var axis in StdevNETPlotModel.Axes)
             {
                 switch (axis.Position)
                 {
@@ -60,13 +45,13 @@ namespace MTDBCreator.ViewModels
                 }
             }
 
-            this.StdevMassPlotModel.Series.Add(MakeStdevMassScatterSeries(analysisJobViewModel.Database));
-            this.StdevNETPlotModel.Series.Add(MakeStdevNETScatterSeries(analysisJobViewModel.Database));
+            StdevMassPlotModel.Series.Add(MakeStdevMassScatterSeries(analysisJobViewModel.Database));
+            StdevNETPlotModel.Series.Add(MakeStdevNETScatterSeries(analysisJobViewModel.Database));
         }
 
         public static PlotModel MakePlotModel(string title)
         {
-            PlotModel plotModel = new PlotModel(title);
+            var plotModel = new PlotModel(title);
 
             plotModel.Axes.Add(MakeLinerAxis(AxisPosition.Left));
             plotModel.Axes.Add(MakeLinerAxis(AxisPosition.Bottom));
@@ -76,7 +61,7 @@ namespace MTDBCreator.ViewModels
 
         public static LinearAxis MakeLinerAxis(AxisPosition position)
         {
-            return new LinearAxis()
+            return new LinearAxis
             {
                 Position = position,
                 TitleFontSize = 14,
@@ -92,7 +77,7 @@ namespace MTDBCreator.ViewModels
 
         public static ScatterSeries MakeScatterSeries()
         {
-            return new ScatterSeries()
+            return new ScatterSeries
             {
                 MarkerSize = 2,
                 // Use Cross MarkerType and MarkerStroke (instead of MarkerFill) to improve the graphing performance
@@ -103,9 +88,9 @@ namespace MTDBCreator.ViewModels
 
         public static ScatterSeries MakeStdevMassScatterSeries(TargetDatabase targetDatabase)
         {
-            ScatterSeries scatterSeries = MakeScatterSeries();
+            var scatterSeries = MakeScatterSeries();
 
-            foreach (ConsensusTarget ct in targetDatabase.ConsensusTargets)
+            foreach (var ct in targetDatabase.ConsensusTargets)
             {
                 scatterSeries.Points.Add(new ScatterPoint(ct.TheoreticalMonoIsotopicMass, ct.Evidences.Count));
             }
@@ -115,9 +100,9 @@ namespace MTDBCreator.ViewModels
 
         public static ScatterSeries MakeStdevNETScatterSeries(TargetDatabase targetDatabase)
         {
-            ScatterSeries scatterSeries = MakeScatterSeries();
+            var scatterSeries = MakeScatterSeries();
 
-            foreach (ConsensusTarget ct in targetDatabase.ConsensusTargets)
+            foreach (var ct in targetDatabase.ConsensusTargets)
             {
                 scatterSeries.Points.Add(new ScatterPoint(ct.Net, ct.Evidences.Count));
             }

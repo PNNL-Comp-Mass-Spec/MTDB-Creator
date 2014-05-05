@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MTDBFramework.Data;
+﻿using MTDBFramework.Data;
 
 namespace MTDBCreator.Helpers.Dialog
 {
@@ -14,9 +10,9 @@ namespace MTDBCreator.Helpers.Dialog
 
         public FileDialogFormatInfo(string title, string filter, LcmsIdentificationTool format)
         {
-            this.Title = title;
-            this.Filter = filter;
-            this.Format = format;
+            Title = title;
+            Filter = filter;
+            Format = format;
         }
     }
 }

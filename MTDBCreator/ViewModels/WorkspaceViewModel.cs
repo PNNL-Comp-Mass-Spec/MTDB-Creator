@@ -8,8 +8,6 @@ namespace MTDBCreator.ViewModels
     public class WorkspaceViewModel : ObservableObject
     {
         #region Private Fields
-
-        private SaveFileDialog m_saveDatabaseDialog; 
         private ICommand m_createDatabaseCommand;
         private ICommand m_refreshCommand;
 
@@ -24,10 +22,6 @@ namespace MTDBCreator.ViewModels
 
         public WorkspaceViewModel()
         {
-            m_saveDatabaseDialog        = new SaveFileDialog();
-            m_saveDatabaseDialog.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
-            m_saveDatabaseDialog.Title  = "Save to MTDB";
-            m_saveDatabaseDialog.RestoreDirectory = true;
         }
 
         public ICommand CreateDatabaseCommand
@@ -124,9 +118,14 @@ namespace MTDBCreator.ViewModels
         {
 
 
-            if (m_saveDatabaseDialog.ShowDialog() == true)
+            var saveDatabaseDialog = new SaveFileDialog();
+            saveDatabaseDialog.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
+            saveDatabaseDialog.Title = "Save to MTDB";
+            saveDatabaseDialog.RestoreDirectory = true;
+
+            if (saveDatabaseDialog.ShowDialog() == true)
             {
-                AnalysisJobViewModel.SaveAnalysisDatabase(m_saveDatabaseDialog.FileName);
+                AnalysisJobViewModel.SaveAnalysisDatabase(saveDatabaseDialog.FileName);
             }
         }
 

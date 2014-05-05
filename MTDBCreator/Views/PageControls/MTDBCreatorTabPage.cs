@@ -1,10 +1,7 @@
 ﻿#region Namespaces
 
-using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using MTDBCreator.ViewModels;
 
 #endregion
 
@@ -50,15 +47,14 @@ namespace MTDBCreator.PageControls
         //}
 
         public MTDBCreatorTabPage(string pageTitle, Image pageImage, UserControl contentControl, RoutedEventHandler closeHandler)
-            : base()
         {
-            this.ContentUserControl = contentControl;
+            ContentUserControl = contentControl;
 
             // TabPage's Header
 
-            StackPanel tabPageHeaderStackPanel = new StackPanel() { Orientation = Orientation.Horizontal };
+            var tabPageHeaderStackPanel = new StackPanel { Orientation = Orientation.Horizontal };
 
-            TextBlock tabPageHeaderTextBlock = new TextBlock()
+            var tabPageHeaderTextBlock = new TextBlock
             {
                 Margin = new Thickness(0, 0, 5, 0),
                 VerticalAlignment = VerticalAlignment.Center,
@@ -68,11 +64,11 @@ namespace MTDBCreator.PageControls
 
             // Width of the textblock is set to auto at present
 
-            Button tabPageCloseButton = new Button()
+            var tabPageCloseButton = new Button
             {
                 Content = "X",
                 Tag = this,
-                Style = (Style)this.FindResource(ToolBar.ButtonStyleKey)
+                Style = (Style)FindResource(ToolBar.ButtonStyleKey)
             };
 
             tabPageCloseButton.Click += closeHandler;
@@ -81,8 +77,8 @@ namespace MTDBCreator.PageControls
             tabPageHeaderStackPanel.Children.Add(tabPageHeaderTextBlock);
             tabPageHeaderStackPanel.Children.Add(tabPageCloseButton);
 
-            this.Header = tabPageHeaderStackPanel;
-            this.Content = contentControl;
+            Header = tabPageHeaderStackPanel;
+            Content = contentControl;
         }
 
         public UserControl ContentUserControl { get; private set; }

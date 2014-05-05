@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using MTDBCreator.Commands;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
@@ -67,7 +66,7 @@ namespace MTDBCreator.ViewModels
 
         public void Save(object param)
         {
-            List<string> options = ((IEnumerable)param).Cast<string>().ToList();
+            var options = ((IEnumerable)param).Cast<string>().ToList();
 
             // General
             Options.MaxModsForAlignment = Convert.ToInt32(options[0]);

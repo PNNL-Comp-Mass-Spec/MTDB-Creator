@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using MTDBCreator.Commands;
@@ -13,9 +9,9 @@ using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
 using OxyPlot;
+using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
-using OxyPlot.Annotations;
 
 namespace MTDBCreator.ViewModels
 {
@@ -49,7 +45,7 @@ namespace MTDBCreator.ViewModels
                 m_AnalysisJobViewModel = value;
                 OnPropertyChanged("AnalysisJobViewModel");
 
-                this.CurrentAnalysisJobItems = value.AnalysisJobItems;
+                CurrentAnalysisJobItems = value.AnalysisJobItems;
             }
         }
 
@@ -105,8 +101,8 @@ namespace MTDBCreator.ViewModels
 
                 if (m_CurrentAnalysisJobItems != null)
                 {
-                    FillAnalysisSeries(this.NETScanPlotModel, this.CurrentAnalysisJobItems, this.AnalysisJobViewModel.Options);
-                    FillAnalysisAnnotations(this.NETScanPlotModel, this.CurrentAnalysisJobItems);
+                    FillAnalysisSeries(NETScanPlotModel, CurrentAnalysisJobItems, AnalysisJobViewModel.Options);
+                    FillAnalysisAnnotations(NETScanPlotModel, CurrentAnalysisJobItems);
                 }
             }
         }
@@ -122,9 +118,9 @@ namespace MTDBCreator.ViewModels
                 m_IsRegressionLineVisible = value;
                 OnPropertyChanged("IsRegressionLineVisible");
 
-                if (this.CurrentAnalysisJobItems != null)
+                if (CurrentAnalysisJobItems != null)
                 {
-                    FillAnalysisAnnotations(this.NETScanPlotModel, this.CurrentAnalysisJobItems);
+                    FillAnalysisAnnotations(NETScanPlotModel, CurrentAnalysisJobItems);
                 }
             }
         }
@@ -135,7 +131,7 @@ namespace MTDBCreator.ViewModels
 
         public LinearAxis MakeLinerAxis(AxisPosition position)
         {
-            return new LinearAxis()
+            return new LinearAxis
             {
                 Position = position,
                 TitleFontSize = 14,
@@ -151,9 +147,9 @@ namespace MTDBCreator.ViewModels
 
         public ScatterSeries MakeAnalysisScatterSeries(AnalysisJobItem analysisJobItem, Options options)
         {
-            Color color = this.m_SeriesColorDictionary[analysisJobItem.FilePath];
+            var color = m_SeriesColorDictionary[analysisJobItem.FilePath];
 
-            ScatterSeries scatterSeries = new ScatterSeries()
+            var scatterSeries = new ScatterSeries
             {
                 MarkerSize = 2,
                 // Use Cross MarkerType and MarkerStroke (instead of MarkerFill) to improve the graphing performance
@@ -163,13 +159,13 @@ namespace MTDBCreator.ViewModels
                 Tag = analysisJobItem,
             };
 
-            foreach (Evidence evidence in analysisJobItem.DataSet.Evidences)
+            foreach (var evidence in analysisJobItem.DataSet.Evidences)
             {
-                ITargetFilter filter = AlignmentFilterFactory.Create(analysisJobItem.Format, options);
+                var filter = AlignmentFilterFactory.Create(analysisJobItem.Format, options);
 
                 if (!filter.ShouldFilter(evidence))
                 {
-                    ScatterPoint scatterPoint = new ScatterPoint(evidence.Scan, evidence.PredictedNet)
+                    var scatterPoint = new ScatterPoint(evidence.Scan, evidence.PredictedNet)
                     {
                         Tag = evidence
                     };
@@ -183,7 +179,7 @@ namespace MTDBCreator.ViewModels
 
         public LineAnnotation MakeRegressionLineAnnotation(AnalysisJobItem analysisJobItem)
         {
-            return new LineAnnotation()
+            return new LineAnnotation
             {
                 Type = LineAnnotationType.LinearEquation,
                 Color = OxyColors.Black,
@@ -198,12 +194,12 @@ namespace MTDBCreator.ViewModels
 
         public void FillAnalysisSeries(PlotModel plotModel, IEnumerable<AnalysisJobItem> analysisJobItems, Options options)
         {
-            foreach (Series series in plotModel.Series)
+            foreach (var series in plotModel.Series)
             {
                 series.IsVisible = false;
             }
 
-            foreach (AnalysisJobItem analysisJobItem in analysisJobItems)
+            foreach (var analysisJobItem in analysisJobItems)
             {
                 // Add new color for this item, if the color does not exist
 
@@ -212,14 +208,14 @@ namespace MTDBCreator.ViewModels
                     m_SeriesColorDictionary.Add(analysisJobItem.FilePath, GraphHelper.PickColor());
                 }
 
-                IEnumerable<Series> seriesList =
+                var seriesList =
                     from s in plotModel.Series
                     where s.Tag == analysisJobItem
                     select s;
 
                 if (seriesList.Any())
                 {
-                    foreach (Series series in seriesList)
+                    foreach (var series in seriesList)
                     {
                         series.IsVisible = true;
                     }
@@ -238,9 +234,9 @@ namespace MTDBCreator.ViewModels
         {
             plotModel.Annotations.Clear();
 
-            if (this.IsRegressionLineVisible)
+            if (IsRegressionLineVisible)
             {
-                foreach (AnalysisJobItem analysisJobItem in analysisJobItems)
+                foreach (var analysisJobItem in analysisJobItems)
                 {
                     plotModel.Annotations.Add(MakeRegressionLineAnnotation(analysisJobItem));
                 }
@@ -255,7 +251,7 @@ namespace MTDBCreator.ViewModels
 
         private void ZoomExtents()
         {
-            foreach (Axis axis in this.NETScanPlotModel.Axes)
+            foreach (var axis in NETScanPlotModel.Axes)
             {
                 axis.Reset();
             }
@@ -267,7 +263,7 @@ namespace MTDBCreator.ViewModels
 
             if (selectedAnalysisJobItems.Any())
             {
-                this.CurrentAnalysisJobItems = selectedAnalysisJobItems;
+                CurrentAnalysisJobItems = selectedAnalysisJobItems;
             }
         }
 
@@ -277,7 +273,7 @@ namespace MTDBCreator.ViewModels
         {
             m_SeriesColorDictionary = new Dictionary<string, Color>();
 
-            this.NETScanPlotModel = new PlotModel()
+            NETScanPlotModel = new PlotModel
             {
                 Title = "Predicted NET Vs. Scan",
                 IsLegendVisible = true,
@@ -290,10 +286,10 @@ namespace MTDBCreator.ViewModels
                 LegendBackground = OxyColors.Transparent,
             };
 
-            this.NETScanPlotModel.Axes.Add(MakeLinerAxis(AxisPosition.Left));
-            this.NETScanPlotModel.Axes.Add(MakeLinerAxis(AxisPosition.Bottom));
+            NETScanPlotModel.Axes.Add(MakeLinerAxis(AxisPosition.Left));
+            NETScanPlotModel.Axes.Add(MakeLinerAxis(AxisPosition.Bottom));
 
-            foreach (Axis axis in this.NETScanPlotModel.Axes)
+            foreach (var axis in NETScanPlotModel.Axes)
             {
                 switch (axis.Position)
                 {
@@ -313,7 +309,7 @@ namespace MTDBCreator.ViewModels
 
         public void UpdatePlotViewModel(AnalysisJobViewModel analysisJobViewModel)
         {
-            this.AnalysisJobViewModel = analysisJobViewModel;
+            AnalysisJobViewModel = analysisJobViewModel;
         }
     }
 }

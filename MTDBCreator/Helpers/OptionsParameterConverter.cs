@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Data;
 
 namespace MTDBCreator.Helpers
@@ -10,7 +8,7 @@ namespace MTDBCreator.Helpers
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            List<string> results = new List<string>();
+            var results = new List<string>();
 
             results.Add((string)values[0]);
             results.Add((string)values[1]);

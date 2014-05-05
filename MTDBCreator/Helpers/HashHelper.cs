@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace MTDBCreator.Helpers
@@ -10,9 +7,9 @@ namespace MTDBCreator.Helpers
     {
         public static string ComputeStringHash(string s)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
-            foreach (byte b in md5.ComputeHash(Encoding.UTF8.GetBytes(s)))
+            foreach (var b in md5.ComputeHash(Encoding.UTF8.GetBytes(s)))
             {
                 sb.Append(b.ToString("X2"));
             }

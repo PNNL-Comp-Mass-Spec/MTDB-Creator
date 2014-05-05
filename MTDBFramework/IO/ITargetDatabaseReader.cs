@@ -1,4 +1,6 @@
-﻿namespace MTDBFramework.Database
+﻿using MTDBFramework.Database;
+
+namespace MTDBFramework.IO
 {
     public interface ITargetDatabaseReader
     {

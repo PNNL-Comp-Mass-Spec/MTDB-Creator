@@ -1,6 +1,7 @@
 ﻿using MTDBFramework.Data;
+using MTDBFramework.Database;
 
-namespace MTDBFramework.Database
+namespace MTDBFramework.IO
 {
     public interface ITargetDatabaseWriter
     {

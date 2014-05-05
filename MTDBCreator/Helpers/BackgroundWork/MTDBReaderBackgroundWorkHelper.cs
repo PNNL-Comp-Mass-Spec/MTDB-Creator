@@ -1,36 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Windows;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
-using MTDBFramework.UI;
+using MTDBFramework.IO;
 
 namespace MTDBCreator.Helpers.BackgroundWork
 {
-    class MTDBReaderBackgroundWorkHelper : IBackgroundWorkHelper
+    class MtdbReaderBackgroundWorkHelper : IBackgroundWorkHelper
     {
         private TargetDatabase m_Database { get; set; }
         private Options m_DatabaseOptions { get; set; }
         private string m_DatabaseFileName { get; set; }
 
-        public MTDBReaderBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel, string fileName)
+        public MtdbReaderBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel, string fileName)
         {
-            this.m_Database = analysisJobViewModel.Database;
-            this.m_DatabaseOptions = analysisJobViewModel.Options;
-            this.m_DatabaseFileName = fileName;
+            m_Database = analysisJobViewModel.Database;
+            m_DatabaseOptions = analysisJobViewModel.Options;
+            m_DatabaseFileName = fileName;
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            SqLiteTargetDatabaseReader targetDatabaseReader = new SqLiteTargetDatabaseReader();
+            var targetDatabaseReader = new SqLiteTargetDatabaseReader();
 
-            m_Database = targetDatabaseReader.Read(this.m_DatabaseFileName);
+            m_Database = targetDatabaseReader.Read(m_DatabaseFileName);
         }
 
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)

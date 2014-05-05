@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Mime;
-using System.Text;
 using MTDBFramework.UI;
 
 namespace MTDBCreator.ViewModels.TreeView
@@ -52,9 +48,9 @@ namespace MTDBCreator.ViewModels.TreeView
 
                     if (value)
                     {
-                        if (this.ItemSelected != null)
+                        if (ItemSelected != null)
                         {
-                            this.ItemSelected(this, new EventArgs());
+                            ItemSelected(this, new EventArgs());
                         }
                     }
                 }
@@ -109,7 +105,7 @@ namespace MTDBCreator.ViewModels.TreeView
 
         public TreeNodeViewModel(string text)
         {
-            this.Text = text;
+            Text = text;
         }
 
         public TreeNodeViewModel(string text, TreeNodeViewModel parent)
@@ -123,7 +119,7 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             if (hasChildNodes)
             {
-                m_ChildNodes = new ObservableCollection<TreeNodeViewModel>() { new TreeNodeViewModel("Loading...") };
+                m_ChildNodes = new ObservableCollection<TreeNodeViewModel> { new TreeNodeViewModel("Loading...") };
             }
         }
 

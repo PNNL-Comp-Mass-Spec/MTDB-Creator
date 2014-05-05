@@ -18,9 +18,9 @@ namespace MTDBCreator.Windows
         {
             InitializeComponent();
 
-            this.Owner = ownerWindow;
+            Owner = ownerWindow;
 
-            this.MainBackgroundWorker = new BackgroundWorker()
+            MainBackgroundWorker = new BackgroundWorker
             {
                 WorkerReportsProgress = true,
                 WorkerSupportsCancellation = true
@@ -28,27 +28,27 @@ namespace MTDBCreator.Windows
 
             backgroundWorkHelper.HostProcessWindow = this;
 
-            this.MainBackgroundWorkHelper = backgroundWorkHelper;
+            MainBackgroundWorkHelper = backgroundWorkHelper;
 
-            this.MainBackgroundWorker.DoWork += backgroundWorkHelper.BackgroundWorker_DoWork;
-            this.MainBackgroundWorker.ProgressChanged += backgroundWorkHelper.BackgroundWorker_ProgressChanged;
-            this.MainBackgroundWorker.RunWorkerCompleted += backgroundWorkHelper.BackgroundWorker_RunWorkerCompleted;
+            MainBackgroundWorker.DoWork += backgroundWorkHelper.BackgroundWorker_DoWork;
+            MainBackgroundWorker.ProgressChanged += backgroundWorkHelper.BackgroundWorker_ProgressChanged;
+            MainBackgroundWorker.RunWorkerCompleted += backgroundWorkHelper.BackgroundWorker_RunWorkerCompleted;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.MainBackgroundWorker.RunWorkerAsync();
+            MainBackgroundWorker.RunWorkerAsync();
         }
 
         public string Status
         {
             get
             {
-                return this.StatusTextBlock.Text;
+                return StatusTextBlock.Text;
             }
             set
             {
-                this.StatusTextBlock.Text = value;
+                StatusTextBlock.Text = value;
             }
         }
 
@@ -56,7 +56,7 @@ namespace MTDBCreator.Windows
         {
             get
             {
-                return this.StatusProgressBar;
+                return StatusProgressBar;
             }
         }
 

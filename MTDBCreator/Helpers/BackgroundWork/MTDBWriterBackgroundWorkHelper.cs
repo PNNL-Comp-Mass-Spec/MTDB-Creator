@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Windows;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
+using MTDBFramework.IO;
 using MTDBFramework.UI;
 
 namespace MTDBCreator.Helpers.BackgroundWork
@@ -17,50 +14,50 @@ namespace MTDBCreator.Helpers.BackgroundWork
     {
         public MTDBWriterBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel, string fileName)
         {
-            this.m_Database = analysisJobViewModel.Database;
-            this.m_DatabaseOptions = analysisJobViewModel.Options;
-            this.m_DatabaseFileName = fileName;
+            m_Database = analysisJobViewModel.Database;
+            m_DatabaseOptions = analysisJobViewModel.Options;
+            m_DatabaseFileName = fileName;
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            SqLiteTargetDatabaseWriter targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
+            var targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
 
             targetDatabaseWriter.ProgressChanged += targetDatabaseWriter_ProgressChanged;
-            targetDatabaseWriter.Write(this.m_Database, this.m_DatabaseOptions, this.m_DatabaseFileName);
+            targetDatabaseWriter.Write(m_Database, m_DatabaseOptions, m_DatabaseFileName);
         }
 
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            this.HostProcessWindow.MainProgressBar.IsIndeterminate = (e.ProgressPercentage == -1);
+            HostProcessWindow.MainProgressBar.IsIndeterminate = (e.ProgressPercentage == -1);
 
             if (e.ProgressPercentage >= 0)
             {
-                object[] userStates = e.UserState as object[];
+                var userStates = e.UserState as object[];
 
                 if (userStates != null)
                 {
-                    int total = Convert.ToInt32(userStates[0].ToString());
-                    string status = userStates[1].ToString();
+                    var total = Convert.ToInt32(userStates[0].ToString());
+                    var status = userStates[1].ToString();
 
-                    this.HostProcessWindow.MainProgressBar.Value = e.ProgressPercentage;
-                    this.HostProcessWindow.MainProgressBar.Maximum = total;
-                    this.HostProcessWindow.Status = status;
+                    HostProcessWindow.MainProgressBar.Value = e.ProgressPercentage;
+                    HostProcessWindow.MainProgressBar.Maximum = total;
+                    HostProcessWindow.Status = status;
                 }
             }
             else
             {
-                this.HostProcessWindow.Status = e.UserState.ToString();
+                HostProcessWindow.Status = e.UserState.ToString();
             }
         }
 
         public void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.HostProcessWindow.Close();
+            HostProcessWindow.Close();
 
             if (e.Result == null)
             {
-                MessageBox.Show(String.Format("The MTDB has been created successfully.{0}{0}Path:{0}{0}{1}", Environment.NewLine, this.m_DatabaseFileName), Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(String.Format("The MTDB has been created successfully.{0}{0}Path:{0}{0}{1}", Environment.NewLine, m_DatabaseFileName), Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -68,7 +65,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
         {
             get
             {
-                return new object[] { this.m_Database, this.m_DatabaseFileName };
+                return new object[] { m_Database, m_DatabaseFileName };
             }
         }
         public object Result
@@ -80,37 +77,37 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         private void targetDatabaseWriter_ProgressChanged(object sender, MtdbProgressChangedEventArgs e)
         {
-            MtdbCreationProgressType type = (MtdbCreationProgressType)Enum.Parse(typeof(MtdbCreationProgressType), e.UserObject.ToString());
+            var type = (MtdbCreationProgressType)Enum.Parse(typeof(MtdbCreationProgressType), e.UserObject.ToString());
 
             switch (type)
             {
                 case MtdbCreationProgressType.CONSENSUS_TARGET:
                     {
-                        this.HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Analysis Evidences...{0}%", WindowHelper.GetPercentage(e.Current, e.Total).ToString()) });
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Analysis Evidences...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
 
                         break;
                     }
                 case MtdbCreationProgressType.SEQUENCE:
                     {
-                        this.HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Sequence Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total).ToString()) });
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Sequence Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
 
                         break;
                     }
                 case MtdbCreationProgressType.PEPTIDE:
                     {
-                        this.HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Peptide Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total).ToString().ToString()) });
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Peptide Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total).ToString()) });
 
                         break;
                     }
                 case MtdbCreationProgressType.ANALYSIS_SOURCE:
                     {
-                        this.HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Analysis Source Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total).ToString()) });
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Analysis Source Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
 
                         break;
                     }
                 case MtdbCreationProgressType.COMMIT:
                     {
-                        this.HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, String.Concat("Writing to MTDB: ", this.m_DatabaseFileName));
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, String.Concat("Writing to MTDB: ", m_DatabaseFileName));
 
                         break;
                     }

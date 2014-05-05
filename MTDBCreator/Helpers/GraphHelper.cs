@@ -2,15 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Media;
-using System.Windows.Shapes;
-using MTDBFramework.Algorithms.Alignment;
-using MTDBFramework.Data;
-using OxyPlot;
-using OxyPlot.Annotations;
-using OxyPlot.Wpf;
-using LineAnnotation = OxyPlot.Wpf.LineAnnotation;
 
 #endregion
 
@@ -21,24 +13,24 @@ namespace MTDBCreator.Helpers
         public static Color PickColor()
         {
             const int DELTA_PERCENT = 15;
-            List<Color> alreadyChoosenColors = new List<Color>();
-            Color tmpColor = Colors.Black;
+            var alreadyChoosenColors = new List<Color>();
+            var tmpColor = Colors.Black;
 
-            bool chooseAnotherColor = true;
+            var chooseAnotherColor = true;
             while (chooseAnotherColor)
             {
                 // create a random color by generating three random channels
-                int redColor = random.Next(0, 255);
-                int greenColor = random.Next(0, 255);
-                int blueColor = random.Next(0, 255);
+                var redColor = random.Next(0, 255);
+                var greenColor = random.Next(0, 255);
+                var blueColor = random.Next(0, 255);
                 tmpColor = Color.FromArgb(255, Convert.ToByte(redColor), Convert.ToByte(greenColor), Convert.ToByte(blueColor));
 
                 // check if a similar color has already been created
                 chooseAnotherColor = false;
 
-                foreach (Color c in alreadyChoosenColors)
+                foreach (var c in alreadyChoosenColors)
                 {
-                    int delta = c.R * DELTA_PERCENT / 100;
+                    var delta = c.R * DELTA_PERCENT / 100;
                     if (c.R - delta <= tmpColor.R && tmpColor.R <= c.R + delta)
                     {
                         chooseAnotherColor = true;

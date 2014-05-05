@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using MTDBFramework.Data;
+using MTDBFramework.Database;
 using MTDBFramework.UI;
 
-namespace MTDBFramework.Database
+namespace MTDBFramework.IO
 {
     public class SqLiteTargetDatabaseWriter : ITargetDatabaseWriter
     {

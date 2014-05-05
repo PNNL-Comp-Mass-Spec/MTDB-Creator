@@ -1,10 +1,9 @@
 ﻿#region Namespaces
 
 using System;
-using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Interop;
 
 #endregion
 
@@ -14,13 +13,13 @@ namespace MTDBCreator.Helpers
     {
         public static int GetPercentage(int current, int total)
         {
-            return Convert.ToInt32(100 * ((double)current / (double)total));
+            return Convert.ToInt32(100 * (current / (double)total));
         }
 
         // Remove
         public static bool SyncBindingExpression(Control control, BindingExpressionSyncDirection direction)
         {
-            bool isChanged = false;
+            var isChanged = false;
             BindingExpression bindingExpression = null;
 
             if (control is TextBox)
@@ -29,11 +28,11 @@ namespace MTDBCreator.Helpers
             }
             else if (control is CheckBox)
             {
-                bindingExpression = control.GetBindingExpression(CheckBox.IsCheckedProperty);
+                bindingExpression = control.GetBindingExpression(ToggleButton.IsCheckedProperty);
             }
             else if (control is RadioButton)
             {
-                bindingExpression = control.GetBindingExpression(RadioButton.IsCheckedProperty);
+                bindingExpression = control.GetBindingExpression(ToggleButton.IsCheckedProperty);
             }
 
             if (bindingExpression != null)

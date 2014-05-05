@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using MTDBCreator.ViewModels.TreeView;
 using MTDBFramework.UI;
 
@@ -13,7 +10,7 @@ namespace MTDBCreator.ViewModels
 
         public TargetTreeViewModel(AnalysisJobViewModel analysisJobViewModel)
         {
-            m_TargetDatabaseTreeNodeViewModels = new List<TargetDatabaseTreeNodeViewModel>() { new TargetDatabaseTreeNodeViewModel(analysisJobViewModel.Database) };
+            m_TargetDatabaseTreeNodeViewModels = new List<TargetDatabaseTreeNodeViewModel> { new TargetDatabaseTreeNodeViewModel(analysisJobViewModel.Database) };
         }
 
         public IEnumerable<TargetDatabaseTreeNodeViewModel> TargetDatabaseTreeNodeViewModels

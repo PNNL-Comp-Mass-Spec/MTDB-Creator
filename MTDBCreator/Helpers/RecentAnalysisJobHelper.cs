@@ -1,9 +1,6 @@
 ﻿#region Namespaces
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Security.Policy;
 using System.Text;
 using MTDBCreator.Properties;
 using MTDBCreator.ViewModels;
@@ -31,7 +28,7 @@ namespace MTDBCreator.Helpers
                 Settings.Default.RecentAnalysisJobs.RemoveAt(Settings.Default.RecentAnalysisJobLimit - 1);
             }
 
-            string analysisJobString = GetRecentAnalysisJobString(analysisJobViewModel);
+            var analysisJobString = GetRecentAnalysisJobString(analysisJobViewModel);
 
             RemoveRecentAnalysisJob(GetRecentAnalysisJobHash(analysisJobString));
 
@@ -43,7 +40,7 @@ namespace MTDBCreator.Helpers
         {
             string recentAnalysisJobString = null;
 
-            foreach (string s in Settings.Default.RecentAnalysisJobs)
+            foreach (var s in Settings.Default.RecentAnalysisJobs)
             {
                 if (s.StartsWith(hash))
                 {
@@ -61,9 +58,9 @@ namespace MTDBCreator.Helpers
 
         internal static string GetRecentAnalysisJobTitle(string analysisJobString)
         {
-            int startIndex = analysisJobString.IndexOf("|"); // | after hash
+            var startIndex = analysisJobString.IndexOf("|"); // | after hash
             startIndex = analysisJobString.IndexOf("|", startIndex + 1); // | after no.
-            int endIndex = analysisJobString.IndexOf("|", startIndex + 1); // | after title
+            var endIndex = analysisJobString.IndexOf("|", startIndex + 1); // | after title
 
             return analysisJobString.Substring(startIndex + 1, endIndex - startIndex - 1);
         }
@@ -77,16 +74,16 @@ namespace MTDBCreator.Helpers
         {
             // Format: <Hash>|<No>|<Title>|<Workflow>|<FileName 1>|<Format 1>|<FileName 2>|<Format 2>|<FileName 3>|<Format 3>|...
 
-            string[] strs = analysisJobString.Split('|');
+            var strs = analysisJobString.Split('|');
 
-            AnalysisJobViewModel analysisJobViewModel = new AnalysisJobViewModel()
+            var analysisJobViewModel = new AnalysisJobViewModel
             {
                 Title = strs[2]
             };
 
             analysisJobViewModel.Options.TargetFilterType = (TargetWorkflowType)Enum.Parse(typeof(TargetWorkflowType), strs[3]);
 
-            for (int i = 4; i < strs.Length; i += 2)
+            for (var i = 4; i < strs.Length; i += 2)
             {
                 analysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(strs[i], (LcmsIdentificationTool)Enum.Parse(typeof(LcmsIdentificationTool), strs[i + 1])));
             }
@@ -96,7 +93,7 @@ namespace MTDBCreator.Helpers
 
         private static string GetRecentAnalysisJobString(AnalysisJobViewModel analysisJobViewModel)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             // Format: <Hash>|<No>|<Title>|<Workflow>|<FileName 1>|<Format 1>|<FileName 2>|<Format 2>|<FileName 3>|<Format 3>|...
 
@@ -108,14 +105,14 @@ namespace MTDBCreator.Helpers
             sb.Insert(0, HashHelper.ComputeStringHash(sb.ToString()));
 
             sb.Append("|");
-            sb.Append(analysisJobViewModel.Options.TargetFilterType.ToString());
+            sb.Append(analysisJobViewModel.Options.TargetFilterType);
 
-            foreach (AnalysisJobItem analysisJobItem in analysisJobViewModel.AnalysisJobItems)
+            foreach (var analysisJobItem in analysisJobViewModel.AnalysisJobItems)
             {
                 sb.Append("|");
                 sb.Append(analysisJobItem.FilePath);
                 sb.Append("|");
-                sb.Append(analysisJobItem.Format.ToString());
+                sb.Append(analysisJobItem.Format);
             }
 
             return sb.ToString();

@@ -1,24 +1,10 @@
 ﻿#region Namespaces
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using Microsoft.Win32;
-using MTDBCreator.Helpers;
-using MTDBCreator.Helpers.BackgroundWork;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Views;
 using MTDBCreator.Windows;
-using MTDBFramework.Algorithms;
-using MTDBFramework.Data;
-using MTDBFramework.Database;
-using OxyPlot.Wpf;
 
 #endregion
 
@@ -39,25 +25,25 @@ namespace MTDBCreator.PageControls
         public WorkspacePageUserControl(AnalysisJobViewModel analysisJobViewModel)
             : this()
         {
-            this.WorkspaceViewModel = new WorkspaceViewModel(analysisJobViewModel);
-            this.DataContext = this.WorkspaceViewModel;
+            WorkspaceViewModel = new WorkspaceViewModel(analysisJobViewModel);
+            DataContext = WorkspaceViewModel;
         }
 
         private void AddAnalysisJobItemsButton_Click(object sender, RoutedEventArgs e)
         {
-            AddDataWindow addDataJobWindow = new AddDataWindow(this.WorkspaceViewModel)
+            var addDataJobWindow = new AddDataWindow(WorkspaceViewModel)
             {
                 Owner = Application.Current.MainWindow
             };
 
             addDataJobWindow.ShowDialog();
 
-            this.AnalysisJobDataGrid.SelectedIndex = -1;
+            AnalysisJobDataGrid.SelectedIndex = -1;
         }
 
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            OptionsWindow optionsWindow = new OptionsWindow(WorkspaceViewModel.AnalysisJobViewModel.Options);
+            var optionsWindow = new OptionsWindow(WorkspaceViewModel.AnalysisJobViewModel.Options);
             optionsWindow.ShowDialog();
         }
 
