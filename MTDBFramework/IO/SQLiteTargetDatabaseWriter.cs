@@ -36,19 +36,19 @@ namespace MTDBFramework.IO
                     foreach (var consensusTarget in database.ConsensusTargets)
                     {
                         consensusTarget.Id = ++current;
-                        foreach (var t in consensusTarget.Evidences)
+                        foreach (var evidence in consensusTarget.Evidences)
                         {
-                            if (!m_uniquePeptides.ContainsKey(t.PeptideInfo.Peptide))
+                            if (!m_uniquePeptides.ContainsKey(evidence.PeptideInfo.Peptide))
                             {
-                                m_uniquePeptides.Add(t.PeptideInfo.Peptide, t.PeptideInfo);
+                                m_uniquePeptides.Add(evidence.PeptideInfo.Peptide, evidence.PeptideInfo);
                             }
-                            t.PeptideInfo = m_uniquePeptides[t.PeptideInfo.Peptide];
-                            if (!m_uniqueDataSets.ContainsKey(t.DataSet.Path))
+                            evidence.PeptideInfo = m_uniquePeptides[evidence.PeptideInfo.Peptide];
+                            if (!m_uniqueDataSets.ContainsKey(evidence.DataSet.Path))
                             {
-                                m_uniqueDataSets.Add(t.DataSet.Path, t.DataSet);
+                                m_uniqueDataSets.Add(evidence.DataSet.Path, evidence.DataSet);
                             }
-                            t.DataSet = m_uniqueDataSets[t.DataSet.Path];
-                            t.Parent = consensusTarget;
+                            evidence.DataSet = m_uniqueDataSets[evidence.DataSet.Path];
+                            evidence.Parent = consensusTarget;
                             
                         }
                         consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;

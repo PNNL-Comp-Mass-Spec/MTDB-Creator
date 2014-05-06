@@ -1,5 +1,6 @@
 ﻿#region Namespaces
 
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MTDBFramework.Data;
 
@@ -9,6 +10,11 @@ namespace MTDBFramework.Database
 {
     public class TargetDatabase
     {
-        public ObservableCollection<ConsensusTarget> ConsensusTargets { get; set; }
+        public TargetDatabase()
+        {
+            ConsensusTargets = new List<ConsensusTarget>();
+        }
+
+        public IList<ConsensusTarget> ConsensusTargets { get; set; }
     }
 }

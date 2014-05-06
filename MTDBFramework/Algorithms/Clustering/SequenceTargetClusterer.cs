@@ -23,7 +23,7 @@ namespace MTDBFramework.Algorithms.Clustering
                     targetMap.Add(sequence, new ConsensusTarget());
                 }
 
-                targetMap[sequence].AddTarget(t);
+                targetMap[sequence].AddEvidence(t);
 
                 if (!targetMap[sequence].Charges.Contains(t.Charge))
                 {

@@ -51,6 +51,17 @@ namespace MTDBFramework.Data
 
         #endregion
 
+
+        public Evidence()
+        {
+            m_proteins = new List<ProteinInformation>();
+
+            DataSet = new TargetDataSet{
+                Path = "",
+                Name = ""
+            };
+        }
+
         #region Public Properties
 
         // Not used - Put off
@@ -320,10 +331,6 @@ namespace MTDBFramework.Data
             }
         }
 
-        public Evidence()
-        {
-            m_proteins = new List<ProteinInformation>();
-        }
 
         #endregion
 

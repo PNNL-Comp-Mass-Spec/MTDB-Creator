@@ -78,20 +78,21 @@ namespace MTDBFramework.Algorithms
             //Create the database (the list of consensus targets)
             //var clustered = clusterer.Cluster(epicTargets);
             //Convert the list of targets into a list of MassTagLights for LCMS to use as baseline
-
-            targetDatabase.ConsensusTargets = new ObservableCollection<ConsensusTarget>(clusterer.Cluster(epicTargets));
-
+            var newTargets = clusterer.Cluster(epicTargets);            
+            targetDatabase.ConsensusTargets = new List<ConsensusTarget>(newTargets.Count());
+                        
             int i = 0, j = 0;
 
-            foreach (var consensusTarget in targetDatabase.ConsensusTargets)
+            foreach (var consensusTarget in newTargets)
             {
                 consensusTarget.Id = ++i;
 
-                foreach (var t in consensusTarget.Evidences)
+                foreach (var target in consensusTarget.Evidences)
                 {
-                    t.Id = ++j;
+                    target.Id = ++j;
                 }
                 consensusTarget.CalculateStatistics();
+                targetDatabase.ConsensusTargets.Add(consensusTarget);
             }
 
 

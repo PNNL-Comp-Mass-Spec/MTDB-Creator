@@ -132,7 +132,7 @@ namespace MTDBFramework.Data
         }
         #endregion
 
-        public void AddTarget(Evidence evidence)
+        public void AddEvidence(Evidence evidence)
         {
             Evidences.Add(evidence);
 

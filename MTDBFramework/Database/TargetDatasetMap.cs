@@ -12,7 +12,6 @@ namespace MTDBFramework.Database
             Not.LazyLoad();
             Id(x => x.Id).GeneratedBy.Identity();
             Map(x => x.Name);
-
         }
     }
 }

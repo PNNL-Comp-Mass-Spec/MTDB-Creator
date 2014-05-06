@@ -87,7 +87,11 @@ namespace MTDBFramework.IO
 				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
                 if (!filter.ShouldFilter(result))
                 {
-                    result.DataSet = new TargetDataSet { Path = path };
+                    result.DataSet = new TargetDataSet
+                    {
+                        Path = path,
+                        Name = DatasetPathUtility.CleanPath(path)
+                    };
 
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
 

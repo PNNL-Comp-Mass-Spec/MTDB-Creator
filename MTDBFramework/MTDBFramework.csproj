@@ -173,6 +173,7 @@
     <Compile Include="IO\AnalysisJobDescriptionReader.cs" />
     <Compile Include="IO\AnalysisReaderHelper.cs" />
     <Compile Include="IO\AnalysisJobProcessor.cs" />
+    <Compile Include="IO\DatasetPathUtility.cs" />
     <Compile Include="IO\IPHRPReader.cs" />
     <Compile Include="IO\ITargetDatabaseReader.cs" />
     <Compile Include="IO\ITargetDatabaseWriter.cs" />
