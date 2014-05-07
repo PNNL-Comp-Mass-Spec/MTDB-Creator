@@ -146,6 +146,7 @@
     <Compile Include="Algorithms\TargetWorkflowType.cs" />
     <Compile Include="Database\ConsensusTargetMap.cs" />
     <Compile Include="Database\DatabaseCreatorFactory.cs" />
+    <Compile Include="Database\DatabaseReaderFactory.cs" />
     <Compile Include="Database\OptionsMap.cs" />
     <Compile Include="Database\ProteinInformationMap.cs" />
     <Compile Include="Database\TargetDatasetMap.cs" />

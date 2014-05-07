@@ -11,9 +11,8 @@ namespace MTDBFramework.IO
     public class SqLiteTargetDatabaseReader : ITargetDatabaseReader
     {
         public TargetDatabase Read(string path)
-        {
-            DatabaseCreatorFactory.DbFile = path;
-            var sessionFactory = DatabaseCreatorFactory.CreateSessionFactory();
+        {            
+            var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
             var reader = new TargetDatabase();
 
             var readConsensus = new List<ConsensusTarget>();
@@ -22,6 +21,7 @@ namespace MTDBFramework.IO
                 using(var transact = session.BeginTransaction())
                 {                    
                     session.CreateCriteria<ConsensusTarget>().List(readConsensus);
+                    transact.Commit();
                 }
             }
             foreach(var evidence in readConsensus)

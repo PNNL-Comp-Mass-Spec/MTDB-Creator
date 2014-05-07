@@ -15,7 +15,7 @@ namespace MTDBFramework.IO
         public void Write(TargetDatabase database, Options options, string path)
         {
 
-            DatabaseCreatorFactory.DbFile = path;
+            DatabaseCreatorFactory.DatabaseFile = path;
             var sessionFactory = DatabaseCreatorFactory.CreateSessionFactory();
 
             using (var session = sessionFactory.OpenSession())
