@@ -100,10 +100,13 @@ namespace MTDBCreator.ViewModels
 
             // Sequest dlCN
             Options.UseDelCn = (Convert.ToBoolean(options[21])) ? true : false;
-            Options.MaxDelCn = Convert.ToDouble(options[22]);
+            if(Options.UseDelCn == true)
+            {
+                Options.MaxDelCn = Convert.ToDouble(options[22]);
 
-            // X!Tandem Export
-            Options.MaxLogEValForXTandemExport = Convert.ToDouble(options[23]);
+                // X!Tandem Export
+                Options.MaxLogEValForXTandemExport = Convert.ToDouble(options[23]);
+            }
         }
 
         public ICommand UpdatePredictionCommand
