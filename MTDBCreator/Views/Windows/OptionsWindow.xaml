@@ -1,8 +1,7 @@
 ﻿<Window x:Class="MTDBCreator.Views.OptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:helpers="clr-namespace:MTDBCreator.Helpers"
-        xmlns:algorithms="clr-namespace:Regressor.Algorithms;assembly=Regressor"
+        xmlns:helpers="clr-namespace:MTDBCreator.Helpers"        
         xmlns:retentionTimePrediction="clr-namespace:MTDBFramework.Algorithms.RetentionTimePrediction;assembly=MTDBFramework"
         Title="Options" Height="650" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
@@ -131,16 +130,12 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="8"/>
                             </Grid.ColumnDefinitions>
-                            <RadioButton x:Name="LinearRegressionRadioButton"
-                                         Grid.Row="1" Grid.Column="1"  
-                                         IsChecked="{Binding Path=Options.RegressionType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static algorithms:RegressionType.LinearEm}, UpdateSourceTrigger=Explicit}" >
-                                Linear
-                            </RadioButton>
-                            <RadioButton x:Name="MixtureRegressionRadioButton"
-                                         Grid.Row="3" Grid.Column="1" 
-                                         IsChecked="{Binding Path=Options.RegressionType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static algorithms:RegressionType.MixtureRegression}, UpdateSourceTrigger=Explicit}" >
-                                Mixture Regression
-                            </RadioButton>
+                            <ComboBox 
+                                Grid.Row="1"          
+                                Grid.ColumnSpan="4"
+                                Margin="5"
+                                ItemsSource="{Binding RegressionTypes}"
+                                SelectedItem ="{Binding SelectedRegressionType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>                            
                             <Label Grid.Row="5" Grid.Column="1">Order</Label>
                             <TextBox x:Name="OrderTextBox"
                                      Grid.Row="5" Grid.Column="3" 

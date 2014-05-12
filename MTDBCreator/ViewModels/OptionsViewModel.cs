@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
 using MTDBCreator.Commands;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
-using Regressor.Algorithms;
+using System;
+using System.Collections;
+using System.Linq;
+using System.Windows.Input;
+using PNNLOmics.Algorithms.Regression;
 
 namespace MTDBCreator.ViewModels
 {
@@ -22,6 +22,15 @@ namespace MTDBCreator.ViewModels
         private ICommand m_SaveCommand;
 
         #endregion
+
+        public OptionsViewModel()
+        {
+            RegressionTypes = new ObservableCollection<RegressionType>
+            {
+                RegressionType.LinearEm,
+                RegressionType.MixtureRegression
+            };
+        }
 
         #region Public Properties
 
@@ -51,6 +60,20 @@ namespace MTDBCreator.ViewModels
             }
         }
 
+        public RegressionType SelectedRegressionType
+        {
+
+            get { return m_Options.RegressionType; }
+
+            set
+            {
+                if (m_Options.RegressionType == value) return;
+                m_Options.RegressionType = value;
+                OnPropertyChanged("RegressionType");
+            }
+        }
+
+        public ObservableCollection<RegressionType> RegressionTypes { get; private set; }
         public ICommand SaveCommand
         {
             get
