@@ -20,7 +20,7 @@ namespace MTDBCreatorTestSuite.Algorithms
             using (var sr = new StreamReader(@"C:\UnitTestFolder\ManySequestList.txt"))
             {
                 var pathName = sr.ReadLine();
-                while (pathName != null)
+                while (pathName != null) 
                 {
                     data = new LcmsDataSet();
                     num++;

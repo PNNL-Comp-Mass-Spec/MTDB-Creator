@@ -4,7 +4,6 @@ using MathNet.Numerics.Statistics;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
 
-
 namespace MTDBFramework.Data
 {
     public class ConsensusTarget : ObservableObject

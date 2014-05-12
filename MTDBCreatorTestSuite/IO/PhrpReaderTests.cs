@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
+using NUnit.Framework;
 using PHRPReader;
 
 namespace MTDBCreatorTestSuite.IO
@@ -10,11 +10,11 @@ namespace MTDBCreatorTestSuite.IO
     /// <summary>
     /// Tests for the Phrpreader converting data into the MTDB Creator object model.
     /// </summary>
-    [TestClass]
+    [TestFixture]
     public sealed class PhrpReaderTests
     {
-        [TestMethod]
-        public void PHRPDatasetNameTest()
+        [Test]
+        public void PhrpDatasetNameTest()
         {
             Console.WriteLine(clsPHRPReader.AutoDetermineDatasetName("QC_Shew_10_02a_2Nov10_Cougar_10-09-06_syn.txt"));
         }
@@ -27,17 +27,17 @@ namespace MTDBCreatorTestSuite.IO
         //    reader.TestReader();
         //}
 
-        [TestMethod]
-        public void PHRPDatasetResultTest()
+        [Test]
+        public void PhrpDatasetResultTest()
         {
-            var ResultType = clsPHRPReader.AutoDetermineResultType("QC_Shew_Intact_F7a_4Feb14_Tiger_13-11-13_msalign_syn.txt");
-            if (ResultType != clsPHRPReader.ePeptideHitResultType.Unknown)
+            var resultType = clsPHRPReader.AutoDetermineResultType("QC_Shew_Intact_F7a_4Feb14_Tiger_13-11-13_msalign_syn.txt");
+            if (resultType != clsPHRPReader.ePeptideHitResultType.Unknown)
             {
                 var results = new List<MsgfPlusResult>();
-                var data = new LcmsDataSet();
+                
                 var option = new Options();
-                var Sreader = new XTandemPhrpReader(option);
-                var filter = new XTandemTargetFilter(Sreader.ReaderOptions);
+                var sreader = new XTandemPhrpReader(option);
+                var filter = new XTandemTargetFilter(sreader.ReaderOptions);
                 //data = Sreader.Read(@"C:\UnitTestFolder\Xtandem\QC_Shew_13-04_pt5_2b_CID_21Jun13_Leopard_13-05-32_xt.txt");
                 var reader = new PHRPReader.clsPHRPReader(@"C:\UnitTestFolder\MSAlign\QC_Shew_Intact_F7a_4Feb14_Tiger_13-11-13_msalign_syn.txt");
                 while (reader.CanRead)

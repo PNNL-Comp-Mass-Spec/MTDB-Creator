@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
-using Regressor.Algorithms;
+using PNNLOmics.Algorithms.Regression;
 
 #endregion
 
@@ -38,16 +38,7 @@ namespace MTDBFramework.Algorithms.Alignment
                 predicted.Add(evidence.PredictedNet);
             }
 
-            // TODO:
-            if (Options.RegressionType == RegressionType.LinearEm)
-            {
-                Regressor = new LinearModelEm();
-            }
-            else if (Options.RegressionType == RegressionType.MixtureRegression)
-            {
-                Regressor = new MixtureModelEm();
-            }
-
+            Regressor = LinearRegressorFactory.Create(Options.RegressionType);            
             var result = Regressor.CalculateRegression(observed, predicted);
 
             foreach (var evidence in evidences)

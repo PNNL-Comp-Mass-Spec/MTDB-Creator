@@ -57,8 +57,8 @@ namespace MTDBCreatorTestSuite.IO
 
                     evidence.AddProtein(protein);
                     target.AddEvidence(evidence);
-                    target.AddProtein(protein);
                 }
+                target.AddProtein(protein);
                 target.CalculateStatistics();
                 database.ConsensusTargets.Add(target);
             }

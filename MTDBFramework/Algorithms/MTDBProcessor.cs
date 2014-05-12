@@ -2,15 +2,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using PNNLOmics.Algorithms.Alignment.LcmsWarp;
+using PNNLOmics.Algorithms.Regression;
+using PNNLOmics.Annotations;
 using PNNLOmics.Data.Features;
-using Regressor.Algorithms;
 
 #endregion
 
@@ -27,20 +27,16 @@ namespace MTDBFramework.Algorithms
 
         public Options ProcessorOptions { get; set; }
 
-
+        [UsedImplicitly]
         public TargetDatabase Process(IEnumerable<LcmsDataSet> dataSets)
         {
             // Deal with DataSetId - Auto increments - Not in this class only
 
-            var targetDatabase = new TargetDatabase();
-
-            var aligner = TargetAlignmentFactory.Create(ProcessorOptions);
-            var clusterer = TargetClustererFactory.Create(ProcessorOptions.TargetFilterType);
-
-            var epicTargets = new List<Evidence>();
-
+            var targetDatabase  = new TargetDatabase();
+            var aligner         = TargetAlignmentFactory.Create(ProcessorOptions);
+            var clusterer       = TargetClustererFactory.Create(ProcessorOptions.TargetFilterType);
+            var epicTargets     = new List<Evidence>();
             
-
             foreach (var dataSet in dataSets)
             {
                 var targetFilter = TargetFilterFactory.Create(dataSet.Tool, ProcessorOptions);
@@ -75,12 +71,9 @@ namespace MTDBFramework.Algorithms
                 }
             }
 
-            //Create the database (the list of consensus targets)
-            //var clustered = clusterer.Cluster(epicTargets);
+            //Create the database (the list of consensus targets)            
             //Convert the list of targets into a list of MassTagLights for LCMS to use as baseline
-            var newTargets = clusterer.Cluster(epicTargets);            
-            targetDatabase.ConsensusTargets = new List<ConsensusTarget>(newTargets.Count());
-                        
+            var newTargets = clusterer.Cluster(epicTargets);                        
             int i = 0, j = 0;
 
             foreach (var consensusTarget in newTargets)
@@ -92,11 +85,8 @@ namespace MTDBFramework.Algorithms
                     target.Id = ++j;
                 }
                 consensusTarget.CalculateStatistics();
-                targetDatabase.ConsensusTargets.Add(consensusTarget);
-            }
-
-
-            
+                targetDatabase.AddConsensusTarget(consensusTarget);
+            }           
 
             var massTagLightTargets = new List<UMCLight>();
             foreach (var evidence in targetDatabase.ConsensusTargets)
@@ -115,11 +105,11 @@ namespace MTDBFramework.Algorithms
 
                     var consensus = new UMCLight
                     {
-                        NETAligned = evidence.Net,
-                        NET = evidence.Net,
+                        NetAligned = evidence.Net,
+                        Net = evidence.Net,
                         ChargeState = charge,
                         MassMonoisotopic = evidence.TheoreticalMonoIsotopicMass,
-                        ID = evidence.Id,
+                        Id = evidence.Id,
                         MassMonoisotopicAligned = evidence.TheoreticalMonoIsotopicMass,
                         DriftTime = driftEnd - driftStart
                     };
@@ -128,7 +118,9 @@ namespace MTDBFramework.Algorithms
             }
 
             var alignmentData = new List<LcmsWarpAlignmentData>();
-            var lcmsAligner = new LcmsWarpAdapter();
+            var options = new LcmsWarpAlignmentOptions { AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP };
+            var lcmsAligner = new LcmsWarpAdapter(options);
+
             //Foreach dataset
             foreach (var dataSet in dataSets)
             {
@@ -137,20 +129,24 @@ namespace MTDBFramework.Algorithms
                 {
                     var umcData = new UMCLight
                     {
-                        NET = evidence.ObservedNet,
+                        Net = evidence.ObservedNet,
                         ChargeState = evidence.Charge,
                         Mz = evidence.Mz,
                         Scan = evidence.Scan,
                         MassMonoisotopic = evidence.MonoisotopicMass,
-                        ID = evidence.Id,
+                        Id = evidence.Id,
                     };
                     umcDataset.Add(umcData);
 
                 }
                 //Convert the list of evidences to UMCLights for LCMS to use as alignee
-                //Align the LCMS
-                var options = new LcmsWarpAlignmentOptions{AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP};
-                alignmentData.Add(lcmsAligner.AlignFeatures(massTagLightTargets, umcDataset, options));
+                //Align the LCMS                
+                // alignmentData.Add(lcmsAligner.AlignFeatures(massTagLightTargets, umcDataset, options));
+                
+                var alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
+                alignmentData.Add(alignedData);
+
+                //alignmentData.Add(lcmsAligner.AlignFeatures(massTagLightTargets, umcDataset, options));
             }
 
             if (AlignmentComplete != null)                

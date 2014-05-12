@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace MTDBFramework.Database
+﻿namespace MTDBFramework.Database
 {
     public class TargetDataSet
     {

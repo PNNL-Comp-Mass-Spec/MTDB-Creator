@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MTDBFramework.IO;
+﻿using MTDBFramework.IO;
 using NUnit.Framework;
 
 namespace MTDBCreatorTestSuite.IO
@@ -17,7 +13,7 @@ namespace MTDBCreatorTestSuite.IO
         /// <param name="expectedNumberOfTargets"></param>
         [Test]
         [TestCase(@"m:\testDatabase-100-3.mtdb", 100)]
-        public void TestLoadDatabase(string path, int expectedNumberOfTargets)
+        public void TestLoadDatabase(string path,  int expectedNumberOfTargets)
         {
             var reader          = new SqLiteTargetDatabaseReader();
             var database        =  reader.Read(path);

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MTDBFramework.UI;
-using Regressor.Algorithms;
+using PNNLOmics.Algorithms.Regression;
 
 #endregion
 

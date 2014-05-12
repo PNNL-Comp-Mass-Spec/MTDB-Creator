@@ -1,8 +1,8 @@
-﻿#region Namespaces
+﻿ #region Namespaces
 
 using System.Collections.Generic;
 using MTDBFramework.Data;
-using Regressor.Algorithms;
+using PNNLOmics.Algorithms.Regression;
 
 #endregion
 
