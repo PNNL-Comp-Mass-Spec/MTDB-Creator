@@ -8,31 +8,37 @@ using NUnit.Framework;
 namespace MTDBCreatorTestSuite.Data
 {
     [TestFixture]
-    public sealed class PeptideSequenceTests
+    public sealed class PeptideSequenceTests : TestBase
     {
-        
-
         // Peptides shouldn't have negative number of tryptic ends OR a number greater than 3
         [Test]
-        public void TrypticEnds()
+        [TestCase("Sequest", "ManySequestList.txt", 1)]
+        [TestCase("Sequest", "ManySequestList.txt", 1)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 50)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 50)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 100)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 100)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 500)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 500)]
+        public void TrypticEnds(string jobDirectory, string jobList, int numJobs)
         {
-            LcmsDataSet data = null;
+            var jobDirectoryPath    = GetPath(jobDirectory);
+            var jobListPath         = GetPath(jobList);
+            LcmsDataSet data        = null;
+            var num                 = 0;
             PeptideCache.Clear();
-            var num = 0;
-            using (var sr = new StreamReader(@"C:\UnitTestFolder\ManySequestList.txt"))
+
+            using (var sr = new StreamReader(jobListPath))
             {
                 var pathName = sr.ReadLine();
-                while (pathName != null)
+                while (pathName != null && num < numJobs)
                 {
-                    data = new LcmsDataSet();
-                    num++;
-                    pathName = @"C:\UnitTestFolder\Sequest\" + pathName;
-
+                    data        = new LcmsDataSet();
+                    pathName    = System.IO.Path.Combine(jobDirectoryPath, pathName);
                     var options = new Options();
+                    var reader  = new SequestPhrpReader(options);
+                    data        = reader.Read(pathName);
 
-                    var reader = new SequestPhrpReader(options);
-
-                    data = reader.Read(pathName);
                     foreach (SequestResult evidence in data.Evidences)
                     {
                         Debug.Assert(evidence.NumTrypticEnds >= 0);
@@ -40,62 +46,38 @@ namespace MTDBCreatorTestSuite.Data
                     }
 
                     pathName = sr.ReadLine();
-                }
-            }
-            using (var sr = new StreamReader(@"C:\UnitTestFolder\ManyXtandemList.txt"))
-            {
-                var pathName = sr.ReadLine();
-                while (pathName != null)
-                {
-                    data = new LcmsDataSet();
                     num++;
-                    pathName = @"C:\UnitTestFolder\Xtandem\" + pathName;
-
-                    var options = new Options();
-
-                    var reader = new XTandemPhrpReader(options);
-
-                    data = reader.Read(pathName);
-                    foreach(XTandemResult evidence in data.Evidences)
-                    {
-                        Debug.Assert(evidence.TrypticState >= 0);
-                        Debug.Assert(evidence.TrypticState < 3);
-                    }
-                    pathName = sr.ReadLine();
                 }
             }
         }
 
         // Peptides with PTMs should have different values for observed NET, delta Mass, and MZ 
         [Test]
-        public void PTMCheck()
+        [TestCase(@"XTandemData\QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt")]
+        public void PTMCheck(string relativePath)
         {
-            LcmsDataSet data = null;
-            var path = @"C:\deganDev\LamarcheData\XTandemData\QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt";
+            LcmsDataSet data    = null;
+            var path            = GetPath(relativePath);
+            data                = new LcmsDataSet();
+            var options         = new Options();
+            var reader          = new XTandemPhrpReader(options);
+            data                = reader.Read(path);
+            var modFound        = false;
+            var target1         = new XTandemResult();
+            var target2         = new List<XTandemResult>();
 
-            data = new LcmsDataSet();
-
-            var options = new Options();
-
-            var reader = new XTandemPhrpReader(options);
-
-            data = reader.Read(path);
-            var modFound = false;
-            var target1 = new XTandemResult();
-            var target2 = new List<XTandemResult>();
             foreach (XTandemResult evidence in data.Evidences)
             {
                 if (evidence.Sequence == "R.Q&AVTNPNNTFFAIKR.L" && !modFound)
                 {
-                    target1 = evidence;
-                    modFound = true;
+                    target1     = evidence;
+                    modFound    = true;
                 }
                 if (evidence.Sequence == "R.QAVTNPNNTFFAIKR.L")
                 {
                     target2.Add(evidence);
                 }
             }
-
             foreach (var evidence in target2)
             {
                 Debug.Assert(target1.ObservedNet != evidence.ObservedNet);

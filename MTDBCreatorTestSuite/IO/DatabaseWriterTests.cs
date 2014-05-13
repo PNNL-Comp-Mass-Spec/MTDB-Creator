@@ -7,7 +7,7 @@ using PHRPReader;
 namespace MTDBCreatorTestSuite.IO
 {
     [TestFixture]
-    public class DatabaseWriterTests
+    public class DatabaseWriterTests : TestBase
     {
         /// <summary>
         /// Tests loading a database from the path provided.
@@ -15,11 +15,12 @@ namespace MTDBCreatorTestSuite.IO
         /// <param name="path"></param>
         /// <param name="numberOfTargets">Number of targets to put in the database</param>
         /// <param name="numberOfEvidences">Number of evidences to put in each target.</param>
+        /// All ignored right now until I get mtdbs locally
         [Test]
         [TestCase(@"m:\testDatabase-1-1.mtdb", 1, 1, Ignore = true)]
         [TestCase(@"m:\testDatabase-1-2.mtdb", 1, 2, Ignore = true)]
         [TestCase(@"m:\testDatabase-2-1.mtdb", 2, 1, Ignore = true)]
-        [TestCase(@"m:\testDatabase-100-3.mtdb", 100, 3, Ignore = false)]
+        [TestCase(@"m:\testDatabase-100-3.mtdb", 100, 3, Ignore = true)]
         public void TestWriteDatabase(string path, int numberOfTargets, int numberOfEvidences)
         {
             var reader       = new SqLiteTargetDatabaseWriter();
