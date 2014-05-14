@@ -59,7 +59,7 @@ namespace MTDBFramework.IO
                 result.NumberBIons = Convert.ToInt16(reader.CurrentPSM.AdditionalScores["b_ions"]);
                 result.NumberYIons = Convert.ToInt16(reader.CurrentPSM.AdditionalScores["y_ions"]);
                 result.PeptideHyperscore = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["Peptide_Hyperscore"]);
-                result.TrypticState = reader.CurrentPSM.NumTrypticTerminii;
+                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
                 result.YScore = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["y_score"]);
                 result.Mz = clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge); 
                 result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);

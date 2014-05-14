@@ -19,7 +19,7 @@ namespace MTDBFramework.Data
         private short m_numberBIons;
         private double m_peptideHyperscore;
         private double m_yScore;
-        private short m_trypticState;
+        private short m_numTrypticEnds;
         private double m_highNormalizedScore;
 
         #endregion
@@ -143,15 +143,15 @@ namespace MTDBFramework.Data
             }
         }
 
-        public short TrypticState
+        public short NumTrypticEnds
         {
             get
             {
-                return m_trypticState;
+                return m_numTrypticEnds;
             }
             set
             {
-                m_trypticState = value;
+                m_numTrypticEnds = value;
                 OnPropertyChanged("TrypticState");
             }
         }

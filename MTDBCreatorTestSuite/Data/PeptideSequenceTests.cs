@@ -4,6 +4,7 @@ using System.IO;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
 using NUnit.Framework;
+using PHRPReader;
 
 namespace MTDBCreatorTestSuite.Data
 {
@@ -13,38 +14,57 @@ namespace MTDBCreatorTestSuite.Data
         // Peptides shouldn't have negative number of tryptic ends OR a number greater than 3
         [Test]
         [TestCase("Sequest", "ManySequestList.txt", 1)]
-        [TestCase("Sequest", "ManySequestList.txt", 1)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 50)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 1)]
+        [TestCase("Sequest", "ManySequestList.txt", 50)]
         [TestCase("Xtandem", "ManyXtandemList.txt", 50)]
         [TestCase("Xtandem", "ManyXtandemList.txt", 100)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 100)]
+        [TestCase("Sequest", "ManySequestList.txt", 100)]
         [TestCase("Xtandem", "ManyXtandemList.txt", 500)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 500)]
+        [TestCase("Sequest", "ManySequestList.txt", 500)]
         public void TrypticEnds(string jobDirectory, string jobList, int numJobs)
         {
             var jobDirectoryPath    = GetPath(jobDirectory);
             var jobListPath         = GetPath(jobList);
             LcmsDataSet data        = null;
             var num                 = 0;
+            var options             = new Options();
             PeptideCache.Clear();
-
             using (var sr = new StreamReader(jobListPath))
             {
                 var pathName = sr.ReadLine();
                 while (pathName != null && num < numJobs)
                 {
-                    data        = new LcmsDataSet();
-                    pathName    = System.IO.Path.Combine(jobDirectoryPath, pathName);
-                    var options = new Options();
-                    var reader  = new SequestPhrpReader(options);
-                    data        = reader.Read(pathName);
-
-                    foreach (SequestResult evidence in data.Evidences)
+                    data            = new LcmsDataSet();
+                    pathName        = Path.Combine(jobDirectoryPath, pathName);
+                    var reader      = PhrpReaderFactory.Create(pathName, options);
+                    data            = reader.Read(pathName);
+                    var resultType  = clsPHRPReader.AutoDetermineResultType(pathName);
+                    switch (resultType)
                     {
-                        Debug.Assert(evidence.NumTrypticEnds >= 0);
-                        Debug.Assert(evidence.NumTrypticEnds < 3);
-                    }
+                        case clsPHRPReader.ePeptideHitResultType.XTandem:
+                            foreach (XTandemResult evidence in data.Evidences)
+                            {
+                                Debug.Assert(evidence.NumTrypticEnds >= 0);
+                                Debug.Assert(evidence.NumTrypticEnds < 3);
+                            }
+                            break;
 
+                        case clsPHRPReader.ePeptideHitResultType.Sequest:
+                            foreach (SequestResult evidence in data.Evidences)
+                            {
+                                Debug.Assert(evidence.NumTrypticEnds >= 0);
+                                Debug.Assert(evidence.NumTrypticEnds < 3);
+                            }
+                            break;
+                            
+                        case clsPHRPReader.ePeptideHitResultType.MSGFDB:
+                            foreach (MsgfPlusResult evidence in data.Evidences)
+                            {
+                                Debug.Assert(evidence.NumTrypticEnds >= 0);
+                                Debug.Assert(evidence.NumTrypticEnds < 3);
+                            }
+                            break;
+                    }
                     pathName = sr.ReadLine();
                     num++;
                 }
@@ -56,12 +76,10 @@ namespace MTDBCreatorTestSuite.Data
         [TestCase(@"XTandemData\QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt")]
         public void PTMCheck(string relativePath)
         {
-            LcmsDataSet data    = null;
             var path            = GetPath(relativePath);
-            data                = new LcmsDataSet();
             var options         = new Options();
             var reader          = new XTandemPhrpReader(options);
-            data                = reader.Read(path);
+            var data            = reader.Read(path);
             var modFound        = false;
             var target1         = new XTandemResult();
             var target2         = new List<XTandemResult>();
