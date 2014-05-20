@@ -25,7 +25,6 @@ namespace MTDBCreatorTestSuite.Data
         {
             var jobDirectoryPath    = GetPath(jobDirectory);
             var jobListPath         = GetPath(jobList);
-            LcmsDataSet data        = null;
             var num                 = 0;
             var options             = new Options();
             PeptideCache.Clear();
@@ -34,10 +33,9 @@ namespace MTDBCreatorTestSuite.Data
                 var pathName = sr.ReadLine();
                 while (pathName != null && num < numJobs)
                 {
-                    data            = new LcmsDataSet();
                     pathName        = Path.Combine(jobDirectoryPath, pathName);
                     var reader      = PhrpReaderFactory.Create(pathName, options);
-                    data            = reader.Read(pathName);
+                    var data            = reader.Read(pathName);
                     var resultType  = clsPHRPReader.AutoDetermineResultType(pathName);
                     switch (resultType)
                     {
