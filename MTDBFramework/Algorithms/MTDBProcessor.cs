@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Algorithms.Clustering;
@@ -118,35 +119,114 @@ namespace MTDBFramework.Algorithms
             }
 
             var alignmentData = new List<LcmsWarpAlignmentData>();
-            var options = new LcmsWarpAlignmentOptions { AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP };
+            var options = new LcmsWarpAlignmentOptions();
             var lcmsAligner = new LcmsWarpAdapter(options);
-
+            int count = 1;
             //Foreach dataset
             foreach (var dataSet in dataSets)
             {
                 var umcDataset = new List<UMCLight>();
-                foreach (var evidence in dataSet.Evidences)
+                var prePath = string.Format(@"d:\preAlign{0}.txt", count);
+                var postPath = string.Format(@"d:\postAlign{0}.txt", count);
+                using (var writer = new StreamWriter(prePath))
                 {
-                    var umcData = new UMCLight
+                    foreach (var evidence in dataSet.Evidences)
                     {
-                        Net = evidence.ObservedNet,
-                        ChargeState = evidence.Charge,
-                        Mz = evidence.Mz,
-                        Scan = evidence.Scan,
-                        MassMonoisotopic = evidence.MonoisotopicMass,
-                        Id = evidence.Id,
-                    };
-                    umcDataset.Add(umcData);
 
+                        var umcData = new UMCLight
+                        {
+                            Net = evidence.ObservedNet,
+                            ChargeState = evidence.Charge,
+                            Mz = evidence.Mz,
+                            Scan = evidence.Scan,
+                            MassMonoisotopic = evidence.MonoisotopicMass,
+                            MassMonoisotopicAligned = evidence.MonoisotopicMass,
+                            Id = evidence.Id,
+                        };
+                        writer.WriteLine(string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}", "\t",
+                                                        umcData.Net,
+                                                        umcData.ChargeState,
+                                                        umcData.Mz,
+                                                        umcData.Scan,
+                                                        umcData.MassMonoisotopic,
+                                                        umcData.MassMonoisotopicAligned,
+                                                        umcData.Id));
+                        umcDataset.Add(umcData);
+                    }
                 }
                 //Convert the list of evidences to UMCLights for LCMS to use as alignee
                 //Align the LCMS                
                 // alignmentData.Add(lcmsAligner.AlignFeatures(massTagLightTargets, umcDataset, options));
-                
+
+                //TODO: Make this a better sorter... bubble sort = booooooo...
+                for (int a = 0; a < (umcDataset.Count - 1); a ++)
+                {
+                    for (int b = a; b < (umcDataset.Count - 1); b++)
+                    {
+                        if (umcDataset[a].Scan > umcDataset[b].Scan)
+                        {
+                            var temp = umcDataset[a];
+                            umcDataset[a] = umcDataset[b];
+                            umcDataset[b] = temp;
+                        }
+                    }
+                }
+
                 var alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
                 alignmentData.Add(alignedData);
+                var residualList = new List<UMCLight> {Capacity = alignedData.ResidualData.Mz.Length};
+                //Put the residual data into a list of UMCLights
+                for (int a = 0; a < alignedData.ResidualData.Mz.Length; a++)
+                {
+                    var residual = new UMCLight
+                    {
+                        MassMonoisotopic    = alignedData.ResidualData.MassErrorCorrected[a],
+                        Scan                = Convert.ToInt32(alignedData.ResidualData.Scan[a])
+                    };
+                    //Not actually monoisotopic mass here, it's the corrected massError from the warping
+                    residualList.Add(residual);
+                }
+
+                //Sort the residual data by scan (so it's sorted the same way as initial list)
+                //TODO: Make this a better sorter... bubble sort = booooooo...
+                for (int a = 0; a < (residualList.Count - 1); a++)
+                {
+                    for (int b = a; b < (residualList.Count - 1); b++)
+                    {
+                        if (residualList[a].Scan > residualList[b].Scan)
+                        {
+                            var temp = residualList[a];
+                            residualList[a] = residualList[b];
+                            residualList[b] = temp;
+                        }
+                    }
+                }
+
+                //Copy the residual data back into the umcDataset
+                for (int a = 0; a < residualList.Count; a++)
+                {
+                    umcDataset[a].MassMonoisotopicAligned = umcDataset[a].MassMonoisotopic -
+                                                            residualList[a].MassMonoisotopic;
+                }
+
+
+                using (var writer = new StreamWriter(postPath))
+                {
+                    foreach (var umcData in umcDataset)
+                    {
+                        writer.WriteLine(string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}", "\t",
+                                                        umcData.Net,
+                                                        umcData.ChargeState,
+                                                        umcData.Mz,
+                                                        umcData.Scan,
+                                                        umcData.MassMonoisotopic,
+                                                        umcData.MassMonoisotopicAligned,
+                                                        umcData.Id));
+                    }
+                }
 
                 //alignmentData.Add(lcmsAligner.AlignFeatures(massTagLightTargets, umcDataset, options));
+                count++;
             }
 
             if (AlignmentComplete != null)                
