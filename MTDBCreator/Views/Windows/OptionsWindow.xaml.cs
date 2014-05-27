@@ -20,8 +20,11 @@ namespace MTDBCreator.Views
         public OptionsWindow(Options options)
         {
             InitializeComponent();
-            m_ViewModel = new OptionsViewModel(options);
-
+            if (m_ViewModel == null)
+            {
+                m_ViewModel = new OptionsViewModel();
+                m_ViewModel.Options = options;
+            }
             DataContext = m_ViewModel;
         }
 

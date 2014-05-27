@@ -98,7 +98,7 @@ namespace MTDBCreator.ViewModels
             Options.MaxLogEValForXTandemAlignment = Convert.ToInt32(options[3]);
 
             // Regression type
-            Options.RegressionType = (Convert.ToBoolean(options[4])) ? RegressionType.LinearEm : RegressionType.MixtureRegression;
+            Options.RegressionType = (options[4] == "LinearEm") ? RegressionType.LinearEm : RegressionType.MixtureRegression;
 
             // Predictor Type
             Options.PredictorType = (Convert.ToBoolean(options[7])) ? RetentionTimePredictionType.Kangas : RetentionTimePredictionType.Krokhin;
@@ -125,11 +125,13 @@ namespace MTDBCreator.ViewModels
             Options.UseDelCn = (Convert.ToBoolean(options[21])) ? true : false;
             if(Options.UseDelCn == true)
             {
-                Options.MaxDelCn = Convert.ToDouble(options[22]);
-
-                // X!Tandem Export
-                Options.MaxLogEValForXTandemExport = Convert.ToDouble(options[23]);
+                if (options[22] == "")
+                    Options.MaxDelCn = 0.0;
+                else
+                    Options.MaxDelCn = Convert.ToDouble(options[22]);                
             }
+            // X!Tandem Export
+            Options.MaxLogEValForXTandemExport = Convert.ToDouble(options[23]);
         }
 
         public ICommand UpdatePredictionCommand

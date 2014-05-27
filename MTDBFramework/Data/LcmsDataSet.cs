@@ -17,6 +17,7 @@ namespace MTDBFramework.Data
         private string m_name;
         private LcmsIdentificationTool m_tool;
         private LinearRegressionResult m_regressionResult;
+        private List<Evidence> m_evidences;
 
         #endregion
 
@@ -42,7 +43,17 @@ namespace MTDBFramework.Data
             }
         }
 
-        public ObservableCollection<Evidence> Evidences { get; set; }
+        //public ObservableCollection<Evidence> Evidences { get; set; }
+
+        public List<Evidence> Evidences
+        {
+            get { return m_evidences; }
+            set
+            {
+                m_evidences = value;
+                OnPropertyChanged("Evidences");
+            }
+        } 
 
         public LinearRegressionResult RegressionResult
         {
@@ -60,7 +71,7 @@ namespace MTDBFramework.Data
         {
             Name = String.Empty;
             Tool = LcmsIdentificationTool.Raw;
-            Evidences = new ObservableCollection<Evidence>();
+            Evidences = new List<Evidence>();
             RegressionResult = new LinearRegressionResult();
         }
 
@@ -68,7 +79,7 @@ namespace MTDBFramework.Data
         {
             Name = name;
             Tool = tool;
-            Evidences = new ObservableCollection<Evidence>(evidences);
+            Evidences = new List<Evidence>(evidences);
             RegressionResult = new LinearRegressionResult();
         }
     }

@@ -344,7 +344,7 @@ namespace MTDBFramework.Data
             MinXCorrForExportNonTrytpic = new [] { 3.0, 3.5, 4.0 };
 
             MinXCorrForAlignment = 3.0;
-            UseDelCn = true;
+            UseDelCn = false;//true;
             MaxDelCn = 0.1;
 
             MaxLogEValForXTandemAlignment = -2.0;

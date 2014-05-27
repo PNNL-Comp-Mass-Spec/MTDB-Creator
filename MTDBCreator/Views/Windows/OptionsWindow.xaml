@@ -130,7 +130,7 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="8"/>
                             </Grid.ColumnDefinitions>
-                            <ComboBox 
+                            <ComboBox x:Name="AlignmentComboBox"
                                 Grid.Row="1"          
                                 Grid.ColumnSpan="4"
                                 Margin="5"
@@ -343,7 +343,7 @@
                             </Grid.ColumnDefinitions>
                             <CheckBox x:Name="SequestDelCnCheckBox" 
                                       Margin="8" Grid.ColumnSpan="3" 
-                                      IsChecked="{Binding Path=Options.UseDelCN, UpdateSourceTrigger=Explicit}">
+                                      IsChecked="{Binding Path=Options.UseDelCn, UpdateSourceTrigger=Explicit}">
                                 Use DelCN Threshold
                             </CheckBox>
                             <Label Margin="8" Grid.Row="1" Grid.Column="1" 
@@ -354,7 +354,7 @@
                                       Margin="0,8,0,8" Grid.Row="1" Grid.Column="2"
                                       PreviewTextInput="Control_PreviewTextInput"
                                       IsEnabled="{Binding ElementName=SequestDelCnCheckBox, Path=IsChecked}"
-                                      Text="{Binding Path=Options.MaxDelCN, UpdateSourceTrigger=Explicit}" />
+                                      Text="{Binding Path=Options.MaxDelCn, UpdateSourceTrigger=Explicit}" />
                         </Grid>
                     </GroupBox>
 
@@ -399,8 +399,8 @@
                         <Binding ElementName="MinimObservationsTextBox" Path="Text" />
                         <Binding ElementName="MinXCorrTextBox" Path="Text"/>
                         <Binding ElementName="MaxLogETextBox" Path="Text"/>
-                        <Binding ElementName="LinearRegressionRadioButton" Path="IsChecked"/>
-                        <Binding ElementName="MixtureRegressionRadioButton" Path="IsChecked"/>
+                        <Binding ElementName="AlignmentComboBox" Path="Text"/>
+                        <Binding ElementName="MixtureRegressionRadioButton" Path="Text"/>
                         <Binding ElementName="OrderTextBox" Path="Text"/>
                         <Binding ElementName="KangasRadioButton" Path="IsChecked"/>
                         <Binding ElementName="KrokhinRadioButton" Path="IsChecked"/>
@@ -418,7 +418,7 @@
                         <Binding ElementName="NonTrypticalCharge3TextBox" Path="Text"/>
                         <Binding ElementName="SequestDelCnCheckBox" Path="IsChecked"/>
                         <Binding ElementName="MinDelCnTextBox" Path="Text"/>
-                        <Binding ElementName="MinDelCnTextBox" Path="Text"/>
+                        <Binding ElementName="MaxLogEForExporTextBox" Path="Text"/>
                         <Binding ElementName="MaxLogEForExporTextBox" Path="Text" />
                     </MultiBinding>
                 </Button.CommandParameter>
