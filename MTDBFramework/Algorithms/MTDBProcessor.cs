@@ -75,12 +75,12 @@ namespace MTDBFramework.Algorithms
 
                 if (ProcessorOptions.TargetFilterType != TargetWorkflowType.TOP_DOWN)
                 {
-                    //var regressor = LinearRegressorFactory.Create(ProcessorOptions.RegressionType);
-                    //dataSet.RegressionResult = regressor.CalculateRegression(alignedTargets.Select(t => (double)t.Scan).ToList(), alignedTargets.Select(t => t.PredictedNet).ToList());
+                    var regressor = LinearRegressorFactory.Create(ProcessorOptions.RegressionType);
+                    dataSet.RegressionResult = regressor.CalculateRegression(alignedTargets.Select(t => (double)t.Scan).ToList(), alignedTargets.Select(t => t.PredictedNet).ToList());
                 }
                 else
                 {
-                    //dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
+                    dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
                 }
             }
 
@@ -278,7 +278,7 @@ namespace MTDBFramework.Algorithms
                 //dataSet.RegressionResult.Intercept  = alignedData.NetIntercept;
                 //dataSet.RegressionResult.Slope      = alignedData.NetSlope;
                 //dataSet.RegressionResult.RSquared   = alignedData.NetRsquared;
-                //alignmentData.Add(lcmsAligner.AlignFeatures(massTagLightTargets, umcDataset, options));
+
                 count++;
             }
 

@@ -26,7 +26,7 @@ namespace MTDBCreator.ViewModels
         private ICommand m_SelectItemsCommand;
 
         private IEnumerable<AnalysisJobItem> m_CurrentAnalysisJobItems;
-        private bool m_IsRegressionLineVisible = true;
+        private bool m_IsRegressionLineVisible = false;//true;
 
         private Dictionary<string, Color> m_SeriesColorDictionary;
 
@@ -226,8 +226,7 @@ namespace MTDBCreator.ViewModels
                 }
              
             }
-            plotModel.Update(true);
-            //plotModel.RefreshPlot(true);
+            plotModel.InvalidatePlot(true);
         }
 
         public void FillAnalysisAnnotations(PlotModel plotModel, IEnumerable<AnalysisJobItem> analysisJobItems)
@@ -241,8 +240,7 @@ namespace MTDBCreator.ViewModels
                     plotModel.Annotations.Add(MakeRegressionLineAnnotation(analysisJobItem));
                 }
             }
-            plotModel.Update(true);
-            //plotModel.RefreshPlot(true);
+            plotModel.InvalidatePlot(true);
         }
 
         #endregion

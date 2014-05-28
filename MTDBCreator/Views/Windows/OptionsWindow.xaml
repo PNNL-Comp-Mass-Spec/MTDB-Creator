@@ -400,10 +400,8 @@
                         <Binding ElementName="MinXCorrTextBox" Path="Text"/>
                         <Binding ElementName="MaxLogETextBox" Path="Text"/>
                         <Binding ElementName="AlignmentComboBox" Path="Text"/>
-                        <Binding ElementName="MixtureRegressionRadioButton" Path="Text"/>
                         <Binding ElementName="OrderTextBox" Path="Text"/>
                         <Binding ElementName="KangasRadioButton" Path="IsChecked"/>
-                        <Binding ElementName="KrokhinRadioButton" Path="IsChecked"/>
                         <Binding ElementName="TrypticPeptidesCheckBox" Path="IsChecked"/>
                         <Binding ElementName="TrypticCharge1TextBox" Path="Text"/>
                         <Binding ElementName="TrypticCharge2TextBox" Path="Text"/>

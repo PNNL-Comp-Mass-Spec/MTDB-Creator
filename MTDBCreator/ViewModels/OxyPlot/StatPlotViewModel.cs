@@ -51,7 +51,10 @@ namespace MTDBCreator.ViewModels
 
         public static PlotModel MakePlotModel(string title)
         {
-            var plotModel = new PlotModel(title);
+            //var plotModel = new PlotModel(title);
+
+            var plotModel = new PlotModel();
+            plotModel.Title = title;
 
             plotModel.Axes.Add(MakeLinerAxis(AxisPosition.Left));
             plotModel.Axes.Add(MakeLinerAxis(AxisPosition.Bottom));
