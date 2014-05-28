@@ -1,8 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
 using NUnit.Framework;
+using PNNLOmics.Algorithms.Regression;
+using MTDBFramework.Algorithms.Alignment;
 
 namespace MTDBCreatorTestSuite.Algorithms
 {
@@ -13,7 +17,7 @@ namespace MTDBCreatorTestSuite.Algorithms
         // Test runs over 200 varied datasets for verification that it's accurate in many instances
         [Test]
         [TestCase("Sequest", "ManySequestList.txt", 1)]
-        [TestCase("Sequest", "ManySequestList.txt", 1)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 1)]
         [TestCase("Xtandem", "ManyXtandemList.txt", 5)]
         [TestCase("Sequest", "ManySequestList.txt", 5)]
         [TestCase("Xtandem", "ManyXtandemList.txt", 10)]
@@ -28,7 +32,6 @@ namespace MTDBCreatorTestSuite.Algorithms
         {
             var jobDirectoryPath    = GetPath(jobDirectory);
             var jobListPath         = GetPath(jobList);
-            LcmsDataSet data        = null;
             var num                 = 0;
             var options             = new Options();
             PeptideCache.Clear();
@@ -38,13 +41,35 @@ namespace MTDBCreatorTestSuite.Algorithms
                 var pathName = sr.ReadLine();
                 while (pathName != null && num < numJobs) 
                 {
-                    data        = new LcmsDataSet();
                     pathName    = Path.Combine(jobDirectoryPath, pathName);
                     var reader  = PhrpReaderFactory.Create(pathName, options);
-                    data        = reader.Read(pathName);
+                    var data        = reader.Read(pathName);
+                    var regressor = LinearRegressorFactory.Create(RegressionType.LinearEm);
 
-                    Debug.Assert(data.RegressionResult.Slope > 0.5);
-                    Debug.Assert(data.RegressionResult.Slope < 2.0);
+                    var targetFilter = TargetFilterFactory.Create(data.Tool, options);
+                    var alignmentFilter = AlignmentFilterFactory.Create(data.Tool, options);
+
+                    var filteredTargets = new List<Evidence>();
+                    var alignedTargets = new List<Evidence>();
+
+                    foreach (var t in data.Evidences)
+                    {
+                        if (!targetFilter.ShouldFilter(t))
+                        {
+                            filteredTargets.Add(t);
+
+                            if (!alignmentFilter.ShouldFilter(t))
+                            {
+                                alignedTargets.Add(t);
+                            }
+                        }
+                    }
+
+                    data.RegressionResult =
+                        regressor.CalculateRegression(alignedTargets.Select(d => d.ObservedNet).ToList(),
+                            alignedTargets.Select(d => d.PredictedNet).ToList());
+                    Debug.Assert(data.RegressionResult.Slope > 0.33);
+                    Debug.Assert(data.RegressionResult.Slope < 1.5);
 
                     pathName = sr.ReadLine();
                     num++;
