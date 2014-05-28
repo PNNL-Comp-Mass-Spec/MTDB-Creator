@@ -121,13 +121,14 @@ namespace MTDBFramework.Algorithms
 
                     var consensus = new UMCLight
                     {
-                        NetAligned = evidence.Net,
                         Net = evidence.Net,
                         ChargeState = charge,
                         MassMonoisotopic = evidence.TheoreticalMonoIsotopicMass,
                         Id = evidence.Id,
                         MassMonoisotopicAligned = evidence.TheoreticalMonoIsotopicMass,
-                        DriftTime = driftEnd - driftStart
+                        DriftTime = driftEnd - driftStart,
+                        ScanStart = (int)driftStart,
+                        ScanEnd = (int)driftEnd,
                     };
                     massTagLightTargets.Add(consensus);
                 }
@@ -159,6 +160,8 @@ namespace MTDBFramework.Algorithms
                             MassMonoisotopic = evidence.MonoisotopicMass,
                             MassMonoisotopicAligned = evidence.MonoisotopicMass,
                             Id = evidence.Id,
+                            ScanStart = evidence.Scan,
+                            ScanEnd = evidence.Scan,
                         };
                         writer.WriteLine(string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}", "\t",
                                                         umcData.Net,
