@@ -10,3 +10,7 @@ packages/
 */builds
 MTDBCreatorInstall/Application Files/
 MTDBCreatorInstall/setup.exe
+_Old/
+bak/data/
+bak/
+SVN_Path.txt
