@@ -19,12 +19,12 @@ namespace MTDBCreatorTestSuite.Data
         [TestCase("Xtandem", "ManyXtandemList.txt", 5)]
         [TestCase("Sequest", "ManySequestList.txt", 10)]
         [TestCase("Xtandem", "ManyXtandemList.txt", 10)]
-        [TestCase("Sequest", "ManySequestList.txt", 50, Ignore = true)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 50, Ignore = true)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 100, Ignore = true)]
-        [TestCase("Sequest", "ManySequestList.txt", 100, Ignore = true)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 500, Ignore = true)]
-        [TestCase("Sequest", "ManySequestList.txt", 500, Ignore = true)]
+        [TestCase("Sequest", "ManySequestList.txt", 50, Ignore = false)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 50, Ignore = false)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 100, Ignore = false)]
+        [TestCase("Sequest", "ManySequestList.txt", 100, Ignore = false)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 500, Ignore = false)]
+        [TestCase("Sequest", "ManySequestList.txt", 500, Ignore = false)]
         public void TrypticEnds(string jobDirectory, string jobList, int numJobs)
         {
             var jobDirectoryPath    = GetPath(jobDirectory);

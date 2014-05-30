@@ -18,15 +18,15 @@ namespace MTDBCreatorTestSuite.IO
         [TestCase("Xtandem", "ManyXtandemList.txt", 5)]
         [TestCase("Xtandem", "ManyXtandemList.txt", 10)]
         [TestCase("Xtandem", "ManyXtandemList.txt", 20)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 50, Ignore = true)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 75, Ignore = true)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 100, Ignore = true)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 50, Ignore = false)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 75, Ignore = false)]
+        [TestCase("Xtandem", "ManyXtandemList.txt", 100, Ignore = false)]
         [TestCase("Sequest", "ManySequestList.txt", 5)]
         [TestCase("Sequest", "ManySequestList.txt", 10)]
         [TestCase("Sequest", "ManySequestList.txt", 20)]
-        [TestCase("Sequest", "ManySequestList.txt", 50, Ignore = true)]
-        [TestCase("Sequest", "ManySequestList.txt", 75, Ignore = true)]
-        [TestCase("Sequest", "ManySequestList.txt", 100, Ignore = true)]
+        [TestCase("Sequest", "ManySequestList.txt", 50, Ignore = false)]
+        [TestCase("Sequest", "ManySequestList.txt", 75, Ignore = false)]
+        [TestCase("Sequest", "ManySequestList.txt", 100, Ignore = false)]
         public void TestLoadingFiles(string jobDirectory, string jobList, int numJobs)
         {
             PeptideCache.Clear();

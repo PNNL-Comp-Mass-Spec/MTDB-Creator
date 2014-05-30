@@ -6,9 +6,9 @@ namespace MTDBCreatorTestSuite
     {
         static TestPathSingleton()
         {
-            TestDirectory = @"D:\testData\";
+            TestDirectory = @"\\protoapps\UserData\DegantestData\";
             var now = DateTime.Now;
-            OutputDirectory = string.Format(@"D:\testResults\{0}_{1}_{2}_{3}_{4}_{5}",
+            OutputDirectory = string.Format(@"C:\MTDBCreatorTestResults\{0}_{1}_{2}_{3}_{4}_{5}",
                                                 now.Year,
                                                 now.Month,
                                                 now.Day,

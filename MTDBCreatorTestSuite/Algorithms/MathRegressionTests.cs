@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -22,12 +23,6 @@ namespace MTDBCreatorTestSuite.Algorithms
         [TestCase("Sequest", "ManySequestList.txt", 5)]
         [TestCase("Xtandem", "ManyXtandemList.txt", 10)]
         [TestCase("Sequest", "ManySequestList.txt", 10)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 50, Ignore = true)]
-        [TestCase("Sequest", "ManySequestList.txt", 50, Ignore = true)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 100, Ignore = true)]
-        [TestCase("Sequest", "ManySequestList.txt", 100, Ignore = true)]
-        [TestCase("Xtandem", "ManyXtandemList.txt", 500, Ignore = true)]
-        [TestCase("Sequest", "ManySequestList.txt", 500, Ignore = true)]
         public void LinearRegression(string jobDirectory, string jobList, int numJobs)
         {
             var jobDirectoryPath    = GetPath(jobDirectory);
@@ -43,16 +38,18 @@ namespace MTDBCreatorTestSuite.Algorithms
                 {
                     pathName    = Path.Combine(jobDirectoryPath, pathName);
                     var reader  = PhrpReaderFactory.Create(pathName, options);
-                    var data        = reader.Read(pathName);
-                    var regressor = LinearRegressorFactory.Create(RegressionType.LinearEm);
+                    var linData        = reader.Read(pathName);
+                    var mixData = new LcmsDataSet();
+                    var linRegressor = LinearRegressorFactory.Create(RegressionType.LinearEm);
+                    var mixRegressor = LinearRegressorFactory.Create(RegressionType.MixtureRegression);
 
-                    var targetFilter = TargetFilterFactory.Create(data.Tool, options);
-                    var alignmentFilter = AlignmentFilterFactory.Create(data.Tool, options);
+                    var targetFilter = TargetFilterFactory.Create(linData.Tool, options);
+                    var alignmentFilter = AlignmentFilterFactory.Create(linData.Tool, options);
 
                     var filteredTargets = new List<Evidence>();
                     var alignedTargets = new List<Evidence>();
 
-                    foreach (var t in data.Evidences)
+                    foreach (var t in linData.Evidences)
                     {
                         if (!targetFilter.ShouldFilter(t))
                         {
@@ -65,12 +62,15 @@ namespace MTDBCreatorTestSuite.Algorithms
                         }
                     }
 
-                    data.RegressionResult =
-                        regressor.CalculateRegression(alignedTargets.Select(d => d.ObservedNet).ToList(),
+                    linData.RegressionResult =
+                        linRegressor.CalculateRegression(alignedTargets.Select(d => d.ObservedNet).ToList(),
                             alignedTargets.Select(d => d.PredictedNet).ToList());
-                    Debug.Assert(data.RegressionResult.Slope > 0.33);
-                    Debug.Assert(data.RegressionResult.Slope < 1.5);
-
+                    mixData.RegressionResult =
+                        mixRegressor.CalculateRegression(alignedTargets.Select(d => d.ObservedNet).ToList(),
+                            alignedTargets.Select(d => d.PredictedNet).ToList());
+                    Debug.Assert(linData.RegressionResult.RSquared < 1.0001);
+                    Debug.Assert(mixData.RegressionResult.RSquared < 1.0001);
+                    Debug.Assert(mixData.RegressionResult.RSquared > 0.8500);
                     pathName = sr.ReadLine();
                     num++;
                 }
