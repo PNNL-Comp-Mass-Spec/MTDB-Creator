@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.IO;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
@@ -12,10 +14,13 @@ namespace MTDBCreatorTestSuite.IO
     public class LoadingDataTests : TestBase
     {
         [Test]
-        [TestCase(@"MSGFPlus\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfdb_syn.txt", null, 1)]
-        [TestCase(@"Xtandem\QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt", null, 1)]
-        [TestCase(@"Sequest\QC_Shew_10_02a_2Nov10_Cougar_10-09-06_syn.txt", null, 1)]
-        public void TestLoadingFiles(string jobDirectory, string jobList, int numJobs)
+        [TestCase(@"MSGFPlus\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfdb_syn.txt", null, 1, 2125)]
+        [TestCase(@"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", null, 1, 2125)]
+        [TestCase(@"Xtandem\QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt", null, 1, 4927)]
+        [TestCase(@"Xtandem", "ManyXtandemList.txt", 3, 2147, 3580, 3433)]
+        [TestCase(@"Sequest\QC_Shew_10_02a_2Nov10_Cougar_10-09-06_syn.txt", null, 1, 3733)]
+        [TestCase(@"Sequest", "ManySequestList.txt", 3, 788, 3733, 3315)]
+        public void TestLoadingFiles(string jobDirectory, string jobList, int numJobs, params int[] expectedEvidences)
         {
             PeptideCache.Clear();
             var options             = new Options();
@@ -24,7 +29,8 @@ namespace MTDBCreatorTestSuite.IO
             {
                 var pathName    = jobDirectoryPath;
                 var reader      = PhrpReaderFactory.Create(pathName, options);
-                reader.Read(pathName);
+                var data        = reader.Read(pathName);
+                Debug.Assert(data.Evidences.Count == expectedEvidences[0]);
             }
             else
             {
@@ -37,8 +43,9 @@ namespace MTDBCreatorTestSuite.IO
                     {
                         pathName    = Path.Combine(jobDirectoryPath, pathName);
                         var reader  = PhrpReaderFactory.Create(pathName, options);
-                        reader.Read(pathName);
-
+                        var data    = reader.Read(pathName);
+                        Debug.Assert(data.Evidences.Count == expectedEvidences[num]);
+                        
                         pathName = sr.ReadLine();
                         num++;
                     }

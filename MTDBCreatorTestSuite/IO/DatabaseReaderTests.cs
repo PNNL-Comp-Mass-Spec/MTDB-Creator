@@ -13,7 +13,7 @@ namespace MTDBCreatorTestSuite.IO
         /// <param name="expectedNumberOfTargets"></param>
         /// All ignored right now until I get mtdbs locally
         [Test]
-        [TestCase(@"d:\testDatabase-100-3.mtdb", 100, Ignore=false)]
+        [TestCase(@"..\..\..\TestData\testDatabase-100-3.mtdb", 100, Ignore = false)]
         public void TestLoadDatabase(string path,  int expectedNumberOfTargets)
         {
             var reader          = new SqLiteTargetDatabaseReader();
