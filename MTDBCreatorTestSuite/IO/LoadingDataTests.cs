@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using MTDBFramework.Data;
@@ -14,43 +13,48 @@ namespace MTDBCreatorTestSuite.IO
     public class LoadingDataTests : TestBase
     {
         [Test]
-        [TestCase(@"MSGFPlus\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfdb_syn.txt", null, 1, 2125)]
-        [TestCase(@"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", null, 1, 2125)]
-        [TestCase(@"Xtandem\QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt", null, 1, 4927)]
         [TestCase(@"Xtandem", "ManyXtandemList.txt", 3, 2147, 3580, 3433)]
-        [TestCase(@"Sequest\QC_Shew_10_02a_2Nov10_Cougar_10-09-06_syn.txt", null, 1, 3733)]
         [TestCase(@"Sequest", "ManySequestList.txt", 3, 788, 3733, 3315)]
         public void TestLoadingFiles(string jobDirectory, string jobList, int numJobs, params int[] expectedEvidences)
         {
             PeptideCache.Clear();
             var options             = new Options();
             var jobDirectoryPath    = GetPath(jobDirectory);
-            if (jobList == null)
+            var jobListPath         = GetPath(jobList);
+            var num                 = 0;
+            using (var sr = new StreamReader(jobListPath))
             {
-                var pathName    = jobDirectoryPath;
-                var reader      = PhrpReaderFactory.Create(pathName, options);
-                var data        = reader.Read(pathName);
-                Debug.Assert(data.Evidences.Count == expectedEvidences[0]);
-            }
-            else
-            {
-                var jobListPath = GetPath(jobList);
-                var num         = 0;
-                using (var sr = new StreamReader(jobListPath))
+                var pathName = sr.ReadLine();
+                while (pathName != null && num < numJobs)
                 {
-                    var pathName = sr.ReadLine();
-                    while (pathName != null && num < numJobs)
-                    {
-                        pathName    = Path.Combine(jobDirectoryPath, pathName);
-                        var reader  = PhrpReaderFactory.Create(pathName, options);
-                        var data    = reader.Read(pathName);
-                        Debug.Assert(data.Evidences.Count == expectedEvidences[num]);
-                        
-                        pathName = sr.ReadLine();
-                        num++;
-                    }
+                    pathName    = Path.Combine(jobDirectoryPath, pathName);
+                    var reader  = PhrpReaderFactory.Create(pathName, options);
+                    var data    = reader.Read(pathName);
+                    Debug.Assert(data.Evidences.Count == expectedEvidences[num]);
+
+                    pathName = sr.ReadLine();
+                    num++;
                 }
             }
+            
+        }
+
+    
+        [Test]
+        [TestCase(@"MSGFPlus\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfdb_syn.txt", 2125)]
+        [TestCase(@"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", 2125)]
+        [TestCase(@"Xtandem\QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt", 4927)]
+        [TestCase(@"Sequest\QC_Shew_10_02a_2Nov10_Cougar_10-09-06_syn.txt", 3733)]
+        public void TestLoadingSingleFile(string jobPath,  int expectedEvidences)
+        {
+            PeptideCache.Clear();
+            var options             = new Options();
+            var jobDirectoryPath    = GetPath(jobPath);
+
+            var pathName    = jobDirectoryPath;
+            var reader      = PhrpReaderFactory.Create(pathName, options);
+            var data        = reader.Read(pathName);
+            Debug.Assert(data.Evidences.Count == expectedEvidences);
         }
     }
 }
