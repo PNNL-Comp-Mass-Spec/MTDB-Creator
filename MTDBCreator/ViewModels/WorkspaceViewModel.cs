@@ -1,6 +1,10 @@
-﻿using System.Windows.Input;
+﻿using System.IO;
+using System.Windows;
+using System.Windows.Input;
 using Microsoft.Win32;
 using MTDBCreator.Commands;
+using MTDBCreator.Views;
+using MTDBFramework.Data;
 using MTDBFramework.UI;
 
 namespace MTDBCreator.ViewModels
@@ -15,6 +19,12 @@ namespace MTDBCreator.ViewModels
         private DatasetPlotViewModel m_datasetPlotViewModel;
         private StatPlotViewModel m_statPlotViewModel;
         private TargetTreeViewModel m_targetTreeViewModel;
+        
+        private const string RefreshBoxText             = "Are you sure you want to refresh the datasets?";
+        private const string RefreshBoxCaption          = "Refresh Datasets";
+        private const MessageBoxButton RefreshBoxButton = MessageBoxButton.YesNo;
+        private const MessageBoxImage RefreshBoxImage   = MessageBoxImage.Question;
+        private bool m_isRefreshAvailable;
 
         #endregion
 
@@ -49,6 +59,8 @@ namespace MTDBCreator.ViewModels
                 return m_refreshCommand;
             }
         }
+
+        private string RestoreDirectory { get; set; }
 
         public AnalysisJobViewModel AnalysisJobViewModel
         {
@@ -102,31 +114,54 @@ namespace MTDBCreator.ViewModels
             }
         }
 
+        
+        
         #endregion
 
         #region Command Methods
 
         private void Refresh()
         {
-            AnalysisJobViewModel.ProcessAnalysisTargets();
-            AnalysisJobViewModel.ProcessAnalysisDatabase();
+            if (AnalysisJobViewModel.Options.OptionsChanged)
+            {
+                MessageBoxResult refreshResult = MessageBox.Show(RefreshBoxText,
+                                                                 RefreshBoxCaption,
+                                                                 RefreshBoxButton,
+                                                                 RefreshBoxImage);
+                if (refreshResult == MessageBoxResult.Yes)
+                {
+                    AnalysisJobViewModel.ProcessAnalysisTargets();
+                    AnalysisJobViewModel.ProcessAnalysisDatabase();
 
-            UpdateDataViewModels();
+                    UpdateDataViewModels();
+                    AnalysisJobViewModel.Options.OptionsChanged = false;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Datasets already current. \nNo need to refresh processing.", "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void CreateDatabase()
         {
 
 
-            var saveDatabaseDialog = new SaveFileDialog();
-            saveDatabaseDialog.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
-            saveDatabaseDialog.Title = "Save to MTDB";
+            var saveDatabaseDialog              = new SaveFileDialog();
+            saveDatabaseDialog.Filter           = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
+            saveDatabaseDialog.Title            = "Save to MTDB";
+            if (RestoreDirectory == null)
+            {
+                RestoreDirectory = "C:\\";
+            }
+            saveDatabaseDialog.InitialDirectory = RestoreDirectory;
             saveDatabaseDialog.RestoreDirectory = true;
 
             if (saveDatabaseDialog.ShowDialog() == true)
             {
                 AnalysisJobViewModel.SaveAnalysisDatabase(saveDatabaseDialog.FileName);
             }
+            RestoreDirectory = Path.GetDirectoryName(saveDatabaseDialog.FileName);
         }
 
         private void ReadDatabase()
@@ -158,7 +193,6 @@ namespace MTDBCreator.ViewModels
             {
                 DatasetPlotViewModel.UpdatePlotViewModel(AnalysisJobViewModel);
             }
-
             TargetTreeViewModel = new TargetTreeViewModel(AnalysisJobViewModel);
             StatPlotViewModel = new StatPlotViewModel(AnalysisJobViewModel);
         }

@@ -18,6 +18,7 @@ namespace MTDBCreator.ViewModels
         private string m_PredictionText;
         private Options m_Options;
 
+
         private ICommand m_UpdatePredictionCommand;
         private ICommand m_SaveCommand;
 
@@ -39,6 +40,7 @@ namespace MTDBCreator.ViewModels
 
         #region Public Properties
 
+
         public string PredictionText
         {
             get
@@ -52,6 +54,8 @@ namespace MTDBCreator.ViewModels
             }
         }
 
+        public bool OptionsChanged { get; set; }
+
         public Options Options
         {
             get
@@ -61,6 +65,7 @@ namespace MTDBCreator.ViewModels
             set
             {
                 m_Options = value;
+                OptionsChanged = true;
                 OnPropertyChanged("Options");
             }
         }
@@ -132,6 +137,7 @@ namespace MTDBCreator.ViewModels
             
             // X!Tandem Export
             Options.MaxLogEValForXTandemExport = Convert.ToDouble(parameter[21]);
+            Options.OptionsChanged = true;
         }
 
         public ICommand UpdatePredictionCommand

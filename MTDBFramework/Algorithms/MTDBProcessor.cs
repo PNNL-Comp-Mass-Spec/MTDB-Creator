@@ -123,10 +123,12 @@ namespace MTDBFramework.Algorithms
                     {
                         Net = evidence.Net,
                         ChargeState = charge,
+                        Mz = (evidence.TheoreticalMonoIsotopicMass / charge),
                         MassMonoisotopic = evidence.TheoreticalMonoIsotopicMass,
                         Id = evidence.Id,
                         MassMonoisotopicAligned = evidence.TheoreticalMonoIsotopicMass,
                         DriftTime = driftEnd - driftStart,
+                        Scan = (int)((driftStart + driftEnd) / 2.0),
                         ScanStart = (int)driftStart,
                         ScanEnd = (int)driftEnd,
                     };

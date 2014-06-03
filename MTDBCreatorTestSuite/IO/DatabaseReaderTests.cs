@@ -11,7 +11,6 @@ namespace MTDBCreatorTestSuite.IO
         /// </summary>
         /// <param name="path"></param>
         /// <param name="expectedNumberOfTargets"></param>
-        /// All ignored right now until I get mtdbs locally
         [Test]
         [TestCase(@"..\..\..\TestData\testDatabase-100-3.mtdb", 100, Ignore = false)]
         public void TestLoadDatabase(string path,  int expectedNumberOfTargets)

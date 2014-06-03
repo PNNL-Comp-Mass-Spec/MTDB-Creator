@@ -54,6 +54,8 @@ namespace MTDBFramework.Data
             }
         }
 
+        public bool OptionsChanged { get; set; }
+
         public short RegressionOrder
         {
             get
@@ -356,6 +358,8 @@ namespace MTDBFramework.Data
 
             MsgfFdr = .01;
             MsgfSpectralEValue = .05;
+
+            OptionsChanged = false;
         }
     }
 }
