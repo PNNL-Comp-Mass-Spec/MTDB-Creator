@@ -24,8 +24,7 @@ namespace MTDBCreator.ViewModels
         private const string RefreshBoxCaption          = "Refresh Datasets";
         private const MessageBoxButton RefreshBoxButton = MessageBoxButton.YesNo;
         private const MessageBoxImage RefreshBoxImage   = MessageBoxImage.Question;
-        private bool m_isRefreshAvailable;
-
+        
         #endregion
 
         #region Public Properties
@@ -114,7 +113,9 @@ namespace MTDBCreator.ViewModels
             }
         }
 
-        
+        public bool IsDatabaseSaved { get; set; }
+
+        public string SavedDatabasePath { get; set; }
         
         #endregion
 
@@ -135,6 +136,7 @@ namespace MTDBCreator.ViewModels
 
                     UpdateDataViewModels();
                     AnalysisJobViewModel.Options.OptionsChanged = false;
+                    
                 }
             }
             else
@@ -145,23 +147,31 @@ namespace MTDBCreator.ViewModels
 
         private void CreateDatabase()
         {
-
-
-            var saveDatabaseDialog              = new SaveFileDialog();
-            saveDatabaseDialog.Filter           = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
-            saveDatabaseDialog.Title            = "Save to MTDB";
-            if (RestoreDirectory == null)
+            if (!IsDatabaseSaved)
             {
-                RestoreDirectory = "C:\\";
-            }
-            saveDatabaseDialog.InitialDirectory = RestoreDirectory;
-            saveDatabaseDialog.RestoreDirectory = true;
+                var saveDatabaseDialog = new SaveFileDialog();
+                saveDatabaseDialog.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
+                saveDatabaseDialog.Title = "Save to MTDB";
+                if (RestoreDirectory == null)
+                {
+                    RestoreDirectory = "C:\\";
+                }
+                saveDatabaseDialog.InitialDirectory = RestoreDirectory;
+                saveDatabaseDialog.RestoreDirectory = true;
 
-            if (saveDatabaseDialog.ShowDialog() == true)
-            {
-                AnalysisJobViewModel.SaveAnalysisDatabase(saveDatabaseDialog.FileName);
+                if (saveDatabaseDialog.ShowDialog() == true)
+                {
+                    AnalysisJobViewModel.SaveAnalysisDatabase(saveDatabaseDialog.FileName);
+                }
+                RestoreDirectory = Path.GetDirectoryName(saveDatabaseDialog.FileName);
+                SavedDatabasePath = saveDatabaseDialog.FileName;
+                IsDatabaseSaved = true;
             }
-            RestoreDirectory = Path.GetDirectoryName(saveDatabaseDialog.FileName);
+            else
+            {
+                var message = string.Format("Database already saved to {0}", SavedDatabasePath);
+                MessageBox.Show(message, "", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
         private void ReadDatabase()
@@ -195,6 +205,7 @@ namespace MTDBCreator.ViewModels
             }
             TargetTreeViewModel = new TargetTreeViewModel(AnalysisJobViewModel);
             StatPlotViewModel = new StatPlotViewModel(AnalysisJobViewModel);
+            IsDatabaseSaved = false;
         }
 
         #endregion

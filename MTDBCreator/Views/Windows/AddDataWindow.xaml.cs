@@ -2,9 +2,12 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Win32;
+using Microsoft.VisualBasic;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.Dialog;
@@ -59,6 +62,41 @@ namespace MTDBCreator.Windows
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             AddButton.ContextMenu.IsOpen = true;
+        }
+
+        private void AddFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            AddFolderButton.ContextMenu.IsOpen = true;
+        }
+
+        private void AddFolderFileMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var addFolderFileMenuItem = e.Source as MenuItem;
+
+            if (addFolderFileMenuItem != null)
+            {
+                var formatInfo = FileDialogFormatInfoFactory.Create(addFolderFileMenuItem.Tag.ToString());
+
+                string rootPath = Interaction.InputBox("Enter the root folder for the datasets.", "Add dataset folder");
+                var filter = formatInfo.Filter.Split('|').Last();
+                foreach (
+                    var file in Directory.EnumerateFiles(rootPath, filter, SearchOption.AllDirectories))
+                {
+                    {
+                        //Check to separate Sequest Files from MSGF+ files due to similar extensions
+                        if ((formatInfo.Format == LcmsIdentificationTool.Sequest) && file.EndsWith("msgfdb_syn.txt"))
+                        {
+                            continue;
+                        }
+                        AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file, formatInfo.Format));
+
+                        if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
+                        {
+                            AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
+                        }
+                    }
+                }
+            }
         }
 
         private void AddFileMenuItem_Click(object sender, RoutedEventArgs e)
