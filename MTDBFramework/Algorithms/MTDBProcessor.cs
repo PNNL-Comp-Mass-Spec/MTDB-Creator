@@ -60,13 +60,18 @@ namespace MTDBFramework.Algorithms
 
                 foreach (var t in dataSet.Evidences)
                 {
-                    if (!targetFilter.ShouldFilter(t))
+                    //Exclude carryover peptides.
+                    //Would be evidenced by a sizable difference between observed net and predicted net
+                    if (Math.Abs(t.ObservedNet - t.PredictedNet) < 0.6)
                     {
-                        filteredTargets.Add(t);
-
-                        if (!alignmentFilter.ShouldFilter(t))
+                        if (!targetFilter.ShouldFilter(t))
                         {
-                            alignedTargets.Add(t);
+                            filteredTargets.Add(t);
+
+                            if (!alignmentFilter.ShouldFilter(t))
+                            {
+                                alignedTargets.Add(t);
+                            }
                         }
                     }
                 }

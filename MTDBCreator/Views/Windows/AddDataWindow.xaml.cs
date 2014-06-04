@@ -78,21 +78,24 @@ namespace MTDBCreator.Windows
                 var formatInfo = FileDialogFormatInfoFactory.Create(addFolderFileMenuItem.Tag.ToString());
 
                 string rootPath = Interaction.InputBox("Enter the root folder for the datasets.", "Add dataset folder");
-                var filter = formatInfo.Filter.Split('|').Last();
-                foreach (
-                    var file in Directory.EnumerateFiles(rootPath, filter, SearchOption.AllDirectories))
+                if (rootPath != "")
                 {
+                    var filter = formatInfo.Filter.Split('|').Last();
+                    foreach (
+                        var file in Directory.EnumerateFiles(rootPath, filter, SearchOption.AllDirectories))
                     {
-                        //Check to separate Sequest Files from MSGF+ files due to similar extensions
-                        if ((formatInfo.Format == LcmsIdentificationTool.Sequest) && file.EndsWith("msgfdb_syn.txt"))
                         {
-                            continue;
-                        }
-                        AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file, formatInfo.Format));
+                            //Check to separate Sequest Files from MSGF+ files due to similar extensions
+                            if ((formatInfo.Format == LcmsIdentificationTool.Sequest) && file.EndsWith("msgfdb_syn.txt"))
+                            {
+                                continue;
+                            }
+                            AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file, formatInfo.Format));
 
-                        if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
-                        {
-                            AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
+                            if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
+                            {
+                                AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
+                            }
                         }
                     }
                 }
