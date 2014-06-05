@@ -1,7 +1,10 @@
 ﻿#region Namespaces
 
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using MathNet.Numerics;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
 
@@ -58,14 +61,69 @@ namespace MTDBFramework.IO
     {
         public static void CalculateObservedNet(IEnumerable<Evidence> evidences )
         {
-            double maxScan = evidences.Max(result => result.Scan);
-            double minScan = evidences.Min(result => result.Scan);
-
-            foreach (var evidence in evidences)
+            // If we have the scans file, use that to calculate the observed Net
+            var jobFolder = Path.GetDirectoryName(evidences.First().DataSet.Path);
+            var scansPath = jobFolder + "\\" + evidences.First().DataSet.Name + "_scans.csv";
+            if (File.Exists(scansPath))
             {
-                evidence.ObservedNet = (evidence.Scan - minScan) / (maxScan - minScan);
+                // Create dictionary of scans to times
+                var scanToTime = new Dictionary<int, double>();
+                using (var reader = new StreamReader(scansPath))
+                {
+                    //Read the header
+                    reader.ReadLine();
+                    //Read the first line
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        if (line != null)
+                        {
+                            var parsedLine = line.Split(',');
+
+                            scanToTime.Add(Convert.ToInt32(parsedLine[0]), Convert.ToDouble(parsedLine[1]));
+                        }
+                    }
+                }
+
+                var maxTime = scanToTime.Max(scanTimePair => scanTimePair.Value);
+                var minTime = scanToTime.Min(scanTimePair => scanTimePair.Value);
+
+                foreach (var evidence in evidences)
+                {
+                    int scanStart = 0;
+                    int scanEnd  = 1;
+                    double timeStart = 1;
+                    double timeEnd = 1;
+                    
+                    foreach (var scanTimePair in scanToTime)
+                    {
+                        if (evidence.Scan < scanTimePair.Key)
+                        {
+                            scanEnd = scanTimePair.Key;
+                            timeEnd = scanTimePair.Value;
+                            break;
+                        }
+                        scanStart = scanTimePair.Key;
+                        timeStart = scanTimePair.Value;
+                    }
+                    // Find the time that it was observed. Not normalized yet.
+                    var observedTime = ((double) (evidence.Scan - scanStart)/(scanEnd - scanStart))*
+                                           (timeEnd - timeStart) + timeStart;
+                    evidence.ObservedNet = (observedTime - minTime)/(maxTime - minTime);
+                }
             }
-            
+
+            //Otherwise, we base it on min and max scan
+            else
+            {
+                double maxScan = evidences.Max(result => result.Scan);
+                double minScan = evidences.Min(result => result.Scan);
+
+                foreach (var evidence in evidences)
+                {
+                    evidence.ObservedNet = (evidence.Scan - minScan)/(maxScan - minScan);
+                }
+            }
         }
 
 		// Entry point for calculating the predicted NET.
