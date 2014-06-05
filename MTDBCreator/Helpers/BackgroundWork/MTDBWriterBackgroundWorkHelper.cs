@@ -10,13 +10,13 @@ using MTDBFramework.UI;
 
 namespace MTDBCreator.Helpers.BackgroundWork
 {
-    public class MTDBWriterBackgroundWorkHelper : IBackgroundWorkHelper
+    public class MtdbWriterBackgroundWorkHelper : IBackgroundWorkHelper
     {
-        public MTDBWriterBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel, string fileName)
+        public MtdbWriterBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel, string fileName)
         {
-            m_Database = analysisJobViewModel.Database;
-            m_DatabaseOptions = analysisJobViewModel.Options;
-            m_DatabaseFileName = fileName;
+            Database = analysisJobViewModel.Database;
+            DatabaseOptions = analysisJobViewModel.Options;
+            DatabaseFileName = fileName;
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -24,7 +24,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
             var targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
 
             targetDatabaseWriter.ProgressChanged += targetDatabaseWriter_ProgressChanged;
-            targetDatabaseWriter.Write(m_Database, m_DatabaseOptions, m_DatabaseFileName);
+            targetDatabaseWriter.Write(Database, DatabaseOptions, DatabaseFileName);
         }
 
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -57,7 +57,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
             if (e.Result == null)
             {
-                MessageBox.Show(String.Format("The MTDB has been created successfully.{0}{0}Path:{0}{0}{1}", Environment.NewLine, m_DatabaseFileName), Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(String.Format("The MTDB has been created successfully.{0}{0}Path:{0}{0}{1}", Environment.NewLine, DatabaseFileName), Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -65,7 +65,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
         {
             get
             {
-                return new object[] { m_Database, m_DatabaseFileName };
+                return new object[] { Database, DatabaseFileName };
             }
         }
         public object Result
@@ -107,15 +107,15 @@ namespace MTDBCreator.Helpers.BackgroundWork
                     }
                 case MtdbCreationProgressType.COMMIT:
                     {
-                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, String.Concat("Writing to MTDB: ", m_DatabaseFileName));
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, String.Concat("Writing to MTDB: ", DatabaseFileName));
 
                         break;
                     }
             }
         }
 
-        private TargetDatabase m_Database { get; set; }
-        private Options m_DatabaseOptions { get; set; }
-        private string m_DatabaseFileName { get; set; }
+        private TargetDatabase Database { get; set; }
+        private Options DatabaseOptions { get; set; }
+        private string DatabaseFileName { get; set; }
     }
 }

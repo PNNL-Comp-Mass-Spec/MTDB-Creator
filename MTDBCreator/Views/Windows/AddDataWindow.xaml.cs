@@ -178,7 +178,7 @@ namespace MTDBCreator.Windows
             Close();
         }
 
-        private void AnalysisJobViewModel_AnalysisJobProcessed(object sender, MTDBResultChangedEventArgs e)
+        private void AnalysisJobViewModel_AnalysisJobProcessed(object sender, MtdbResultChangedEventArgs e)
         {
             if (e.Result == null)
             {

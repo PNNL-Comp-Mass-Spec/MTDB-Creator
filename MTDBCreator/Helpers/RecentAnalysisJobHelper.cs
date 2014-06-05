@@ -1,6 +1,8 @@
 ﻿#region Namespaces
 
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using MTDBCreator.Properties;
 using MTDBCreator.ViewModels;
@@ -38,17 +40,8 @@ namespace MTDBCreator.Helpers
 
         internal static void RemoveRecentAnalysisJob(string hash)
         {
-            string recentAnalysisJobString = null;
-
-            foreach (var s in Settings.Default.RecentAnalysisJobs)
-            {
-                if (s.StartsWith(hash))
-                {
-                    recentAnalysisJobString = s;
-
-                    break;
-                }
-            }
+            var recentAnalysisJobString = Settings.Default.RecentAnalysisJobs.
+                                                Cast<string>().FirstOrDefault(s => s.StartsWith(hash));
 
             if (!String.IsNullOrEmpty(recentAnalysisJobString))
             {
@@ -58,16 +51,16 @@ namespace MTDBCreator.Helpers
 
         internal static string GetRecentAnalysisJobTitle(string analysisJobString)
         {
-            var startIndex = analysisJobString.IndexOf("|"); // | after hash
-            startIndex = analysisJobString.IndexOf("|", startIndex + 1); // | after no.
-            var endIndex = analysisJobString.IndexOf("|", startIndex + 1); // | after title
+            var startIndex = analysisJobString.IndexOf("|", StringComparison.Ordinal); // | after hash
+            startIndex = analysisJobString.IndexOf("|", startIndex + 1, StringComparison.Ordinal); // | after no.
+            var endIndex = analysisJobString.IndexOf("|", startIndex + 1, StringComparison.Ordinal); // | after title
 
             return analysisJobString.Substring(startIndex + 1, endIndex - startIndex - 1);
         }
 
         internal static string GetRecentAnalysisJobHash(string analysisJobString)
         {
-            return analysisJobString.Substring(0, analysisJobString.IndexOf("|"));
+            return analysisJobString.Substring(0, analysisJobString.IndexOf("|", StringComparison.Ordinal));
         }
 
         internal static AnalysisJobViewModel GetRecentAnalysisJobItem(string analysisJobString)
@@ -78,10 +71,9 @@ namespace MTDBCreator.Helpers
 
             var analysisJobViewModel = new AnalysisJobViewModel
             {
-                Title = strs[2]
+                Title = strs[2],
+                Options = {TargetFilterType = (TargetWorkflowType) Enum.Parse(typeof (TargetWorkflowType), strs[3])}
             };
-
-            analysisJobViewModel.Options.TargetFilterType = (TargetWorkflowType)Enum.Parse(typeof(TargetWorkflowType), strs[3]);
 
             for (var i = 4; i < strs.Length; i += 2)
             {
@@ -98,7 +90,7 @@ namespace MTDBCreator.Helpers
             // Format: <Hash>|<No>|<Title>|<Workflow>|<FileName 1>|<Format 1>|<FileName 2>|<Format 2>|<FileName 3>|<Format 3>|...
 
             sb.Append("|");
-            sb.Append(analysisJobViewModel.Id.ToString()); // Get new recent analysis job item no.
+            sb.Append(analysisJobViewModel.Id.ToString(CultureInfo.InvariantCulture)); // Get new recent analysis job item no.
             sb.Append("|");
             sb.Append(analysisJobViewModel.Title);
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace MTDBCreator.Helpers
@@ -17,11 +18,9 @@ namespace MTDBCreator.Helpers
 
             // Regression Type
             results.Add(values[4].ToString());
-            //results.Add(values[5].ToString());
             results.Add((string)values[5]);
 
             // Predictor Type
-            //results.Add(values[7].ToString());
             results.Add(values[6].ToString());
 
             // Tryptic Peptides
@@ -48,6 +47,14 @@ namespace MTDBCreator.Helpers
 
             // X!Tandem Export
             results.Add((string)values[21]);
+
+            for(int i = 0; i < results.Count; i++)
+            {
+                if (results[i] == "")
+                {
+                    results[i] = "0";
+                }
+            }
 
             return results;
         }

@@ -14,10 +14,10 @@ namespace MTDBFramework.Database
             Map(x => x.RegressionType);
             Map(x => x.RegressionOrder);
 
-            //// General
+            // General
             Map(x => x.TargetFilterType);
 
-            ////public static IRetentionTimePredictor Predictor { get; set; }
+            //// NET Prediction
             Map(x => x.PredictorType);
 
             //// Peptides

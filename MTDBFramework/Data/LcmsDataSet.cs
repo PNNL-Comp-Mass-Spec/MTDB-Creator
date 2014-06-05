@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using MTDBFramework.UI;
 using PNNLOmics.Algorithms.Regression;
 
@@ -42,9 +41,7 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("Tool");
             }
         }
-
-        //public ObservableCollection<Evidence> Evidences { get; set; }
-
+        
         public List<Evidence> Evidences
         {
             get { return m_evidences; }

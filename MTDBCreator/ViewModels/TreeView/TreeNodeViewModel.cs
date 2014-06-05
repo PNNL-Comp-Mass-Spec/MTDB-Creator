@@ -8,9 +8,9 @@ namespace MTDBCreator.ViewModels.TreeView
     {
         #region Private Fields
 
-        private bool m_IsSelected;
-        private bool m_IsExpanded;
-        private bool m_IsLoaded;
+        private bool m_isSelected;
+        private bool m_isExpanded;
+        private bool m_isLoaded;
 
         protected TreeNodeViewModel m_Parent;
 
@@ -38,12 +38,12 @@ namespace MTDBCreator.ViewModels.TreeView
 
         public virtual bool IsSelected
         {
-            get { return m_IsSelected; }
+            get { return m_isSelected; }
             set
             {
-                if (value != m_IsSelected)
+                if (value != m_isSelected)
                 {
-                    m_IsSelected = value;
+                    m_isSelected = value;
                     OnPropertyChanged("IsSelected");
 
                     if (value)
@@ -59,28 +59,28 @@ namespace MTDBCreator.ViewModels.TreeView
 
         public virtual bool IsExpanded
         {
-            get { return m_IsExpanded; }
+            get { return m_isExpanded; }
             set
             {
-                if (value != m_IsExpanded)
+                if (value != m_isExpanded)
                 {
-                    m_IsExpanded = value;
+                    m_isExpanded = value;
                     OnPropertyChanged("IsExpanded");
                 }
 
                 // Expand all the way up to the root.
-                if (m_IsExpanded && m_Parent != null)
+                if (m_isExpanded && m_Parent != null)
                 {
                     m_Parent.IsExpanded = true;
                 }
 
-                if (m_IsExpanded && !IsLoaded)
+                if (m_isExpanded && !IsLoaded)
                 {
                     LoadChildNodes();
-                    m_IsLoaded = true;
+                    m_isLoaded = true;
                 }
 
-                if (m_IsExpanded)
+                if (m_isExpanded)
                 {
                     IsSelected = true;
                 }
@@ -89,7 +89,7 @@ namespace MTDBCreator.ViewModels.TreeView
 
         public virtual bool IsLoaded
         {
-            get { return m_IsLoaded; }
+            get { return m_isLoaded; }
         }
 
         #endregion

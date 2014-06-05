@@ -5,25 +5,25 @@ namespace MTDBCreator.ViewModels.TreeView
 {
     public class TargetTreeNodeViewModel : TreeNodeViewModel
     {
-        private Evidence m_Evidence;
+        private readonly Evidence m_evidence;
 
         public TargetTreeNodeViewModel(Evidence t, TreeNodeViewModel parent)
             : base(t.Sequence, true, parent)
         {
-            m_Evidence = t;
+            m_evidence = t;
         }
 
         public override void LoadChildNodes()
         {
             base.LoadChildNodes();
 
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Scan: ", m_Evidence.Scan.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Charge: ", m_Evidence.Charge.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Mass: ", m_Evidence.MonoisotopicMass.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Observed Net: ", m_Evidence.ObservedNet.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Predicted Net: ", m_Evidence.PredictedNet.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Sequence: ", m_Evidence.Sequence)));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Clean Peptide: ", m_Evidence.CleanPeptide)));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Scan: ", m_evidence.Scan.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Charge: ", m_evidence.Charge.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Mass: ", m_evidence.MonoisotopicMass.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Observed Net: ", m_evidence.ObservedNet.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Predicted Net: ", m_evidence.PredictedNet.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Sequence: ", m_evidence.Sequence)));
+            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Clean Peptide: ", m_evidence.CleanPeptide)));
         }
     }
 }

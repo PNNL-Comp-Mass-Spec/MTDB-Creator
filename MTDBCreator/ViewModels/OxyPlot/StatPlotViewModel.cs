@@ -1,5 +1,4 @@
-﻿using MTDBFramework.Data;
-using MTDBFramework.Database;
+﻿using MTDBFramework.Database;
 using MTDBFramework.UI;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -10,12 +9,12 @@ namespace MTDBCreator.ViewModels
     public class StatPlotViewModel : ObservableObject
     {
         public PlotModel StdevMassPlotModel { get; set; }
-        public PlotModel StdevNETPlotModel { get; set; }
+        public PlotModel StdevNetPlotModel { get; set; }
 
         public StatPlotViewModel(AnalysisJobViewModel analysisJobViewModel)
         {
             StdevMassPlotModel = MakePlotModel("Stdev Mass");
-            StdevNETPlotModel = MakePlotModel("Stdev NET");
+            StdevNetPlotModel = MakePlotModel("Stdev NET");
 
             foreach (var axis in StdevMassPlotModel.Axes)
             {
@@ -32,7 +31,7 @@ namespace MTDBCreator.ViewModels
 
             StdevMassPlotModel.Series.Add(MakeStdevMassScatterSeries(analysisJobViewModel.Database));
 
-            foreach (var axis in StdevNETPlotModel.Axes)
+            foreach (var axis in StdevNetPlotModel.Axes)
             {
                 switch (axis.Position)
                 {
@@ -46,15 +45,15 @@ namespace MTDBCreator.ViewModels
             }
 
             StdevMassPlotModel.Series.Add(MakeStdevMassScatterSeries(analysisJobViewModel.Database));
-            StdevNETPlotModel.Series.Add(MakeStdevNETScatterSeries(analysisJobViewModel.Database));
+            StdevNetPlotModel.Series.Add(MakeStdevNetScatterSeries(analysisJobViewModel.Database));
         }
 
         public static PlotModel MakePlotModel(string title)
         {
-            //var plotModel = new PlotModel(title);
-
-            var plotModel = new PlotModel();
-            plotModel.Title = title;
+            var plotModel = new PlotModel
+            {
+                Title = title
+            };
 
             plotModel.Axes.Add(MakeLinerAxis(AxisPosition.Left));
             plotModel.Axes.Add(MakeLinerAxis(AxisPosition.Bottom));
@@ -68,7 +67,7 @@ namespace MTDBCreator.ViewModels
             {
                 Position = position,
                 TitleFontSize = 14,
-                TitleFontWeight = OxyPlot.FontWeights.Bold,
+                TitleFontWeight = FontWeights.Bold,
                 AxisTitleDistance = 12,
                 MajorGridlineStyle = LineStyle.Solid,
                 MinorGridlineStyle = LineStyle.Solid,
@@ -101,7 +100,7 @@ namespace MTDBCreator.ViewModels
             return scatterSeries;
         }
 
-        public static ScatterSeries MakeStdevNETScatterSeries(TargetDatabase targetDatabase)
+        public static ScatterSeries MakeStdevNetScatterSeries(TargetDatabase targetDatabase)
         {
             var scatterSeries = MakeScatterSeries();
 

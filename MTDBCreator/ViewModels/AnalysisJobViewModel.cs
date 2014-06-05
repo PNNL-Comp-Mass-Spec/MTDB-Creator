@@ -114,13 +114,13 @@ namespace MTDBCreator.ViewModels
         {
             var result = ProcessAnalysisTargets();
 
-            OnAnalysisJobProcessed(new MTDBResultChangedEventArgs(result));
+            OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
 
             if (result != null && param == null)
             {
                 result = ProcessAnalysisDatabase();
 
-                OnAnalysisJobProcessed(new MTDBResultChangedEventArgs(result));
+                OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
             }
         }
 
@@ -153,16 +153,16 @@ namespace MTDBCreator.ViewModels
 
         public object SaveAnalysisDatabase(string fileName)
         {
-            return BackgroundWorkProcessHelper.Process(new MTDBWriterBackgroundWorkHelper(this, fileName));
+            return BackgroundWorkProcessHelper.Process(new MtdbWriterBackgroundWorkHelper(this, fileName));
         }
 
         #endregion
 
         #region Events
 
-        public event MTDBResultChangedEventHandler AnalysisJobProcessed;
+        public event MtdbResultChangedEventHandler AnalysisJobProcessed;
 
-        private void OnAnalysisJobProcessed(MTDBResultChangedEventArgs e)
+        private void OnAnalysisJobProcessed(MtdbResultChangedEventArgs e)
         {
             if (AnalysisJobProcessed != null)
             {

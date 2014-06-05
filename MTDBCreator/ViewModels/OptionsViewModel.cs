@@ -5,7 +5,6 @@ using MTDBFramework.Data;
 using MTDBFramework.UI;
 using System;
 using System.Collections;
-using System.Linq;
 using System.Windows.Input;
 using PNNLOmics.Algorithms.Regression;
 
@@ -15,12 +14,12 @@ namespace MTDBCreator.ViewModels
     {
         #region Private Fields
 
-        private string m_PredictionText;
-        private Options m_Options;
+        private string m_predictionText;
+        private Options m_options;
 
 
-        private ICommand m_UpdatePredictionCommand;
-        private ICommand m_SaveCommand;
+        private ICommand m_updatePredictionCommand;
+        private ICommand m_saveCommand;
 
         #endregion
 
@@ -45,11 +44,11 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                return m_PredictionText;
+                return m_predictionText;
             }
             set
             {
-                m_PredictionText = value;
+                m_predictionText = value;
                 OnPropertyChanged("PredictionText");
             }
         }
@@ -60,11 +59,11 @@ namespace MTDBCreator.ViewModels
         {
             get
             {
-                return m_Options;
+                return m_options;
             }
             set
             {
-                m_Options = value;
+                m_options = value;
                 OptionsChanged = true;
                 OnPropertyChanged("Options");
             }
@@ -73,12 +72,12 @@ namespace MTDBCreator.ViewModels
         public RegressionType SelectedRegressionType
         {
 
-            get { return m_Options.RegressionType; }
+            get { return m_options.RegressionType; }
 
             set
             {
-                if (m_Options.RegressionType == value) return;
-                m_Options.RegressionType = value;
+                if (m_options.RegressionType == value) return;
+                m_options.RegressionType = value;
                 OnPropertyChanged("RegressionType");
             }
         }
@@ -86,69 +85,64 @@ namespace MTDBCreator.ViewModels
         public ObservableCollection<RegressionType> RegressionTypes { get; private set; }
         public ICommand SaveCommand
         {
-            get
-            {
-                if (m_SaveCommand == null)
-                {
-                    m_SaveCommand = new RelayCommand(options => Save(options));
-                }
-
-                return m_SaveCommand;
-            }
+            get { return m_saveCommand ?? (m_saveCommand = new RelayCommand(Save)); }
         }
 
         public void Save(object param)
         { 
-            // Remove this: This is just so I can see what the param object looks like
             var parameter = param as IList;
             // General
-            Options.MaxModsForAlignment = Convert.ToInt32(parameter[0]);
-            Options.MinObservationsForExport = Convert.ToInt16(parameter[1]);
-            Options.MinXCorrForAlignment = Convert.ToInt32(parameter[2]);
-            Options.MaxLogEValForXTandemAlignment = Convert.ToInt32(parameter[3]);
+            if (parameter != null)
+            {
+                Options.MaxModsForAlignment = Convert.ToInt32(parameter[0]);
+                Options.MinObservationsForExport = Convert.ToInt16(parameter[1]);
+                Options.MinXCorrForAlignment = Convert.ToInt32(parameter[2]);
+                Options.MaxLogEValForXTandemAlignment = Convert.ToInt32(parameter[3]);
 
-            // Regression type
-            Options.RegressionType = (Convert.ToString(parameter[4]) == "LinearEm") ? RegressionType.LinearEm : RegressionType.MixtureRegression;
+                // Regression type
+                Options.RegressionType = (Convert.ToString(parameter[4]) == "LinearEm")
+                    ? RegressionType.LinearEm
+                    : RegressionType.MixtureRegression;
+                Options.RegressionOrder = (Convert.ToInt16(parameter[5]));
 
-            // Predictor Type
-            Options.PredictorType = (Convert.ToBoolean(parameter[6])) ? RetentionTimePredictionType.Kangas : RetentionTimePredictionType.Krokhin;
+                // Predictor Type
+                Options.PredictorType = (Convert.ToBoolean(parameter[6]))
+                    ? RetentionTimePredictionType.KANGAS
+                    : RetentionTimePredictionType.KROKHIN;
 
-            // Tryptic Peptides
-            Options.ExportTryptic = (Convert.ToBoolean(parameter[7])) ? true : false;
-            Options.MinXCorrForExportTrytpic[0] = Convert.ToDouble(parameter[8]);
-            Options.MinXCorrForExportTrytpic[1] = Convert.ToDouble(parameter[9]);
-            Options.MinXCorrForExportTrytpic[2] = Convert.ToDouble(parameter[10]);
+                // Tryptic Peptides
+                Options.ExportTryptic = (Convert.ToBoolean(parameter[7]));
+                Options.MinXCorrForExportTrytpic[0] = Convert.ToDouble(parameter[8]);
+                Options.MinXCorrForExportTrytpic[1] = Convert.ToDouble(parameter[9]);
+                Options.MinXCorrForExportTrytpic[2] = Convert.ToDouble(parameter[10]);
 
-            // Partially Tryptic Peptides
-            Options.ExportPartiallyTryptic = (Convert.ToBoolean(parameter[11])) ? true : false;
-            Options.MinXCorrForExportPartiallyTrytpic[0] = Convert.ToDouble(parameter[12]);
-            Options.MinXCorrForExportPartiallyTrytpic[1] = Convert.ToDouble(parameter[13]);
-            Options.MinXCorrForExportPartiallyTrytpic[2] = Convert.ToDouble(parameter[14]);
+                // Partially Tryptic Peptides
+                Options.ExportPartiallyTryptic = (Convert.ToBoolean(parameter[11]));
+                Options.MinXCorrForExportPartiallyTrytpic[0] = Convert.ToDouble(parameter[12]);
+                Options.MinXCorrForExportPartiallyTrytpic[1] = Convert.ToDouble(parameter[13]);
+                Options.MinXCorrForExportPartiallyTrytpic[2] = Convert.ToDouble(parameter[14]);
 
-            // Non Tryptic Peptides
-            Options.ExportNonTryptic = (Convert.ToBoolean(parameter[15])) ? true : false;
-            Options.MinXCorrForExportNonTrytpic[0] = Convert.ToDouble(parameter[16]);
-            Options.MinXCorrForExportNonTrytpic[1] = Convert.ToDouble(parameter[17]);
-            Options.MinXCorrForExportNonTrytpic[2] = Convert.ToDouble(parameter[18]);
+                // Non Tryptic Peptides
+                Options.ExportNonTryptic = (Convert.ToBoolean(parameter[15]));
+                Options.MinXCorrForExportNonTrytpic[0] = Convert.ToDouble(parameter[16]);
+                Options.MinXCorrForExportNonTrytpic[1] = Convert.ToDouble(parameter[17]);
+                Options.MinXCorrForExportNonTrytpic[2] = Convert.ToDouble(parameter[18]);
 
-            // Sequest dlCN
-            Options.UseDelCn = (Convert.ToBoolean(parameter[19])) ? true : false;
-            Options.MaxDelCn = Convert.ToDouble(parameter[20]);                
-            
-            // X!Tandem Export
-            Options.MaxLogEValForXTandemExport = Convert.ToDouble(parameter[21]);
-            Options.OptionsChanged = true;
+                // Sequest dlCN
+                Options.UseDelCn = (Convert.ToBoolean(parameter[19]));
+                Options.MaxDelCn = Convert.ToDouble(parameter[20]);
+
+                // X!Tandem Export
+                Options.MaxLogEValForXTandemExport = Convert.ToDouble(parameter[21]);
+                Options.OptionsChanged = true;
+            }
         }
 
         public ICommand UpdatePredictionCommand
         {
-            get
-            {
-                if (m_UpdatePredictionCommand == null)
-                {
-                    m_UpdatePredictionCommand = new RelayCommand(param => UpdatePredictionReference());
-                }
-                return m_UpdatePredictionCommand;
+            get {
+                return m_updatePredictionCommand ??
+                       (m_updatePredictionCommand = new RelayCommand(param => UpdatePredictionReference()));
             }
         }
 
@@ -157,7 +151,7 @@ namespace MTDBCreator.ViewModels
         public OptionsViewModel(Options options)
         {
             Options = options;
-            if(options.PredictorType == RetentionTimePredictionType.Kangas)
+            if(options.PredictorType == RetentionTimePredictionType.KANGAS)
             {
                 PredictionText = "Kangas ANN algorithm developed by Lars Kangas and Kostas Petritis.  See:  " +
                    "K. Petritis, L.J. Kangas, P.L. Ferguson, G.A. Anderson, L. Paša-Tolic, M.S. Lipton, K.J. Auberry, " +
@@ -179,7 +173,7 @@ namespace MTDBCreator.ViewModels
 
         private void UpdatePredictionReference()
         {
-            if (Options.PredictorType == RetentionTimePredictionType.Krokhin)
+            if (Options.PredictorType == RetentionTimePredictionType.KROKHIN)
             {
                 PredictionText = "Kangas ANN algorithm developed by Lars Kangas and Kostas Petritis.  See:  " +
                    "K. Petritis, L.J. Kangas, P.L. Ferguson, G.A. Anderson, L. Paša-Tolic, M.S. Lipton, K.J. Auberry, " +
@@ -187,7 +181,7 @@ namespace MTDBCreator.ViewModels
                    "accurate prediction of peptide liquid chromatography elution times in proteome analyses\". " +
                    "Analytical Chemistry, 75 (5) 1039-1048.";
 
-                Options.PredictorType = RetentionTimePredictionType.Kangas;
+                Options.PredictorType = RetentionTimePredictionType.KANGAS;
             }
             else
             {
@@ -197,7 +191,7 @@ namespace MTDBCreator.ViewModels
                      "- Its application to protein peptide mapping by off-line HPLC-MALDI MS\". " +
                     "Molecular & Cellular Proteomics, 3 (9) 908-919.";
 
-                Options.PredictorType = RetentionTimePredictionType.Krokhin;
+                Options.PredictorType = RetentionTimePredictionType.KROKHIN;
             }
         }
 

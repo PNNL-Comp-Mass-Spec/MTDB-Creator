@@ -7,19 +7,19 @@ namespace MTDBCreator.ViewModels.TreeView
 {
     public class TargetCollectionTreeNodeViewModel : TreeNodeViewModel
     {
-        private IEnumerable<Evidence> m_Evidences;
+        private readonly IEnumerable<Evidence> m_evidences;
 
         public TargetCollectionTreeNodeViewModel(IEnumerable<Evidence> evidences, TreeNodeViewModel parent)
             : base(String.Format("Evidence ({0})", evidences.Count()), true, parent)
         {
-            m_Evidences = evidences;
+            m_evidences = evidences;
         }
 
         public override void LoadChildNodes()
         {
             base.LoadChildNodes();
 
-            foreach (var t in m_Evidences)
+            foreach (var t in m_evidences)
             {
                 m_ChildNodes.Add(new TargetTreeNodeViewModel(t, this));
             }

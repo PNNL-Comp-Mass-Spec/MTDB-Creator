@@ -39,7 +39,7 @@ namespace MTDBCreator.Helpers
             {
                 switch (direction)
                 {
-                    case BindingExpressionSyncDirection.Source:
+                    case BindingExpressionSyncDirection.SOURCE:
                         {
                             bindingExpression.UpdateSource();
 
@@ -47,7 +47,7 @@ namespace MTDBCreator.Helpers
 
                             break;
                         }
-                    case BindingExpressionSyncDirection.Target:
+                    case BindingExpressionSyncDirection.TARGET:
                         {
                             bindingExpression.UpdateTarget();
 
@@ -63,7 +63,7 @@ namespace MTDBCreator.Helpers
     // Remove
     public enum BindingExpressionSyncDirection
     {
-        Source,
-        Target
+        SOURCE,
+        TARGET
     }
 }

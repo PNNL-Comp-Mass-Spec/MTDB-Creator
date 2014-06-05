@@ -8,8 +8,8 @@ namespace MTDBCreator.Commands
     {
         #region Fields
 
-        readonly Action<object> _execute; 
-        readonly Predicate<object> _canExecute; 
+        readonly Action<object> m_execute; 
+        readonly Predicate<object> m_canExecute; 
         
         #endregion // Fields 
         
@@ -19,7 +19,7 @@ namespace MTDBCreator.Commands
 
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            if (execute == null) throw new ArgumentNullException("execute"); _execute = execute; _canExecute = canExecute;
+            if (execute == null) throw new ArgumentNullException("execute"); m_execute = execute; m_canExecute = canExecute;
         } 
         
         #endregion // Constructors 
@@ -29,7 +29,7 @@ namespace MTDBCreator.Commands
         [DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return (_canExecute == null ? true : _canExecute(parameter));
+            return (m_canExecute == null || m_canExecute(parameter));
         }
 
         public event EventHandler CanExecuteChanged
@@ -39,7 +39,7 @@ namespace MTDBCreator.Commands
 
         public void Execute(object parameter)
         {
-            _execute(parameter);
+            m_execute(parameter);
         } 
         
         #endregion // ICommand Members }

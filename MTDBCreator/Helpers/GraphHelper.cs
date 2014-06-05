@@ -12,7 +12,7 @@ namespace MTDBCreator.Helpers
     {
         public static Color PickColor()
         {
-            const int DELTA_PERCENT = 15;
+            const int deltaPercent = 15;
             var alreadyChoosenColors = new List<Color>();
             var tmpColor = Colors.Black;
 
@@ -20,9 +20,9 @@ namespace MTDBCreator.Helpers
             while (chooseAnotherColor)
             {
                 // create a random color by generating three random channels
-                var redColor = random.Next(0, 255);
-                var greenColor = random.Next(0, 255);
-                var blueColor = random.Next(0, 255);
+                var redColor = Random.Next(0, 255);
+                var greenColor = Random.Next(0, 255);
+                var blueColor = Random.Next(0, 255);
                 tmpColor = Color.FromArgb(255, Convert.ToByte(redColor), Convert.ToByte(greenColor), Convert.ToByte(blueColor));
 
                 // check if a similar color has already been created
@@ -30,21 +30,21 @@ namespace MTDBCreator.Helpers
 
                 foreach (var c in alreadyChoosenColors)
                 {
-                    var delta = c.R * DELTA_PERCENT / 100;
+                    var delta = c.R * deltaPercent / 100;
                     if (c.R - delta <= tmpColor.R && tmpColor.R <= c.R + delta)
                     {
                         chooseAnotherColor = true;
                         break;
                     }
 
-                    delta = c.G * DELTA_PERCENT / 100;
+                    delta = c.G * deltaPercent / 100;
                     if (c.G - delta <= tmpColor.G && tmpColor.G <= c.G + delta)
                     {
                         chooseAnotherColor = true;
                         break;
                     }
 
-                    delta = c.B * DELTA_PERCENT / 100;
+                    delta = c.B * deltaPercent / 100;
                     if (c.B - delta <= tmpColor.B && tmpColor.B <= c.B + delta)
                     {
                         chooseAnotherColor = true;
@@ -57,6 +57,6 @@ namespace MTDBCreator.Helpers
             return tmpColor;
         }
 
-        private static readonly Random random = new Random();
+        private static readonly Random Random = new Random();
     }
 }

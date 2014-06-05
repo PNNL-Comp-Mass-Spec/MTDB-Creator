@@ -9,11 +9,9 @@
             switch (tool)
             {
                 case LcmsIdentificationTool.MsgfPlus:
-                    //TODO: MsgfPlusTargetFilter
                     targetFilter = new MsgfPlusTargetFilter(options);
                     break;
                 case LcmsIdentificationTool.MZIdentML:
-                    //TODO: MsgfPlusTargetFilter
                     targetFilter = new MsgfPlusTargetFilter(options);
                     break;
                 case LcmsIdentificationTool.Sequest:

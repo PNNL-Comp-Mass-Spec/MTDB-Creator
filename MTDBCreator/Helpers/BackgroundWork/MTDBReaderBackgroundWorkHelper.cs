@@ -10,22 +10,22 @@ namespace MTDBCreator.Helpers.BackgroundWork
 {
     class MtdbReaderBackgroundWorkHelper : IBackgroundWorkHelper
     {
-        private TargetDatabase m_Database { get; set; }
-        private Options m_DatabaseOptions { get; set; }
-        private string m_DatabaseFileName { get; set; }
+        private TargetDatabase Database { get; set; }
+        private Options DatabaseOptions { get; set; }
+        private string DatabaseFileName { get; set; }
 
         public MtdbReaderBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel, string fileName)
         {
-            m_Database = analysisJobViewModel.Database;
-            m_DatabaseOptions = analysisJobViewModel.Options;
-            m_DatabaseFileName = fileName;
+            Database = analysisJobViewModel.Database;
+            DatabaseOptions = analysisJobViewModel.Options;
+            DatabaseFileName = fileName;
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var targetDatabaseReader = new SqLiteTargetDatabaseReader();
 
-            m_Database = targetDatabaseReader.Read(m_DatabaseFileName);
+            Database = targetDatabaseReader.Read(DatabaseFileName);
         }
 
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)

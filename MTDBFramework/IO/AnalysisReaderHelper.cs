@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MathNet.Numerics;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
 
@@ -62,6 +61,7 @@ namespace MTDBFramework.IO
         public static void CalculateObservedNet(IEnumerable<Evidence> evidences )
         {
             // If we have the scans file, use that to calculate the observed Net
+            evidences = evidences.ToList();
             var jobFolder = Path.GetDirectoryName(evidences.First().DataSet.Path);
             var scansPath = jobFolder + "\\" + evidences.First().DataSet.Name + "_scans.csv";
             if (File.Exists(scansPath))
@@ -109,6 +109,10 @@ namespace MTDBFramework.IO
                     // Find the time that it was observed. Not normalized yet.
                     var observedTime = ((double) (evidence.Scan - scanStart)/(scanEnd - scanStart))*
                                            (timeEnd - timeStart) + timeStart;
+                    if (observedTime > maxTime)
+                    {
+                        observedTime = maxTime;
+                    }
                     evidence.ObservedNet = (observedTime - minTime)/(maxTime - minTime);
                 }
             }

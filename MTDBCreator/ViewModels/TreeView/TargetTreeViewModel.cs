@@ -6,22 +6,22 @@ namespace MTDBCreator.ViewModels
 {
     public class TargetTreeViewModel : ObservableObject
     {
-        private IEnumerable<TargetDatabaseTreeNodeViewModel> m_TargetDatabaseTreeNodeViewModels;
+        private IEnumerable<TargetDatabaseTreeNodeViewModel> m_targetDatabaseTreeNodeViewModels;
 
         public TargetTreeViewModel(AnalysisJobViewModel analysisJobViewModel)
         {
-            m_TargetDatabaseTreeNodeViewModels = new List<TargetDatabaseTreeNodeViewModel> { new TargetDatabaseTreeNodeViewModel(analysisJobViewModel.Database) };
+            m_targetDatabaseTreeNodeViewModels = new List<TargetDatabaseTreeNodeViewModel> { new TargetDatabaseTreeNodeViewModel(analysisJobViewModel.Database) };
         }
 
         public IEnumerable<TargetDatabaseTreeNodeViewModel> TargetDatabaseTreeNodeViewModels
         {
             get
             {
-                return m_TargetDatabaseTreeNodeViewModels;
+                return m_targetDatabaseTreeNodeViewModels;
             }
             set
             {
-                m_TargetDatabaseTreeNodeViewModels = value;
+                m_targetDatabaseTreeNodeViewModels = value;
                 OnPropertyChanged("TargetDatabaseTreeNodeViewModels");
             }
         }

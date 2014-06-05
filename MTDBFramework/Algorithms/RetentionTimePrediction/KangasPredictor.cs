@@ -9,7 +9,7 @@ namespace MTDBFramework.Algorithms.RetentionTimePrediction
 {
     public class KangasPredictor : IRetentionTimePredictor
     {
-        private iPeptideElutionTime m_kangas = new ElutionTimePredictionKangas();
+        private readonly iPeptideElutionTime m_kangas = new ElutionTimePredictionKangas();
 
         public double GetElutionTime(string peptide)
         {

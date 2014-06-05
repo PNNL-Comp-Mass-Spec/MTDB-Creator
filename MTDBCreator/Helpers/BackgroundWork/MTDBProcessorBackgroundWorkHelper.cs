@@ -15,23 +15,23 @@ namespace MTDBCreator.Helpers.BackgroundWork
 {
     public sealed class MtdbProcessorBackgroundWorkHelper : IBackgroundWorkHelper
     {
-        private readonly AnalysisJobViewModel m_AnalysisJobViewModel;
+        private readonly AnalysisJobViewModel m_analysisJobViewModel;
 
         public MtdbProcessorBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel)
         {
-            m_AnalysisJobViewModel = analysisJobViewModel;
+            m_analysisJobViewModel = analysisJobViewModel;
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            var mtdbProcessor = new MtdbProcessor(m_AnalysisJobViewModel.Options);
+            var mtdbProcessor = new MtdbProcessor(m_analysisJobViewModel.Options);
             mtdbProcessor.AlignmentComplete +=  mtdbProcessor_AlignmentComplete;
             HostProcessWindow.MainBackgroundWorker.ReportProgress(0);
 
             try
             {
 
-                e.Result = mtdbProcessor.Process(m_AnalysisJobViewModel.AnalysisJobItems.Select(job => job.DataSet).ToList());
+                e.Result = mtdbProcessor.Process(m_analysisJobViewModel.AnalysisJobItems.Select(job => job.DataSet).ToList());
             }
             catch (Exception ex)
             {
@@ -41,30 +41,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         private void mtdbProcessor_AlignmentComplete(object sender, AlignmentCompleteArgs e)
         {            
-            //TODO: Mike cleanup....
-
-            //int alignmentNum = 1;
-            //foreach (var alignment in alignmentData)
-            //{
-
-            //    string filePath = string.Format("C:\\alignmentResults\\results{0}.csv", alignmentNum);
-
-            //    using (var write = new StreamWriter(filePath))
-            //    {
-            //        write.WriteLine("Linear Net Rsquared, Alignment Time Scan, Alignment Scan Output, Alignment Net Output");
-            //        write.WriteLine(string.Format("{0}, {1}, {2}, {3}", alignment.NetRsquared,
-            //            alignment.AlignmentFunction.NetFuncTimeInput[0],
-            //            alignment.AlignmentFunction.NetFuncTimeOutput[0],
-            //            alignment.AlignmentFunction.NetFuncNetOutput[0]));
-            //        for (int line = 1; line < alignment.AlignmentFunction.NetFuncTimeInput.Count; line++)
-            //        {
-            //            write.WriteLine(string.Format(", {0}, {1}, {2}",
-            //             alignment.AlignmentFunction.NetFuncTimeInput[line],
-            //             alignment.AlignmentFunction.NetFuncTimeOutput[line],
-            //             alignment.AlignmentFunction.NetFuncNetOutput[line]));
-            //        }
-            //    }
-            //}
         }
 
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -84,7 +60,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
             }
             else
             {
-                m_AnalysisJobViewModel.Database = e.Result as TargetDatabase;
+                m_analysisJobViewModel.Database = e.Result as TargetDatabase;
             }
 
             HostProcessWindow.DialogResult = !(e.Result is Exception);
@@ -93,7 +69,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         public object Result
         {
-            get { return m_AnalysisJobViewModel.Database; }
+            get { return m_analysisJobViewModel.Database; }
         }
 
         public ProcessWindow HostProcessWindow { get; set; }        

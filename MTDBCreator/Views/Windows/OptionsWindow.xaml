@@ -170,14 +170,14 @@
                                          Grid.Row="1" Grid.Column="1" 
                                          Command="{Binding Path=UpdatePredictionCommand}"
                                          IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, 
-                                         ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.Kangas}, UpdateSourceTrigger=Explicit}" >
+                                         ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.KANGAS}, UpdateSourceTrigger=Explicit}" >
                                 Kangas ANN
                             </RadioButton>
                             <RadioButton x:Name="KrokhinRadioButton"
                                          Grid.Row="3" Grid.Column="1"
                                          Command="{Binding Path=UpdatePredictionCommand}"
                                          IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, 
-                                         ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.Krokhin}, UpdateSourceTrigger=Explicit}">
+                                         ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.KROKHIN}, UpdateSourceTrigger=Explicit}">
                                 Krokhin
                             </RadioButton>
                             <TextBox x:Name="PredictionAlgorithmDescriptionTextBox" 

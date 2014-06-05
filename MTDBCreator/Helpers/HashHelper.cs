@@ -9,7 +9,7 @@ namespace MTDBCreator.Helpers
         {
             var sb = new StringBuilder();
 
-            foreach (var b in md5.ComputeHash(Encoding.UTF8.GetBytes(s)))
+            foreach (var b in Md5.ComputeHash(Encoding.UTF8.GetBytes(s)))
             {
                 sb.Append(b.ToString("X2"));
             }
@@ -17,6 +17,6 @@ namespace MTDBCreator.Helpers
             return sb.ToString();
         }
 
-        private static MD5 md5 = MD5.Create();
+        private static readonly MD5 Md5 = MD5.Create();
     }
 }

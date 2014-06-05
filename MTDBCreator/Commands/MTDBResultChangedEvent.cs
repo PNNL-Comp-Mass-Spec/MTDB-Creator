@@ -6,14 +6,14 @@ using System;
 
 namespace MTDBCreator.Commands
 {
-    public class MTDBResultChangedEventArgs : EventArgs
+    public class MtdbResultChangedEventArgs : EventArgs
     {
-        public MTDBResultChangedEventArgs(object result)
+        public MtdbResultChangedEventArgs(object result)
         {
             Result = result;
         }
 
-        public MTDBResultChangedEventArgs(object result, object userObject)
+        public MtdbResultChangedEventArgs(object result, object userObject)
             : this(result)
         {
             UserObject = userObject;
@@ -23,5 +23,5 @@ namespace MTDBCreator.Commands
         public object UserObject { get; private set; }
     }
 
-    public delegate void MTDBResultChangedEventHandler(object sender, MTDBResultChangedEventArgs e);
+    public delegate void MtdbResultChangedEventHandler(object sender, MtdbResultChangedEventArgs e);
 }

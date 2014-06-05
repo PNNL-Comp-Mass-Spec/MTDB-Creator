@@ -2,9 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Data;
@@ -13,7 +11,6 @@ using PNNLOmics.Algorithms.Alignment.LcmsWarp;
 using PNNLOmics.Algorithms.Regression;
 using PNNLOmics.Annotations;
 using PNNLOmics.Data.Features;
-using Remotion.Linq.Collections;
 
 #endregion
 
@@ -49,7 +46,7 @@ namespace MTDBFramework.Algorithms
             var aligner         = TargetAlignmentFactory.Create(ProcessorOptions);
             var clusterer       = TargetClustererFactory.Create(ProcessorOptions.TargetFilterType);
             var epicTargets     = new List<Evidence>();
-            
+            dataSets = dataSets.ToList();
             foreach (var dataSet in dataSets)
             {
                 var targetFilter = TargetFilterFactory.Create(dataSet.Tool, ProcessorOptions);
@@ -112,33 +109,28 @@ namespace MTDBFramework.Algorithms
             var massTagLightTargets = new List<UMCLight>();
             foreach (var evidence in tempConsensusTargets)
             {
-                var driftStart = double.MaxValue;
-                var driftEnd = double.MinValue;
+                var driftStart  = double.MaxValue;
+                var driftEnd    = double.MinValue;
 
                 foreach (var member in evidence.Evidences)
                 {
-                    driftStart = Math.Min(member.Scan, driftStart);
-                    driftEnd = Math.Max(member.Scan, driftEnd);
+                    driftStart  = Math.Min(member.Scan, driftStart);
+                    driftEnd    = Math.Max(member.Scan, driftEnd);
                 }
 
-                foreach (var charge in evidence.Charges)
+                massTagLightTargets.AddRange(evidence.Charges.Select(charge => new UMCLight
                 {
-
-                    var consensus = new UMCLight
-                    {
-                        Net = evidence.Net,
-                        ChargeState = charge,
-                        Mz = (evidence.TheoreticalMonoIsotopicMass / charge),
-                        MassMonoisotopic = evidence.TheoreticalMonoIsotopicMass,
-                        Id = evidence.Id,
-                        MassMonoisotopicAligned = evidence.TheoreticalMonoIsotopicMass,
-                        DriftTime = driftEnd - driftStart,
-                        Scan = (int)((driftStart + driftEnd) / 2.0),
-                        ScanStart = (int)driftStart,
-                        ScanEnd = (int)driftEnd,
-                    };
-                    massTagLightTargets.Add(consensus);
-                }
+                    Net                     = evidence.Net, 
+                    ChargeState             = charge, 
+                    Mz                      = (evidence.TheoreticalMonoIsotopicMass/charge), 
+                    MassMonoisotopic        = evidence.TheoreticalMonoIsotopicMass, 
+                    Id                      = evidence.Id, 
+                    MassMonoisotopicAligned = evidence.TheoreticalMonoIsotopicMass, 
+                    DriftTime               = driftEnd - driftStart, 
+                    Scan                    = (int) ((driftStart + driftEnd)/2.0), 
+                    ScanStart               = (int) driftStart, 
+                    ScanEnd                 = (int) driftEnd,
+                }));
             }
 
             var alignmentData = new List<LcmsWarpAlignmentData>();
@@ -149,33 +141,26 @@ namespace MTDBFramework.Algorithms
             foreach (var dataSet in dataSets)
             {
                 dataSet.Evidences.Sort(EvidenceScanComparison);
-                var umcDataset = new List<UMCLight>();
-
-                foreach (var evidence in dataSet.Evidences)
+                var umcDataset = dataSet.Evidences.Select(evidence => new UMCLight
                 {
+                    Net                     = evidence.ObservedNet, 
+                    ChargeState             = evidence.Charge, 
+                    Mz                      = evidence.Mz, 
+                    Scan                    = evidence.Scan, 
+                    MassMonoisotopic        = evidence.MonoisotopicMass, 
+                    MassMonoisotopicAligned = evidence.MonoisotopicMass, 
+                    Id                      = evidence.Id, 
+                    ScanStart               = evidence.Scan, 
+                    ScanEnd                 = evidence.Scan,
+                }).ToList();
 
-                    var umcData = new UMCLight
-                    {
-                        Net = evidence.ObservedNet,
-                        ChargeState = evidence.Charge,
-                        Mz = evidence.Mz,
-                        Scan = evidence.Scan,
-                        MassMonoisotopic = evidence.MonoisotopicMass,
-                        MassMonoisotopicAligned = evidence.MonoisotopicMass,
-                        Id = evidence.Id,
-                        ScanStart = evidence.Scan,
-                        ScanEnd = evidence.Scan,
-                    };
-                    umcDataset.Add(umcData);
-                }
-                
                 umcDataset.Sort(UmcScanComparison);
 
                 var alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
                 alignmentData.Add(alignedData);
                 var residualList = new List<UMCLight> {Capacity = alignedData.ResidualData.Mz.Length};
                 //Put the residual data into a list of UMCLights
-                for (int a = 0; a < alignedData.ResidualData.Mz.Length; a++)
+                for (var a = 0; a < alignedData.ResidualData.Mz.Length; a++)
                 {
                     var residual = new UMCLight
                     {
@@ -192,7 +177,7 @@ namespace MTDBFramework.Algorithms
                 umcDataset.Sort(UmcScanComparison);
 
                 //Copy the residual data back into the umcDataset
-                for (int a = 0; a < residualList.Count; a++)
+                for (var a = 0; a < residualList.Count; a++)
                 {
                     umcDataset[a].MassMonoisotopicAligned   = umcDataset[a].MassMonoisotopic -
                                                                 residualList[a].MassMonoisotopic;
@@ -203,12 +188,9 @@ namespace MTDBFramework.Algorithms
                     dataSet.Evidences[a].ObservedNet        = residualList[a].Net;
                 }
 
-                foreach(var data in dataSet.Evidences)
+                foreach (var data in dataSet.Evidences.Where(data => !evidenceMap.ContainsKey(data.Id)))
                 {
-                    if(!evidenceMap.ContainsKey(data.Id))
-                    {
-                        evidenceMap.Add(data.Id, data);
-                    }
+                    evidenceMap.Add(data.Id, data);
                 }
             }
             if (AlignmentComplete != null)
@@ -218,7 +200,7 @@ namespace MTDBFramework.Algorithms
 
             foreach(var consensus in tempConsensusTargets)
             {
-                for (int evNum = 0; evNum < consensus.Evidences.Count; evNum++)
+                for (var evNum = 0; evNum < consensus.Evidences.Count; evNum++)
                 {
                     consensus.Evidences[evNum] = evidenceMap[consensus.Evidences[evNum].Id];
                 }

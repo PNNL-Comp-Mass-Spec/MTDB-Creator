@@ -18,17 +18,17 @@ namespace MTDBCreator.Helpers.BackgroundWork
     {
         public AnalysisJobBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel)
         {
-            m_AnalysisJobViewModel = analysisJobViewModel;
+            AnalysisJobViewModel = analysisJobViewModel;
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            var analysisJobProcessor = new AnalysisJobProcessor(m_AnalysisJobViewModel.Options);
+            var analysisJobProcessor = new AnalysisJobProcessor(AnalysisJobViewModel.Options);
             analysisJobProcessor.ProgressChanged += analysisJobProcessor_ProgressChanged;
 
             try
             {
-                e.Result = analysisJobProcessor.Process(m_AnalysisJobViewModel.AnalysisJobItems);
+                e.Result = analysisJobProcessor.Process(AnalysisJobViewModel.AnalysisJobItems);
             }
             catch (Exception ex)
             {
@@ -70,11 +70,11 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         public object Argument
         {
-            get { return m_AnalysisJobViewModel; }
+            get { return AnalysisJobViewModel; }
         }
         public object Result
         {
-            get { return m_AnalysisJobViewModel.AnalysisJobItems; }
+            get { return AnalysisJobViewModel.AnalysisJobItems; }
         }
 
         public ProcessWindow HostProcessWindow { get; set; }
@@ -89,6 +89,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
             }
         }
 
-        private AnalysisJobViewModel m_AnalysisJobViewModel { get; set; }
+        private AnalysisJobViewModel AnalysisJobViewModel { get; set; }
     }
 }

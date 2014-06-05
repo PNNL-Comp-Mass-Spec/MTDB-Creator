@@ -332,7 +332,7 @@ namespace MTDBFramework.Data
 
             TargetFilterType = TargetWorkflowType.BOTTOM_UP;
 
-            PredictorType = RetentionTimePredictionType.Kangas;
+            PredictorType = RetentionTimePredictionType.KANGAS;
 
             MaxModsForAlignment = 2;
             MinObservationsForExport = 2;
@@ -346,7 +346,7 @@ namespace MTDBFramework.Data
             MinXCorrForExportNonTrytpic = new [] { 3.0, 3.5, 4.0 };
 
             MinXCorrForAlignment = 3.0;
-            UseDelCn = false;//true;
+            UseDelCn = false;
             MaxDelCn = 0.1;
 
             MaxLogEValForXTandemAlignment = -2.0;

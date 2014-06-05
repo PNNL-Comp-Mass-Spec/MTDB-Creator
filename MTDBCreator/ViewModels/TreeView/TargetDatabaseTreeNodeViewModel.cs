@@ -1,17 +1,16 @@
 ﻿using System;
-using MTDBFramework.Data;
 using MTDBFramework.Database;
 
 namespace MTDBCreator.ViewModels.TreeView
 {
     public class TargetDatabaseTreeNodeViewModel : TreeNodeViewModel
     {
-        private TargetDatabase m_TargetDatabase;
+        private readonly TargetDatabase m_targetDatabase;
 
         public TargetDatabaseTreeNodeViewModel(TargetDatabase database)
             : base(String.Format("Target Database ({0})", database.ConsensusTargets.Count), true)
         {
-            m_TargetDatabase = database;
+            m_targetDatabase = database;
 
             IsExpanded = true;
         }
@@ -20,7 +19,7 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             base.LoadChildNodes();
 
-            foreach (var ct in m_TargetDatabase.ConsensusTargets)
+            foreach (var ct in m_targetDatabase.ConsensusTargets)
             {
                 m_ChildNodes.Add(new ConsensusTargetTreeNodeViewModel(ct, this));
             }

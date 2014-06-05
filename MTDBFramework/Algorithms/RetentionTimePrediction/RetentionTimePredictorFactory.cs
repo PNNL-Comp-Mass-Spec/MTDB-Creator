@@ -7,13 +7,11 @@
             IRetentionTimePredictor predictor = null;
             switch (type)
             {
-                case RetentionTimePredictionType.Krokhin:
+                case RetentionTimePredictionType.KROKHIN:
                     predictor = new KrokhinPredictor();
                     break;
-                case RetentionTimePredictionType.Kangas:
+                case RetentionTimePredictionType.KANGAS:
                     predictor = new KangasPredictor();
-                    break;
-                default:
                     break;
             }
 
