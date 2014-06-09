@@ -90,13 +90,20 @@ namespace MTDBFramework.IO
 
                 foreach (var evidence in evidences)
                 {
-                    int scanStart = 0;
-                    int scanEnd  = 1;
-                    double timeStart = 1;
-                    double timeEnd = 1;
+                    int scanStart       = 1;
+                    int scanEnd         = 1;
+                    double timeStart    = minTime;
+                    double timeEnd      = maxTime;
+                    bool exactMatch     = false;
+                    double observedTime;
                     
                     foreach (var scanTimePair in scanToTime)
                     {
+                        if (evidence.Scan == scanTimePair.Key)
+                        {
+                            exactMatch  = true;
+                            timeEnd     = scanTimePair.Value;
+                        }
                         if (evidence.Scan < scanTimePair.Key)
                         {
                             scanEnd = scanTimePair.Key;
@@ -107,12 +114,16 @@ namespace MTDBFramework.IO
                         timeStart = scanTimePair.Value;
                     }
                     // Find the time that it was observed. Not normalized yet.
-                    var observedTime = ((double) (evidence.Scan - scanStart)/(scanEnd - scanStart))*
-                                           (timeEnd - timeStart) + timeStart;
-                    if (observedTime > maxTime)
+                    if (exactMatch)
                     {
-                        observedTime = maxTime;
+                        observedTime = timeEnd;
                     }
+                    else
+                    {
+                        observedTime = ((double) (evidence.Scan - scanStart)/(scanEnd - scanStart))*
+                                       (timeEnd - timeStart) + timeStart;
+                    }
+
                     evidence.ObservedNet = (observedTime - minTime)/(maxTime - minTime);
                 }
             }

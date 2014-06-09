@@ -163,9 +163,12 @@ namespace MTDBCreator.ViewModels
                 {
                     AnalysisJobViewModel.SaveAnalysisDatabase(saveDatabaseDialog.FileName);
                 }
-                RestoreDirectory = Path.GetDirectoryName(saveDatabaseDialog.FileName);
-                SavedDatabasePath = saveDatabaseDialog.FileName;
-                IsDatabaseSaved = true;
+                if (saveDatabaseDialog.FileName != "")
+                {
+                    RestoreDirectory = Path.GetDirectoryName(saveDatabaseDialog.FileName);
+                    SavedDatabasePath = saveDatabaseDialog.FileName;
+                    IsDatabaseSaved = true;
+                }
             }
             else
             {

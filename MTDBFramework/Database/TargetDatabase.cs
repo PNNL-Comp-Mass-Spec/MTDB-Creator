@@ -27,15 +27,6 @@ namespace MTDBFramework.Database
         public void AddConsensusTarget(ConsensusTarget target)
         {
             ConsensusTargets.Add(target);
-            //foreach (var protein in target.Proteins)
-            //{
-            //    var proteinId = protein.Id;
-            //    if (!m_uniqueProteins.ContainsKey(proteinId))
-            //    {
-            //        m_uniqueProteins.Add(proteinId, protein);
-            //        Proteins.Add(protein);
-            //    }
-            //}
         }
 
         /// <summary>

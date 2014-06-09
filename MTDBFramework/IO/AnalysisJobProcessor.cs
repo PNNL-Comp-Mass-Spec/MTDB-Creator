@@ -32,9 +32,6 @@ namespace MTDBFramework.IO
             {
                 OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, jobItem));
 
-                // Legacy code from before implementation of clsPHRPReader
-                // IAnalysisReader analysisReader = AnalysisReaderFactory.Create(jobItem.Format, this.ProcessorOptions);
-
                 var analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
 
 				// Reads the jobItem using the reader returned by the Reader Factory

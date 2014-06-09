@@ -57,15 +57,15 @@ namespace MTDBFramework.Algorithms
 
                 foreach (var t in dataSet.Evidences)
                 {
-                    //Exclude carryover peptides.
-                    //Would be evidenced by a sizable difference between observed net and predicted net
-                    if (Math.Abs(t.ObservedNet - t.PredictedNet) < 0.6)
+                    if (!targetFilter.ShouldFilter(t))
                     {
-                        if (!targetFilter.ShouldFilter(t))
-                        {
-                            filteredTargets.Add(t);
+                        filteredTargets.Add(t);
 
-                            if (!alignmentFilter.ShouldFilter(t))
+                        if (!alignmentFilter.ShouldFilter(t))
+                        {
+                            //Exclude carryover peptides.
+                            //Would be evidenced by a sizable difference between observed net and predicted net
+                            if (Math.Abs(t.ObservedNet - t.PredictedNet) < 0.6)
                             {
                                 alignedTargets.Add(t);
                             }
@@ -154,8 +154,6 @@ namespace MTDBFramework.Algorithms
                     ScanEnd                 = evidence.Scan,
                 }).ToList();
 
-                umcDataset.Sort(UmcScanComparison);
-
                 var alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
                 alignmentData.Add(alignedData);
                 var residualList = new List<UMCLight> {Capacity = alignedData.ResidualData.Mz.Length};
@@ -174,15 +172,9 @@ namespace MTDBFramework.Algorithms
 
                 residualList.Sort(UmcScanComparison);
 
-                umcDataset.Sort(UmcScanComparison);
-
-                //Copy the residual data back into the umcDataset
+                //Copy the residual data back into the evidences
                 for (var a = 0; a < residualList.Count; a++)
                 {
-                    umcDataset[a].MassMonoisotopicAligned   = umcDataset[a].MassMonoisotopic -
-                                                                residualList[a].MassMonoisotopic;
-                    umcDataset[a].Net                       = residualList[a].Net;
-
                     dataSet.Evidences[a].MonoisotopicMass   = dataSet.Evidences[a].MonoisotopicMass -
                                                                 residualList[a].MassMonoisotopic;
                     dataSet.Evidences[a].ObservedNet        = residualList[a].Net;
