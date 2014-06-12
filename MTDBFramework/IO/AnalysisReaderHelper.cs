@@ -63,12 +63,42 @@ namespace MTDBFramework.IO
             // If we have the scans file, use that to calculate the observed Net
             evidences = evidences.ToList();
             var jobFolder = Path.GetDirectoryName(evidences.First().DataSet.Path);
-            var scansPath = jobFolder + "\\" + evidences.First().DataSet.Name + "_scans.csv";
-            if (File.Exists(scansPath))
+            var csvPath = jobFolder + "\\" + evidences.First().DataSet.Name + "_scans.csv";
+            var txtPath = jobFolder + "\\" + evidences.First().DataSet.Name + "_scanstats.txt";
+
+            if (File.Exists(txtPath))
+            {
+                var scanToTime = new Dictionary<int, double>();
+                using (var reader = new StreamReader(txtPath))
+                {
+                    //Read the header
+                    reader.ReadLine();
+                    //Read the first line
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        if (line != null)
+                        {
+                            var parsedLine = line.Split('\t');
+
+                            scanToTime.Add(Convert.ToInt32(parsedLine[1]), Convert.ToDouble(parsedLine[2]));
+                        }
+                    }
+                }
+                foreach (var evidence in evidences)
+                {
+                    evidence.ObservedNet = scanToTime[evidence.Scan];
+                }
+                
+            }
+
+
+            //If it's a .csv file which holds the scans data
+            else if (File.Exists(csvPath))
             {
                 // Create dictionary of scans to times
                 var scanToTime = new Dictionary<int, double>();
-                using (var reader = new StreamReader(scansPath))
+                using (var reader = new StreamReader(csvPath))
                 {
                     //Read the header
                     reader.ReadLine();

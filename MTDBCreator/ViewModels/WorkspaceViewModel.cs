@@ -3,8 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
 using MTDBCreator.Commands;
-using MTDBCreator.Views;
-using MTDBFramework.Data;
+using MTDBFramework.IO;
 using MTDBFramework.UI;
 
 namespace MTDBCreator.ViewModels
@@ -13,6 +12,7 @@ namespace MTDBCreator.ViewModels
     {
         #region Private Fields
         private ICommand m_createDatabaseCommand;
+        private ICommand m_loadDatabaseCommand;
         private ICommand m_refreshCommand;
 
         private AnalysisJobViewModel m_analysisJobViewModel;
@@ -43,6 +43,19 @@ namespace MTDBCreator.ViewModels
                 }
 
                 return m_createDatabaseCommand;
+            }
+        }
+
+        public ICommand LoadDatabaseCommand
+        {
+            get
+            {
+                if (m_loadDatabaseCommand == null)
+                {
+                    m_loadDatabaseCommand = new RelayCommand(param => ReadDatabase());
+                }
+
+                return m_loadDatabaseCommand;
             }
         }
 
@@ -179,16 +192,18 @@ namespace MTDBCreator.ViewModels
 
         private void ReadDatabase()
         {
-            var dlg = new OpenFileDialog();
-
-            dlg.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|AllFile (*.*)|*.*";
-            dlg.Title = "Load MTDB";
-
-            dlg.RestoreDirectory = true;
+            var dlg = new OpenFileDialog
+            {
+                Filter = "Mass Tag Database (*.mtdb)|*.mtdb|AllFile (*.*)|*.*",
+                Title = "Load MTDB from file",
+                InitialDirectory = RestoreDirectory,
+                RestoreDirectory = true
+            };
 
             if(dlg.ShowDialog() == true)
             {
-                AnalysisJobViewModel.ProcessAnalysisDatabase();//dlg.FileName);
+                var reader = new SqLiteTargetDatabaseReader();
+                AnalysisJobViewModel.Database = reader.Read(dlg.FileName);
             }
         }
 
