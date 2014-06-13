@@ -168,6 +168,7 @@
     <Compile Include="IO\MSAlignPHRPReader.cs" />
     <Compile Include="IO\MSGFPlusPHRPReader.cs" />
     <Compile Include="IO\MZIdentMLReader.cs" />
+    <Compile Include="IO\PHRPReaderBase.cs" />
     <Compile Include="IO\SequestPHRPReader.cs" />
     <Compile Include="IO\SQLiteTargetDatabaseReader.cs" />
     <Compile Include="IO\SQLiteTargetDatabaseWriter.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="UI\MTDBCreationProgressType.cs" />
     <Compile Include="UI\MTDBProgressChangedEvent.cs" />
     <Compile Include="UI\ObservableObject.cs" />
+    <Compile Include="UI\PercentCompleteEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

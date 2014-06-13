@@ -11,21 +11,21 @@ namespace MTDBFramework.IO
     /// <summary>
     /// Summary Description for SequestPHRP Reader
     /// </summary>
-    public class SequestPhrpReader : IPhrpReader
+    public class SequestPhrpReader : PHRPReaderBase
     {
-        public Options ReaderOptions { get; set; }
-
         public SequestPhrpReader(Options options)
         {
             ReaderOptions = options;
         }
 
-        public LcmsDataSet Read(string path)
+        public override LcmsDataSet Read(string path)
         {
             var results = new List<SequestResult>();
             var filter = new SequestTargetFilter(ReaderOptions);
 
             var proteinInfos = new Dictionary<int, ProteinInformation>();
+
+            int resultsProcessed = 0;
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in
             var reader = new clsPHRPReader(path);
@@ -78,8 +78,11 @@ namespace MTDBFramework.IO
                     result.DataSet = new TargetDataSet
                     {
                         Path = path,
-                        Name = DatasetPathUtility.CleanPath(path)
+                        Name = reader.DatasetName
                     };
+
+                    if (string.IsNullOrEmpty(result.DataSet.Name))
+                        result.DataSet.Name = DatasetPathUtility.CleanPath(path);
 
                     result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
@@ -117,11 +120,16 @@ namespace MTDBFramework.IO
 
                     results.Add(result);
                 }
+
+                resultsProcessed++;
+                if (resultsProcessed % 500 == 0)
+                    UpdateProgress(reader.PercentComplete);
             }
             AnalysisReaderHelper.CalculateObservedNet(results);
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.Sequest, results);
         }
+       
     }
 }

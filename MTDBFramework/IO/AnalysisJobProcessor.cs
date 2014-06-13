@@ -11,6 +11,10 @@ namespace MTDBFramework.IO
 {
     public class AnalysisJobProcessor : IProcessor
     {
+        private int mCurrentItem;
+        private int mTotalItems;
+        private AnalysisJobItem mCurrentJob;
+
         public Options ProcessorOptions { get; set; }
 
         public AnalysisJobProcessor(Options options)
@@ -25,22 +29,34 @@ namespace MTDBFramework.IO
         {
             // analysisJobItems should have LcmsDataSet field be null
 
-            var current = 0;
-            var total = analysisJobItems.Count();
+            mCurrentItem = 0;
+            mTotalItems = analysisJobItems.Count();
 
             foreach (var jobItem in analysisJobItems)
             {
-                OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, jobItem));
+                OnProgressChanged(new MtdbProgressChangedEventArgs(mCurrentItem, mTotalItems, jobItem));
+                mCurrentJob = jobItem;
 
-                var analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
+                PHRPReaderBase analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
 
+                analysisReader.ProgressChanged += analysisReader_ProgressChanged;
+                
 				// Reads the jobItem using the reader returned by the Reader Factory
                 jobItem.DataSet = analysisReader.Read(jobItem.FilePath);
 
-                current++;
+                mCurrentItem++;
             }
             
             return analysisJobItems;
+        }
+
+        private void analysisReader_ProgressChanged(object sender, PercentCompleteEventArgs e)
+        {
+            float percentComplete = (mCurrentItem * 100 + e.PercentComplete) / (mTotalItems * 100);
+
+            var effectiveItemCount = (int)(mCurrentItem * 100 + e.PercentComplete);
+
+            OnProgressChanged(new MtdbProgressChangedEventArgs(effectiveItemCount, mTotalItems * 100, mCurrentJob));
         }
 
         #region Events

@@ -11,21 +11,21 @@ namespace MTDBFramework.IO
     /// <summary>
     /// Summary Description for XTandemPHRP Reader
     /// </summary>
-    public class XTandemPhrpReader : IPhrpReader
+    public class XTandemPhrpReader : PHRPReaderBase
     {
-        public Options ReaderOptions { get; set; }
-
         public XTandemPhrpReader(Options options)
         {
             ReaderOptions = options;
         }
 
-        public LcmsDataSet Read(string path)
+        public override LcmsDataSet Read(string path)
         {
             var results = new List<XTandemResult>();
             var filter = new XTandemTargetFilter(ReaderOptions);
 
             var proteinInfos = new Dictionary<int, ProteinInformation>();
+
+            int resultsProcessed = 0;
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in
             var reader = new clsPHRPReader(path);
@@ -128,6 +128,10 @@ namespace MTDBFramework.IO
 
                     results.Add(result);
                 }
+
+                resultsProcessed++;
+                if (resultsProcessed % 500 == 0)
+                    UpdateProgress(reader.PercentComplete);
             }
             AnalysisReaderHelper.CalculateObservedNet(results);
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);

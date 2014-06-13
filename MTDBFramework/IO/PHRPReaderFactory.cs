@@ -12,9 +12,9 @@ namespace MTDBFramework.IO
 		// it determines the type of reader to return based on the extension of the file, using that to 
 		// determine if it is a Sequest, XTandem, MSAlign or MSGF+ file
 		// The if statement is due to the PHRP Reader not meaning to be used on .mzid files
-        public static IPhrpReader Create(string path, Options options)
+        public static PHRPReaderBase Create(string path, Options options)
         {
-            IPhrpReader reader = null;
+            PHRPReaderBase reader = null;
             var resultType = clsPHRPReader.AutoDetermineResultType(path);
 
             if (path.EndsWith("msgfplus.mzid"))

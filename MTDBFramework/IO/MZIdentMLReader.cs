@@ -9,10 +9,8 @@ using PHRPReader;
 
 namespace MTDBFramework.IO
 {
-    public class MzIdentMlReader : IPhrpReader
+    public class MzIdentMlReader : PHRPReaderBase
     {
-        public Options ReaderOptions { get; set; }
-
         public MzIdentMlReader(Options options)
         {
             ReaderOptions = options;
@@ -143,11 +141,12 @@ namespace MTDBFramework.IO
 		// then adds the data for if there are modifications and adds the result to a running list of results.
 		// When all the results are tabulated, it passes them through to the AnalysisHelper class to calculate
 		// both the observed and the predicted NETs and then returns an LCMSDataSet of the results with the MZIdent tool
-		
-        public LcmsDataSet Read(string path)
+
+        public override LcmsDataSet Read(string path)
         {
             var xSettings = new XmlReaderSettings {IgnoreWhitespace = true};
             var sr = new StreamReader(path);
+
             using (var reader = XmlReader.Create(sr, xSettings))
             {
                 reader.Read();
@@ -445,6 +444,7 @@ namespace MTDBFramework.IO
                     }
                     results.Add(result);
                 }
+             
             }
 
             // Calculate NET for the results

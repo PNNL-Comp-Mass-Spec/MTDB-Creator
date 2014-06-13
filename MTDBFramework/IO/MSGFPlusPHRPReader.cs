@@ -11,21 +11,21 @@ namespace MTDBFramework.IO
     /// <summary>
     /// Summary Description for MSGFPlusPHRP Reader
     /// </summary>
-    public class MsgfPlusPhrpReader : IPhrpReader
+    public class MsgfPlusPhrpReader : PHRPReaderBase,IPhrpReader
     {
-        public Options ReaderOptions { get; set; }
-
         public MsgfPlusPhrpReader(Options options)
         {
             ReaderOptions = options;
         }
 
-        public LcmsDataSet Read(string path)
+        public override LcmsDataSet Read(string path)
         {
             var results = new List<MsgfPlusResult>();
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
 
             var proteinInfos = new Dictionary<int, ProteinInformation>();
+
+            int resultsProcessed = 0;
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in
             var reader = new clsPHRPReader(path);
@@ -127,6 +127,10 @@ namespace MTDBFramework.IO
                     }
                     results.Add(result);
                 }
+
+                resultsProcessed++;
+                if (resultsProcessed % 500 == 0)
+                    UpdateProgress(reader.PercentComplete);
             }
 
             AnalysisReaderHelper.CalculateObservedNet(results);
