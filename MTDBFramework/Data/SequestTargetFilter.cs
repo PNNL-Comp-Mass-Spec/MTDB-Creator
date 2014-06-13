@@ -23,6 +23,11 @@
                 return true;
             }
 
+            if (result.SpecProb > FilterOptions.MaxMsgfSpecProb)
+            {
+                return true;
+            }
+
             return false;
         }
     }

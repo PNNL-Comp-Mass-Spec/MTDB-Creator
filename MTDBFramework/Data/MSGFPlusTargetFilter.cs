@@ -33,7 +33,12 @@
                 return true;
             }
 
-            if (result.SpectralProbability > FilterOptions.MsgfSpectralEValue)
+            if (result.SpecEValue > FilterOptions.MsgfSpectralEValue)
+            {
+                return true;
+            }
+
+            if (result.SpecProb > FilterOptions.MaxMsgfSpecProb)
             {
                 return true;
             }

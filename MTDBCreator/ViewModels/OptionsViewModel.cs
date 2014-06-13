@@ -98,42 +98,45 @@ namespace MTDBCreator.ViewModels
                 Options.MinObservationsForExport = Convert.ToInt16(parameter[1]);
                 Options.MinXCorrForAlignment = Convert.ToInt32(parameter[2]);
                 Options.MaxLogEValForXTandemAlignment = Convert.ToInt32(parameter[3]);
+                Options.MaxMsgfSpecProb = Convert.ToDouble(parameter[4]);
+                Options.MsgfFdr = Convert.ToDouble(parameter[5]);
+                Options.MsgfSpectralEValue = Convert.ToDouble(parameter[6]);
 
                 // Regression type
-                Options.RegressionType = (Convert.ToString(parameter[4]) == "LinearEm")
+                Options.RegressionType = (Convert.ToString(parameter[7]) == "LinearEm")
                     ? RegressionType.LinearEm
                     : RegressionType.MixtureRegression;
-                Options.RegressionOrder = (Convert.ToInt16(parameter[5]));
+                Options.RegressionOrder = (Convert.ToInt16(parameter[8]));
 
                 // Predictor Type
-                Options.PredictorType = (Convert.ToBoolean(parameter[6]))
+                Options.PredictorType = (Convert.ToBoolean(parameter[9]))
                     ? RetentionTimePredictionType.KANGAS
                     : RetentionTimePredictionType.KROKHIN;
 
                 // Tryptic Peptides
-                Options.ExportTryptic = (Convert.ToBoolean(parameter[7]));
-                Options.MinXCorrForExportTrytpic[0] = Convert.ToDouble(parameter[8]);
-                Options.MinXCorrForExportTrytpic[1] = Convert.ToDouble(parameter[9]);
-                Options.MinXCorrForExportTrytpic[2] = Convert.ToDouble(parameter[10]);
+                Options.ExportTryptic = (Convert.ToBoolean(parameter[10]));
+                Options.MinXCorrForExportTrytpic[0] = Convert.ToDouble(parameter[11]);
+                Options.MinXCorrForExportTrytpic[1] = Convert.ToDouble(parameter[12]);
+                Options.MinXCorrForExportTrytpic[2] = Convert.ToDouble(parameter[13]);
 
                 // Partially Tryptic Peptides
-                Options.ExportPartiallyTryptic = (Convert.ToBoolean(parameter[11]));
-                Options.MinXCorrForExportPartiallyTrytpic[0] = Convert.ToDouble(parameter[12]);
-                Options.MinXCorrForExportPartiallyTrytpic[1] = Convert.ToDouble(parameter[13]);
-                Options.MinXCorrForExportPartiallyTrytpic[2] = Convert.ToDouble(parameter[14]);
+                Options.ExportPartiallyTryptic = (Convert.ToBoolean(parameter[14]));
+                Options.MinXCorrForExportPartiallyTrytpic[0] = Convert.ToDouble(parameter[15]);
+                Options.MinXCorrForExportPartiallyTrytpic[1] = Convert.ToDouble(parameter[16]);
+                Options.MinXCorrForExportPartiallyTrytpic[2] = Convert.ToDouble(parameter[17]);
 
                 // Non Tryptic Peptides
-                Options.ExportNonTryptic = (Convert.ToBoolean(parameter[15]));
-                Options.MinXCorrForExportNonTrytpic[0] = Convert.ToDouble(parameter[16]);
-                Options.MinXCorrForExportNonTrytpic[1] = Convert.ToDouble(parameter[17]);
-                Options.MinXCorrForExportNonTrytpic[2] = Convert.ToDouble(parameter[18]);
+                Options.ExportNonTryptic = (Convert.ToBoolean(parameter[18]));
+                Options.MinXCorrForExportNonTrytpic[0] = Convert.ToDouble(parameter[19]);
+                Options.MinXCorrForExportNonTrytpic[1] = Convert.ToDouble(parameter[20]);
+                Options.MinXCorrForExportNonTrytpic[2] = Convert.ToDouble(parameter[21]);
 
                 // Sequest dlCN
-                Options.UseDelCn = (Convert.ToBoolean(parameter[19]));
-                Options.MaxDelCn = Convert.ToDouble(parameter[20]);
+                Options.UseDelCn = (Convert.ToBoolean(parameter[22]));
+                Options.MaxDelCn = Convert.ToDouble(parameter[23]);
 
                 // X!Tandem Export
-                Options.MaxLogEValForXTandemExport = Convert.ToDouble(parameter[21]);
+                Options.MaxLogEValForXTandemExport = Convert.ToDouble(parameter[24]);
                 Options.OptionsChanged = true;
             }
         }

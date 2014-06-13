@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helpers="clr-namespace:MTDBCreator.Helpers"        
         xmlns:retentionTimePrediction="clr-namespace:MTDBFramework.Algorithms.RetentionTimePrediction;assembly=MTDBFramework"
-        Title="Options" Height="650" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Options" Height="780" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
         <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
         <helpers:OptionsParameterConverter x:Key="OptionsParameterConverter"/>
@@ -108,6 +108,59 @@
                                      Text="{Binding Path=Options.MaxLogEValForXTandemAlignment, UpdateSourceTrigger=Explicit}">
                                 <TextBox.ToolTip>
                                     Specifies the maximum log(eval) that a match from X!Tandem can have for it to be used in the alignment
+                                </TextBox.ToolTip>
+                            </TextBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="MSGF+ Filters" >
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="8"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="1" Grid.Column="1">
+                                Max MSFG Spectral Probability For Alignment
+                            </Label>
+                            <TextBox x:Name="MaxMsgfSpecProbBox"
+                                     Grid.Row="1" Grid.Column="3" 
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     Text="{Binding Path=Options.MaxMsgfSpecProb, UpdateSourceTrigger=Explicit}">
+                                <TextBox.ToolTip>
+                                    Specifies the maximum Spectral Probability that a match from MSGF+, SeQuest or MzIdent can have for it to be used in the alignment
+                                </TextBox.ToolTip>
+                            </TextBox>
+                            <Label Grid.Row="3" Grid.Column="1">
+                                Max FDR For Alignment
+                            </Label>
+                            <TextBox x:Name="MaxMsgffdrBox"
+                                     Grid.Row="3" Grid.Column="3" 
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     Text="{Binding Path=Options.MsgfFdr, UpdateSourceTrigger=Explicit}">
+                                <TextBox.ToolTip>
+                                    Specifies the maximum FDR that a match from MSGF+ or MzIdent can have for it to be used in the alignment
+                                </TextBox.ToolTip>
+                            </TextBox>
+                            <Label Grid.Row="5" Grid.Column="1">
+                                Max Spectral E Value For Alignment
+                            </Label>
+                            <TextBox x:Name="MaxMsgfSpecEValBox"
+                                     Grid.Row="5" Grid.Column="3" 
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     Text="{Binding Path=Options.MsgfSpectralEValue, UpdateSourceTrigger=Explicit}">
+                                <TextBox.ToolTip>
+                                    Specifies the maximum Spectral E Value that a match from MSGF+ can have for it to be used in the alignment
                                 </TextBox.ToolTip>
                             </TextBox>
                         </Grid>
@@ -379,6 +432,7 @@
                                       Text="{Binding Path=Options.MaxLogEValForXTandemExport, UpdateSourceTrigger=Explicit}" />
                         </Grid>
                     </GroupBox>
+                    
                 </StackPanel>
             </TabItem>
         </TabControl>
@@ -399,6 +453,9 @@
                         <Binding ElementName="MinimObservationsTextBox" Path="Text" />
                         <Binding ElementName="MinXCorrTextBox" Path="Text"/>
                         <Binding ElementName="MaxLogETextBox" Path="Text"/>
+                        <Binding ElementName="MaxMsgfSpecProbBox" Path="Text"/>
+                        <Binding ElementName="MaxMsgffdrBox" Path ="Text"/>
+                        <Binding ElementName="MaxMsgfSpecEValBox" Path="Text"/>
                         <Binding ElementName="AlignmentComboBox" Path="Text"/>
                         <Binding ElementName="OrderTextBox" Path="Text"/>
                         <Binding ElementName="KangasRadioButton" Path="IsChecked"/>

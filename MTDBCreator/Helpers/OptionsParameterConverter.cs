@@ -15,38 +15,41 @@ namespace MTDBCreator.Helpers
             results.Add((string)values[1]);
             results.Add((string)values[2]);
             results.Add((string)values[3]);
+            results.Add((string)values[4]);
+            results.Add((string)values[5]);
+            results.Add((string)values[6]);
 
             // Regression Type
-            results.Add(values[4].ToString());
-            results.Add((string)values[5]);
-
-            // Predictor Type
-            results.Add(values[6].ToString());
-
-            // Tryptic Peptides
             results.Add(values[7].ToString());
             results.Add((string)values[8]);
-            results.Add((string)values[9]);
-            results.Add((string)values[10]);
 
-            // Partially Tryptic Peptides
-            results.Add(values[11].ToString());
+            // Predictor Type
+            results.Add(values[9].ToString());
+
+            // Tryptic Peptides
+            results.Add(values[10].ToString());
+            results.Add((string)values[11]);
             results.Add((string)values[12]);
             results.Add((string)values[13]);
-            results.Add((string)values[14]);
 
-            // Non Tryptic Peptides
-            results.Add(values[15].ToString());
+            // Partially Tryptic Peptides
+            results.Add(values[14].ToString());
+            results.Add((string)values[15]);
             results.Add((string)values[16]);
             results.Add((string)values[17]);
-            results.Add((string)values[18]);
+
+            // Non Tryptic Peptides
+            results.Add(values[18].ToString());
+            results.Add((string)values[19]);
+            results.Add((string)values[20]);
+            results.Add((string)values[21]);
 
             // Sequest dlCN
-            results.Add(values[19].ToString());
-            results.Add((string)values[20]);
+            results.Add(values[22].ToString());
+            results.Add((string)values[23]);
 
             // X!Tandem Export
-            results.Add((string)values[21]);
+            results.Add((string)values[24]);
 
             for(int i = 0; i < results.Count; i++)
             {

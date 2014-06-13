@@ -34,6 +34,7 @@ namespace MTDBFramework.Data
         private short m_maxRankForExport;
         private double m_msgfFdr;
         private double m_msgfSpectralEValue;
+        private double m_maxMsgfSpecProb;
 
         #endregion
 
@@ -309,6 +310,19 @@ namespace MTDBFramework.Data
             }
         }
 
+        public double MaxMsgfSpecProb
+        {
+            get
+            {
+                return m_maxMsgfSpecProb;
+            }
+            set
+            {
+                m_maxMsgfSpecProb = value;
+                OnPropertyChanged("MaxMSGFSpecProb");
+            }
+        }
+
         // Other
         public short MaxRankForExport
         {
@@ -358,6 +372,7 @@ namespace MTDBFramework.Data
 
             MsgfFdr = .01;
             MsgfSpectralEValue = .05;
+            MaxMsgfSpecProb = 1E-10;
 
             OptionsChanged = false;
         }
