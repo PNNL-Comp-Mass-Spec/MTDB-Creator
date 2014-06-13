@@ -156,6 +156,7 @@ namespace MTDBFramework.Data
             }
         }
 
+        [Obsolete("This property is not used anywhere in this project")]
         public double HighNormalizedScore
         {
             get
@@ -169,71 +170,6 @@ namespace MTDBFramework.Data
             }
         }
 
-        #endregion
-
-        public static short CalculateTrypticState(string peptide)
-        {
-            short trypticState = 0;
-            var peptideChar = peptide.ToCharArray();
-            var startIndex = 2;
-            var stopIndex = peptideChar.Length - 3;
-
-            if (peptideChar[1] != '.')
-            {
-                startIndex = 0;
-
-                throw new ApplicationException(String.Format("Peptide {0} does not have a . in the second position", peptide));
-            }
-
-            if (peptideChar[stopIndex + 1] != '.')
-            {
-                stopIndex = peptideChar.Length - 1;
-
-                throw new ApplicationException(String.Format("Peptide {0} does not have a . in the second last position", peptide));
-            }
-
-            if (peptideChar[stopIndex] == 'R' || peptideChar[stopIndex] == 'K')
-            {
-                trypticState++;
-
-                if (peptideChar[peptideChar.Length - 1] == 'P')
-                {
-                    trypticState--;
-                }
-            }
-            else if (!Char.IsLetter(peptideChar[stopIndex]))
-            {
-                if (peptideChar[stopIndex - 1] == 'R' || peptideChar[stopIndex - 1] == 'K')
-                {
-                    trypticState++;
-
-                    if (peptideChar[peptideChar.Length - 1] == 'P')
-                    {
-                        trypticState--;
-                    }
-                }
-            }
-
-            if (peptideChar[peptideChar.Length - 1] == '-' && trypticState == 0)
-            {
-                trypticState++;
-            }
-
-            if (peptideChar[0] == 'R' || peptideChar[0] == 'K')
-            {
-                trypticState++;
-
-                if (peptideChar[startIndex] == 'P')
-                {
-                    trypticState--;
-                }
-            }
-            else if (peptideChar[0] == '-')
-            {
-                trypticState++;
-            }
-
-            return trypticState;
-        }
+        #endregion        
     }
 }

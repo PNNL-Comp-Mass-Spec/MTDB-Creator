@@ -175,6 +175,7 @@ namespace MTDBFramework.Data
             }
         }
 
+        [Obsolete("Superseded by clsPeptideCleavageStateCalculator.ComputeCleavageState")]
         public static short CalculateTrypticState(string peptide)
         {
             short trypticState = 0;

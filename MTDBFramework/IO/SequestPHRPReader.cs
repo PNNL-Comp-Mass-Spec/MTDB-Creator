@@ -23,7 +23,8 @@ namespace MTDBFramework.IO
             var results = new List<SequestResult>();
             var filter = new SequestTargetFilter(ReaderOptions);
 
-            var proteinInfos = new Dictionary<int, ProteinInformation>();
+            // Key is protein name, value is the protein information
+            var proteinInfos = new Dictionary<string, ProteinInformation>();
 
             int resultsProcessed = 0;
 
@@ -87,27 +88,7 @@ namespace MTDBFramework.IO
                     result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
 
-                    foreach (var p in reader.CurrentPSM.ProteinDetails)
-                    {
-                        var protein = new ProteinInformation
-                        {
-                            ProteinName = p.ProteinName,
-                            CleavageState = p.CleavageState,
-                            TerminusState = p.TerminusState,
-                            ResidueStart = p.ResidueStart,
-                            ResidueEnd = p.ResidueEnd
-                        };
-
-                        if (proteinInfos.ContainsValue(protein))
-                        {
-                            result.Proteins.Add(protein);
-                        }
-                        else
-                        {
-                            proteinInfos.Add((proteinInfos.Count + 1), protein);
-                            result.Proteins.Add(protein);
-                        }
-                    }
+                    StoreProteinInfo(reader, proteinInfos, result);
 
                     if (result.ModificationCount != 0)
                     {
@@ -130,6 +111,6 @@ namespace MTDBFramework.IO
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.Sequest, results);
         }
-       
+        
     }
 }

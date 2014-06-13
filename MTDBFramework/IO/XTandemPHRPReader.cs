@@ -23,7 +23,7 @@ namespace MTDBFramework.IO
             var results = new List<XTandemResult>();
             var filter = new XTandemTargetFilter(ReaderOptions);
 
-            var proteinInfos = new Dictionary<int, ProteinInformation>();
+            var proteinInfos = new Dictionary<string, ProteinInformation>();
 
             int resultsProcessed = 0;
 
@@ -65,9 +65,11 @@ namespace MTDBFramework.IO
                 result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
 
 				
-                double highNorm;
+                // Convert the X!Tandem hyperscore to pseudo-XCorr values
+                // See udfHyperscoreToNormalizedScore in MTS (SQL Server)
+                // In reality, this project doesn't use result.HighNormalizedScore so this isn't really necessary
 
-                // Not sure where these magic numbers come from. It's a deep thing... -Brian
+                double highNorm; 
                 if (result.Charge == 1)
                 {
                     highNorm = 0.082 * result.PeptideHyperscore;
@@ -78,7 +80,7 @@ namespace MTDBFramework.IO
                 }
                 else
                 {
-                    highNorm = 0.0872 * result.PeptideHyperscore;
+                    highNorm = 0.0874 * result.PeptideHyperscore;
                 }
 
                 result.HighNormalizedScore = highNorm;
@@ -95,27 +97,7 @@ namespace MTDBFramework.IO
                     result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
 
-                    foreach (var p in reader.CurrentPSM.ProteinDetails)
-                    {
-                        var protein = new ProteinInformation
-                        {
-                            ProteinName = p.ProteinName,
-                            CleavageState = p.CleavageState,
-                            TerminusState = p.TerminusState,
-                            ResidueStart = p.ResidueStart,
-                            ResidueEnd = p.ResidueEnd
-                        };
-
-                        if (proteinInfos.ContainsValue(protein))
-                        {
-                            result.Proteins.Add(protein);
-                        }
-                        else
-                        {
-                            proteinInfos.Add((proteinInfos.Count + 1), protein);
-                            result.Proteins.Add(protein);
-                        }
-                    }
+                    StoreProteinInfo(reader, proteinInfos, result);                    
 
                     if (result.ModificationCount != 0)
                     {

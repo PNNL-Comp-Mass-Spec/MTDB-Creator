@@ -23,7 +23,7 @@ namespace MTDBFramework.IO
             var results = new List<MsgfPlusResult>();
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
 
-            var proteinInfos = new Dictionary<int, ProteinInformation>();
+            var proteinInfos = new Dictionary<string, ProteinInformation>();
 
             int resultsProcessed = 0;
 
@@ -79,11 +79,14 @@ namespace MTDBFramework.IO
                 result.PepQValue = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["PepQvalue"]);
                 result.IsotopeError = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["IsotopeError"]);
                 result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
+                result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
+                
                 if (reader.CurrentPSM.MassErrorPPM.Length != 0)
                 {
                     result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
                 }
                 result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
+
 				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
                 if (!filter.ShouldFilter(result))
                 {
@@ -95,28 +98,8 @@ namespace MTDBFramework.IO
 
                     result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
 
-                    foreach (var p in reader.CurrentPSM.ProteinDetails)
-                    {
-                        var protein = new ProteinInformation
-                        {
-                            ProteinName = p.ProteinName,
-                            CleavageState = p.CleavageState,
-                            TerminusState = p.TerminusState,
-                            ResidueStart = p.ResidueStart,
-                            ResidueEnd = p.ResidueEnd
-                        };
-
-                        if (proteinInfos.ContainsValue(protein))
-                        {
-                            result.Proteins.Add(protein);
-                        }
-                        else
-                        {
-                            proteinInfos.Add((proteinInfos.Count + 1), protein);
-                            result.Proteins.Add(protein);
-                        }
-                    }
-                    
+                    StoreProteinInfo(reader, proteinInfos, result);
+                   
                     if (result.ModificationCount != 0)
                     {
                         foreach (var info in reader.CurrentPSM.ModifiedResidues)

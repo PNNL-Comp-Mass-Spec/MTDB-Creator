@@ -1,5 +1,6 @@
 ﻿#region Namespaces
 
+using System;
 using System.Collections.Generic;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
@@ -50,7 +51,6 @@ namespace MTDBFramework.Data
         private string m_seqWithNumericMods;
 
         #endregion
-
 
         public Evidence()
         {
