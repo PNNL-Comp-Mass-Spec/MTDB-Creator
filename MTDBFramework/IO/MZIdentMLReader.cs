@@ -283,7 +283,9 @@ namespace MTDBFramework.IO
             }
             var results = new List<MsgfPlusResult>();
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
-            
+
+            var cleavageStateCalculator = new clsPeptideCleavageStateCalculator();
+
             var i = 1;
 			// Go through each Spectrum ID and map it to an MSGF+ result
             foreach (var item in m_specItems)
@@ -321,7 +323,10 @@ namespace MTDBFramework.IO
                 var evidence = item.Value.PepEvidence[0];
 
                 result.Sequence = evidence.Pre + "." + item.Value.Peptide.Sequence + "." + evidence.Post;
-                result.NumTrypticEnds = MsgfPlusResult.CalculateTrypticState(result.Sequence);
+                
+                var eCleavageState = cleavageStateCalculator.ComputeCleavageState(item.Value.Peptide.Sequence, evidence.Pre, evidence.Post);
+                result.NumTrypticEnds = clsPeptideCleavageStateCalculator.CleavageStateToShort(eCleavageState);
+                
                 result.SeqWithNumericMods = null;
 
                 result.Reference = evidence.DBSeq.Accession;

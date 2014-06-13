@@ -72,7 +72,7 @@
             </StackPanel>
         </StackPanel>
 
-        <WebBrowser Grid.Column="1" Source="http://omics.pnl.gov/software"/>
+        <WebBrowser Grid.Column="1" Source="http://omics.pnl.gov/software" Visibility="Hidden"/>
         <!--<WebBrowser Grid.Column="1" Source="http://heyyeyaaeyaaaeyaeyaa.com/"/>-->
     </Grid>
 </UserControl>

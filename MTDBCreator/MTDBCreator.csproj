@@ -330,7 +330,7 @@
 MakeDistPackage $(ConfigurationName) $(PlatformName)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>del $(TargetDir)*.* /s /q</PreBuildEvent>
+    <PreBuildEvent>rem del $(TargetDir)*.* /s /q</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
