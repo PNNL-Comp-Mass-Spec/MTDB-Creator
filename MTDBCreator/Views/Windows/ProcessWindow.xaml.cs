@@ -28,16 +28,23 @@ namespace MTDBCreator.Windows
 
             backgroundWorkHelper.HostProcessWindow = this;
 
-            MainBackgroundWorkHelper = backgroundWorkHelper;
+                MainBackgroundWorkHelper = backgroundWorkHelper;
 
-            MainBackgroundWorker.DoWork += backgroundWorkHelper.BackgroundWorker_DoWork;
-            MainBackgroundWorker.ProgressChanged += backgroundWorkHelper.BackgroundWorker_ProgressChanged;
-            MainBackgroundWorker.RunWorkerCompleted += backgroundWorkHelper.BackgroundWorker_RunWorkerCompleted;
+                MainBackgroundWorker.DoWork += backgroundWorkHelper.BackgroundWorker_DoWork;
+                MainBackgroundWorker.ProgressChanged += backgroundWorkHelper.BackgroundWorker_ProgressChanged;
+                MainBackgroundWorker.RunWorkerCompleted += backgroundWorkHelper.BackgroundWorker_RunWorkerCompleted;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             MainBackgroundWorker.RunWorkerAsync();
+        }
+
+        private void CancelProcessing_Click(object sender, RoutedEventArgs e)
+        {
+            MainBackgroundWorker.CancelAsync();
+            StatusTextBlock.Text = "Cancelling Processing of data";
+            IsEnabled = false;
         }
 
         public string Status
@@ -48,7 +55,10 @@ namespace MTDBCreator.Windows
             }
             set
             {
-                StatusTextBlock.Text = value;
+                if (!MainBackgroundWorker.CancellationPending)
+                {
+                    StatusTextBlock.Text = value;
+                }
             }
         }
 

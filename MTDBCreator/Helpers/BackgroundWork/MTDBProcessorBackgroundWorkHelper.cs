@@ -30,8 +30,16 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
             try
             {
-
-                e.Result = mtdbProcessor.Process(m_analysisJobViewModel.AnalysisJobItems.Select(job => job.DataSet).ToList());
+                    e.Result =
+                        mtdbProcessor.Process(
+                            m_analysisJobViewModel.AnalysisJobItems.Select(job => job.DataSet).ToList(), HostProcessWindow.MainBackgroundWorker);
+                    if (HostProcessWindow.MainBackgroundWorker.CancellationPending)
+                    {
+                        e.Cancel = true;
+                        //var cancelException = new Exception("Process Cancelled");
+                        //e.Result = cancelException;
+                    }
+                
             }
             catch (Exception ex)
             {
@@ -50,20 +58,29 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         public void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Result is Exception)
+            if (e.Cancelled)
             {
-                var ex = e.Result as Exception;
-
-                ErrorHelper.WriteExceptionTraceInformation(ex);
-
-                MessageBox.Show(String.Format("The following exception has occurred:{0}{0}{1}", Environment.NewLine, ex.Message), Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(String.Format("Processing was cancelled prior to completion"));
             }
             else
             {
-                m_analysisJobViewModel.Database = e.Result as TargetDatabase;
-            }
+                if (e.Result is Exception)
+                {
+                    var ex = e.Result as Exception;
 
-            HostProcessWindow.DialogResult = !(e.Result is Exception);
+                    ErrorHelper.WriteExceptionTraceInformation(ex);
+
+                    MessageBox.Show(
+                        String.Format("The following exception has occurred:{0}{0}{1}", Environment.NewLine, ex.Message),
+                        Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    m_analysisJobViewModel.Database = e.Result as TargetDatabase;
+                }
+
+                HostProcessWindow.DialogResult = !(e.Result is Exception);
+            }
             HostProcessWindow.Close();
         }
 

@@ -1,6 +1,7 @@
 ﻿#region Namespaces
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
@@ -25,7 +26,7 @@ namespace MTDBFramework.IO
 		// Entry point for processing analysis job items. Accepts a IEnumerable of Analysis Job Items
 		// and returns the same.
 		// It will Analyse each one individually depending on the file type using PHRP Reader
-        public IEnumerable<AnalysisJobItem> Process(IEnumerable<AnalysisJobItem> analysisJobItems)
+        public IEnumerable<AnalysisJobItem> Process(IEnumerable<AnalysisJobItem> analysisJobItems, BackgroundWorker bWorker)
         {
             // analysisJobItems should have LcmsDataSet field be null
 
@@ -34,17 +35,20 @@ namespace MTDBFramework.IO
 
             foreach (var jobItem in analysisJobItems)
             {
-                OnProgressChanged(new MtdbProgressChangedEventArgs(mCurrentItem, mTotalItems, jobItem));
-                mCurrentJob = jobItem;
+                if (!bWorker.CancellationPending)
+                {
+                    OnProgressChanged(new MtdbProgressChangedEventArgs(mCurrentItem, mTotalItems, jobItem));
+                    mCurrentJob = jobItem;
 
-                PHRPReaderBase analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
+                    PHRPReaderBase analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
 
-                analysisReader.ProgressChanged += analysisReader_ProgressChanged;
-                
-				// Reads the jobItem using the reader returned by the Reader Factory
-                jobItem.DataSet = analysisReader.Read(jobItem.FilePath);
+                    analysisReader.ProgressChanged += analysisReader_ProgressChanged;
 
-                mCurrentItem++;
+                    // Reads the jobItem using the reader returned by the Reader Factory
+                    jobItem.DataSet = analysisReader.Read(jobItem.FilePath);
+
+                    mCurrentItem++;
+                }
             }
             
             return analysisJobItems;
