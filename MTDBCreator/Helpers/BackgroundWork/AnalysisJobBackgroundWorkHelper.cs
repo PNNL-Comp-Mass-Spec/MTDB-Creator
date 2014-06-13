@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Windows;
 using MTDBFramework.Data;
@@ -61,6 +62,9 @@ namespace MTDBCreator.Helpers.BackgroundWork
                 HostProcessWindow.MainProgressBar.Value = e.ProgressPercentage;
                 HostProcessWindow.MainProgressBar.Maximum = total;
                 HostProcessWindow.Status = status;
+
+                // This is the WPF version of DoEvents
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate { }));                
             }
         }
 

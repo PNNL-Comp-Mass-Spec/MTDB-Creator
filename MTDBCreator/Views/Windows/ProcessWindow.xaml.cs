@@ -14,9 +14,13 @@ namespace MTDBCreator.Windows
     /// </summary>
     public partial class ProcessWindow : Window
     {
+        public bool MultithreadingEnabled { get; private set; }
+
         public ProcessWindow(IBackgroundWorkHelper backgroundWorkHelper, Window ownerWindow)
         {
             InitializeComponent();
+
+            MultithreadingEnabled = false;
 
             Owner = ownerWindow;
 
@@ -37,7 +41,9 @@ namespace MTDBCreator.Windows
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            MainBackgroundWorker.RunWorkerAsync();
+            if (MultithreadingEnabled)
+                MainBackgroundWorker.RunWorkerAsync();
+
         }
 
         private void CancelProcessing_Click(object sender, RoutedEventArgs e)
@@ -70,7 +76,16 @@ namespace MTDBCreator.Windows
             }
         }
 
+        public void StartProcessingNonThreaded()
+        {
+            if (MultithreadingEnabled)
+                return;
+
+            MainBackgroundWorkHelper.BackgroundWorker_DoWork(this, new DoWorkEventArgs(0));
+        }
+
         public BackgroundWorker MainBackgroundWorker { get; private set; }
         public IBackgroundWorkHelper MainBackgroundWorkHelper { get; set; }
+     
     }
 }

@@ -10,11 +10,19 @@ namespace MTDBCreator.Helpers
         {
             var processWindow = new ProcessWindow(backgroundWorkHelper, Application.Current.MainWindow);
 
-            if (processWindow.ShowDialog() == true)
+            if (processWindow.MultithreadingEnabled)
             {
-                return backgroundWorkHelper.Result;
-            }
 
+                if (processWindow.ShowDialog() == true)
+                {
+                    return backgroundWorkHelper.Result;
+                }
+            }
+            else
+            {
+                processWindow.Show();
+                processWindow.StartProcessingNonThreaded();                
+            }
             return null;
         }
     }
