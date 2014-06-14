@@ -4,44 +4,17 @@ namespace MTDBFramework.Data
 {
     public class MsgfPlusResult : Evidence
     {
-        private double m_precursorMonoMass;
-        private double m_precursorMz;
         private string m_reference;
-        private short m_numTrypticEnds;
-        private double m_fdr;
+        private short m_numTrypticEnds;        
         private int m_deNovoScore;
         private int m_msgfScore;
         private double m_specEValue;
         private int m_rankSpecEValue;
         private double m_eValue;
-        private double m_qValue;
+        private double m_qValue;        // holds FDR if old MSGF-DB results
         private double m_pepQValue;
         private int m_isotopeError;
-
-        public double PrecursorMonoMass
-        {
-            get
-            {
-                return m_precursorMonoMass;
-            }
-            set
-            {
-                m_precursorMonoMass = value;
-                OnPropertyChanged("PrecursorMonoMass");
-            }
-        }
-        public double PrecursorMz 
-        {
-            get
-            {
-                return m_precursorMz;
-            }
-            set
-            {
-                 m_precursorMz = value;
-                OnPropertyChanged("PrecursorMZ");
-            }
-        }
+        
         public string Reference
         {
             get
@@ -50,7 +23,7 @@ namespace MTDBFramework.Data
             }
             set
             {
-                 m_reference = value;
+                m_reference = value;
                 OnPropertyChanged("Reference");
             }
         }
@@ -64,18 +37,6 @@ namespace MTDBFramework.Data
             {
                 m_numTrypticEnds = value;
                 OnPropertyChanged("NumTrypticEnds");
-            }
-        }
-        public double Fdr
-        {
-            get
-            {
-                return m_fdr;
-            }
-            set
-            {
-                m_fdr = value;
-                OnPropertyChanged("FDR");
             }
         }
         public int DeNovoScore
@@ -174,71 +135,6 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("IsotopeError");
             }
         }
-
-        [Obsolete("Superseded by clsPeptideCleavageStateCalculator.ComputeCleavageState")]
-        public static short CalculateTrypticState(string peptide)
-        {
-            short trypticState = 0;
-            var peptideChar = peptide.ToCharArray();
-            var startIndex = 2;
-            var stopIndex = peptideChar.Length - 3;
-
-            if (peptideChar[1] != '.')
-            {
-                startIndex = 0;
-
-                throw new ApplicationException(String.Format("Peptide {0} does not have a . in the second position", peptide));
-            }
-
-            if (peptideChar[stopIndex + 1] != '.')
-            {
-                stopIndex = peptideChar.Length - 1;
-
-                throw new ApplicationException(String.Format("Peptide {0} does not have a . in the second last position", peptide));
-            }
-
-            if (peptideChar[stopIndex] == 'R' || peptideChar[stopIndex] == 'K')
-            {
-                trypticState++;
-
-                if (peptideChar[peptideChar.Length - 1] == 'P')
-                {
-                    trypticState--;
-                }
-            }
-            else if (!Char.IsLetter(peptideChar[stopIndex]))
-            {
-                if (peptideChar[stopIndex - 1] == 'R' || peptideChar[stopIndex - 1] == 'K')
-                {
-                    trypticState++;
-
-                    if (peptideChar[peptideChar.Length - 1] == 'P')
-                    {
-                        trypticState--;
-                    }
-                }
-            }
-
-            if (peptideChar[peptideChar.Length - 1] == '-' && trypticState == 0)
-            {
-                trypticState++;
-            }
-
-            if (peptideChar[0] == 'R' || peptideChar[0] == 'K')
-            {
-                trypticState++;
-
-                if (peptideChar[startIndex] == 'P')
-                {
-                    trypticState--;
-                }
-            }
-            else if (peptideChar[0] == '-')
-            {
-                trypticState++;
-            }
-
-            return trypticState;
-        }
+       
     }	
 }

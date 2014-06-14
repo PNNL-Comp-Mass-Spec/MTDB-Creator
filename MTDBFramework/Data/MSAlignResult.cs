@@ -4,19 +4,22 @@
     {
         #region Private Fields
 
-        private double m_eScore;
+        private double m_eValue;
 
         #endregion
 
         #region Public Properties
 
-        public double EScore
+        /// <summary>
+        /// MSAlign EValue
+        /// </summary>
+        public double EValue
         {
-            get { return m_eScore; }
+            get { return m_eValue; }
             set
             {
-                m_eScore = value;
-                OnPropertyChanged("EScore");
+                m_eValue = value;
+                OnPropertyChanged("EValue");
             }
         }
 

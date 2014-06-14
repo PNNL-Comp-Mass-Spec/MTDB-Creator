@@ -20,8 +20,7 @@ namespace MTDBFramework.Data
         private double m_peptideHyperscore;
         private double m_yScore;
         private short m_numTrypticEnds;
-        private double m_highNormalizedScore;
-
+        
         #endregion
 
         #region Public Properties
@@ -153,20 +152,6 @@ namespace MTDBFramework.Data
             {
                 m_numTrypticEnds = value;
                 OnPropertyChanged("TrypticState");
-            }
-        }
-
-        [Obsolete("This property is not used anywhere in this project")]
-        public double HighNormalizedScore
-        {
-            get
-            {
-                return m_highNormalizedScore;
-            }
-            set
-            {
-                m_highNormalizedScore = value;
-                OnPropertyChanged("HighNormalizedScore");
             }
         }
 

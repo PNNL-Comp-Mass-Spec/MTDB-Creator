@@ -12,8 +12,8 @@
         /// <summary>
         /// Determine whether the given evidence should be filtered out
         /// </summary>
-        /// <param name="evidence"></param>
-        /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
+        /// <param name="evidence">Peptide evidence</param>
+        /// /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
         public bool ShouldFilter(Evidence evidence)
         {
             var result = evidence as SequestResult;
@@ -23,12 +23,24 @@
                 return true;
             }
 
-            if (result.XCorr < FilterOptions.MinXCorrForAlignment)
+            return ShouldFilter(result.XCorr, result.SpecProb);
+        }
+
+
+        /// <summary>
+        /// Determine whether the given evidence should be filtered out
+        /// </summary>
+        /// <param name="xcorr">Sequest XCorr</param>
+        /// /// <param name="specProb">MSGF+ SpecProb</param>
+        /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
+        public bool ShouldFilter(double xcorr, double specProb)
+        {
+            if (xcorr < FilterOptions.MinXCorrForAlignment)
             {
                 return true;
             }
 
-            if (result.SpecProb > FilterOptions.MaxMsgfSpecProb)
+            if (specProb > FilterOptions.MaxMsgfSpecProb)
             {
                 return true;
             }

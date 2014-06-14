@@ -3,6 +3,7 @@
     public class MsAlignTargetFilter : ITargetFilter
     {
         public Options FilterOptions { get; set; }
+       
 
         public MsAlignTargetFilter(Options options)
         {
@@ -12,8 +13,8 @@
         /// <summary>
         /// Determine whether the given evidence should be filtered out
         /// </summary>
-        /// <param name="evidence"></param>
-        /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
+        /// <param name="evidence">Peptide evidence</param>
+        /// /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
         public bool ShouldFilter(Evidence evidence)
         {
             var result = evidence as MsAlignResult;
@@ -23,7 +24,23 @@
                 return true;
             }
 
-            if (result.EScore > FilterOptions.MaxLogEValForMsAlignAlignment)
+            return ShouldFilter(result.EValue, result.SpecProb);
+        }
+
+        /// <summary>
+        /// Determine whether the given evidence should be filtered out
+        /// </summary>
+        /// <param name="eValue">MSAlign EValue</param>
+        /// <param name="specProb">MSGF Spectral Probability</param>
+        /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
+        public bool ShouldFilter(double eValue, double specProb)
+        {
+            if (eValue > FilterOptions.MaxLogEValForMsAlignAlignment)
+            {
+                return true;
+            }
+
+            if (specProb > FilterOptions.MaxMsgfSpecProb)
             {
                 return true;
             }

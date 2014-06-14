@@ -140,6 +140,9 @@ namespace MTDBFramework.Data
             }
         }
 
+        /// <summary>
+        /// Computed monoisotopic mass (uncharged, theoretical mass, including mods)
+        /// </summary>
         public double MonoisotopicMass
         {
             get { return m_monoisotopicMass; }
@@ -150,6 +153,9 @@ namespace MTDBFramework.Data
             }
         }
 
+        /// <summary>
+        /// Observed monoisotopic (of the precursor if MS/MS)
+        /// </summary>
         public double ObservedMonoisotopicMass
         {
             get { return m_observedMonoMass; }
@@ -200,6 +206,10 @@ namespace MTDBFramework.Data
             }
         }
 
+
+        /// <summary>
+        /// Observed m/z (of the precursor if MS/MS)
+        /// </summary>
         public double Mz
         {
             get { return m_mz; }
@@ -299,6 +309,9 @@ namespace MTDBFramework.Data
             }
         }
 
+        /// <summary>
+        /// Computed monoisotopic mass of the peptide sequence associated with this feature (uncharged, theoretical mass, including mods)
+        /// </summary>
         public double SeqInfoMonoisotopicMass
         {
             get { return m_seqInfoMonoisotopicMass; }
