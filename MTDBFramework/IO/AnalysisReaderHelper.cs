@@ -25,9 +25,15 @@ namespace MTDBFramework.IO
             Cache.Clear();
         }
 
+        [Obsolete("Use TryGetValue")]
         public static bool HasValue(string peptide)
         {
             return Cache.ContainsKey(peptide);
+        }
+
+        public static bool TryGetValue(string peptide, out double predictedNET)
+        {
+            return Cache.TryGetValue(peptide, out predictedNET);            
         }
 
         public static void Add(string peptide, double net)
@@ -35,6 +41,7 @@ namespace MTDBFramework.IO
             Cache.Add(peptide, net);
         }
 
+        [Obsolete("Use TryGetValue")]
         public static double RetrieveValue(string peptide)
         {
             return Cache[peptide];
@@ -45,133 +52,156 @@ namespace MTDBFramework.IO
     {
         public double PredictPeptide(string peptide, IRetentionTimePredictor predictor)
         {
-            var hasBeenPredicted = PeptideCache.HasValue(peptide);
-            if (!hasBeenPredicted)
+            double predictedNET;
+            if (!PeptideCache.TryGetValue(peptide, out predictedNET))
             {
-                var net = predictor.GetElutionTime(peptide);
-                PeptideCache.Add(peptide, net);
-                return net;
+                predictedNET = predictor.GetElutionTime(peptide);
+                PeptideCache.Add(peptide, predictedNET);
             }
-            return PeptideCache.RetrieveValue(peptide);
+
+            return predictedNET;
         }
     }
 
     public static class AnalysisReaderHelper
     {
-        public static void CalculateObservedNet(IEnumerable<Evidence> evidences )
+        /// <summary>
+        /// Calculate the observed NET values
+        /// </summary>
+        /// <param name="evidences"></param>
+        /// <remarks>Will use the MASIC scanstats.txt file or DeconTools scans.csv file if they are available</remarks>
+        public static void CalculateObservedNet(IEnumerable<Evidence> evidences)
         {
-            // If we have the scans file, use that to calculate the observed Net
-            evidences = evidences.ToList();
-            var jobFolder = Path.GetDirectoryName(evidences.First().DataSet.Path);
-            var csvPath = jobFolder + "\\" + evidences.First().DataSet.Name + "_scans.csv";
-            var txtPath = jobFolder + "\\" + evidences.First().DataSet.Name + "_scanstats.txt";
+            // Convert to a list to suppress the "Possible multiple enumeration" warning
+            var lstEvidences = evidences.ToList();
+
+            var dataset = lstEvidences.First().DataSet;
+
+            var fiDataset = new FileInfo(dataset.Path);
+
+            if (fiDataset.Directory == null)
+            {
+                // Invalid directory
+                return;
+            }
+
+            var jobFolder = fiDataset.Directory.FullName;
+            var csvPath = Path.Combine(jobFolder, dataset.Name + "_scans.csv");
+            var txtPath = Path.Combine(jobFolder, dataset.Name + "_scanstats.txt");
 
             if (File.Exists(txtPath))
             {
-                var scanToTime = new Dictionary<int, double>();
-                using (var reader = new StreamReader(txtPath))
-                {
-                    //Read the header
-                    reader.ReadLine();
-                    //Read the first line
-                    while (!reader.EndOfStream)
-                    {
-                        var line = reader.ReadLine();
-                        if (line != null)
-                        {
-                            var parsedLine = line.Split('\t');
+                // Obtain the elution time info from the Masic _scanstats.txt file
+                // Column index 1 is scan number and index 2 is elution time
+                var scanToTime = ReadScanTimeFile(txtPath, 1, 2);
 
-                            scanToTime.Add(Convert.ToInt32(parsedLine[1]), Convert.ToDouble(parsedLine[2]));
-                        }
-                    }
-                }
-                foreach (var evidence in evidences)
-                {
-                    evidence.ObservedNet = scanToTime[evidence.Scan];
-                }
-                
+                AssignNETs(lstEvidences, scanToTime);
+
             }
-
-
-            //If it's a .csv file which holds the scans data
             else if (File.Exists(csvPath))
             {
-                // Create dictionary of scans to times
-                var scanToTime = new Dictionary<int, double>();
-                using (var reader = new StreamReader(csvPath))
-                {
-                    //Read the header
-                    reader.ReadLine();
-                    //Read the first line
-                    while (!reader.EndOfStream)
-                    {
-                        var line = reader.ReadLine();
-                        if (line != null)
-                        {
-                            var parsedLine = line.Split(',');
+                // Obtain the elution time info from the DeconTools _scans.csv file
+                // Column index 0 is scan number and index 1 is elution time
+                var scanToTime = ReadScanTimeFile(txtPath, 0, 1);
 
-                            scanToTime.Add(Convert.ToInt32(parsedLine[0]), Convert.ToDouble(parsedLine[1]));
-                        }
-                    }
-                }
-
-                var maxTime = scanToTime.Max(scanTimePair => scanTimePair.Value);
-                var minTime = scanToTime.Min(scanTimePair => scanTimePair.Value);
-
-                foreach (var evidence in evidences)
-                {
-                    int scanStart       = 1;
-                    int scanEnd         = 1;
-                    double timeStart    = minTime;
-                    double timeEnd      = maxTime;
-                    bool exactMatch     = false;
-                    double observedTime;
-                    
-                    foreach (var scanTimePair in scanToTime)
-                    {
-                        if (evidence.Scan == scanTimePair.Key)
-                        {
-                            exactMatch  = true;
-                            timeEnd     = scanTimePair.Value;
-                        }
-                        if (evidence.Scan < scanTimePair.Key)
-                        {
-                            scanEnd = scanTimePair.Key;
-                            timeEnd = scanTimePair.Value;
-                            break;
-                        }
-                        scanStart = scanTimePair.Key;
-                        timeStart = scanTimePair.Value;
-                    }
-                    // Find the time that it was observed. Not normalized yet.
-                    if (exactMatch)
-                    {
-                        observedTime = timeEnd;
-                    }
-                    else
-                    {
-                        observedTime = ((double) (evidence.Scan - scanStart)/(scanEnd - scanStart))*
-                                       (timeEnd - timeStart) + timeStart;
-                    }
-
-                    evidence.ObservedNet = (observedTime - minTime)/(maxTime - minTime);
-                }
+                AssignNETs(lstEvidences, scanToTime);
             }
-
-            //Otherwise, we base it on min and max scan
             else
             {
-                double maxScan = evidences.Max(result => result.Scan);
-                double minScan = evidences.Min(result => result.Scan);
+                // Base elution time on the min and max scan
+                double maxScan = lstEvidences.Max(result => result.Scan);
+                double minScan = lstEvidences.Min(result => result.Scan);
 
-                foreach (var evidence in evidences)
+                foreach (var evidence in lstEvidences)
                 {
                     evidence.ObservedNet = (evidence.Scan - minScan)/(maxScan - minScan);
                 }
             }
         }
 
-		// Entry point for calculating the predicted NET.
+        private static void AssignNETs(IEnumerable<Evidence> evidences, Dictionary<int, double> scanToTime)
+        {
+            var maxTime = scanToTime.Max(scanTimePair => scanTimePair.Value);
+            var minTime = scanToTime.Min(scanTimePair => scanTimePair.Value);
+
+            foreach (var evidence in evidences)
+            {
+                int scanStart = 1;
+                int scanEnd = 1;
+                double timeStart = minTime;
+                double timeEnd = maxTime;
+                bool exactMatch = false;
+                double observedTime;
+
+                foreach (var scanTimePair in scanToTime)
+                {
+                    if (evidence.Scan == scanTimePair.Key)
+                    {
+                        exactMatch = true;
+                        timeEnd = scanTimePair.Value;
+                    }
+                    if (evidence.Scan < scanTimePair.Key)
+                    {
+                        scanEnd = scanTimePair.Key;
+                        timeEnd = scanTimePair.Value;
+                        break;
+                    }
+                    scanStart = scanTimePair.Key;
+                    timeStart = scanTimePair.Value;
+                }
+
+                // Find the time that it was observed. Not normalized yet.
+                if (exactMatch)
+                {
+                    observedTime = timeEnd;
+                }
+                else
+                {
+                    observedTime = ((double)(evidence.Scan - scanStart) / (scanEnd - scanStart)) *
+                                   (timeEnd - timeStart) + timeStart;
+                }
+
+                evidence.ObservedNet = (observedTime - minTime) / (maxTime - minTime);
+            }
+        }
+
+        private static Dictionary<int, double> ReadScanTimeFile(string txtPath, int scanColIndex, int timeColIndex)
+        {
+            var scanToTime = new Dictionary<int, double>();
+            int minimumColCount = Math.Max(scanColIndex, timeColIndex) + 1;
+
+            using (var reader = new StreamReader(txtPath))
+            {
+
+                while (reader.Peek() > -1)
+                {
+                    var line = reader.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+
+                    var parsedLine = line.Split('\t');
+
+                    if (parsedLine.Length < minimumColCount)
+                        continue;
+
+                    int scanNumber;
+                    if (!int.TryParse(parsedLine[scanColIndex], out scanNumber))
+                        continue;
+
+                    double elutionTimeMinutes;
+                    if (!double.TryParse(parsedLine[timeColIndex], out elutionTimeMinutes))
+                        continue;
+
+                    scanToTime.Add(scanNumber, elutionTimeMinutes);
+                    
+                }
+            }
+
+            return scanToTime;
+        }
+
+        // Entry point for calculating the predicted NET.
 		// Accepts a Retention time predictor and an IEnumerable of Evidences
 		// For each evidence, it passes the clean peptide sequence through the peptideCache alongside
 		// the predictor to determine the predicted NET. If the peptide has been seen before, it has
@@ -185,8 +215,7 @@ namespace MTDBFramework.IO
             foreach (var evidence in evidences)
             {
                 evidence.PredictedNet = pepCache.PredictPeptide(evidence.CleanPeptide, predictor);
-                // Old version of predicting the NET not utilizing the peptide cache
-                // evidence.PredictedNet = predictor.GetElutionTime(evidence.CleanPeptide);
+                
             }
         }
     }

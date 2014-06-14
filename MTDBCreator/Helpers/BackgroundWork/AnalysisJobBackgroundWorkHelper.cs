@@ -30,16 +30,12 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
             try
             {
-                //while (!HostProcessWindow.MainBackgroundWorker.CancellationPending)
-                //{
-                    e.Result = analysisJobProcessor.Process(AnalysisJobViewModel.AnalysisJobItems, HostProcessWindow.MainBackgroundWorker);
-                //}
-                    if (HostProcessWindow.MainBackgroundWorker.CancellationPending)
-                    {
-                        e.Cancel = true;
-                        //var cancelException = new Exception("Process Cancelled");
-                        //e.Result = cancelException;
-                    }
+                e.Result = analysisJobProcessor.Process(AnalysisJobViewModel.AnalysisJobItems, HostProcessWindow.MainBackgroundWorker);
+
+                if (HostProcessWindow.MainBackgroundWorker.CancellationPending)
+                {
+                    e.Cancel = true;
+                }
             }
 
             catch (Exception ex)
@@ -64,7 +60,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
                 HostProcessWindow.Status = status;
 
                 // This is the WPF version of DoEvents
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate { }));                
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate { }));
             }
         }
 
@@ -85,7 +81,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
                     MessageBox.Show(String.Format("The following exception has occurred:{0}{0}{1}", Environment.NewLine, ex.Message), Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 HostProcessWindow.DialogResult = !(e.Result is Exception);
-                
+
             }
             HostProcessWindow.Close();
         }

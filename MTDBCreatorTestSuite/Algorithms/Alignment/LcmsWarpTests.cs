@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
@@ -36,12 +37,13 @@ namespace MTDBCreatorTestSuite.Algorithms.Alignment
 
             var analysisProcessor   = new AnalysisJobProcessor(options);
             var individualJobs      = fullPaths.Select(path => new AnalysisJobItem(path, LcmsIdentificationTool.MsgfPlus)).ToList();
-
-            var jobs = analysisProcessor.Process(individualJobs);
+            var bWorker = new BackgroundWorker();
+            
+            var jobs = analysisProcessor.Process(individualJobs, bWorker);
 
             var databaseProcess = new MtdbProcessor(options);
 
-            databaseProcess.Process(jobs.Select(job => job.DataSet).ToList());
+            databaseProcess.Process(jobs.Select(job => job.DataSet).ToList(), bWorker);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿#region Namespaces
 
+using System;
 using MTDBFramework.Algorithms;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.UI;
@@ -284,6 +285,7 @@ namespace MTDBFramework.Data
         }
 
         // MSGF+
+        [Obsolete("Use MaxMsgfSpecProb instead")]
         public double MsgfSpectralEValue
         {
             get

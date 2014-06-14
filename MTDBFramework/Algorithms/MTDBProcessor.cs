@@ -47,6 +47,7 @@ namespace MTDBFramework.Algorithms
             var aligner         = TargetAlignmentFactory.Create(ProcessorOptions);
             var clusterer       = TargetClustererFactory.Create(ProcessorOptions.TargetFilterType);
             var epicTargets     = new List<Evidence>();
+
             dataSets = dataSets.ToList();
             foreach (var dataSet in dataSets)
             {
@@ -66,8 +67,8 @@ namespace MTDBFramework.Algorithms
 
                             if (!alignmentFilter.ShouldFilter(t))
                             {
-                                //Exclude carryover peptides.
-                                //Would be evidenced by a sizable difference between observed net and predicted net
+                                // Exclude carryover peptides.
+                                // Would be evidenced by a sizable difference between observed net and predicted net
                                 if (Math.Abs(t.ObservedNet - t.PredictedNet) < 0.6)
                                 {
                                     alignedTargets.Add(t);
