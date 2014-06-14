@@ -11,10 +11,10 @@ namespace MTDBFramework.IO
     /// <summary>
     /// Summary Description for MSGFPlusPHRP Reader
     /// </summary>
-    public class MsgfPlusPhrpReader : PHRPReaderBase,IPhrpReader
+    public class MsgfPlusPhrpReader : PHRPReaderBase
     {
         public MsgfPlusPhrpReader(Options options)
-        {
+        {            
             ReaderOptions = options;
         }
 
@@ -23,97 +23,74 @@ namespace MTDBFramework.IO
             var results = new List<MsgfPlusResult>();
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
 
-            var proteinInfos = new Dictionary<string, ProteinInformation>();
-
             int resultsProcessed = 0;
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in
             var reader = new clsPHRPReader(path);
-            //foreach(var protein in reader.SeqToProteinMap)
-
             while (reader.CanRead)
             {
                 reader.MoveNext();
-                if(reader.CurrentPSM.SeqID == 0)
-                {
-                    continue;
-                }
-                var result = new MsgfPlusResult
-                {
-                    AnalysisId = reader.CurrentPSM.ResultID,
-                    Charge = reader.CurrentPSM.Charge,
-                    CleanPeptide = reader.CurrentPSM.PeptideCleanSequence,
-                    SeqWithNumericMods = reader.CurrentPSM.PeptideWithNumericMods,
-                    MonoisotopicMass = reader.CurrentPSM.PeptideMonoisotopicMass,
-                    ObservedMonoisotopicMass = reader.CurrentPSM.PrecursorNeutralMass,
-                    MultiProteinCount = (short) reader.CurrentPSM.Proteins.Count,
-                    Scan = reader.CurrentPSM.ScanNumber,
-                    Sequence = reader.CurrentPSM.Peptide,
-                    Mz =
-                        clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0,
-                            reader.CurrentPSM.Charge)
-                };
-
-                result.PeptideInfo = new TargetPeptideInfo
-                {
-                    Peptide = result.Sequence,
-                    CleanPeptide = result.CleanPeptide,
-                    PeptideWithNumericMods = result.SeqWithNumericMods
-                };
-                result.PrecursorMonoMass = reader.CurrentPSM.PrecursorNeutralMass;
-                result.PrecursorMz = result.PrecursorMonoMass / result.Charge;
-                result.Reference = null;
-                foreach (var proteinName in reader.CurrentPSM.Proteins)
-                {
-                    result.Reference += proteinName;
-                }
-                result.SpecProb = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["MSGFDB_SpecProb"]);
-                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
-                result.Fdr = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["FDR"]);
-                result.DeNovoScore = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["DeNovoScore"]);
-                result.MsgfScore = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["MSGFScore"]);
-                result.SpecEValue = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["MSGFDB_SpecEValue"]);
-                result.RankSpecEValue = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["Rank_MSGFDB_SpecEValue"]);
-                result.EValue = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["Evalue"]);
-                result.QValue = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["Qvalue"]);
-                result.PepQValue = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["PepQvalue"]);
-                result.IsotopeError = Convert.ToInt32(reader.CurrentPSM.AdditionalScores["IsotopeError"]);
-                result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
-                result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
-                
-                if (reader.CurrentPSM.MassErrorPPM.Length != 0)
-                {
-                    result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
-                }
-                result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
-
-				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
-                if (!filter.ShouldFilter(result))
-                {
-                    result.DataSet = new TargetDataSet
-                    {
-                        Path = path,
-                        Name = DatasetPathUtility.CleanPath(path)
-                    };
-
-                    result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
-
-                    StoreProteinInfo(reader, proteinInfos, result);
-                   
-                    if (result.ModificationCount != 0)
-                    {
-                        foreach (var info in reader.CurrentPSM.ModifiedResidues)
-                        {
-                            result.SeqInfoMonoisotopicMass += info.ModDefinition.ModificationMass;
-                            result.ModificationDescription += info.ModDefinition.MassCorrectionTag + ":" + info.ResidueLocInPeptide + " ";
-                        }
-                    }
-                    results.Add(result);
-                }
 
                 resultsProcessed++;
                 if (resultsProcessed % 500 == 0)
                     UpdateProgress(reader.PercentComplete);
+
+                if (reader.CurrentPSM.SeqID == 0)
+                    continue;
+
+                // Skip this PSM if it doesn't pass the import filters
+                // Note that qValue is basically FDR
+                double qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_QValue, -1);
+                if (qValue < 0)
+                    qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_FDR, 0);
+                
+                double specProb = 0;
+                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
+                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
+
+                if (filter.ShouldFilter(qValue, specProb))
+                    continue;
+
+                var result = new MsgfPlusResult
+                {
+                    AnalysisId = reader.CurrentPSM.ResultID
+                };
+
+                StorePSMData(result, reader, specProb);
+
+                StoreDatasetInfo(result, reader, path);
+
+
+
+                // Populate items specific to MGSF+
+                result.Reference = reader.CurrentPSM.ProteinFirst;
+                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
+
+                result.DeNovoScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_DeNovoScore, 0);
+                result.MsgfScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFScore, 0);
+
+                result.SpecEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFDB_SpecEValue, -1);
+                if (result.SpecEValue < 0)
+                {
+                    result.SpecEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFDB_SpecProb, 0);
+                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_Rank_MSGFDB_SpecProb, 0);
+                }
+                else
+                {
+                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_Rank_MSGFDB_SpecEValue, 0);
+                }
+
+
+                result.EValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_EValue, 0);
+                
+                result.QValue = qValue;
+                result.PepQValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_PepQValue, -1);
+                if (result.PepQValue < 0)
+                    result.PepQValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_PepFDR, 0);
+
+                result.IsotopeError = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_Isotope_Error, 0);
+
+                results.Add(result);
             }
 
             AnalysisReaderHelper.CalculateObservedNet(results);
@@ -121,5 +98,6 @@ namespace MTDBFramework.IO
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MsgfPlus, results);
         }
+        
     }
 }

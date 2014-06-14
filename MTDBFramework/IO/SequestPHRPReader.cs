@@ -23,89 +23,60 @@ namespace MTDBFramework.IO
             var results = new List<SequestResult>();
             var filter = new SequestTargetFilter(ReaderOptions);
 
-            // Key is protein name, value is the protein information
-            var proteinInfos = new Dictionary<string, ProteinInformation>();
-
             int resultsProcessed = 0;
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in
             var reader = new clsPHRPReader(path);
             while (reader.CanRead)
             {
-                var result = new SequestResult();
                 reader.MoveNext();
-
-                result.AnalysisId = reader.CurrentPSM.ResultID;
-                result.Charge = reader.CurrentPSM.Charge;
-                result.CleanPeptide = reader.CurrentPSM.PeptideCleanSequence;
-                result.SeqWithNumericMods = reader.CurrentPSM.PeptideWithNumericMods;
-                result.MonoisotopicMass = reader.CurrentPSM.PeptideMonoisotopicMass;
-                result.ObservedMonoisotopicMass = reader.CurrentPSM.PrecursorNeutralMass;
-                result.MultiProteinCount = (short)reader.CurrentPSM.Proteins.Count;
-                result.Scan = reader.CurrentPSM.ScanNumber;
-                result.Sequence = reader.CurrentPSM.Peptide;
-                result.Mz = clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge);
-                if (reader.CurrentPSM.MSGFSpecProb.Length != 0)
-                {
-                    result.SpecProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
-                }
-
-                result.PeptideInfo = new TargetPeptideInfo
-                {
-                    Peptide = result.Sequence,
-                    CleanPeptide = result.CleanPeptide,
-                    PeptideWithNumericMods = result.SeqWithNumericMods
-                };
-
-                result.DelCn = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["DelCn"]);
-                result.DelCn2 = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["DelCn2"]);
-                result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
-                if (reader.CurrentPSM.MassErrorPPM.Length != 0)
-                {
-                    result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
-                }
-                result.NumTrypticEnds = Convert.ToInt16(reader.CurrentPSM.AdditionalScores["NumTrypticEnds"]);
-                result.RankSp = Convert.ToInt16(reader.CurrentPSM.AdditionalScores["RankSp"]);
-                result.RankXc = Convert.ToInt16(reader.CurrentPSM.AdditionalScores["RankXc"]);
-                result.Sp = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["Sp"]);
-                result.XCorr = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["XCorr"]);
-                result.XcRatio = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["XcRatio"]);
-
-                result.FScore = SequestResult.CalculatePeptideProphetDistriminantScore(result);
-
-				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
-                if (!filter.ShouldFilter(result))
-                {
-                    result.DataSet = new TargetDataSet
-                    {
-                        Path = path,
-                        Name = reader.DatasetName
-                    };
-
-                    if (string.IsNullOrEmpty(result.DataSet.Name))
-                        result.DataSet.Name = DatasetPathUtility.CleanPath(path);
-
-                    result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
-                    result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
-
-                    StoreProteinInfo(reader, proteinInfos, result);
-
-                    if (result.ModificationCount != 0)
-                    {
-                        foreach (var info in reader.CurrentPSM.ModifiedResidues)
-                        {
-                            result.SeqInfoMonoisotopicMass += info.ModDefinition.ModificationMass;
-                            result.ModificationDescription += info.ModDefinition.MassCorrectionTag + ":" + info.ResidueLocInPeptide + " ";
-                        }
-                    }
-
-                    results.Add(result);
-                }
 
                 resultsProcessed++;
                 if (resultsProcessed % 500 == 0)
                     UpdateProgress(reader.PercentComplete);
+
+                if (reader.CurrentPSM.SeqID == 0)
+                    continue;
+
+                // Skip this PSM if it doesn't pass the import filters
+                double xcorr = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XCorr, 0);
+
+                double specProb = 0;
+                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
+                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
+
+                if (filter.ShouldFilter(xcorr, specProb))
+                    continue;
+
+                var result = new SequestResult
+                {
+                    AnalysisId = reader.CurrentPSM.ResultID                   
+                };
+
+                StorePSMData(result, reader, specProb);
+
+                StoreDatasetInfo(result, reader, path);
+
+
+                // Populate items specific to Sequest
+
+                result.Reference = reader.CurrentPSM.ProteinFirst;
+                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
+
+                result.DelCn = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_DelCn, 0);
+                result.DelCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_DelCn2, 0);
+             
+                result.RankSp = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserSequest.DATA_COLUMN_RankSp, 0);
+                result.RankXc = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserSequest.DATA_COLUMN_RankXc, 0);
+                result.Sp = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_Sp, 0);
+                result.XCorr = xcorr;
+                result.XcRatio = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XcRatio, 0);
+
+                result.FScore = SequestResult.CalculatePeptideProphetDistriminantScore(result);
+		
+                results.Add(result);             
             }
+
             AnalysisReaderHelper.CalculateObservedNet(results);
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
 

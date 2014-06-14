@@ -23,72 +23,47 @@ namespace MTDBFramework.IO
             var results = new List<MsAlignResult>();
             var filter = new MsAlignTargetFilter(ReaderOptions);
 
-            var proteinInfos = new Dictionary<string, ProteinInformation>();
-
             int resultsProcessed = 0;
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in
             var reader = new clsPHRPReader(path);
             while (reader.CanRead)
-            {
-                var result = new MsAlignResult();
+            {                
                 reader.MoveNext();
-
-                result.AnalysisId = reader.CurrentPSM.ResultID;
-                result.Charge = reader.CurrentPSM.Charge;
-                result.CleanPeptide = reader.CurrentPSM.PeptideCleanSequence;
-                result.SeqWithNumericMods = reader.CurrentPSM.PeptideWithNumericMods;
-                result.MonoisotopicMass = reader.CurrentPSM.PeptideMonoisotopicMass;
-                result.ObservedMonoisotopicMass = reader.CurrentPSM.PrecursorNeutralMass;
-                result.MultiProteinCount = (short)reader.CurrentPSM.Proteins.Count;
-                result.Scan = reader.CurrentPSM.ScanNumber;
-                result.Sequence = reader.CurrentPSM.Peptide;
-                result.Mz = clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge);
-                result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
-                if (reader.CurrentPSM.MassErrorPPM.Length != 0)
-                {
-                    result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
-                }
-
-                result.PeptideInfo = new TargetPeptideInfo
-                {
-                    Peptide = result.Sequence,
-                    CleanPeptide = result.CleanPeptide,
-                    PeptideWithNumericMods = result.SeqWithNumericMods
-                };
-
-                result.EScore = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["EValue"]);
-
-				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
-                if (!filter.ShouldFilter(result))
-                {
-                    result.DataSet = new TargetDataSet
-                    {
-                        Path = path,
-                        Name = DatasetPathUtility.CleanPath(path)
-                    };
-
-                    result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
-                    result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
-
-                    StoreProteinInfo(reader, proteinInfos, result);
-
-                    if (result.ModificationCount != 0)
-                    {
-                        foreach (var info in reader.CurrentPSM.ModifiedResidues)
-                        {
-                            result.SeqInfoMonoisotopicMass += info.ModDefinition.ModificationMass;
-                            result.ModificationDescription += info.ModDefinition.MassCorrectionTag + ":" + info.ResidueLocInPeptide + " ";
-                        }
-                    }
-
-                    results.Add(result);
-                }
 
                 resultsProcessed++;
                 if (resultsProcessed % 500 == 0)
                     UpdateProgress(reader.PercentComplete);
+
+                if (reader.CurrentPSM.SeqID == 0)
+                    continue;
+
+                // Skip this PSM if it doesn't pass the import filters
+                double eValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSAlign.DATA_COLUMN_EValue, 0);
+              
+                double specProb = 0;
+                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
+                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
+
+                if (filter.ShouldFilter(eValue, specProb))
+                    continue;
+
+                var result = new MsAlignResult
+                {
+                    AnalysisId = reader.CurrentPSM.ResultID
+                };
+
+                StorePSMData(result, reader, specProb);
+
+                StoreDatasetInfo(result, reader, path);
+
+
+                // Populate items specific to MSAlign
+                result.EValue = eValue;
+				              
+                results.Add(result);              
             }
+
             AnalysisReaderHelper.CalculateObservedNet(results);
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
 

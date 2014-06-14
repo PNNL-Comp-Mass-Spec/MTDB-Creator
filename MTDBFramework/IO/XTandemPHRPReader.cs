@@ -23,98 +23,58 @@ namespace MTDBFramework.IO
             var results = new List<XTandemResult>();
             var filter = new XTandemTargetFilter(ReaderOptions);
 
-            var proteinInfos = new Dictionary<string, ProteinInformation>();
-
             int resultsProcessed = 0;
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in
             var reader = new clsPHRPReader(path);
             while (reader.CanRead)
-            {
-                var result = new XTandemResult();
+            {                
                 reader.MoveNext();
-
-                result.AnalysisId = reader.CurrentPSM.ResultID;
-                result.Charge = reader.CurrentPSM.Charge;
-                result.CleanPeptide = reader.CurrentPSM.PeptideCleanSequence;
-                result.SeqWithNumericMods = reader.CurrentPSM.PeptideWithNumericMods;
-                result.MonoisotopicMass = reader.CurrentPSM.PeptideMonoisotopicMass;
-                result.ObservedMonoisotopicMass = reader.CurrentPSM.PrecursorNeutralMass;
-                result.MultiProteinCount = (short)reader.CurrentPSM.Proteins.Count;
-                result.Scan = reader.CurrentPSM.ScanNumber;
-                result.Sequence = reader.CurrentPSM.Peptide;
-
-                result.PeptideInfo = new TargetPeptideInfo
-                {
-                    Peptide = result.Sequence,
-                    CleanPeptide = result.CleanPeptide, 
-                    PeptideWithNumericMods = result.SeqWithNumericMods
-                };
-
-                result.BScore = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["b_score"]);
-                result.DeltaCn2 = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["DeltaCn2"]);
-                result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
-                result.LogIntensity = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["Peptide_Intensity_Log(I)"]);
-                result.LogPeptideEValue = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["Peptide_Expectation_Value_Log(e)"]);
-                result.NumberBIons = Convert.ToInt16(reader.CurrentPSM.AdditionalScores["b_ions"]);
-                result.NumberYIons = Convert.ToInt16(reader.CurrentPSM.AdditionalScores["y_ions"]);
-                result.PeptideHyperscore = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["Peptide_Hyperscore"]);
-                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
-                result.YScore = Convert.ToDouble(reader.CurrentPSM.AdditionalScores["y_score"]);
-                result.Mz = clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0, reader.CurrentPSM.Charge); 
-                result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
-
-				
-                // Convert the X!Tandem hyperscore to pseudo-XCorr values
-                // See udfHyperscoreToNormalizedScore in MTS (SQL Server)
-                // In reality, this project doesn't use result.HighNormalizedScore so this isn't really necessary
-
-                double highNorm; 
-                if (result.Charge == 1)
-                {
-                    highNorm = 0.082 * result.PeptideHyperscore;
-                }
-                else if (result.Charge == 2)
-                {
-                    highNorm = 0.085 * result.PeptideHyperscore;
-                }
-                else
-                {
-                    highNorm = 0.0874 * result.PeptideHyperscore;
-                }
-
-                result.HighNormalizedScore = highNorm;
-
-				// If it passes the filter, check for if there are any modifications, add them if needed, and add the result to the list
-                if (!filter.ShouldFilter(result))
-                {
-                    result.DataSet = new TargetDataSet
-                    {
-                        Path = path,
-                        Name = DatasetPathUtility.CleanPath(path)
-                    };
-
-                    result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
-                    result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
-
-                    StoreProteinInfo(reader, proteinInfos, result);                    
-
-                    if (result.ModificationCount != 0)
-                    {
-                        foreach (var info in reader.CurrentPSM.ModifiedResidues)
-                        {
-                            result.SeqInfoMonoisotopicMass += info.ModDefinition.ModificationMass;
-                            result.ModificationDescription += info.ModDefinition.MassCorrectionTag + ":" + info.ResidueLocInPeptide + " ";
-                        }
-                    }
-
-                    results.Add(result);
-                }
 
                 resultsProcessed++;
                 if (resultsProcessed % 500 == 0)
                     UpdateProgress(reader.PercentComplete);
+
+                if (reader.CurrentPSM.SeqID == 0)
+                    continue;
+
+                // Skip this PSM if it doesn't pass the import filters
+                double logPepEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Expectation_Value_LogE, 0);
+                
+                double specProb = 0;
+                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
+                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
+
+                if (filter.ShouldFilter(logPepEValue, specProb))
+                    continue;
+
+                var result = new XTandemResult
+                {
+                    AnalysisId = reader.CurrentPSM.ResultID                    
+                };
+
+                StorePSMData(result, reader, specProb);
+
+                StoreDatasetInfo(result, reader, path);
+
+
+                // Populate items specific to X!Tandem
+                
+                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
+
+
+                result.BScore = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_b_score, 0);
+                result.DeltaCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_DeltaCn2, 0);                
+                result.LogIntensity = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Intensity_LogI, 0);
+                result.LogPeptideEValue = logPepEValue;
+                result.NumberBIons = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserXTandem.DATA_COLUMN_b_ions);
+                result.NumberYIons = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserXTandem.DATA_COLUMN_y_ions);
+                result.PeptideHyperscore = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Hyperscore, 0);
+                result.YScore = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_y_score, 0);
+
+                results.Add(result);
             }
+
             AnalysisReaderHelper.CalculateObservedNet(results);
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
             

@@ -23,8 +23,8 @@ namespace MTDBFramework.IO
 
         private class SpectrumIdItem
         {
-			#region Spectrum ID Public Properties
-			
+            #region Spectrum ID Public Properties
+
             public SpectrumIdItem()
             {
                 PepEvidence = new List<PeptideEvidence>();
@@ -65,7 +65,7 @@ namespace MTDBFramework.IO
             public int ScanNum { get; set; }
 
             #endregion
-			
+
         }
 
         private class DatabaseSequence
@@ -104,7 +104,7 @@ namespace MTDBFramework.IO
             {
                 get { return m_mods; }
             }
-                    
+
         }
 
         private class PeptideEvidence
@@ -124,27 +124,27 @@ namespace MTDBFramework.IO
             public DatabaseSequence DBSeq { get; set; }
         }
 
-		// Entry point for MZIdentMLReaders
-		// Accepts a string "Path" and returns an LCMSDataSet
-		// 
-		// XML Reader parses an MZIdentML file, storing Peptide data, such as sequence,
-		// number, and type of modifications, as a PeptideRef, Database Information holds
-		// the length of the peptide and the protein description, Peptide Evidence holds the pre,
-		// post, start and end for the peptide for Tryptic End calculations. The element that holds
-		// the most information is the Spectrum ID Item, which has the calculated mz, experimental mz,
-		// charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue, MSGF QValue,
-		// MSGR PepQValue, Scan number as well as which peptide it is and which evidences it has from
-		// the analysis run.
-		//
-		// After the XML Reader, it then goes through each Spectrum ID item and maps the appropriate values
-		// to the appropriate variables as a MSGF+ result. If the result passes the filter for MSGF+, it
-		// then adds the data for if there are modifications and adds the result to a running list of results.
-		// When all the results are tabulated, it passes them through to the AnalysisHelper class to calculate
-		// both the observed and the predicted NETs and then returns an LCMSDataSet of the results with the MZIdent tool
+        // Entry point for MZIdentMLReaders
+        // Accepts a string "Path" and returns an LCMSDataSet
+        // 
+        // XML Reader parses an MZIdentML file, storing Peptide data, such as sequence,
+        // number, and type of modifications, as a PeptideRef, Database Information holds
+        // the length of the peptide and the protein description, Peptide Evidence holds the pre,
+        // post, start and end for the peptide for Tryptic End calculations. The element that holds
+        // the most information is the Spectrum ID Item, which has the calculated mz, experimental mz,
+        // charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue, MSGF QValue,
+        // MSGR PepQValue, Scan number as well as which peptide it is and which evidences it has from
+        // the analysis run.
+        //
+        // After the XML Reader, it then goes through each Spectrum ID item and maps the appropriate values
+        // to the appropriate variables as a MSGF+ result. If the result passes the filter for MSGF+, it
+        // then adds the data for if there are modifications and adds the result to a running list of results.
+        // When all the results are tabulated, it passes them through to the AnalysisHelper class to calculate
+        // both the observed and the predicted NETs and then returns an LCMSDataSet of the results with the MZIdent tool
 
         public override LcmsDataSet Read(string path)
         {
-            var xSettings = new XmlReaderSettings {IgnoreWhitespace = true};
+            var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
             var sr = new StreamReader(path);
 
             using (var reader = XmlReader.Create(sr, xSettings))
@@ -152,7 +152,7 @@ namespace MTDBFramework.IO
                 reader.Read();
                 while (reader.Read())
                 {
-                    
+
                     switch (reader.NodeType)
                     {
                         case XmlNodeType.Element:
@@ -243,11 +243,11 @@ namespace MTDBFramework.IO
                                                 Convert.ToDouble(reader.GetAttribute("experimentalMassToCharge")),
                                             Charge = Convert.ToInt32(reader.GetAttribute("chargeState"))
                                         };
-                                        reader.ReadToDescendant("PeptideEvidenceRef");                                        
+                                        reader.ReadToDescendant("PeptideEvidenceRef");
                                         do
-                                        {                                                                                       
+                                        {
                                             specItem.PepEvidence.Add(m_evidences[reader.GetAttribute("peptideEvidence_ref")]);
-                                            specItem.PepEvCount++;                                            
+                                            specItem.PepEvCount++;
                                             reader.Read();
                                         }
                                         while (reader.Name == "PeptideEvidenceRef");
@@ -286,53 +286,78 @@ namespace MTDBFramework.IO
 
             var cleavageStateCalculator = new clsPeptideCleavageStateCalculator();
 
-            var i = 1;
-			// Go through each Spectrum ID and map it to an MSGF+ result
+            var i = 0;
+
+            // Go through each Spectrum ID and map it to an MSGF+ result
             foreach (var item in m_specItems)
             {
+                i++;
+
+                // Skip this PSM if it doesn't pass the import filters
+                // Note that qValue is basically FDR
+                double qValue = item.Value.QValue;
+
+                double specProb = item.Value.SpecEv;
+
+                if (filter.ShouldFilter(qValue, specProb))
+                    continue;
+
+                if (item.Value.PepEvidence.Count == 0)
+                    continue;
+
+                var evidence = item.Value.PepEvidence[0];
+
                 var result = new MsgfPlusResult
                 {
                     AnalysisId = i,
                     Charge = Convert.ToInt16(item.Value.Charge),
                     CleanPeptide = item.Value.Peptide.Sequence,
-                    DeNovoScore = item.Value.DeNovoScore,
-                    EValue = item.Value.EValue,
-                    Fdr = item.Value.QValue,
-                    IsotopeError = item.Value.IsoError,
-                    MsgfScore = item.Value.RawScore,
-                    MultiProteinCount = Convert.ToInt16(item.Value.PepEvCount),
+                    SeqWithNumericMods = null,
                     MonoisotopicMass = clsPeptideMassCalculator.ConvoluteMass(item.Value.CalMz, item.Value.Charge, 0),
-                    PepQValue = item.Value.PepQValue,
-                    ObservedMonoisotopicMass =
-                        clsPeptideMassCalculator.ConvoluteMass(item.Value.ExperimentalMz, item.Value.Charge, 0)
+                    ObservedMonoisotopicMass = clsPeptideMassCalculator.ConvoluteMass(item.Value.ExperimentalMz, item.Value.Charge, 0),
+                    MultiProteinCount = Convert.ToInt16(item.Value.PepEvCount),
+                    Scan = item.Value.ScanNum,
+                    Sequence = evidence.Pre + "." + item.Value.Peptide.Sequence + "." + evidence.Post,
+                    Mz = 0,
+                    SpecProb = specProb,
+                    DelM = 0,
+                    ModificationCount = Convert.ToInt16(item.Value.Peptide.Mods.Count)
                 };
 
+                // Populate some mass related items
                 result.DelM = result.ObservedMonoisotopicMass - result.MonoisotopicMass;
                 result.DelMPpm = clsPeptideMassCalculator.MassToPPM(result.DelM, result.ObservedMonoisotopicMass);
 
-                result.Mz = clsPeptideMassCalculator.ConvoluteMass(result.ObservedMonoisotopicMass, 0, result.Charge);
-                result.PrecursorMz = item.Value.ExperimentalMz;
+                // We could compute m/z:
+                //     Mz = clsPeptideMassCalculator.ConvoluteMass(result.ObservedMonoisotopicMass, 0, result.Charge);                
+                // But it's stored in the mzid file, so we'll use that
+                result.Mz = item.Value.ExperimentalMz;
 
-                result.QValue = item.Value.QValue;
-                result.Scan = item.Value.ScanNum;
+                StoreDatasetInfo(result, path);
 
-                result.SpecEValue = item.Value.SpecEv;
-                result.SpecProb = item.Value.SpecEv;
-                result.ModificationCount = Convert.ToInt16(item.Value.Peptide.Mods.Count);
 
-                var evidence = item.Value.PepEvidence[0];
-
-                result.Sequence = evidence.Pre + "." + item.Value.Peptide.Sequence + "." + evidence.Post;
-                
-                var eCleavageState = cleavageStateCalculator.ComputeCleavageState(item.Value.Peptide.Sequence, evidence.Pre, evidence.Post);
-                result.NumTrypticEnds = clsPeptideCleavageStateCalculator.CleavageStateToShort(eCleavageState);
-                
-                result.SeqWithNumericMods = null;
+                // Populate items specific to the MSGF+ results (stored as mzid)
 
                 result.Reference = evidence.DBSeq.Accession;
 
-                if (item.Value.Peptide.Mods.Count != 0)
+                var eCleavageState = cleavageStateCalculator.ComputeCleavageState(item.Value.Peptide.Sequence, evidence.Pre, evidence.Post);
+                result.NumTrypticEnds = clsPeptideCleavageStateCalculator.CleavageStateToShort(eCleavageState);
+
+                result.DeNovoScore = item.Value.DeNovoScore;
+                result.MsgfScore = item.Value.RawScore;
+                result.SpecEValue = item.Value.SpecEv;
+                result.RankSpecEValue = item.Value.Rank;
+
+                result.EValue = item.Value.EValue;
+                result.QValue = qValue;
+                result.PepQValue = item.Value.PepQValue;
+
+                result.IsotopeError = item.Value.IsoError;
+
+                if (result.ModificationCount > 0)
                 {
+                    // TODO: This code needs be updated to support additional mods
+
                     var j = 0;
                     var numModSeq = evidence.Pre + ".";
                     foreach (var mod in item.Value.Peptide.Mods)
@@ -372,84 +397,40 @@ namespace MTDBFramework.IO
                     CleanPeptide = result.CleanPeptide,
                     PeptideWithNumericMods = result.SeqWithNumericMods
                 };
-                i++;
 
-                // If it passes the filter, it needs to be added to the final results
-                if (!filter.ShouldFilter(result))
+               
+                result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
+                result.ModificationDescription = null;
+
+                foreach (var thing in item.Value.PepEvidence)
                 {
-                    result.DataSet = new TargetDataSet
+                    var protein = new ProteinInformation
                     {
-                        Path = path,
-                        Name = DatasetPathUtility.CleanPath(path)
+                        ProteinName = thing.DBSeq.Accession,
+                        ResidueStart = thing.Start,
+                        ResidueEnd = thing.End
                     };
-                    result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
-                    result.ModificationDescription = null;
-
-                    foreach (var thing in item.Value.PepEvidence)
-                    {
-                        var protein = new ProteinInformation
-                        {
-                            ProteinName = thing.DBSeq.Accession,
-                            ResidueStart = thing.Start,
-                            ResidueEnd = thing.End
-                        };
-                        if (evidence.Pre[0] == '-')
-                        {
-                            if (evidence.Post[0] == '-')
-                            {
-                                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNandCCTerminus;
-                                protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
-                            }
-                            else
-                            {
-                                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNTerminus;
-
-                            }
-                        }
-                        else if (evidence.Post[0] == '-')
-                        {
-                            protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinCTerminus;
-                        }
-                        else
-                        {
-                            protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.None;
-                        }
-                        switch (result.NumTrypticEnds)
-                        {
-                            case 0:
-                                protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.NonSpecific;
-                                break;
-                            case 1:
-                                protein.CleavageState =
-                                    clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Partial;
-                                break;
-                            case 2:
-                                protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
-                                break;
-                            default:
-                                //ERROR!!! Should never be more than 2 or less than 0 tryptic ends!\
-                                break;
-                        }
-                        result.Proteins.Add(protein);
-                    }
-
-                    if (result.ModificationCount != 0)
-                    {
-
-                        foreach (var mod in item.Value.Peptide.Mods)
-                        {
-                            if (mod.Value.Tag != "Carbamidomethyl")
-                            {
-
-                                result.SeqInfoMonoisotopicMass += mod.Value.Mass;
-                            }
-
-                            result.ModificationDescription += mod.Value.Tag + ":" + mod.Key + "  ";
-                        }
-                    }
-                    results.Add(result);
+                    ComputeTerminusState(evidence, result.NumTrypticEnds, protein);
+                    result.Proteins.Add(protein);
                 }
-             
+
+                if (result.ModificationCount > 0)
+                {
+
+                    foreach (var mod in item.Value.Peptide.Mods)
+                    {
+                        if (mod.Value.Tag != "Carbamidomethyl")
+                        {
+                            // TODO: Confirm that this is valid math (MEM thinks it may not be)
+                            result.SeqInfoMonoisotopicMass += mod.Value.Mass;
+                        }
+
+                        result.ModificationDescription += mod.Value.Tag + ":" + mod.Key + "  ";
+                    }
+                }
+
+                results.Add(result);
+
             }
 
             // Calculate NET for the results
@@ -457,6 +438,48 @@ namespace MTDBFramework.IO
             AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MZIdentML, results);
+        }
+
+        private void ComputeTerminusState(PeptideEvidence evidence, short numTrypticEnds, ProteinInformation protein)
+        {
+            if (evidence.Pre[0] == '-')
+            {
+                if (evidence.Post[0] == '-')
+                {
+                    protein.TerminusState =
+                        clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNandCCTerminus;
+                    protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
+                }
+                else
+                {
+                    protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNTerminus;
+                }
+            }
+            else if (evidence.Post[0] == '-')
+            {
+                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinCTerminus;
+            }
+            else
+            {
+                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.None;
+            }
+
+            switch (numTrypticEnds)
+            {
+                case 0:
+                    protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.NonSpecific;
+                    break;
+                case 1:
+                    protein.CleavageState =
+                        clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Partial;
+                    break;
+                case 2:
+                    protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
+                    break;
+                default:
+                    //ERROR!!! Should never be more than 2 or less than 0 tryptic ends!\
+                    break;
+            }
         }
     }
 }
