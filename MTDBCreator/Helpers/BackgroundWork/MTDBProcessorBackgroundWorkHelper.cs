@@ -16,14 +16,22 @@ namespace MTDBCreator.Helpers.BackgroundWork
     public sealed class MtdbProcessorBackgroundWorkHelper : IBackgroundWorkHelper
     {
         private readonly AnalysisJobViewModel m_analysisJobViewModel;
+        private bool mAbortRequested;
 
         public MtdbProcessorBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel)
         {
             m_analysisJobViewModel = analysisJobViewModel;
         }
 
+        public void BackgroundWorker_AbortProcessing()
+        {
+            mAbortRequested = true;
+        }
+
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            mAbortRequested = false;
+
             var mtdbProcessor = new MtdbProcessor(m_analysisJobViewModel.Options);
             mtdbProcessor.AlignmentComplete +=  mtdbProcessor_AlignmentComplete;
             HostProcessWindow.MainBackgroundWorker.ReportProgress(0);
@@ -33,11 +41,10 @@ namespace MTDBCreator.Helpers.BackgroundWork
                     e.Result =
                         mtdbProcessor.Process(
                             m_analysisJobViewModel.AnalysisJobItems.Select(job => job.DataSet).ToList(), HostProcessWindow.MainBackgroundWorker);
-                    if (HostProcessWindow.MainBackgroundWorker.CancellationPending)
+
+                    if (HostProcessWindow.MainBackgroundWorker.CancellationPending || mAbortRequested)
                     {
-                        e.Cancel = true;
-                        //var cancelException = new Exception("Process Cancelled");
-                        //e.Result = cancelException;
+                        e.Cancel = true;                       
                     }
                 
             }

@@ -18,21 +18,33 @@ namespace MTDBCreator.Helpers.BackgroundWork
 {
     public class AnalysisJobBackgroundWorkHelper : IBackgroundWorkHelper
     {
+        protected bool mAbortRequested;
+        protected AnalysisJobProcessor mAnalysisJobProcessor;
+
         public AnalysisJobBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel)
         {
             AnalysisJobViewModel = analysisJobViewModel;
         }
 
+        public void BackgroundWorker_AbortProcessing()
+        {
+            mAbortRequested = true;
+            mAnalysisJobProcessor.AbortProcessing();
+
+        }
+
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            var analysisJobProcessor = new AnalysisJobProcessor(AnalysisJobViewModel.Options);
-            analysisJobProcessor.ProgressChanged += analysisJobProcessor_ProgressChanged;
+            mAbortRequested = false;
+
+            mAnalysisJobProcessor = new AnalysisJobProcessor(AnalysisJobViewModel.Options);
+            mAnalysisJobProcessor.ProgressChanged += analysisJobProcessor_ProgressChanged;
 
             try
             {
-                e.Result = analysisJobProcessor.Process(AnalysisJobViewModel.AnalysisJobItems, HostProcessWindow.MainBackgroundWorker);
+                e.Result = mAnalysisJobProcessor.Process(AnalysisJobViewModel.AnalysisJobItems, HostProcessWindow.MainBackgroundWorker);
 
-                if (HostProcessWindow.MainBackgroundWorker.CancellationPending)
+                if (HostProcessWindow.MainBackgroundWorker.CancellationPending || mAbortRequested)
                 {
                     e.Cancel = true;
                 }
@@ -101,9 +113,29 @@ namespace MTDBCreator.Helpers.BackgroundWork
         {
             var analysisJobItem = e.UserObject as AnalysisJobItem;
 
-            if (analysisJobItem != null)
+            if (analysisJobItem == null)
             {
-                HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Concat("Processing analysis file: ", Path.GetFileName(analysisJobItem.FilePath)) });
+                if (!string.IsNullOrEmpty(e.CurrentTask))
+                {
+                    HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current,
+                                                                          new object[]
+                                                                          {e.Total.ToString(), e.CurrentTask});
+                }
+            }
+            else
+            {
+                string statusMessage;
+
+                if (string.IsNullOrEmpty(e.CurrentTask))
+                    statusMessage = "Processing analysis file";
+                else
+                    statusMessage = e.CurrentTask;
+
+                statusMessage += ": " + Path.GetFileName(analysisJobItem.FilePath);
+                
+                HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current,
+                                                                      new object[] 
+                                                                      {e.Total.ToString(), statusMessage});
             }
         }
 

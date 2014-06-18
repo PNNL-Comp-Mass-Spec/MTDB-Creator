@@ -9,6 +9,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 {
     public interface IBackgroundWorkHelper
     {
+        void BackgroundWorker_AbortProcessing();
         void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e);
         void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e);
         void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e);

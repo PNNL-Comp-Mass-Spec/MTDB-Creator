@@ -15,8 +15,17 @@ namespace MTDBFramework.IO
         private int mCurrentItem;
         private int mTotalItems;
         private AnalysisJobItem mCurrentJob;
+        private bool mAbortRequested;
+
+        private PHRPReaderBase mAnalysisReader;
 
         public Options ProcessorOptions { get; set; }
+
+        public void AbortProcessing()
+        {
+            mAbortRequested = true;
+            mAnalysisReader.AbortProcessing();
+        }
 
         public AnalysisJobProcessor(Options options)
         {
@@ -29,26 +38,28 @@ namespace MTDBFramework.IO
         public IEnumerable<AnalysisJobItem> Process(IEnumerable<AnalysisJobItem> analysisJobItems, BackgroundWorker bWorker)
         {
             // analysisJobItems should have LcmsDataSet field be null
+            mAbortRequested = false;
 
             mCurrentItem = 0;
             mTotalItems = analysisJobItems.Count();
 
             foreach (var jobItem in analysisJobItems)
             {
-                if (!bWorker.CancellationPending)
-                {
-                    OnProgressChanged(new MtdbProgressChangedEventArgs(mCurrentItem, mTotalItems, jobItem));
-                    mCurrentJob = jobItem;
+                if (bWorker.CancellationPending || mAbortRequested)
+                    break;
+                
+                OnProgressChanged(new MtdbProgressChangedEventArgs(mCurrentItem, mTotalItems, jobItem));
+                mCurrentJob = jobItem;
 
-                    PHRPReaderBase analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
+                mAnalysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
 
-                    analysisReader.ProgressChanged += analysisReader_ProgressChanged;
+                mAnalysisReader.ProgressChanged += analysisReader_ProgressChanged;
 
-                    // Reads the jobItem using the reader returned by the Reader Factory
-                    jobItem.DataSet = analysisReader.Read(jobItem.FilePath);
+                // Reads the jobItem using the reader returned by the Reader Factory
+                jobItem.DataSet = mAnalysisReader.Read(jobItem.FilePath);
 
-                    mCurrentItem++;
-                }
+                mCurrentItem++;
+                
             }
             
             return analysisJobItems;
@@ -60,7 +71,7 @@ namespace MTDBFramework.IO
 
             var effectiveItemCount = (int)(mCurrentItem * 100 + e.PercentComplete);
 
-            OnProgressChanged(new MtdbProgressChangedEventArgs(effectiveItemCount, mTotalItems * 100, mCurrentJob));
+            OnProgressChanged(new MtdbProgressChangedEventArgs(effectiveItemCount, mTotalItems * 100, e.CurrentTask, mCurrentJob));
         }
 
         #region Events
@@ -76,5 +87,6 @@ namespace MTDBFramework.IO
         }
 
         #endregion
+
     }
 }

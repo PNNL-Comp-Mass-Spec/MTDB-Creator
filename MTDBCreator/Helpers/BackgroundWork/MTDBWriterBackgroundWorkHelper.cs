@@ -12,6 +12,8 @@ namespace MTDBCreator.Helpers.BackgroundWork
 {
     public class MtdbWriterBackgroundWorkHelper : IBackgroundWorkHelper
     {
+        protected bool mAbortRequested;
+
         public MtdbWriterBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel, string fileName)
         {
             Database = analysisJobViewModel.Database;
@@ -19,8 +21,15 @@ namespace MTDBCreator.Helpers.BackgroundWork
             DatabaseFileName = fileName;
         }
 
+        public void BackgroundWorker_AbortProcessing()
+        {
+            mAbortRequested = true;
+        }
+
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            mAbortRequested = false;
+
             var targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
 
             targetDatabaseWriter.ProgressChanged += targetDatabaseWriter_ProgressChanged;
@@ -77,6 +86,16 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         private void targetDatabaseWriter_ProgressChanged(object sender, MtdbProgressChangedEventArgs e)
         {
+            if (e.UserObject == null)
+            {
+                if (e.Current > 0 && e.Total > 0)
+                    HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Writing to MTDB...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
+                else
+                    HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, String.Concat("Writing to MTDB: ", DatabaseFileName));
+
+                return;
+            }               
+
             var type = (MtdbCreationProgressType)Enum.Parse(typeof(MtdbCreationProgressType), e.UserObject.ToString());
 
             switch (type)
