@@ -120,6 +120,15 @@ namespace MTDBCreator.ViewModels
             {
                 result = ProcessAnalysisDatabase();
 
+                if (result == null && BackgroundWorkProcessHelper.MostRecentResult != null)
+                {
+                    // This condition will be true if MultithreadingEnabled = false
+                    result = BackgroundWorkProcessHelper.MostRecentResult;
+
+                    if (Database == null && result is TargetDatabase)
+                        Database = (TargetDatabase)result;
+                }
+                
                 OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
             }
         }

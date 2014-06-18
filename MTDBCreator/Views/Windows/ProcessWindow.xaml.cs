@@ -16,11 +16,13 @@ namespace MTDBCreator.Windows
     {
         public bool MultithreadingEnabled { get; private set; }
 
+        public object MostRecentResult { get; private set; }
+
         public ProcessWindow(IBackgroundWorkHelper backgroundWorkHelper, Window ownerWindow)
         {
             InitializeComponent();
 
-            MultithreadingEnabled = false;
+            MultithreadingEnabled = true;
 
             Owner = ownerWindow;
 
@@ -49,6 +51,7 @@ namespace MTDBCreator.Windows
         private void CancelProcessing_Click(object sender, RoutedEventArgs e)
         {
             MainBackgroundWorker.CancelAsync();
+            MainBackgroundWorkHelper.BackgroundWorker_AbortProcessing();
             StatusTextBlock.Text = "Cancelling Processing of data";
             IsEnabled = false;
         }
@@ -76,12 +79,21 @@ namespace MTDBCreator.Windows
             }
         }
 
-        public void StartProcessingNonThreaded()
+        public void StartProcessingNonThreaded(IBackgroundWorkHelper backgroundWorkHelper)
         {
             if (MultithreadingEnabled)
+            {
                 return;
+            }
 
-            MainBackgroundWorkHelper.BackgroundWorker_DoWork(this, new DoWorkEventArgs(0));
+            var e = new DoWorkEventArgs(backgroundWorkHelper);
+            backgroundWorkHelper.BackgroundWorker_DoWork(this, e);
+
+            MostRecentResult = e.Result;
+
+            // MainBackgroundWorkHelper.BackgroundWorker_DoWork(this, e);
+            // backgroundWorkHelper = MainBackgroundWorkHelper;
+
         }
 
         public BackgroundWorker MainBackgroundWorker { get; private set; }

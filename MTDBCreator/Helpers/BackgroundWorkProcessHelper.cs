@@ -6,6 +6,8 @@ namespace MTDBCreator.Helpers
 {
     internal static class BackgroundWorkProcessHelper
     {
+        public static object MostRecentResult { get; private set; }
+
         internal static object Process(IBackgroundWorkHelper backgroundWorkHelper)
         {
             var processWindow = new ProcessWindow(backgroundWorkHelper, Application.Current.MainWindow);
@@ -21,8 +23,14 @@ namespace MTDBCreator.Helpers
             else
             {
                 processWindow.Show();
-                processWindow.StartProcessingNonThreaded();                
+                processWindow.StartProcessingNonThreaded(backgroundWorkHelper);
+                processWindow.Close();
+
+                MostRecentResult = processWindow.MostRecentResult;
+
+                return backgroundWorkHelper.Result;
             }
+
             return null;
         }
     }
