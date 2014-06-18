@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
@@ -11,7 +12,15 @@ namespace MTDBFramework.IO
 {
     public abstract class PHRPReaderBase : IPhrpReader
     {
+        protected const int PROGRESS_PCT_START = 0;
+        protected const int PROGRESS_PCT_PEPTIDES_LOADED = 98;
+        protected const int PROGRESS_PCT_COMPLETE = 100;
+
         protected readonly Dictionary<string, TargetDataSet> mDatasetCache;
+
+        protected readonly AnalysisReaderHelper mNETPredictor;
+
+        protected bool mAbortRequested;
 
         /// <summary>
         /// Constructor
@@ -19,11 +28,59 @@ namespace MTDBFramework.IO
         protected PHRPReaderBase()
         {
             mDatasetCache = new Dictionary<string, TargetDataSet>(StringComparer.CurrentCultureIgnoreCase);
-        }
+
+            mNETPredictor = new AnalysisReaderHelper();
+            
+            mAbortRequested = false;
+        }       
 
         public Data.Options ReaderOptions { get; set; }
 
         public abstract Data.LcmsDataSet Read(string path);
+
+        public void AbortProcessing()
+        {
+            mAbortRequested = true;
+        }
+
+        protected void ComputeNETs(IEnumerable<Evidence> results)
+        {
+            if (!mAbortRequested)
+            {
+                UpdateProgress(99, "Loading elution times");
+
+                mNETPredictor.CalculateObservedNet(results);
+
+                UpdateProgress(99, "Initializing NET predictor");
+                var netPredictor = RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType);
+
+                UpdateProgress(99, "Computing NET values");
+                mNETPredictor.CalculatePredictedNet(netPredictor, results);
+            }
+        }
+
+        protected clsPHRPReader InitializeReader(string path)
+        {
+            mAbortRequested = false;
+
+            var oStartupOptions = new PHRPReader.clsPHRPStartupOptions
+            {
+                LoadModsAndSeqInfo = true,
+                LoadMSGFResults = true,
+                LoadScanStatsData = false,
+                MaxProteinsPerPSM = 100
+            };
+
+            UpdateProgress(0, "Initializing reader");
+            
+            var reader = new clsPHRPReader(path, oStartupOptions)
+            {
+                SkipDuplicatePSMs = true,
+                FastReadMode = true
+            };
+
+            return reader;
+        }
 
         protected void StoreDatasetInfo(Evidence result, string dataFilePath)
         {
@@ -121,10 +178,28 @@ namespace MTDBFramework.IO
 
         }
 
+        #region ProgressHandlers
+
         protected void UpdateProgress(float percentComplete)
         {
-            OnProgressChanged(new PercentCompleteEventArgs(percentComplete));
+            UpdateProgress(percentComplete, string.Empty);
         }
+
+        protected void UpdateProgress(float percentComplete, string currentTask)
+        {
+            float percentCompleteEffective = PROGRESS_PCT_START + percentComplete * (PROGRESS_PCT_PEPTIDES_LOADED - PROGRESS_PCT_START) / 100;
+
+            OnProgressChanged(new PercentCompleteEventArgs(percentCompleteEffective, currentTask));
+        }
+
+        void mNETPredictor_ProgressChanged(object sender, PercentCompleteEventArgs e)
+        {
+            float percentCompleteEffective = PROGRESS_PCT_PEPTIDES_LOADED + e.PercentComplete * (PROGRESS_PCT_COMPLETE - PROGRESS_PCT_PEPTIDES_LOADED) / 100;
+
+            OnProgressChanged(new PercentCompleteEventArgs(percentCompleteEffective, "Computing NETs"));
+        }
+
+        #endregion
 
         #region Events
 
@@ -139,5 +214,6 @@ namespace MTDBFramework.IO
         }
 
         #endregion
+       
     }
 }

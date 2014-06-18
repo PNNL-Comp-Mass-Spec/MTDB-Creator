@@ -23,20 +23,18 @@ namespace MTDBFramework.IO
             var results = new List<XTandemResult>();
             var filter = new XTandemTargetFilter(ReaderOptions);
 
+            // Get the Evidences using PHRPReader which looks at the path that was passed in to determine the data type
             int resultsProcessed = 0;
+            var reader = InitializeReader(path);
 
-            // Get the Evidences using PHRPReader which looks at the path that was passed in
-            var reader = new clsPHRPReader(path);
-            while (reader.CanRead)
-            {                
-                reader.MoveNext();
-
+            while (reader.MoveNext())
+            {
                 resultsProcessed++;
                 if (resultsProcessed % 500 == 0)
-                    UpdateProgress(reader.PercentComplete);
+                    UpdateProgress(reader.PercentComplete, "Reading peptides");
 
-                if (reader.CurrentPSM.SeqID == 0)
-                    continue;
+                if (mAbortRequested)
+                    break;
 
                 // Skip this PSM if it doesn't pass the import filters
                 double logPepEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Expectation_Value_LogE, 0);
@@ -48,6 +46,11 @@ namespace MTDBFramework.IO
                 if (filter.ShouldFilter(logPepEValue, specProb))
                     continue;
 
+                reader.FinalizeCurrentPSM();
+
+                if (reader.CurrentPSM.SeqID == 0)
+                    continue;
+
                 var result = new XTandemResult
                 {
                     AnalysisId = reader.CurrentPSM.ResultID                    
@@ -57,11 +60,8 @@ namespace MTDBFramework.IO
 
                 StoreDatasetInfo(result, reader, path);
 
-
-                // Populate items specific to X!Tandem
-                
+                // Populate items specific to X!Tandem                
                 result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
-
 
                 result.BScore = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_b_score, 0);
                 result.DeltaCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_DeltaCn2, 0);                
@@ -75,8 +75,7 @@ namespace MTDBFramework.IO
                 results.Add(result);
             }
 
-            AnalysisReaderHelper.CalculateObservedNet(results);
-            AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
+            ComputeNETs(results);
             
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.XTandem, results);
         }

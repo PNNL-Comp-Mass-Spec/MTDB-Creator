@@ -23,20 +23,18 @@ namespace MTDBFramework.IO
             var results = new List<SequestResult>();
             var filter = new SequestTargetFilter(ReaderOptions);
 
+            // Get the Evidences using PHRPReader which looks at the path that was passed in to determine the data type
             int resultsProcessed = 0;
-
-            // Get the Evidences using PHRPReader which looks at the path that was passed in
-            var reader = new clsPHRPReader(path);
-            while (reader.CanRead)
+            var reader = InitializeReader(path);
+            
+            while (reader.MoveNext())
             {
-                reader.MoveNext();
-
                 resultsProcessed++;
                 if (resultsProcessed % 500 == 0)
-                    UpdateProgress(reader.PercentComplete);
+                    UpdateProgress(reader.PercentComplete, "Reading peptides");
 
-                if (reader.CurrentPSM.SeqID == 0)
-                    continue;
+                if (mAbortRequested)
+                    break;
 
                 // Skip this PSM if it doesn't pass the import filters
                 double xcorr = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XCorr, 0);
@@ -48,6 +46,11 @@ namespace MTDBFramework.IO
                 if (filter.ShouldFilter(xcorr, specProb))
                     continue;
 
+                reader.FinalizeCurrentPSM();
+
+                if (reader.CurrentPSM.SeqID == 0)
+                    continue;
+
                 var result = new SequestResult
                 {
                     AnalysisId = reader.CurrentPSM.ResultID                   
@@ -57,9 +60,7 @@ namespace MTDBFramework.IO
 
                 StoreDatasetInfo(result, reader, path);
 
-
                 // Populate items specific to Sequest
-
                 result.Reference = reader.CurrentPSM.ProteinFirst;
                 result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
 
@@ -77,11 +78,10 @@ namespace MTDBFramework.IO
                 results.Add(result);             
             }
 
-            AnalysisReaderHelper.CalculateObservedNet(results);
-            AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
+            ComputeNETs(results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.Sequest, results);
         }
-        
+       
     }
 }

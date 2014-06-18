@@ -23,20 +23,18 @@ namespace MTDBFramework.IO
             var results = new List<MsAlignResult>();
             var filter = new MsAlignTargetFilter(ReaderOptions);
 
+            // Get the Evidences using PHRPReader which looks at the path that was passed in to determine the data type
             int resultsProcessed = 0;
+            var reader = InitializeReader(path);
 
-            // Get the Evidences using PHRPReader which looks at the path that was passed in
-            var reader = new clsPHRPReader(path);
-            while (reader.CanRead)
-            {                
-                reader.MoveNext();
-
+            while (reader.MoveNext())
+            {
                 resultsProcessed++;
                 if (resultsProcessed % 500 == 0)
                     UpdateProgress(reader.PercentComplete);
 
-                if (reader.CurrentPSM.SeqID == 0)
-                    continue;
+                if (mAbortRequested)
+                    break;
 
                 // Skip this PSM if it doesn't pass the import filters
                 double eValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSAlign.DATA_COLUMN_EValue, 0);
@@ -48,6 +46,11 @@ namespace MTDBFramework.IO
                 if (filter.ShouldFilter(eValue, specProb))
                     continue;
 
+                reader.FinalizeCurrentPSM();
+
+                if (reader.CurrentPSM.SeqID == 0)
+                    continue;
+
                 var result = new MsAlignResult
                 {
                     AnalysisId = reader.CurrentPSM.ResultID
@@ -57,17 +60,16 @@ namespace MTDBFramework.IO
 
                 StoreDatasetInfo(result, reader, path);
 
-
                 // Populate items specific to MSAlign
                 result.EValue = eValue;
 				              
                 results.Add(result);              
             }
 
-            AnalysisReaderHelper.CalculateObservedNet(results);
-            AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
+            ComputeNETs(results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MSAlign, results);
         }
+
     }
 }

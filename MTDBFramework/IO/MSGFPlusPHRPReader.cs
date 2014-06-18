@@ -14,7 +14,7 @@ namespace MTDBFramework.IO
     public class MsgfPlusPhrpReader : PHRPReaderBase
     {
         public MsgfPlusPhrpReader(Options options)
-        {            
+        {
             ReaderOptions = options;
         }
 
@@ -23,32 +23,35 @@ namespace MTDBFramework.IO
             var results = new List<MsgfPlusResult>();
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
 
+            // Get the Evidences using PHRPReader which looks at the path that was passed in to determine the data type
             int resultsProcessed = 0;
+            var reader = InitializeReader(path);
 
-            // Get the Evidences using PHRPReader which looks at the path that was passed in
-            var reader = new clsPHRPReader(path);
-            while (reader.CanRead)
+            while (reader.MoveNext())
             {
-                reader.MoveNext();
-
                 resultsProcessed++;
                 if (resultsProcessed % 500 == 0)
                     UpdateProgress(reader.PercentComplete);
 
-                if (reader.CurrentPSM.SeqID == 0)
-                    continue;
+                if (mAbortRequested)
+                    break;
 
                 // Skip this PSM if it doesn't pass the import filters
                 // Note that qValue is basically FDR
                 double qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_QValue, -1);
                 if (qValue < 0)
                     qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_FDR, 0);
-                
+
                 double specProb = 0;
                 if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
                     specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
 
                 if (filter.ShouldFilter(qValue, specProb))
+                    continue;
+
+                reader.FinalizeCurrentPSM();
+
+                if (reader.CurrentPSM.SeqID == 0)
                     continue;
 
                 var result = new MsgfPlusResult
@@ -59,8 +62,6 @@ namespace MTDBFramework.IO
                 StorePSMData(result, reader, specProb);
 
                 StoreDatasetInfo(result, reader, path);
-
-
 
                 // Populate items specific to MGSF+
                 result.Reference = reader.CurrentPSM.ProteinFirst;
@@ -80,9 +81,8 @@ namespace MTDBFramework.IO
                     result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_Rank_MSGFDB_SpecEValue, 0);
                 }
 
-
                 result.EValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_EValue, 0);
-                
+
                 result.QValue = qValue;
                 result.PepQValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_PepQValue, -1);
                 if (result.PepQValue < 0)
@@ -93,11 +93,10 @@ namespace MTDBFramework.IO
                 results.Add(result);
             }
 
-            AnalysisReaderHelper.CalculateObservedNet(results);
-            AnalysisReaderHelper.CalculatePredictedNet(RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType), results);
+            ComputeNETs(results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MsgfPlus, results);
         }
-        
+
     }
 }
