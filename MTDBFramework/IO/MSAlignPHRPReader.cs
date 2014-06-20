@@ -48,7 +48,7 @@ namespace MTDBFramework.IO
 
                 reader.FinalizeCurrentPSM();
 
-                if (reader.CurrentPSM.SeqID == 0)
+                if (reader.CurrentPSM.ResultID == 0)
                     continue;
 
                 var result = new MsAlignResult

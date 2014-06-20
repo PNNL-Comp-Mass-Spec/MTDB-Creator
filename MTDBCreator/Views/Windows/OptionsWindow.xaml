@@ -155,14 +155,6 @@
                             <Label Grid.Row="5" Grid.Column="1">
                                 Max Spectral E Value For Alignment
                             </Label>
-                            <TextBox x:Name="MaxMsgfSpecEValBox"
-                                     Grid.Row="5" Grid.Column="3" 
-                                     PreviewTextInput="Control_PreviewTextInput"
-                                     Text="{Binding Path=Options.MsgfSpectralEValue, UpdateSourceTrigger=Explicit}">
-                                <TextBox.ToolTip>
-                                    Specifies the maximum Spectral E Value that a match from MSGF+ can have for it to be used in the alignment
-                                </TextBox.ToolTip>
-                            </TextBox>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Alignment Type" >

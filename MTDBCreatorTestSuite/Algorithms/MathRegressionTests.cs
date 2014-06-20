@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
 using NUnit.Framework;
-using PNNLOmics.Algorithms.Regression;
-using MTDBFramework.Algorithms.Alignment;
 
 namespace MTDBCreatorTestSuite.Algorithms
 {
@@ -27,7 +26,7 @@ namespace MTDBCreatorTestSuite.Algorithms
             var num                 = 0;
             var options             = new Options();
             PeptideCache.Clear();
-            
+            var dataSets = new List<LcmsDataSet>();
             using (var sr = new StreamReader(jobListPath))
             {
                 var pathName = sr.ReadLine();
@@ -35,42 +34,17 @@ namespace MTDBCreatorTestSuite.Algorithms
                 {
                     pathName    = Path.Combine(jobDirectoryPath, pathName);
                     var reader  = PhrpReaderFactory.Create(pathName, options);
-                    var linData        = reader.Read(pathName);
-                    var mixData = new LcmsDataSet();
-                    var linRegressor = LinearRegressorFactory.Create(RegressionType.LinearEm);
-                    var mixRegressor = LinearRegressorFactory.Create(RegressionType.MixtureRegression);
-
-                    var targetFilter = TargetFilterFactory.Create(linData.Tool, options);
-                    var alignmentFilter = AlignmentFilterFactory.Create(linData.Tool, options);
-
-                    var filteredTargets = new List<Evidence>();
-                    var alignedTargets = new List<Evidence>();
-
-                    foreach (var t in linData.Evidences)
-                    {
-                        if (!targetFilter.ShouldFilter(t))
-                        {
-                            filteredTargets.Add(t);
-
-                            if (!alignmentFilter.ShouldFilter(t))
-                            {
-                                alignedTargets.Add(t);
-                            }
-                        }
-                    }
-
-                    linData.RegressionResult =
-                        linRegressor.CalculateRegression(alignedTargets.Select(d => d.ObservedNet).ToList(),
-                            alignedTargets.Select(d => d.PredictedNet).ToList());
-                    mixData.RegressionResult =
-                        mixRegressor.CalculateRegression(alignedTargets.Select(d => d.ObservedNet).ToList(),
-                            alignedTargets.Select(d => d.PredictedNet).ToList());
-                    Debug.Assert(linData.RegressionResult.RSquared < 1.0001);
-                    Debug.Assert(mixData.RegressionResult.RSquared < 1.0001);
-                    Debug.Assert(mixData.RegressionResult.RSquared > 0.8500);
-                    pathName = sr.ReadLine();
+                    dataSets.Add(reader.Read(pathName));
+                    pathName    = sr.ReadLine();
                     num++;
                 }
+            }
+            var processor   = new MtdbProcessor(options);
+            processor.Process(dataSets, new BackgroundWorker());
+            foreach (var set in dataSets)
+            {
+                Assert.Greater(set.RegressionResult.RSquared, 0.8);
+                Assert.Less(set.RegressionResult.RSquared, 1.0);
             }
         }
     }

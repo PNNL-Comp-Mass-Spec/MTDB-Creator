@@ -19,17 +19,8 @@ namespace MTDBFramework.Algorithms
 {
     public class MtdbProcessor : IProcessor
     {
-        protected bool mAbortRequested;
-
-        private static int UmcScanComparison(UMCLight umc1, UMCLight umc2)
-        {
-            return umc1.Scan.CompareTo(umc2.Scan);
-        }
-
-        private static int EvidenceScanComparison(Evidence ev1, Evidence ev2)
-        {
-            return ev1.Scan.CompareTo(ev2.Scan);
-        }
+        private bool m_abortRequested;
+        private const double CarryOverThreshold = 0.05;
 
         public event EventHandler<AlignmentCompleteArgs> AlignmentComplete;
 
@@ -42,13 +33,13 @@ namespace MTDBFramework.Algorithms
 
         public void AbortProcessing()
         {
-            mAbortRequested = true;
+            m_abortRequested = true;
         }
 
         [UsedImplicitly]
         public TargetDatabase Process(IEnumerable<LcmsDataSet> dataSets, BackgroundWorker bWorker)
         {
-            mAbortRequested = false;
+            m_abortRequested = false;
 
             // Deal with DataSetId - Auto increments - Not in this class only
             var evidenceMap = new Dictionary<int, Evidence>();
@@ -60,7 +51,7 @@ namespace MTDBFramework.Algorithms
             dataSets = dataSets.ToList();
             foreach (var dataSet in dataSets)
             {
-                if (bWorker.CancellationPending || mAbortRequested)
+                if (bWorker.CancellationPending || m_abortRequested)
                     return targetDatabase;
 
                 var targetFilter = TargetFilterFactory.Create(dataSet.Tool, ProcessorOptions);
@@ -71,16 +62,17 @@ namespace MTDBFramework.Algorithms
 
                 foreach (var t in dataSet.Evidences)
                 {
-                    if (!targetFilter.ShouldFilter(t))
+                    // Exclude carryover peptides.
+                    // Would be evidenced by a sizable difference between observed net and predicted net
+                    if (t.ObservedNet > CarryOverThreshold)
                     {
-                        filteredTargets.Add(t);
-
-                        if (!alignmentFilter.ShouldFilter(t))
+                        if (!targetFilter.ShouldFilter(t))
                         {
-                            // Exclude carryover peptides.
-                            // Would be evidenced by a sizable difference between observed net and predicted net
-                            if (Math.Abs(t.ObservedNet - t.PredictedNet) < 0.6)
+                            filteredTargets.Add(t);
+
+                            if (!alignmentFilter.ShouldFilter(t))
                             {
+
                                 alignedTargets.Add(t);
                             }
                         }
@@ -89,22 +81,28 @@ namespace MTDBFramework.Algorithms
 
                 epicTargets.AddRange(filteredTargets);
 
-                const bool PERFORM_LINEAR_REGRESSION = false;
+                
 
-                if (PERFORM_LINEAR_REGRESSION)
+                if (ProcessorOptions.TargetFilterType == TargetWorkflowType.TOP_DOWN)
                 {
-                    if (ProcessorOptions.TargetFilterType != TargetWorkflowType.TOP_DOWN)
-                    {
-                        var regressor = LinearRegressorFactory.Create(ProcessorOptions.RegressionType);
-                        dataSet.RegressionResult =
-                            regressor.CalculateRegression(alignedTargets.Select(t => (double)t.Scan).ToList(),
-                                                          alignedTargets.Select(t => t.PredictedNet).ToList());
-                    }
-                    else
-                    {
-                        dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
-                    }
+                    dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
                 }
+
+                //const bool PERFORM_LINEAR_REGRESSION = false;
+                //if (PERFORM_LINEAR_REGRESSION)
+                //{
+                //    if (ProcessorOptions.TargetFilterType != TargetWorkflowType.TOP_DOWN)
+                //    {
+                //        var regressor = LinearRegressorFactory.Create(ProcessorOptions.RegressionType);
+                //        dataSet.RegressionResult =
+                //            regressor.CalculateRegression(alignedTargets.Select(t => (double)t.Scan).ToList(),
+                //                                          alignedTargets.Select(t => t.PredictedNet).ToList());
+                //    }
+                //    else
+                //    {
+                //        dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
+                //    }
+                //}
 
             }
 
@@ -155,75 +153,131 @@ namespace MTDBFramework.Algorithms
                 }));
             }
 
-            if (bWorker.CancellationPending || mAbortRequested)
+            if (bWorker.CancellationPending || m_abortRequested)
                 return targetDatabase;
 
             var alignmentData = new List<LcmsWarpAlignmentData>();
             var options = new LcmsWarpAlignmentOptions();
             var lcmsAligner = new LcmsWarpAdapter(options);
 
+            //For performing net warping without mass correction
+            options.AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP;
+            var lcmsNetAligner = new LcmsWarpAdapter(options);
+            
+
             //Foreach dataset
             foreach (var dataSet in dataSets)
             {
-                if (bWorker.CancellationPending || mAbortRequested)
+                if (bWorker.CancellationPending || m_abortRequested)
                     return targetDatabase;
-                
-                dataSet.Evidences.Sort(EvidenceScanComparison);
-                var umcDataset = dataSet.Evidences.Select(evidence => new UMCLight
-                {
-                    Net = evidence.ObservedNet,
-                    ChargeState = evidence.Charge,
-                    Mz = evidence.Mz,
-                    Scan = evidence.Scan,
-                    MassMonoisotopic = evidence.MonoisotopicMass,
-                    MassMonoisotopicAligned = evidence.MonoisotopicMass,
-                    Id = evidence.Id,
-                    ScanStart = evidence.Scan,
-                    ScanEnd = evidence.Scan,
-                }).ToList();
 
-                var alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
-                alignmentData.Add(alignedData);
-                var residualList = new List<UMCLight> { Capacity = alignedData.ResidualData.Mz.Length };
-                //Put the residual data into a list of UMCLights
-                for (var a = 0; a < alignedData.ResidualData.Mz.Length; a++)
+                var umcDataset = new List<UMCLight>();
+                if (dataSet.Tool == LcmsIdentificationTool.MSAlign)
                 {
-                    var residual = new UMCLight
+                    continue;
+                }
+
+                dataSet.Evidences.Sort((x, y) => x.Scan.CompareTo(y.Scan));
+
+                var backupDataset = new List<UMCLight>();
+                foreach (var evidence in dataSet.Evidences)
+                {
+                    if (evidence.ObservedNet > CarryOverThreshold)
                     {
-                        MassMonoisotopic = alignedData.ResidualData.MassErrorCorrected[a],
-                        Net = alignedData.ResidualData.LinearCustomNet[a],
-                        Scan = Convert.ToInt32(alignedData.ResidualData.Scan[a])
-                    };
-                    //Not actually monoisotopic mass here, it's the corrected massError from the warping
-                    residualList.Add(residual);
+                        UMCLight umc;
+                        {
+                            umc = new UMCLight
+                            {
+                                Net = evidence.ObservedNet,
+                                ChargeState = evidence.Charge,
+                                Mz = evidence.Mz,
+                                Scan = evidence.Scan,
+                                MassMonoisotopic = evidence.MonoisotopicMass,
+                                MassMonoisotopicAligned = evidence.MonoisotopicMass,
+                                Id = evidence.Id,
+                                ScanStart = evidence.Scan,
+                                ScanEnd = evidence.Scan,
+                            };
+                        }
+                        umcDataset.Add(umc);
+                        backupDataset.Add(umc);
+                    }
                 }
-
-                residualList.Sort(UmcScanComparison);
-
-                //Copy the residual data back into the evidences
-                for (var a = 0; a < residualList.Count; a++)
+                umcDataset.Sort((x, y) => x.MassMonoisotopic.CompareTo(y.MassMonoisotopic));
+                var alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
+                if (umcDataset.Max(x => x.NetAligned) < 0.6)
                 {
-                    dataSet.Evidences[a].MonoisotopicMass = dataSet.Evidences[a].MonoisotopicMass -
-                                                            residualList[a].MassMonoisotopic;
-                    dataSet.Evidences[a].ObservedNet = residualList[a].Net;
+                    umcDataset = backupDataset;
+                    alignedData = lcmsNetAligner.Align(massTagLightTargets, umcDataset);
                 }
+                
+                //var alignedData = lcmsAligner.Align(datasetMassTagLight, umcDataset);
+                alignmentData.Add(alignedData);
+                //var residualList = new List<UMCLight> { Capacity = alignedData.ResidualData.Mz.Length };
+                ////Put the residual data into a list of UMCLights
+                //for (var a = 0; a < alignedData.ResidualData.Mz.Length; a++)
+                //{
+                //    var residual = new UMCLight
+                //    {
+                //        MassMonoisotopic = alignedData.ResidualData.MassErrorCorrected[a],
+                //        Net = alignedData.ResidualData.LinearCustomNet[a],
+                //        Scan = Convert.ToInt32(alignedData.ResidualData.Scan[a])
+                //    };
+                //    //Not actually monoisotopic mass here, it's the corrected massError from the warping
+                //    residualList.Add(residual);
+                //}
+
+                //residualList.Sort(UmcScanComparison);
+                
+                //foreach (var umc in umcDataset)
+                //{
+                //    firstSeenPeptide[umc.]
+                //}
+                umcDataset.Sort((x, y) => x.ScanAligned.CompareTo(y.ScanAligned));
+                
+                //Copy the residual data back into the evidences
+                for (int a = 0, b = 0; a < dataSet.Evidences.Count; a++)
+                {
+                    if (dataSet.Evidences[a].ObservedNet > CarryOverThreshold)
+                    {
+                        dataSet.Evidences[a].MonoisotopicMass = umcDataset[b].MassMonoisotopicAligned;
+                        dataSet.Evidences[a].ObservedNet = umcDataset[b].NetAligned;
+                        b++;
+                    }
+                }
+
+                //foreach (var evidence in dataSet.Evidences)
+                //{
+                //    UMCLight value;
+                //    firstSeenPeptide.TryGetValue(evidence.Sequence, out value);
+                //    if (value != null)
+                //    {
+                //        evidence.MonoisotopicMass = value.MassMonoisotopicAligned;
+                //        evidence.ObservedNet = value.NetAligned;
+                //    }
+                //}
 
                 foreach (var data in dataSet.Evidences.Where(data => !evidenceMap.ContainsKey(data.Id)))
                 {
                     evidenceMap.Add(data.Id, data);
-                }                
+                }
+                dataSet.RegressionResult.Slope = alignedData.NetSlope;
+                dataSet.RegressionResult.Intercept = alignedData.NetIntercept;
+                dataSet.RegressionResult.RSquared = alignedData.NetRsquared;
             }
           
             if (AlignmentComplete != null)
             {
                 AlignmentComplete(this, new AlignmentCompleteArgs(alignmentData));
             }
-
-            foreach (var consensus in tempConsensusTargets)
+            if (ProcessorOptions.TargetFilterType != TargetWorkflowType.TOP_DOWN)
             {
-                for (var evNum = 0; evNum < consensus.Evidences.Count; evNum++)
+                foreach (var consensus in tempConsensusTargets)
                 {
-                    consensus.Evidences[evNum] = evidenceMap[consensus.Evidences[evNum].Id];
+                    for (var evNum = 0; evNum < consensus.Evidences.Count; evNum++)
+                    {
+                        consensus.Evidences[evNum] = evidenceMap[consensus.Evidences[evNum].Id];
+                    }
                 }
             }
 

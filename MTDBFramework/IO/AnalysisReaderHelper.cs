@@ -93,7 +93,7 @@ namespace MTDBFramework.IO
             {
                 // Obtain the elution time info from the Masic _scanstats.txt file
                 // Column index 1 is scan number and index 2 is elution time
-                var scanToTime = ReadScanTimeFile(txtPath, 1, 2);
+                var scanToTime = ReadScanTimeFile(txtPath, 1, 2, '\t');
 
                 ConvertElutionTimeToNET(lstEvidences, scanToTime);
 
@@ -102,7 +102,7 @@ namespace MTDBFramework.IO
             {
                 // Obtain the elution time info from the DeconTools _scans.csv file
                 // Column index 0 is scan number and index 1 is elution time
-                var scanToTime = ReadScanTimeFile(txtPath, 0, 1);
+                var scanToTime = ReadScanTimeFile(csvPath, 0, 1, ',');
 
                 ConvertElutionTimeToNET(lstEvidences, scanToTime);
             }
@@ -167,7 +167,7 @@ namespace MTDBFramework.IO
             }
         }
 
-        private Dictionary<int, double> ReadScanTimeFile(string txtPath, int scanColIndex, int timeColIndex)
+        private Dictionary<int, double> ReadScanTimeFile(string txtPath, int scanColIndex, int timeColIndex, char delimiter)
         {
             var scanToTime = new Dictionary<int, double>();
             int minimumColCount = Math.Max(scanColIndex, timeColIndex) + 1;
@@ -182,7 +182,7 @@ namespace MTDBFramework.IO
                     if (string.IsNullOrWhiteSpace(line))
                         continue;
 
-                    var parsedLine = line.Split('\t');
+                    var parsedLine = line.Split(delimiter);
 
                     if (parsedLine.Length < minimumColCount)
                         continue;

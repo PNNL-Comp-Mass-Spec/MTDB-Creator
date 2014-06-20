@@ -34,7 +34,6 @@ namespace MTDBFramework.Data
         private double m_maxLogEValForMsAlignAlignment;
         private short m_maxRankForExport;
         private double m_msgfFdr;
-        private double m_msgfSpectralEValue;
         private double m_maxMsgfSpecProb;
 
         #endregion
@@ -284,21 +283,6 @@ namespace MTDBFramework.Data
             }
         }
 
-        // MSGF+
-        [Obsolete("Use MaxMsgfSpecProb instead")]
-        public double MsgfSpectralEValue
-        {
-            get
-            {
-                return m_msgfSpectralEValue;
-            }
-            set
-            {
-                m_msgfSpectralEValue = value;
-                OnPropertyChanged("MsgfSpectralEValue");
-            }
-        }
-
         public double MsgfFdr
         {
             get
@@ -373,7 +357,6 @@ namespace MTDBFramework.Data
             MaxRankForExport = 2;
 
             MsgfFdr = .01;
-            MsgfSpectralEValue = .05;
             MaxMsgfSpecProb = 1E-10;
 
             OptionsChanged = false;

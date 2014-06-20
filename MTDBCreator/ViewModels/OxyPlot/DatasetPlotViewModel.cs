@@ -165,7 +165,7 @@ namespace MTDBCreator.ViewModels
 
                 if (!filter.ShouldFilter(evidence))
                 {
-                    var scatterPoint = new ScatterPoint(evidence.Scan, evidence.PredictedNet)
+                    var scatterPoint = new ScatterPoint(evidence.Scan, evidence.ObservedNet)
                     {
                         Tag = evidence
                     };
@@ -273,7 +273,7 @@ namespace MTDBCreator.ViewModels
 
             NETScanPlotModel = new PlotModel
             {
-                Title = "Predicted NET Vs. Scan",
+                Title = "Observed NET Vs. Scan",
                 IsLegendVisible = true,
                 LegendTitle = "LEGEND",
                 LegendPosition = LegendPosition.RightMiddle,
@@ -292,7 +292,7 @@ namespace MTDBCreator.ViewModels
                 switch (axis.Position)
                 {
                     case AxisPosition.Left:
-                        axis.Title = "Predicted NET";
+                        axis.Title = "Observed NET";
                         axis.AbsoluteMinimum = 0;
                         break;
                     case AxisPosition.Bottom:

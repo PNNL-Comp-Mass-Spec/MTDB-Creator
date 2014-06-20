@@ -2,7 +2,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
@@ -18,8 +17,8 @@ namespace MTDBCreator.Helpers.BackgroundWork
 {
     public class AnalysisJobBackgroundWorkHelper : IBackgroundWorkHelper
     {
-        protected bool mAbortRequested;
-        protected AnalysisJobProcessor mAnalysisJobProcessor;
+        private bool m_abortRequested;
+        private AnalysisJobProcessor m_analysisJobProcessor;
 
         public AnalysisJobBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel)
         {
@@ -28,23 +27,23 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         public void BackgroundWorker_AbortProcessing()
         {
-            mAbortRequested = true;
-            mAnalysisJobProcessor.AbortProcessing();
+            m_abortRequested = true;
+            m_analysisJobProcessor.AbortProcessing();
 
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            mAbortRequested = false;
+            m_abortRequested = false;
 
-            mAnalysisJobProcessor = new AnalysisJobProcessor(AnalysisJobViewModel.Options);
-            mAnalysisJobProcessor.ProgressChanged += analysisJobProcessor_ProgressChanged;
+            m_analysisJobProcessor = new AnalysisJobProcessor(AnalysisJobViewModel.Options);
+            m_analysisJobProcessor.ProgressChanged += analysisJobProcessor_ProgressChanged;
 
             try
             {
-                e.Result = mAnalysisJobProcessor.Process(AnalysisJobViewModel.AnalysisJobItems, HostProcessWindow.MainBackgroundWorker);
+                e.Result = m_analysisJobProcessor.Process(AnalysisJobViewModel.AnalysisJobItems, HostProcessWindow.MainBackgroundWorker);
 
-                if (HostProcessWindow.MainBackgroundWorker.CancellationPending || mAbortRequested)
+                if (HostProcessWindow.MainBackgroundWorker.CancellationPending || m_abortRequested)
                 {
                     e.Cancel = true;
                 }
