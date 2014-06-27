@@ -10,8 +10,9 @@ namespace MTDBFramework.Database
         public TargetDatasetMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).GeneratedBy.Identity();
+            Id(x => x.Id).Column("DatasetId").GeneratedBy.Identity();
             Map(x => x.Name);
+            Map(x => x.Tool);
         }
     }
 }

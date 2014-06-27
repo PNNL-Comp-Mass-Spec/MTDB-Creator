@@ -62,6 +62,7 @@ namespace MTDBFramework.IO
                 StorePSMData(result, reader, specProb);
 
                 StoreDatasetInfo(result, reader, path);
+                result.DataSet.Tool = LcmsIdentificationTool.MsgfPlus;
 
                 // Populate items specific to MGSF+
                 result.Reference = reader.CurrentPSM.ProteinFirst;

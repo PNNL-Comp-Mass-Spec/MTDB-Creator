@@ -9,7 +9,7 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id)
-                .Column("ProteinId").GeneratedBy.Increment();
+                .Column("ProteinId").GeneratedBy.Assigned();//Increment();
             Map(x => x.ProteinName);
             Map(x => x.CleavageState);
             Map(x => x.TerminusState);
@@ -20,6 +20,9 @@ namespace MTDBFramework.Database
                                            .ParentKeyColumn("ProteinId")
                                            .ChildKeyColumn("ConsensusId")
                                            .Cascade.All().Inverse();
+             
+
+            HasMany(x => x.ConsensusProtein).Cascade.All().Inverse().Table("ConsensusProtein");
         }
     }
 }

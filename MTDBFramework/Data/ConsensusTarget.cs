@@ -13,6 +13,7 @@ namespace MTDBFramework.Data
             Evidences = new List<Evidence>();
             Proteins = new List<ProteinInformation>();
             Charges = new List<int>();
+            ConsensusProtein = new List<ConsensusProteinPair>();
         }
 
         #region Private fields
@@ -29,6 +30,8 @@ namespace MTDBFramework.Data
         #endregion
 
         #region Public Properties
+
+        public IList<ConsensusProteinPair> ConsensusProtein { get; set; }
 
         public int Id
         {
@@ -146,6 +149,24 @@ namespace MTDBFramework.Data
             Proteins.Add(protein);
 
             protein.Consensus.Add(this);
+        }
+
+        public string SeqWithNumericMods
+        {
+            get;
+            set;
+        }
+
+        public int ModificationCount
+        {
+            get;
+            set;
+        }
+
+        public string ModificationDescription
+        {
+            get;
+            set; 
         }
 
         /// <summary>

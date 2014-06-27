@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
@@ -9,6 +11,7 @@ using MTDBCreator.Helpers.BackgroundWork;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
+using Microsoft.Win32;
 
 namespace MTDBCreator.ViewModels
 {
@@ -130,6 +133,43 @@ namespace MTDBCreator.ViewModels
                 }
                 
                 OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
+
+                if (result != null)
+                {
+                    if (Options.DatabaseType != DatabaseType.NotSaved)
+                    {
+                        var saveDatabaseDialog = new SaveFileDialog();
+                        if (RestoreDirectory == null)
+                        {
+                            RestoreDirectory = "C:\\";
+                        }
+                        saveDatabaseDialog.InitialDirectory = RestoreDirectory;
+                        saveDatabaseDialog.RestoreDirectory = true;
+
+                        if (Options.DatabaseType == DatabaseType.SQLite)
+                        {
+                            saveDatabaseDialog.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
+                            saveDatabaseDialog.Title = "Save to MTDB";
+                        }
+                        else
+                        {
+                            saveDatabaseDialog.Filter = "Access Database (*.accdb)|*.accdb|All Files (*.*)|*.*";
+                            saveDatabaseDialog.Title = "Save to Access Database";
+                        }
+
+                        if (saveDatabaseDialog.ShowDialog() == true)
+                        {
+                            SaveAnalysisDatabase(saveDatabaseDialog.FileName);
+                        }
+                        if (saveDatabaseDialog.FileName != "")
+                        {
+                            RestoreDirectory = Path.GetDirectoryName(saveDatabaseDialog.FileName);
+                            SavedDatabasePath = saveDatabaseDialog.FileName;
+                            IsDatabaseSaved = true;
+                        }
+                    }
+
+                }
             }
         }
 
@@ -188,5 +228,11 @@ namespace MTDBCreator.ViewModels
             AnalysisJobItems = new ObservableCollection<AnalysisJobItem>();
             Options = new Options();
         }
+
+        private string RestoreDirectory { get; set; }
+
+        public string SavedDatabasePath { get; set; }
+
+        public bool IsDatabaseSaved { get; set; }
     }
 }

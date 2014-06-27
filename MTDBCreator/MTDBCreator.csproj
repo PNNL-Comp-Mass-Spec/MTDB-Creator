@@ -138,6 +138,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.92.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.92.0\lib\net40\System.Data.SQLite.dll</HintPath>
@@ -149,6 +150,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.92.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -169,6 +172,7 @@
     <Compile Include="Commands\MTDBResultChangedEvent.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Helpers\BackgroundWorkProcessHelper.cs" />
+    <Compile Include="Helpers\BackgroundWork\AccessTargetDatabaseWriter.cs" />
     <Compile Include="Helpers\BackgroundWork\AnalysisJobBackgroundWorkHelper.cs" />
     <Compile Include="Helpers\BackgroundWork\MTDBProcessorBackgroundWorkHelper.cs" />
     <Compile Include="Helpers\BackgroundWork\IBackgroundWorkHelper.cs" />

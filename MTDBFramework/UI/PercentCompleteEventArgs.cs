@@ -21,6 +21,16 @@ namespace MTDBFramework.UI
             mCurrentTask = currentTask;
         }
 
+        public PercentCompleteEventArgs(int current, int total, float percentComplete, string currentTask)
+        {
+            Current = current;
+            Total = total;
+            PercentComplete = percentComplete;
+            mCurrentTask = currentTask;
+        }
+
+        public int Current { get; set; }
+        public int Total { get; set; }
 
         public float PercentComplete { get; private set; }
 

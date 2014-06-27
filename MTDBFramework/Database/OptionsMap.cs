@@ -8,7 +8,7 @@ namespace MTDBFramework.Database
         public OptionsMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).GeneratedBy.Identity();
+            Id(x => x.Id).Column("OptionsId").GeneratedBy.Identity();
 
             // Regression
             Map(x => x.RegressionType);

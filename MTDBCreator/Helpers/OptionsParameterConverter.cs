@@ -17,39 +17,38 @@ namespace MTDBCreator.Helpers
             results.Add((string)values[3]);
             results.Add((string)values[4]);
             results.Add((string)values[5]);
-            results.Add((string)values[6]);
 
             // Regression Type
-            results.Add(values[7].ToString());
-            results.Add((string)values[8]);
+            results.Add(values[6].ToString());
+            results.Add((string)values[7]);
 
             // Predictor Type
-            results.Add(values[9].ToString());
+            results.Add(values[8].ToString());
 
             // Tryptic Peptides
-            results.Add(values[10].ToString());
+            results.Add(values[9].ToString());
+            results.Add((string)values[10]);
             results.Add((string)values[11]);
             results.Add((string)values[12]);
-            results.Add((string)values[13]);
 
             // Partially Tryptic Peptides
-            results.Add(values[14].ToString());
+            results.Add(values[13].ToString());
+            results.Add((string)values[14]);
             results.Add((string)values[15]);
             results.Add((string)values[16]);
-            results.Add((string)values[17]);
 
             // Non Tryptic Peptides
-            results.Add(values[18].ToString());
+            results.Add(values[17].ToString());
+            results.Add((string)values[18]);
             results.Add((string)values[19]);
             results.Add((string)values[20]);
-            results.Add((string)values[21]);
 
             // Sequest dlCN
-            results.Add(values[22].ToString());
-            results.Add((string)values[23]);
+            results.Add(values[21].ToString());
+            results.Add((string)values[22]);
 
             // X!Tandem Export
-            results.Add((string)values[24]);
+            results.Add((string)values[23]);
 
             for(int i = 0; i < results.Count; i++)
             {

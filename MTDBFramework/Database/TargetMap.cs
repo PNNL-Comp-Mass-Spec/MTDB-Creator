@@ -13,21 +13,18 @@ namespace MTDBFramework.Database
         public EvidenceMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).GeneratedBy.Assigned();
+            Id(x => x.Id).Column("EvidenceId").GeneratedBy.Assigned();
             Map(x => x.Charge);
             Map(x => x.ObservedNet);
             Map(x => x.PredictedNet);
             Map(x => x.Mz);
             Map(x => x.MultiProteinCount);
             Map(x => x.Scan);
-            Map(x => x.ModificationCount);
-            Map(x => x.ModificationDescription);
             Map(x => x.DelM);
             Map(x => x.DelMPpm);
             Map(x => x.SpecProb);
 
-            References(x => x.DataSet).Cascade.SaveUpdate();
-            References(x => x.PeptideInfo).Cascade.SaveUpdate();
+            References(x => x.DataSet).Column("DatasetId").Cascade.SaveUpdate();
         }
     }
 }

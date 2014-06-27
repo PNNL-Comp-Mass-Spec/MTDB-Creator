@@ -19,13 +19,20 @@ namespace MTDBFramework.Database
             Map(x => x.StdevNet);
             Map(x => x.PredictedNet);
             Map(x => x.TheoreticalMonoIsotopicMass);
-            Map(x => x.Sequence);
+            Map(x => x.SeqWithNumericMods).Column("Sequence");
+            Map(x => x.ModificationCount).Column("ModificationCount");
+            Map(x => x.ModificationDescription).Column("ModificationDescription");
 
-            HasMany(x => x.Evidences).Cascade.All();
+
+            HasMany(x => x.Evidences).KeyColumn("ConsensusId").Cascade.All();
+            
+            
             HasManyToMany(x => x.Proteins).Table("ConsensusProteins")
                                           .ParentKeyColumn("ConsensusId")
                                           .ChildKeyColumn("ProteinID")
                                           .Cascade.All();
+            
+            HasMany(x => x.ConsensusProtein).Cascade.All().Inverse().Table("ConsensusProtein");
         }
     }
 }

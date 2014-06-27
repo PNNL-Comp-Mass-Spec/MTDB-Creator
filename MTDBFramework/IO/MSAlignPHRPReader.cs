@@ -59,6 +59,7 @@ namespace MTDBFramework.IO
                 StorePSMData(result, reader, specProb);
 
                 StoreDatasetInfo(result, reader, path);
+                result.DataSet.Tool = LcmsIdentificationTool.MSAlign;
 
                 // Populate items specific to MSAlign
                 result.EValue = eValue;

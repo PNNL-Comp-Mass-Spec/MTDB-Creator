@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helpers="clr-namespace:MTDBCreator.Helpers"        
         xmlns:retentionTimePrediction="clr-namespace:MTDBFramework.Algorithms.RetentionTimePrediction;assembly=MTDBFramework"
-        Title="Options" Height="780" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Options" Height="740" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
         <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
         <helpers:OptionsParameterConverter x:Key="OptionsParameterConverter"/>
@@ -120,8 +120,6 @@
                                 <RowDefinition Height="8" />
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="8" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="8" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="8"/>
@@ -152,9 +150,6 @@
                                     Specifies the maximum FDR that a match from MSGF+ or MzIdent can have for it to be used in the alignment
                                 </TextBox.ToolTip>
                             </TextBox>
-                            <Label Grid.Row="5" Grid.Column="1">
-                                Max Spectral E Value For Alignment
-                            </Label>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Alignment Type" >
@@ -424,7 +419,30 @@
                                       Text="{Binding Path=Options.MaxLogEValForXTandemExport, UpdateSourceTrigger=Explicit}" />
                         </Grid>
                     </GroupBox>
-                    
+                    <GroupBox Header="Saving Database">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="25" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="75" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Margin="8" Grid.Row="1" Grid.Column="1" >
+                                Database Format
+                            </Label>
+                            <ComboBox x:Name="SaveFormatComboBox"
+                                Grid.Row="1"      
+                                Grid.Column="2"
+                                Grid.ColumnSpan="2"
+                                Margin="5"
+                                ItemsSource="{Binding DatabaseTypes}"
+                                SelectedItem ="{Binding SelectedDatabaseType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                    </GroupBox>
                 </StackPanel>
             </TabItem>
         </TabControl>
@@ -447,7 +465,6 @@
                         <Binding ElementName="MaxLogETextBox" Path="Text"/>
                         <Binding ElementName="MaxMsgfSpecProbBox" Path="Text"/>
                         <Binding ElementName="MaxMsgffdrBox" Path ="Text"/>
-                        <Binding ElementName="MaxMsgfSpecEValBox" Path="Text"/>
                         <Binding ElementName="AlignmentComboBox" Path="Text"/>
                         <Binding ElementName="OrderTextBox" Path="Text"/>
                         <Binding ElementName="KangasRadioButton" Path="IsChecked"/>
@@ -466,7 +483,6 @@
                         <Binding ElementName="SequestDelCnCheckBox" Path="IsChecked"/>
                         <Binding ElementName="MinDelCnTextBox" Path="Text"/>
                         <Binding ElementName="MaxLogEForExporTextBox" Path="Text"/>
-                        <Binding ElementName="MaxLogEForExporTextBox" Path="Text" />
                     </MultiBinding>
                 </Button.CommandParameter>
             </Button>

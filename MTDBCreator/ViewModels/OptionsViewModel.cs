@@ -30,6 +30,12 @@ namespace MTDBCreator.ViewModels
                 RegressionType.LinearEm,
                 RegressionType.MixtureRegression
             };
+            DatabaseTypes = new ObservableCollection<DatabaseType>
+            {
+                DatabaseType.Access,
+                DatabaseType.SQLite,
+                DatabaseType.NotSaved
+            };
             PredictionText = "Kangas ANN algorithm developed by Lars Kangas and Kostas Petritis.  See:  " +
                    "K. Petritis, L.J. Kangas, P.L. Ferguson, G.A. Anderson, L. Paša-Tolic, M.S. Lipton, K.J. Auberry, " +
                    "E.F. Strittmatter, Y. Shen, R. Zhao, R.D. Smith. 2003. \"Use of artificial neural networks for the " +
@@ -81,8 +87,21 @@ namespace MTDBCreator.ViewModels
                 OnPropertyChanged("RegressionType");
             }
         }
+        public DatabaseType SelectedDatabaseType
+        {
+
+            get { return m_options.DatabaseType; }
+
+            set
+            {
+                if (m_options.DatabaseType == value) return;
+                m_options.DatabaseType = value;
+                OnPropertyChanged("RegressionType");
+            }
+        }
 
         public ObservableCollection<RegressionType> RegressionTypes { get; private set; }
+        public ObservableCollection<DatabaseType> DatabaseTypes { get; private set; }
         public ICommand SaveCommand
         {
             get { return m_saveCommand ?? (m_saveCommand = new RelayCommand(Save)); }

@@ -1,4 +1,5 @@
-﻿namespace MTDBFramework.Database
+﻿using MTDBFramework.Data;
+namespace MTDBFramework.Database
 {
     public class TargetDataSet
     {
@@ -8,7 +9,8 @@
         /// <summary>
         /// Gets or sets the name of the target dataset.
         /// </summary>
-        public string Name { get; set; }        
+        public string Name { get; set; }
+        public LcmsIdentificationTool Tool { get; set; }
     }
 
 }

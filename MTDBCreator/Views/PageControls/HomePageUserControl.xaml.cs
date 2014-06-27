@@ -1,7 +1,9 @@
 ﻿#region Namespaces
 
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.BackgroundWork;
 using MTDBCreator.Properties;
@@ -83,7 +85,9 @@ namespace MTDBCreator.PageControls
 
                         if (analysisJobViewModel.Database != null)
                         {
+                            
                             mainWindow.NewWorkspacePage(analysisJobViewModel);
+                            
                         }
                     }
                 }

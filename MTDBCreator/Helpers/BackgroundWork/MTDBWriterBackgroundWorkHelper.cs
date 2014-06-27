@@ -29,9 +29,15 @@ namespace MTDBCreator.Helpers.BackgroundWork
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             mAbortRequested = false;
-
-            var targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
-
+            ITargetDatabaseWriter targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
+            if (DatabaseOptions.DatabaseType != DatabaseType.Access)
+            {
+                targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
+            }
+            else
+            {
+                targetDatabaseWriter = new AccessTargetDatabaseWriter();
+            }
             targetDatabaseWriter.ProgressChanged += targetDatabaseWriter_ProgressChanged;
             targetDatabaseWriter.Write(Database, DatabaseOptions, DatabaseFileName);
         }

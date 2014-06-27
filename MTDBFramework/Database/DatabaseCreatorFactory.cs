@@ -26,6 +26,7 @@ namespace MTDBFramework.Database
                     .UsingFile(DatabaseFile))
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusTargetMap>())
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ProteinInformationMap>())
+                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusProteinPairMap>())
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<EvidenceMap>())
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<TargetPeptideInfoMap>())
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<OptionsMap>())

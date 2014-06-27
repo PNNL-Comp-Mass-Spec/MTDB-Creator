@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using PHRPReader;
+using MTDBFramework.Database;
 
 namespace MTDBFramework.Data
 {
@@ -9,6 +10,7 @@ namespace MTDBFramework.Data
         public ProteinInformation()
         {
             Consensus = new List<ConsensusTarget>();
+            ConsensusProtein = new List<ConsensusProteinPair>();
         }
         public IList<ConsensusTarget> Consensus { get; set; }
         public int Id { get; set; }
@@ -17,6 +19,8 @@ namespace MTDBFramework.Data
         public clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants CleavageState { get; set; }
         public int    ResidueStart { get; set; }
         public int    ResidueEnd   { get; set; }
+
+        public IList<ConsensusProteinPair> ConsensusProtein { get; set; }
 
         public override bool Equals(object obj)
         {                        

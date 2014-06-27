@@ -14,7 +14,8 @@ namespace MTDBFramework.Data
     {
         #region Private Fields
 
-        private RegressionType m_regressionType ;
+        private DatabaseType m_databaseType;
+        private RegressionType m_regressionType;
         private short m_regressionOrder;
         private TargetWorkflowType m_targetFilterType;
         private RetentionTimePredictionType m_predictorType;
@@ -41,6 +42,18 @@ namespace MTDBFramework.Data
         #region Public Properties
 
         public int Id;
+
+        // Format of saved Database
+        public DatabaseType DatabaseType
+        {
+            get { return m_databaseType; }
+            set
+            {
+                m_databaseType = value;
+                OnPropertyChanged("DatabaseType");
+            }
+        }
+
         // Regression
         public RegressionType RegressionType
         {
@@ -327,6 +340,8 @@ namespace MTDBFramework.Data
 
         public Options()
         {
+            DatabaseType = DatabaseType.SQLite;
+
             RegressionType = RegressionType.LinearEm;
             RegressionOrder = 1;
 

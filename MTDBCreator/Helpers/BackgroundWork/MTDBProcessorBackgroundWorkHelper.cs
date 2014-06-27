@@ -4,10 +4,12 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Threading;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Windows;
 using MTDBFramework.Algorithms;
 using MTDBFramework.Database;
+using MTDBFramework.UI;
 
 #endregion
 
@@ -34,6 +36,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
             var mtdbProcessor = new MtdbProcessor(m_analysisJobViewModel.Options);
             mtdbProcessor.AlignmentComplete +=  mtdbProcessor_AlignmentComplete;
+            mtdbProcessor.ProgressChanged += mtdbProcessor_ProgressChanged;
             HostProcessWindow.MainBackgroundWorker.ReportProgress(0);
 
             try
@@ -58,9 +61,39 @@ namespace MTDBCreator.Helpers.BackgroundWork
         {            
         }
 
+        private void mtdbProcessor_ProgressChanged(object sender, PercentCompleteEventArgs e)
+        {
+            string statusMessage;
+
+            if (string.IsNullOrEmpty(e.CurrentTask))
+                statusMessage = "Processing dataset file";
+            else
+                statusMessage = e.CurrentTask;
+
+            HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current,
+                                                                  new object[] { e.Total.ToString(), statusMessage });
+
+        }
+
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             HostProcessWindow.Status = "Processing Data...";
+
+            HostProcessWindow.MainProgressBar.IsIndeterminate = false;
+
+            var userStates = e.UserState as object[];
+
+            if (userStates != null)
+            {
+                var total = Convert.ToInt32(userStates[0].ToString());
+                var status = userStates[1].ToString();
+
+                HostProcessWindow.MainProgressBar.Value = e.ProgressPercentage;
+                HostProcessWindow.MainProgressBar.Maximum = total;
+                HostProcessWindow.Status = status;
+
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate { }));
+            }
         }
 
         public void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

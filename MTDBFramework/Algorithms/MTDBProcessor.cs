@@ -8,6 +8,7 @@ using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
+using MTDBFramework.UI;
 using PNNLOmics.Algorithms.Alignment.LcmsWarp;
 using PNNLOmics.Algorithms.Regression;
 using PNNLOmics.Annotations;
@@ -19,6 +20,13 @@ namespace MTDBFramework.Algorithms
 {
     public class MtdbProcessor : IProcessor
     {
+        private const int ProgressPercentStart = 0;
+        private const int ProgressPercentComplete = 100;
+        private const int ProgressPercentMORESTUFF = 0;
+
+        private int m_currentItem;
+        private int m_totalItems;
+
         private bool m_abortRequested;
         private const double CarryOverThreshold = 0.05;
 
@@ -41,6 +49,11 @@ namespace MTDBFramework.Algorithms
         {
             m_abortRequested = false;
 
+            m_currentItem = 0;
+            m_totalItems = 2*dataSets.Count();
+
+            OnPercentProgressChanged(new PercentCompleteEventArgs(0));
+
             // Deal with DataSetId - Auto increments - Not in this class only
             var evidenceMap = new Dictionary<int, Evidence>();
             var targetDatabase = new TargetDatabase();
@@ -51,6 +64,8 @@ namespace MTDBFramework.Algorithms
             dataSets = dataSets.ToList();
             foreach (var dataSet in dataSets)
             {
+                float percentComplete = (float)m_currentItem/m_totalItems;
+                UpdateProgress(m_currentItem, m_totalItems, percentComplete, "Determining Consensus Targets");
                 if (bWorker.CancellationPending || m_abortRequested)
                     return targetDatabase;
 
@@ -103,7 +118,7 @@ namespace MTDBFramework.Algorithms
                 //        dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
                 //    }
                 //}
-
+                m_currentItem++;
             }
 
             //Create the database (the list of consensus targets)            
@@ -168,6 +183,8 @@ namespace MTDBFramework.Algorithms
             //Foreach dataset
             foreach (var dataSet in dataSets)
             {
+                float percentComplete = (float)m_currentItem / m_totalItems;
+                UpdateProgress(m_currentItem, m_totalItems, percentComplete, "Performing LCMSWarp Alignment");
                 if (bWorker.CancellationPending || m_abortRequested)
                     return targetDatabase;
 
@@ -264,6 +281,7 @@ namespace MTDBFramework.Algorithms
                 dataSet.RegressionResult.Slope = alignedData.NetSlope;
                 dataSet.RegressionResult.Intercept = alignedData.NetIntercept;
                 dataSet.RegressionResult.RSquared = alignedData.NetRsquared;
+                m_currentItem++;
             }
           
             if (AlignmentComplete != null)
@@ -282,6 +300,23 @@ namespace MTDBFramework.Algorithms
             }
 
             return targetDatabase;
+        }
+
+        protected void UpdateProgress(int current, int total, float percentComplete, string currentTask)
+        {
+            float percentCompleteEffective = ProgressPercentStart +
+                                             percentComplete*(ProgressPercentComplete - ProgressPercentStart);
+            OnPercentProgressChanged(new PercentCompleteEventArgs(current, total, percentCompleteEffective, currentTask));
+        }
+
+        public PercentCompleteEventHandler ProgressChanged;
+
+        protected void OnPercentProgressChanged(PercentCompleteEventArgs e)
+        {
+            if (ProgressChanged != null)
+            {
+                ProgressChanged(this, e);
+            }
         }
     }
 }

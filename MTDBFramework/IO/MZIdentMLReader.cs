@@ -335,6 +335,8 @@ namespace MTDBFramework.IO
 
                 StoreDatasetInfo(result, path);
 
+                result.DataSet.Tool = LcmsIdentificationTool.MZIdentML;
+
 
                 // Populate items specific to the MSGF+ results (stored as mzid)
 

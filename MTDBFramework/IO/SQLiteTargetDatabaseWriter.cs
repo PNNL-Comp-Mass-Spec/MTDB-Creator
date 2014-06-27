@@ -31,10 +31,12 @@ namespace MTDBFramework.IO
                      * exist in order to properly generate the relation. 
                      * */
                     var current = 0;
+                    var currentProt = 0;
                     var total = database.ConsensusTargets.Count;
                     session.Save(options);
                     foreach (var consensusTarget in database.ConsensusTargets)
                     {
+                        OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, MtdbCreationProgressType.COMMIT.ToString()));
                         consensusTarget.Id = ++current;
                         foreach (var evidence in consensusTarget.Evidences)
                         {
@@ -51,12 +53,28 @@ namespace MTDBFramework.IO
                             evidence.Parent = consensusTarget;
                             
                         }
-                        consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
+                        foreach (var protein in consensusTarget.Proteins)
+                        {
+                            protein.Id = ++currentProt;
+                            ConsensusProteinPair cPPair = new ConsensusProteinPair();
+                            cPPair.Consensus = consensusTarget;
+                            cPPair.Protein = protein;
+                            cPPair.CleavageState = (int)protein.CleavageState;
+                            cPPair.TerminusState = (int)protein.TerminusState;
+                            cPPair.ResidueStart = protein.ResidueStart;
+                            cPPair.ResidueEnd = protein.ResidueEnd;
+                            protein.ConsensusProtein.Add(cPPair);
+                            consensusTarget.ConsensusProtein.Add(cPPair);
+                        }
                         
-                        session.SaveOrUpdate(consensusTarget);
+                        consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
+                        consensusTarget.SeqWithNumericMods = consensusTarget.Evidences[0].SeqWithNumericMods;
+                        consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
+                        consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
+
+                        //session.SaveOrUpdate(consensusTarget);
+                        session.Save(consensusTarget);
                     }
-                    current = -1;
-                    total = 0;
 
                     OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, MtdbCreationProgressType.COMMIT.ToString()));
 

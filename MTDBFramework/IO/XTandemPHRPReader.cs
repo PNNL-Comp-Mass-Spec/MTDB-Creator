@@ -59,6 +59,7 @@ namespace MTDBFramework.IO
                 StorePSMData(result, reader, specProb);
 
                 StoreDatasetInfo(result, reader, path);
+                result.DataSet.Tool = LcmsIdentificationTool.XTandem;
 
                 // Populate items specific to X!Tandem                
                 result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
