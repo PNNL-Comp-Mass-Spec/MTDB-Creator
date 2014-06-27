@@ -1,8 +1,14 @@
-﻿using MTDBFramework.Data;
+﻿using MTDBFramework.Algorithms;
+using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.IO;
 using NUnit.Framework;
 using PHRPReader;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using PNNLOmics.Algorithms.Regression;
+
 
 namespace MTDBCreatorTestSuite.IO
 {
@@ -64,6 +70,37 @@ namespace MTDBCreatorTestSuite.IO
                 database.ConsensusTargets.Add(target);
             }
             reader.Write(database, options, path);            
+        }
+
+        [Test]
+        [TestCase(@"QC_Shew_13_02_2a_03Mar14\QC_Shew_13_02_2a_03Mar14_Leopard_14-02-01_msgfdb_syn.txt",
+            @"QC_Shew_13_02_2b_03Mar14\QC_Shew_13_02_2b_03Mar14_Leopard_14-02-02_msgfdb_syn.txt", Ignore = false
+            )]
+        public void TestWriteReal(params string[] paths)
+        {
+            var fullPaths = new List<string>();
+            var fullOutputPaths = new List<string>();
+            foreach (var path in paths)
+            {
+                fullPaths.Add(GetPath(path));
+                fullOutputPaths.Add(GetOutputPath(path));
+            }
+            var options = new Options();
+
+            var analysisProcessor = new AnalysisJobProcessor(options);
+            var individualJobs = fullPaths.Select(path => new AnalysisJobItem(path, LcmsIdentificationTool.MsgfPlus)).ToList();
+            var bWorker = new BackgroundWorker();
+
+            var jobs = analysisProcessor.Process(individualJobs, bWorker);
+
+            var databaseProcess = new MtdbProcessor(options);
+
+            var database = databaseProcess.Process(jobs.Select(job => job.DataSet).ToList(), bWorker);
+
+            SqLiteTargetDatabaseWriter writer = new SqLiteTargetDatabaseWriter();
+
+            writer.Write(database, options, @".\Output.mtdb");
+
         }
     }
 }
