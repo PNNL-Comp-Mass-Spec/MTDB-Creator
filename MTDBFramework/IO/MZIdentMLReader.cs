@@ -124,164 +124,485 @@ namespace MTDBFramework.IO
             public DatabaseSequence DBSeq { get; set; }
         }
 
-        // Entry point for MZIdentMLReaders
-        // Accepts a string "Path" and returns an LCMSDataSet
-        // 
-        // XML Reader parses an MZIdentML file, storing Peptide data, such as sequence,
-        // number, and type of modifications, as a PeptideRef, Database Information holds
-        // the length of the peptide and the protein description, Peptide Evidence holds the pre,
-        // post, start and end for the peptide for Tryptic End calculations. The element that holds
-        // the most information is the Spectrum ID Item, which has the calculated mz, experimental mz,
-        // charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue, MSGF QValue,
-        // MSGR PepQValue, Scan number as well as which peptide it is and which evidences it has from
-        // the analysis run.
-        //
-        // After the XML Reader, it then goes through each Spectrum ID item and maps the appropriate values
-        // to the appropriate variables as a MSGF+ result. If the result passes the filter for MSGF+, it
-        // then adds the data for if there are modifications and adds the result to a running list of results.
-        // When all the results are tabulated, it passes them through to the AnalysisHelper class to calculate
-        // both the observed and the predicted NETs and then returns an LCMSDataSet of the results with the MZIdent tool
-
+        /*************************************************************************************************
+         * Entry point for MZIdentMLReader
+         * Accepts a string "Path" and returns an LCMSDataSet
+         * 
+         * XML Reader parses an MZIdentML file, storing data as follows:
+         *   PeptideRef holds Peptide data, such as sequence, number, and type of modifications
+         *   Database Information holds the length of the peptide and the protein description 
+         *   Peptide Evidence holds the pre, post, start and end for the peptide for Tryptic End calculations.
+         * The element that holds the most information is the Spectrum ID Item, which has the calculated mz,
+         * experimental mz, charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue, 
+         * MSGF QValue, MSGR PepQValue, Scan number as well as which peptide it is and which evidences 
+         * it has from the analysis run.
+         * 
+         * After the XML Reader, it then goes through each Spectrum ID item and maps the appropriate values
+         * to the appropriate variables as a MSGF+ result. If the result passes the filter for MSGF+, it
+         * then adds the data for if there are modifications and adds the result to a running list of results.
+         * When all the results are tabulated, it passes them through to the AnalysisHelper class to calculate
+         * both the observed and the predicted NETs and then returns an LCMSDataSet of the results with the MZIdent tool
+         **************************************************************************************************/
         public override LcmsDataSet Read(string path)
+        {
+            var results = new List<MsgfPlusResult>();
+
+            // Read in the file
+            ReadMzIdentML(path);
+
+            // Map to MSGF+ results
+            MapToMsgf(results, path);
+
+            // Calculate the Normal Elution Times
+            ComputeNETs(results);
+
+            return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MZIdentML, results);
+        }
+
+        /*******
+         * Read and parse a .mzid file, or mzIdentML
+         * Files are commonly larger than 30 MB, so use a streaming reader instead of a DOM reader
+         */
+        private void ReadMzIdentML(string path)
         {
             var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
             var sr = new StreamReader(path);
 
+            // Handle disposal of allocated object correctly
             using (var reader = XmlReader.Create(sr, xSettings))
             {
-                reader.Read();
-                while (reader.Read())
+                // Guarantee a move to the root node
+                reader.MoveToContent();
+                // Consume the MzIdentML root tag
+                // Throws exception if we are not at the "MzIdentML" tag.
+                // This is a critical error; we want to stop processing for this file if we encounter this error
+                reader.ReadStartElement("MzIdentML");
+                // Read the next node - should be the first child node
+                /**/
+                while (reader.ReadState == ReadState.Interactive)
                 {
-
-                    switch (reader.NodeType)
+                    // Handle exiting out properly at EndElement tags
+                    if (reader.NodeType != XmlNodeType.Element)
                     {
-                        case XmlNodeType.Element:
-                            string id;
-                            if (reader.Name == "Peptide")
-                            {
-                                var pepRef = new PeptideRef();
-                                id = reader.GetAttribute("id");
-                                reader.ReadToDescendant("PeptideSequence");
-                                reader.Read();
-                                pepRef.Sequence = reader.Value; // record the peptide sequence
-                                reader.Read();//Read twice to get it out of peptideSequence element
-                                reader.Read();
-                                // Read in all the modifications
-                                while (reader.NodeType != XmlNodeType.EndElement ||
-                                       reader.Name != "Peptide")
-                                {
-                                    if (reader.NodeType != XmlNodeType.EndElement && reader.Name == "Modification")
-                                    {
-
-                                        var mod = new Modification
-                                        {
-                                            Mass = Convert.ToDouble(reader.GetAttribute("monoisotopicMassDelta"))
-                                        };
-                                        var mods = new KeyValuePair<int, Modification>(Convert.ToInt32(reader.GetAttribute("location")),
-                                                                                                                     mod);
-                                        // Read down to get the name of the modification, then add the modification to the peptide reference
-                                        reader.Read();
-
-                                        mod.Tag = reader.GetAttribute("name");
-                                        pepRef.ModsAdd(mods.Key, mods.Value);
-
-                                    }
-                                    reader.Read();
-                                }
-                                if (id != null)
-                                {
-                                    m_peptides.Add(id, pepRef);
-                                }
-                            }
-                            else if (reader.Name == "DBSequence")
-                            {
-                                var dbSeq = new DatabaseSequence
-                                {
-                                    Length = Convert.ToInt32(reader.GetAttribute("length")),
-                                    Accession = reader.GetAttribute("accession")
-                                };
-                                id = reader.GetAttribute("id");
-                                reader.ReadToDescendant("cvParam");
-                                dbSeq.ProteinDescription = reader.GetAttribute("value");//.Split(' ')[0];
-                                if (id != null)
-                                {
-                                    m_database.Add(id, dbSeq);
-                                }
-                            }
-                            else if (reader.Name == "PeptideEvidence")
-                            {
-                                var pepEvidence = new PeptideEvidence
-                                {
-                                    IsDecoy = Convert.ToBoolean(reader.GetAttribute("isDecoy")),
-                                    Post = reader.GetAttribute("post"),
-                                    Pre = reader.GetAttribute("pre"),
-                                    End = Convert.ToInt32(reader.GetAttribute("end")),
-                                    Start = Convert.ToInt32(reader.GetAttribute("start")),
-                                    PeptideRef = m_peptides[reader.GetAttribute("peptide_ref")],
-                                    DBSeq = m_database[reader.GetAttribute("dBSequence_ref")]
-                                };
-                                m_evidences.Add(reader.GetAttribute("id"), pepEvidence);
-                            }
-                            else if (reader.Name == "SpectrumIdentificationResult")
-                            {
-                                var specRes = new List<SpectrumIdItem>();
-
-                                while (reader.NodeType != XmlNodeType.EndElement || reader.Name != "SpectrumIdentificationResult")
-                                {
-                                    if (reader.NodeType != XmlNodeType.EndElement &&
-                                        reader.Name == "SpectrumIdentificationItem")
-                                    {
-                                        var specItem = new SpectrumIdItem
-                                        {
-                                            PepEvCount = 0,
-                                            SpecItemId = reader.GetAttribute("id"),
-                                            PassThreshold = Convert.ToBoolean(reader.GetAttribute("passThreshold")),
-                                            Rank = Convert.ToInt32(reader.GetAttribute("rank")),
-                                            Peptide = m_peptides[reader.GetAttribute("peptide_ref")],
-                                            CalMz = Convert.ToDouble(reader.GetAttribute("calculatedMassToCharge")),
-                                            ExperimentalMz =
-                                                Convert.ToDouble(reader.GetAttribute("experimentalMassToCharge")),
-                                            Charge = Convert.ToInt32(reader.GetAttribute("chargeState"))
-                                        };
-                                        reader.ReadToDescendant("PeptideEvidenceRef");
-                                        do
-                                        {
-                                            specItem.PepEvidence.Add(m_evidences[reader.GetAttribute("peptideEvidence_ref")]);
-                                            specItem.PepEvCount++;
-                                            reader.Read();
-                                        }
-                                        while (reader.Name == "PeptideEvidenceRef");
-                                        specItem.RawScore = Convert.ToInt32(reader.GetAttribute("value"));
-                                        reader.ReadToFollowing("cvParam");
-                                        specItem.DeNovoScore = Convert.ToInt32(reader.GetAttribute("value"));
-                                        reader.ReadToFollowing("cvParam");
-                                        specItem.SpecEv = Convert.ToDouble(reader.GetAttribute("value"));
-                                        reader.ReadToFollowing("cvParam");
-                                        specItem.EValue = Convert.ToDouble(reader.GetAttribute("value"));
-                                        reader.ReadToFollowing("cvParam");
-                                        specItem.QValue = Convert.ToDouble(reader.GetAttribute("value"));
-                                        reader.ReadToFollowing("cvParam");
-                                        specItem.PepQValue = Convert.ToDouble(reader.GetAttribute("value"));
-                                        reader.ReadToFollowing("userParam");
-                                        specItem.IsoError = Convert.ToInt32(reader.GetAttribute("value"));
-                                        specRes.Add(specItem);
-                                    }
-                                    reader.Read();
-                                    if (reader.Name == "cvParam")
-                                    {
-                                        foreach (var item in specRes)
-                                        {
-                                            item.ScanNum = Convert.ToInt32(reader.GetAttribute("value"));
-                                            m_specItems.Add(item.SpecItemId, item);
-                                        }
-                                    }
-                                }
-                            }
+                        reader.Read();
+                        continue;
+                    }
+                    // Handle each 1st level as a chunk
+                    switch (reader.Name)
+                    {
+                        case "cvList":
+                            // Schema requirements: one instance of this element
+                            reader.Skip();
+                            break;
+                        case "AnalysisSoftwareList":
+                            // Schema requirements: zero to one instances of this element
+                            reader.Skip();
+                            break;
+                        case "Provider":
+                            // Schema requirements: zero to one instances of this element
+                            reader.Skip();
+                            break;
+                        case "AuditCollection":
+                            // Schema requirements: zero to one instances of this element
+                            reader.Skip();
+                            break;
+                        case "AnalysisSampleCollection":
+                            // Schema requirements: zero to one instances of this element
+                            reader.Skip();
+                            break;
+                        case "SequenceCollection":
+                            // Schema requirements: zero to one instances of this element
+                            // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
+                            ReadSequenceCollection(reader.ReadSubtree());
+                            reader.ReadEndElement(); // "SequenceCollection", if it exists, must have child nodes
+                            break;
+                        case "AnalysisCollection":
+                            // Schema requirements: one instance of this element
+                            reader.Skip();
+                            break;
+                        case "AnalysisProtocolCollection":
+                            // Schema requirements: one instance of this element
+                            reader.Skip();
+                            break;
+                        case "DataCollection":
+                            // Schema requirements: one instance of this element
+                            // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
+                            ReadDataCollection(reader.ReadSubtree());
+                            reader.ReadEndElement(); // "DataCollection" must have child nodes
+                            break;
+                        case "BibliographicReference":
+                            // Schema requirements: zero to many instances of this element
+                            reader.Skip();
+                            break;
+                        default:
+                            // We are not reading anything out of the tag, so bypass it
+                            reader.Skip();
                             break;
                     }
                 }
             }
-            var results = new List<MsgfPlusResult>();
+        }
+
+        /****
+         * Handle the child nodes of the SequenceCollection element
+         * Called by ReadMzIdentML (xml hierarchy)
+         * XmlReader parameter is only valid for the scope of the single SequenceCollection element 
+         */
+        private void ReadSequenceCollection(XmlReader reader)
+        {
+            reader.MoveToContent();
+            reader.ReadStartElement("SequenceCollection"); // Throws exception if we are not at the "SequenceCollection" tag.
+            while (reader.ReadState == ReadState.Interactive)
+            {
+                // Handle exiting out properly at EndElement tags
+                if (reader.NodeType != XmlNodeType.Element)
+                {
+                    reader.Read();
+                    continue;
+                }
+                switch (reader.Name)
+                {
+                    case "DBSequence":
+                        // Schema requirements: one to many instances of this element
+                        // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
+                        ReadDBSequence(reader.ReadSubtree());
+                        // "DBSequence" might not have any child nodes
+                        // We will either consume the EndElement, or the same element that was passed to ReadDBSequence (in case of no child nodes)
+                        reader.Read();
+                        break;
+                    case "Peptide":
+                        // Schema requirements: zero to many instances of this element
+                        // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
+                        ReadPeptide(reader.ReadSubtree());
+                        // "Peptide" might not have any child nodes
+                        // We will either consume the EndElement, or the same element that was passed to ReadPeptide (in case of no child nodes)
+                        reader.Read();
+                        break;
+                    case "PeptideEvidence":
+                        // Schema requirements: zero to many instances of this element
+                        // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
+                        ReadPeptideEvidence(reader.ReadSubtree());
+                        // "PeptideEvidence" might not have any child nodes; guarantee advance
+                        // We will either consume the EndElement, or the same element that was passed to ReadPeptideEvidence (in case of no child nodes)
+                        reader.Read();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+            reader.Close();
+        }
+
+        /****
+         * Handle Peptide element
+         * Called by ReadSequenceCollection (xml hierarchy)
+         * XmlReader parameter is only valid for the scope of the single DBSequence element 
+         */
+        private void ReadDBSequence(XmlReader reader)
+        {
+            reader.MoveToContent();
+            string id = reader.GetAttribute("id");
+            if (id != null)
+            {
+                var dbSeq = new DatabaseSequence
+                {
+                    Length = Convert.ToInt32(reader.GetAttribute("length")),
+                    Accession = reader.GetAttribute("accession")
+                };
+                if (reader.ReadToDescendant("cvParam"))
+                {
+                    dbSeq.ProteinDescription = reader.GetAttribute("value"); //.Split(' ')[0];
+                }
+                m_database.Add(id, dbSeq);
+            }
+            reader.Close();
+        }
+
+        /****
+         * Handle Peptide element
+         * Called by ReadSequenceCollection (xml hierarchy)
+         * XmlReader parameter is only valid for the scope of the single Peptide element
+         */
+        private void ReadPeptide(XmlReader reader)
+        {
+            reader.MoveToContent();
+            string id = reader.GetAttribute("id");
+            if (id != null)
+            {
+                var pepRef = new PeptideRef();
+                reader.ReadToDescendant("PeptideSequence");
+                pepRef.Sequence = reader.ReadElementContentAsString(); // record the peptide sequence, and consume the start and end elements
+                // Read in all the modifications
+                // If a modification exists, we are already on the start tag for it
+                while (reader.Name == "Modification")
+                {
+                    var mod = new Modification
+                    {
+                        Mass = Convert.ToDouble(reader.GetAttribute("monoisotopicMassDelta"))
+                    };
+                    var mods = new KeyValuePair<int, Modification>(Convert.ToInt32(reader.GetAttribute("location")),
+                                                                                                mod);
+                    // Read down to get the name of the modification, then add the modification to the peptide reference
+                    reader.ReadToDescendant("cvParam"); // The cvParam child node is required
+
+                    mod.Tag = reader.GetAttribute("name");
+                    pepRef.ModsAdd(mods.Key, mods.Value);
+
+                    // There could theoretically exist more than one cvParam element. Clear them out.
+                    while (reader.ReadToNextSibling("cvParam"))
+                    {
+                        // This is supposed to be empty. The loop condition does everything that needs to happen
+                    }
+                    reader.ReadEndElement(); // Consume EndElement for Modification
+                }
+                m_peptides.Add(id, pepRef);
+            }
+            reader.Close();
+        }
+
+        /****
+         * Handle PeptideEvidence element
+         * Called by ReadSequenceCollection (xml hierarchy)
+         * XmlReader parameter is only valid for the scope of the single PeptideEvidence element
+         */
+        private void ReadPeptideEvidence(XmlReader reader)
+        {
+            reader.MoveToContent();
+            var pepEvidence = new PeptideEvidence
+            {
+                IsDecoy = Convert.ToBoolean(reader.GetAttribute("isDecoy")),
+                Post = reader.GetAttribute("post"),
+                Pre = reader.GetAttribute("pre"),
+                End = Convert.ToInt32(reader.GetAttribute("end")),
+                Start = Convert.ToInt32(reader.GetAttribute("start")),
+                PeptideRef = m_peptides[reader.GetAttribute("peptide_ref")],
+                DBSeq = m_database[reader.GetAttribute("dBSequence_ref")]
+            };
+            m_evidences.Add(reader.GetAttribute("id"), pepEvidence);
+            reader.Close();
+        }
+
+        /*****
+         * Handle the child nodes of the DataCollection element
+         * Called by ReadMzIdentML (xml hierarchy)
+         * Currently we are only working with the AnalysisData child element
+         * XmlReader parameter is only valid for the scope of the single DataCollection element
+         */
+        private void ReadDataCollection(XmlReader reader)
+        {
+            reader.MoveToContent();
+            reader.ReadStartElement("DataCollection"); // Throws exception if we are not at the "DataCollection" tag.
+            while (reader.ReadState == ReadState.Interactive)
+            {
+                // Handle exiting out properly at EndElement tags
+                if (reader.NodeType != XmlNodeType.Element)
+                {
+                    reader.Read();
+                    continue;
+                }
+                if (reader.Name == "AnalysisData")
+                {
+                    // Schema requirements: one and only one instance of this element
+                    // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
+                    ReadAnalysisData(reader.ReadSubtree());
+                    reader.ReadEndElement(); // "AnalysisData" must have child nodes
+                }
+                else
+                {
+                    reader.Skip();
+                }
+            }
+            reader.Close();
+        }
+
+        /****
+         * Handle child nodes of AnalysisData element
+         * Called by ReadDataCollection (xml hierarchy)
+         * Currently we are only working with the SpectrumIdentificationList child elements
+         * XmlReader parameter is only valid for the scope of the single AnalysisData element
+         */
+        private void ReadAnalysisData(XmlReader reader)
+        {
+            reader.MoveToContent();
+            reader.ReadStartElement("AnalysisData"); // Throws exception if we are not at the "AnalysisData" tag.
+            while (reader.ReadState == ReadState.Interactive)
+            {
+                // Handle exiting out properly at EndElement tags
+                if (reader.NodeType != XmlNodeType.Element)
+                {
+                    reader.Read();
+                    continue;
+                }
+                if (reader.Name == "SpectrumIdentificationList")
+                {
+                    // Schema requirements: one to many instances of this element
+                    // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
+                    ReadSpectrumIdentificationList(reader.ReadSubtree());
+                    reader.ReadEndElement(); // "SpectrumIdentificationList" must have child nodes
+                }
+                else
+                {
+                    reader.Skip();
+                }
+            }
+            reader.Close();
+        }
+
+        /****
+         * Handle the child nodes of a SpectrumIdentificationList element
+         * Called by ReadAnalysisData (xml hierarchy)
+         * XmlReader parameter is only valid for the scope of the single SpectrumIdentificationList element
+         */
+        private void ReadSpectrumIdentificationList(XmlReader reader)
+        {
+            reader.MoveToContent();
+            reader.ReadStartElement("SpectrumIdentificationList"); // Throws exception if we are not at the "SpectrumIdentificationList" tag.
+            while (reader.ReadState == ReadState.Interactive)
+            {
+                // Handle exiting out properly at EndElement tags
+                if (reader.NodeType != XmlNodeType.Element)
+                {
+                    reader.Read();
+                    continue;
+                }
+                if (reader.Name == "SpectrumIdentificationResult")
+                {
+                    // Schema requirements: one to many instances of this element
+                    // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
+                    ReadSpectrumIdentificationResult(reader.ReadSubtree());
+                    reader.ReadEndElement(); // "SpectrumIdentificationResult" must have child nodes
+                }
+                else
+                {
+                    reader.Skip();
+                }
+            }
+            reader.Close();
+        }
+
+        /****
+         * Handle a single SpectrumIdentificationResult element and child nodes
+         * Called by ReadSpectrumIdentificationList (xml hierarchy)
+         * XmlReader parameter is only valid for the scope of the single SpectrumIdentificationResult element
+         */
+        private void ReadSpectrumIdentificationResult(XmlReader reader)
+        {
+            var specRes = new List<SpectrumIdItem>();
+
+            reader.MoveToContent();
+            reader.ReadStartElement("SpectrumIdentificationResult"); // Throws exception if we are not at the "SpectrumIdentificationResult" tag.
+            while (reader.ReadState == ReadState.Interactive)
+            {
+                // Handle exiting out properly at EndElement tags
+                if (reader.NodeType != XmlNodeType.Element)
+                {
+                    reader.Read();
+                    continue;
+                }
+
+                switch (reader.Name)
+                {
+                    case "SpectrumIdentificationItem":
+                        // Schema requirements: one to many instances of this element
+                        ReadSpectrumIdentificationItem(reader.ReadSubtree(), specRes);
+                        reader.ReadEndElement(); // "SpectrumIdentificationItem" must have child nodes
+                        break;
+                    case "cvParam":
+                        // Schema requirements: zero to many instances of this element
+                        int value = Convert.ToInt32(reader.GetAttribute("value"));
+                        foreach (var item in specRes)
+                        {
+                            item.ScanNum = value;
+                            m_specItems.Add(item.SpecItemId, item);
+                        }
+                        reader.Read(); // Consume the cvParam element (no child nodes)
+                        break;
+                    case "userParam":
+                        // Schema requirements: zero to many instances of this element
+                        reader.Skip();
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+            reader.Close();
+        }
+
+        /****
+         * Handle a single SpectrumIdentificationItem element and child nodes
+         * Called by ReadSpectrumIdentificationResult (xml hierarchy)
+         * XmlReader parameter is only valid for the scope of the single SpectrumIdentificationItem element
+         */
+        private void ReadSpectrumIdentificationItem(XmlReader reader, List<SpectrumIdItem> specRes)
+        {
+            reader.MoveToContent(); // Move to the "SpectrumIdentificationItem" element
+            var specItem = new SpectrumIdItem
+            {
+                PepEvCount = 0,
+                SpecItemId = reader.GetAttribute("id"),
+                PassThreshold = Convert.ToBoolean(reader.GetAttribute("passThreshold")),
+                Rank = Convert.ToInt32(reader.GetAttribute("rank")),
+                Peptide = m_peptides[reader.GetAttribute("peptide_ref")],
+                CalMz = Convert.ToDouble(reader.GetAttribute("calculatedMassToCharge")),
+                ExperimentalMz =
+                    Convert.ToDouble(reader.GetAttribute("experimentalMassToCharge")),
+                Charge = Convert.ToInt32(reader.GetAttribute("chargeState"))
+            };
+
+            // Read all child PeptideEvidenceRef tags
+            reader.ReadToDescendant("PeptideEvidenceRef");
+            while (reader.Name == "PeptideEvidenceRef")
+            {
+                specItem.PepEvidence.Add(m_evidences[reader.GetAttribute("peptideEvidence_ref")]);
+                reader.Read();
+            }
+
+            // Parse all of the cvParam/userParam fields
+            while (reader.Name == "cvParam" || reader.Name == "userParam")
+            {
+                switch (reader.GetAttribute("name"))
+                {
+                    case "MS-GF:RawScore":
+                        specItem.RawScore = Convert.ToInt32(reader.GetAttribute("value"));
+                        break;
+                    case "MS-GF:DeNovoScore":
+                        specItem.DeNovoScore = Convert.ToInt32(reader.GetAttribute("value"));
+                        break;
+                    case "MS-GF:SpecEValue":
+                        specItem.SpecEv = Convert.ToDouble(reader.GetAttribute("value"));
+                        break;
+                    case "MS-GF:EValue":
+                        specItem.EValue = Convert.ToDouble(reader.GetAttribute("value"));
+                        break;
+                    case "MS-GF:QValue":
+                        specItem.QValue = Convert.ToDouble(reader.GetAttribute("value"));
+                        break;
+                    case "MS-GF:PepQValue":
+                        specItem.PepQValue = Convert.ToDouble(reader.GetAttribute("value"));
+                        break;
+                    case "IsotopeError":
+                        // userParam field
+                        specItem.IsoError = Convert.ToInt32(reader.GetAttribute("value"));
+                        break;
+                    case "AssumedDissociationMethod":
+                        // userParam field
+                        break;
+                }
+                reader.Read();
+            }
+            specItem.PepEvCount = specItem.PepEvidence.Count;
+            specRes.Add(specItem);
+
+            reader.Close();
+        }
+
+        /*****
+         * Map the results
+         */
+        private void MapToMsgf(List<MsgfPlusResult> results, string path)
+        {
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
 
             var cleavageStateCalculator = new clsPeptideCleavageStateCalculator();
@@ -336,7 +657,6 @@ namespace MTDBFramework.IO
                 StoreDatasetInfo(result, path);
 
                 result.DataSet.Tool = LcmsIdentificationTool.MZIdentML;
-
 
                 // Populate items specific to the MSGF+ results (stored as mzid)
 
@@ -400,7 +720,7 @@ namespace MTDBFramework.IO
                     PeptideWithNumericMods = result.SeqWithNumericMods
                 };
 
-               
+
                 result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
                 result.ModificationDescription = null;
 
@@ -434,11 +754,8 @@ namespace MTDBFramework.IO
                 results.Add(result);
 
             }
-
-            ComputeNETs(results);
-
-            return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MZIdentML, results);
         }
+
 
         private void ComputeTerminusState(PeptideEvidence evidence, short numTrypticEnds, ProteinInformation protein)
         {
