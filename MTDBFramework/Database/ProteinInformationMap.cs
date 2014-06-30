@@ -11,15 +11,15 @@ namespace MTDBFramework.Database
             Id(x => x.Id)
                 .Column("ProteinId").GeneratedBy.Assigned();//Increment();
             Map(x => x.ProteinName);
-            Map(x => x.CleavageState);
-            Map(x => x.TerminusState);
-            Map(x => x.ResidueStart);
-            Map(x => x.ResidueEnd);
+            //Map(x => x.CleavageState);
+            //Map(x => x.TerminusState);
+            //Map(x => x.ResidueStart);
+            //Map(x => x.ResidueEnd);
 
-            HasManyToMany(x => x.Consensus).Table("ConsensusProteins")
-                                           .ParentKeyColumn("ProteinId")
-                                           .ChildKeyColumn("ConsensusId")
-                                           .Cascade.All().Inverse();
+            //HasManyToMany(x => x.Consensus).Table("ConsensusProteinsOld")
+            //                               .ParentKeyColumn("ProteinId")
+            //                               .ChildKeyColumn("ConsensusId")
+            //                               .Cascade.All().Inverse();
              
 
             HasMany(x => x.ConsensusProtein).Cascade.All().Inverse().Table("ConsensusProtein");

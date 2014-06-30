@@ -31,6 +31,10 @@ namespace MTDBFramework.Data
 
         #region Public Properties
 
+        public char PrefixResidue { get { return m_sequence.First(); } private set { char temp = value; } }
+
+        public char SuffixResidue { get { return m_sequence.Last(); } private set { char temp = value; } }
+
         public IList<ConsensusProteinPair> ConsensusProtein { get; set; }
 
         public int Id

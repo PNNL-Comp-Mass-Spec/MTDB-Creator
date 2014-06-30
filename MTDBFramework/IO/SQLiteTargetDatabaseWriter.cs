@@ -11,6 +11,7 @@ namespace MTDBFramework.IO
         // TODO: Implement these (or maybe dictionaries)
         private readonly Dictionary<string, TargetPeptideInfo> m_uniquePeptides = new Dictionary<string, TargetPeptideInfo>();
         private readonly Dictionary<string, TargetDataSet> m_uniqueDataSets = new Dictionary<string, TargetDataSet>();
+        private readonly Dictionary<string, ProteinInformation> m_uniqueProteins = new Dictionary<string, ProteinInformation>();
 
         public void Write(TargetDatabase database, Options options, string path)
         {
@@ -55,14 +56,20 @@ namespace MTDBFramework.IO
                         }
                         foreach (var protein in consensusTarget.Proteins)
                         {
-                            protein.Id = ++currentProt;
+                            if(!m_uniqueProteins.ContainsKey(protein.ProteinName))
+                            {
+                                protein.Id = ++currentProt;
+                                m_uniqueProteins.Add(protein.ProteinName, protein);
+                            }
+                            protein.Id = m_uniqueProteins[protein.ProteinName].Id;
+                            var cProt = m_uniqueProteins[protein.ProteinName];
                             ConsensusProteinPair cPPair = new ConsensusProteinPair();
-                            cPPair.Consensus = consensusTarget;
-                            cPPair.Protein = protein;
-                            cPPair.CleavageState = (int)protein.CleavageState;
-                            cPPair.TerminusState = (int)protein.TerminusState;
-                            cPPair.ResidueStart = protein.ResidueStart;
-                            cPPair.ResidueEnd = protein.ResidueEnd;
+                            cPPair.Consensus        = consensusTarget;
+                            cPPair.Protein          = cProt;
+                            cPPair.CleavageState    = (short)cProt.CleavageState;
+                            cPPair.TerminusState    = (short)cProt.TerminusState;
+                            cPPair.ResidueStart     = (short)cProt.ResidueStart;
+                            cPPair.ResidueEnd       = (short)cProt.ResidueEnd;
                             protein.ConsensusProtein.Add(cPPair);
                             consensusTarget.ConsensusProtein.Add(cPPair);
                         }
@@ -72,9 +79,16 @@ namespace MTDBFramework.IO
                         consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
                         consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
 
-                        //session.SaveOrUpdate(consensusTarget);
-                        session.Save(consensusTarget);
+                        session.SaveOrUpdate(consensusTarget);
+                        //session.Save(consensusTarget);
                     }
+
+                    foreach(var protein in m_uniqueProteins)
+                    {
+                        session.SaveOrUpdate(protein.Value);
+                    }
+
+                    //session.SaveOrUpdate(database.ConsensusTargets);
 
                     OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, MtdbCreationProgressType.COMMIT.ToString()));
 

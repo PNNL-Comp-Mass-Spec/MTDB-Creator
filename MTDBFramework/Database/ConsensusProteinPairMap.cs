@@ -7,12 +7,15 @@ namespace MTDBFramework.Database
         public ConsensusProteinPairMap()
         {
             Not.LazyLoad();
-            CompositeId().KeyReference(x => x.Consensus, "ConsensusId")
-                        .KeyReference(x => x.Protein, "ProteinId");
+            Id(x => x.Id).Column("PairId").GeneratedBy.Increment();
+            Map(x => x.ConsensusId);
+            Map(x => x.ProteinId);
             Map(x => x.CleavageState);
             Map(x => x.TerminusState);
             Map(x => x.ResidueStart);
             Map(x => x.ResidueEnd);
+            //CompositeId().KeyReference(x => x.Consensus, "ConsensusId")
+            //            .KeyReference(x => x.Protein, "ProteinId");
         }
     }
 }

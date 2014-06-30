@@ -28,10 +28,11 @@ namespace MTDBFramework.Database
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ProteinInformationMap>())
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusProteinPairMap>())
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<EvidenceMap>())
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<TargetPeptideInfoMap>())
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<OptionsMap>())
                 .ExposeConfiguration(BuildSchema)              
                 .BuildSessionFactory();
+
+            //.Mappings(m => m.FluentMappings.AddFromAssemblyOf<TargetPeptideInfoMap>())
         }
         private static void BuildSchema(Configuration config)
         {

@@ -7,10 +7,15 @@ namespace MTDBFramework.Database
         public ConsensusTarget Consensus { get; set; }
         public ProteinInformation Protein { get; set; }
 
-        public int CleavageState { get; set; }
-        public int TerminusState { get; set; }
-        public int ResidueStart { get; set; }
-        public int ResidueEnd { get; set; }
+        public int Id { get; set; }
+
+        public int ConsensusId { get { return Consensus.Id; } private set { Consensus.Id = value; } }
+        public int ProteinId { get { return Protein.Id; } private set { Protein.Id = value; } }
+
+        public short CleavageState { get; set; }
+        public short TerminusState { get; set; }
+        public short ResidueStart { get; set; }
+        public short ResidueEnd { get; set; }
 
         public override bool Equals(object obj)
         {

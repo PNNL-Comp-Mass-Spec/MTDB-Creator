@@ -12,7 +12,7 @@ namespace MTDBFramework.Database
             Not.LazyLoad();
             Id(x => x.Id).Column("DatasetId").GeneratedBy.Identity();
             Map(x => x.Name);
-            Map(x => x.Tool);
+            Map(x => x.Tool).Column("SearchTool");
         }
     }
 }
