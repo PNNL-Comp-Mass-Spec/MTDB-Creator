@@ -24,6 +24,7 @@ namespace MTDBFramework.Database
             Map(x => x.SeqWithNumericMods).Column("Sequence");
             Map(x => x.ModificationCount).Column("ModificationCount");
             Map(x => x.ModificationDescription).Column("ModificationDescription");
+            Map(x => x.MultiProteinCount).Column("MultiProteinCount");
 
 
             HasMany(x => x.Evidences).KeyColumn("ConsensusId").Cascade.All();

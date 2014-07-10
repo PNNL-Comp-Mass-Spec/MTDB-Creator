@@ -74,47 +74,49 @@ namespace MTDBFramework.IO
         {
             // Convert to a list to suppress the "Possible multiple enumeration" warning
             var lstEvidences = evidences.ToList();
-
-            var dataset = lstEvidences.First().DataSet;
-
-            var fiDataset = new FileInfo(dataset.Path);
-
-            if (fiDataset.Directory == null)
+            if (evidences.Count() != 0)
             {
-                // Invalid directory
-                return;
-            }
+                var dataset = lstEvidences.First().DataSet;
 
-            var jobFolder = fiDataset.Directory.FullName;
-            var csvPath = Path.Combine(jobFolder, dataset.Name + "_scans.csv");
-            var txtPath = Path.Combine(jobFolder, dataset.Name + "_scanstats.txt");
+                var fiDataset = new FileInfo(dataset.Path);
 
-            if (File.Exists(txtPath))
-            {
-                // Obtain the elution time info from the Masic _scanstats.txt file
-                // Column index 1 is scan number and index 2 is elution time
-                var scanToTime = ReadScanTimeFile(txtPath, 1, 2, '\t');
-
-                ConvertElutionTimeToNET(lstEvidences, scanToTime);
-
-            }
-            else if (File.Exists(csvPath))
-            {
-                // Obtain the elution time info from the DeconTools _scans.csv file
-                // Column index 0 is scan number and index 1 is elution time
-                var scanToTime = ReadScanTimeFile(csvPath, 0, 1, ',');
-
-                ConvertElutionTimeToNET(lstEvidences, scanToTime);
-            }
-            else
-            {
-                // Base elution time on the min and max scan
-                double maxScan = lstEvidences.Max(result => result.Scan);
-                double minScan = lstEvidences.Min(result => result.Scan);
-
-                foreach (var evidence in lstEvidences)
+                if (fiDataset.Directory == null)
                 {
-                    evidence.ObservedNet = (evidence.Scan - minScan) / (maxScan - minScan);
+                    // Invalid directory
+                    return;
+                }
+
+                var jobFolder = fiDataset.Directory.FullName;
+                var csvPath = Path.Combine(jobFolder, dataset.Name + "_scans.csv");
+                var txtPath = Path.Combine(jobFolder, dataset.Name + "_scanstats.txt");
+
+                if (File.Exists(txtPath))
+                {
+                    // Obtain the elution time info from the Masic _scanstats.txt file
+                    // Column index 1 is scan number and index 2 is elution time
+                    var scanToTime = ReadScanTimeFile(txtPath, 1, 2, '\t');
+
+                    ConvertElutionTimeToNET(lstEvidences, scanToTime);
+
+                }
+                else if (File.Exists(csvPath))
+                {
+                    // Obtain the elution time info from the DeconTools _scans.csv file
+                    // Column index 0 is scan number and index 1 is elution time
+                    var scanToTime = ReadScanTimeFile(csvPath, 0, 1, ',');
+
+                    ConvertElutionTimeToNET(lstEvidences, scanToTime);
+                }
+                else
+                {
+                    // Base elution time on the min and max scan
+                    double maxScan = lstEvidences.Max(result => result.Scan);
+                    double minScan = lstEvidences.Min(result => result.Scan);
+
+                    foreach (var evidence in lstEvidences)
+                    {
+                        evidence.ObservedNet = (evidence.Scan - minScan) / (maxScan - minScan);
+                    }
                 }
             }
         }

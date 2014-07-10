@@ -16,9 +16,9 @@ namespace MTDBFramework.Database
             Id(x => x.Id).Column("EvidenceId").GeneratedBy.Assigned();
             Map(x => x.Charge);
             Map(x => x.ObservedNet);
-            Map(x => x.PredictedNet);
+            //Map(x => x.PredictedNet);
             Map(x => x.Mz);
-            Map(x => x.MultiProteinCount);
+            //Map(x => x.MultiProteinCount);
             Map(x => x.Scan);
             Map(x => x.DelM);
             Map(x => x.DelMPpm);

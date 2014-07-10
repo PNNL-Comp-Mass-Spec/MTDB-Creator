@@ -17,7 +17,7 @@ namespace MTDBFramework.IO
         {
 
             DatabaseCreatorFactory.DatabaseFile = path;
-            var sessionFactory = DatabaseCreatorFactory.CreateSessionFactory();
+            var sessionFactory = DatabaseCreatorFactory.CreateSessionFactory(options.DatabaseType);
 
             using (var session = sessionFactory.OpenSession())
             {
@@ -78,7 +78,7 @@ namespace MTDBFramework.IO
                         consensusTarget.SeqWithNumericMods = consensusTarget.Evidences[0].SeqWithNumericMods;
                         consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
                         consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
-
+                        consensusTarget.MultiProteinCount = consensusTarget.Evidences[0].MultiProteinCount;
                         session.SaveOrUpdate(consensusTarget);
                         //session.Save(consensusTarget);
                     }

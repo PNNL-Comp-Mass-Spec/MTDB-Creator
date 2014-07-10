@@ -221,15 +221,33 @@ namespace MTDBFramework.Algorithms
                     }
                 }
                 umcDataset.Sort((x, y) => x.MassMonoisotopic.CompareTo(y.MassMonoisotopic));
-                var alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
-                if (umcDataset.Max(x => x.NetAligned) < 0.6)
+                LcmsWarpAlignmentData alignedData;
+                try
                 {
-                    umcDataset = backupDataset;
-                    alignedData = lcmsNetAligner.Align(massTagLightTargets, umcDataset);
+                    alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
+                    if (umcDataset.Max(x => x.NetAligned) < 0.6)
+                    {
+                        umcDataset = backupDataset;
+                        alignedData = lcmsNetAligner.Align(massTagLightTargets, umcDataset);
+                    }
                 }
-                
+                catch
+                {
+                    try
+                    {
+                        alignedData = lcmsNetAligner.Align(massTagLightTargets, umcDataset);
+                    }
+                    catch
+                    {
+                        alignedData = null;
+                    }
+                }
+
                 //var alignedData = lcmsAligner.Align(datasetMassTagLight, umcDataset);
-                alignmentData.Add(alignedData);
+                if (alignedData != null)
+                {
+                    alignmentData.Add(alignedData);
+                } 
                 //var residualList = new List<UMCLight> { Capacity = alignedData.ResidualData.Mz.Length };
                 ////Put the residual data into a list of UMCLights
                 //for (var a = 0; a < alignedData.ResidualData.Mz.Length; a++)
@@ -278,9 +296,18 @@ namespace MTDBFramework.Algorithms
                 {
                     evidenceMap.Add(data.Id, data);
                 }
-                dataSet.RegressionResult.Slope = alignedData.NetSlope;
-                dataSet.RegressionResult.Intercept = alignedData.NetIntercept;
-                dataSet.RegressionResult.RSquared = alignedData.NetRsquared;
+                if (alignedData != null)
+                {
+                    dataSet.RegressionResult.Slope = alignedData.NetSlope;
+                    dataSet.RegressionResult.Intercept = alignedData.NetIntercept;
+                    dataSet.RegressionResult.RSquared = alignedData.NetRsquared;
+                }
+                else
+                {
+                    dataSet.RegressionResult.Slope = 1;
+                    dataSet.RegressionResult.Intercept = 0;
+                    dataSet.RegressionResult.RSquared = 0;
+                }
                 m_currentItem++;
             }
           

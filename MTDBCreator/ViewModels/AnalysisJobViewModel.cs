@@ -12,6 +12,7 @@ using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
 using Microsoft.Win32;
+using System;
 
 namespace MTDBCreator.ViewModels
 {
@@ -115,12 +116,16 @@ namespace MTDBCreator.ViewModels
 
         private void ProcessAnalysisJob(object param)
         {
+            DateTime start = DateTime.Now;
             var result = ProcessAnalysisTargets();
 
             OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
+            DateTime end = DateTime.Now;
+            Console.WriteLine("Analysis processed after " + (end-start));
 
             if (result != null && param == null)
             {
+                DateTime procStart = DateTime.Now;
                 result = ProcessAnalysisDatabase();
 
                 if (result == null && BackgroundWorkProcessHelper.MostRecentResult != null)
@@ -133,6 +138,9 @@ namespace MTDBCreator.ViewModels
                 }
                 
                 OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
+                end = DateTime.Now;
+                Console.WriteLine("Alignment processed after " + (end - start) + " total");
+                Console.WriteLine("Alignment took " + (end - procStart));
 
                 if (result != null)
                 {
@@ -153,13 +161,16 @@ namespace MTDBCreator.ViewModels
                         }
                         else
                         {
-                            saveDatabaseDialog.Filter = "Access Database (*.accdb)|*.accdb|All Files (*.*)|*.*";
+                            saveDatabaseDialog.Filter = "Access Database (*.mdb)|*.mdb|All Files (*.*)|*.*";
                             saveDatabaseDialog.Title = "Save to Access Database";
                         }
 
                         if (saveDatabaseDialog.ShowDialog() == true)
                         {
+                            DateTime saveStart = DateTime.Now;
                             SaveAnalysisDatabase(saveDatabaseDialog.FileName);
+                            end = DateTime.Now;
+                            Console.WriteLine("Database Save took " + (end - saveStart));
                         }
                         if (saveDatabaseDialog.FileName != "")
                         {

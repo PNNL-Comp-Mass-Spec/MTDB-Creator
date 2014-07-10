@@ -173,6 +173,12 @@ namespace MTDBFramework.Data
             set; 
         }
 
+        public int MultiProteinCount
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Calculate average mass & net and stdev mass & net for each Target.
         /// </summary>
@@ -184,7 +190,14 @@ namespace MTDBFramework.Data
             TheoreticalMonoIsotopicMass = massesList.Average();
             Net = netList.Average();
 
-            StdevNet = netList.StandardDeviation();
+            if (netList.Count == 1)
+            {
+                StdevNet = 0;
+            }
+            else
+            {
+                StdevNet = netList.StandardDeviation();
+            }
         }
     }
 }
