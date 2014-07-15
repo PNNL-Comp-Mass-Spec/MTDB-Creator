@@ -104,7 +104,6 @@ namespace MTDBFramework.IO
             {
                 get { return m_mods; }
             }
-
         }
 
         private class PeptideEvidence
@@ -124,25 +123,27 @@ namespace MTDBFramework.IO
             public DatabaseSequence DBSeq { get; set; }
         }
 
-        /*************************************************************************************************
-         * Entry point for MZIdentMLReader
-         * Accepts a string "Path" and returns an LCMSDataSet
-         * 
-         * XML Reader parses an MZIdentML file, storing data as follows:
-         *   PeptideRef holds Peptide data, such as sequence, number, and type of modifications
-         *   Database Information holds the length of the peptide and the protein description 
-         *   Peptide Evidence holds the pre, post, start and end for the peptide for Tryptic End calculations.
-         * The element that holds the most information is the Spectrum ID Item, which has the calculated mz,
-         * experimental mz, charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue, 
-         * MSGF QValue, MSGR PepQValue, Scan number as well as which peptide it is and which evidences 
-         * it has from the analysis run.
-         * 
-         * After the XML Reader, it then goes through each Spectrum ID item and maps the appropriate values
-         * to the appropriate variables as a MSGF+ result. If the result passes the filter for MSGF+, it
-         * then adds the data for if there are modifications and adds the result to a running list of results.
-         * When all the results are tabulated, it passes them through to the AnalysisHelper class to calculate
-         * both the observed and the predicted NETs and then returns an LCMSDataSet of the results with the MZIdent tool
-         **************************************************************************************************/
+        /// <summary>
+        /// Entry point for MZIdentMLReader
+        /// </summary>
+        /// <param name="path">Path to *.mzid/mzIdentML file</param>
+        /// <returns>LCMSDataSet</returns>
+        /// <remarks>
+        /// XML Reader parses an MZIdentML file, storing data as follows:
+        ///   PeptideRef holds Peptide data, such as sequence, number, and type of modifications
+        ///   Database Information holds the length of the peptide and the protein description 
+        ///   Peptide Evidence holds the pre, post, start and end for the peptide for Tryptic End calculations.
+        /// The element that holds the most information is the Spectrum ID Item, which has the calculated mz,
+        /// experimental mz, charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue, 
+        /// MSGF QValue, MSGR PepQValue, Scan number as well as which peptide it is and which evidences 
+        /// it has from the analysis run.
+        /// 
+        /// After the XML Reader, it then goes through each Spectrum ID item and maps the appropriate values
+        /// to the appropriate variables as a MSGF+ result. If the result passes the filter for MSGF+, it
+        /// then adds the data for if there are modifications and adds the result to a running list of results.
+        /// When all the results are tabulated, it passes them through to the AnalysisHelper class to calculate
+        /// both the observed and the predicted NETs and then returns an LCMSDataSet of the results with the MZIdent tool
+        /// </remarks>
         public override LcmsDataSet Read(string path)
         {
             var results = new List<MsgfPlusResult>();
@@ -159,10 +160,11 @@ namespace MTDBFramework.IO
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MZIdentML, results);
         }
 
-        /*******
-         * Read and parse a .mzid file, or mzIdentML
-         * Files are commonly larger than 30 MB, so use a streaming reader instead of a DOM reader
-         */
+        /// <summary>
+        /// Read and parse a .mzid file, or mzIdentML
+        /// Files are commonly larger than 30 MB, so use a streaming reader instead of a DOM reader
+        /// </summary>
+        /// <param name="path">System path of file to read in</param>
         private void ReadMzIdentML(string path)
         {
             var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
@@ -243,11 +245,11 @@ namespace MTDBFramework.IO
             }
         }
 
-        /****
-         * Handle the child nodes of the SequenceCollection element
-         * Called by ReadMzIdentML (xml hierarchy)
-         * XmlReader parameter is only valid for the scope of the single SequenceCollection element 
-         */
+        /// <summary>
+        /// Handle the child nodes of the SequenceCollection element
+        /// Called by ReadMzIdentML (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single SequenceCollection element</param>
         private void ReadSequenceCollection(XmlReader reader)
         {
             reader.MoveToContent();
@@ -294,11 +296,11 @@ namespace MTDBFramework.IO
             reader.Close();
         }
 
-        /****
-         * Handle Peptide element
-         * Called by ReadSequenceCollection (xml hierarchy)
-         * XmlReader parameter is only valid for the scope of the single DBSequence element 
-         */
+        /// <summary>
+        /// Handle DBSequence element
+        /// Called by ReadSequenceCollection (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single DBSequence element</param>
         private void ReadDBSequence(XmlReader reader)
         {
             reader.MoveToContent();
@@ -319,11 +321,11 @@ namespace MTDBFramework.IO
             reader.Close();
         }
 
-        /****
-         * Handle Peptide element
-         * Called by ReadSequenceCollection (xml hierarchy)
-         * XmlReader parameter is only valid for the scope of the single Peptide element
-         */
+        /// <summary>
+        /// Handle Peptide element
+        /// Called by ReadSequenceCollection (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single Peptide element</param>
         private void ReadPeptide(XmlReader reader)
         {
             reader.MoveToContent();
@@ -361,11 +363,11 @@ namespace MTDBFramework.IO
             reader.Close();
         }
 
-        /****
-         * Handle PeptideEvidence element
-         * Called by ReadSequenceCollection (xml hierarchy)
-         * XmlReader parameter is only valid for the scope of the single PeptideEvidence element
-         */
+        /// <summary>
+        /// Handle PeptideEvidence element
+        /// Called by ReadSequenceCollection (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single PeptideEvidence element</param>
         private void ReadPeptideEvidence(XmlReader reader)
         {
             reader.MoveToContent();
@@ -383,12 +385,12 @@ namespace MTDBFramework.IO
             reader.Close();
         }
 
-        /*****
-         * Handle the child nodes of the DataCollection element
-         * Called by ReadMzIdentML (xml hierarchy)
-         * Currently we are only working with the AnalysisData child element
-         * XmlReader parameter is only valid for the scope of the single DataCollection element
-         */
+        /// <summary>
+        /// Handle the child nodes of the DataCollection element
+        /// Called by ReadMzIdentML (xml hierarchy)
+        /// Currently we are only working with the AnalysisData child element
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single DataCollection element</param>
         private void ReadDataCollection(XmlReader reader)
         {
             reader.MoveToContent();
@@ -416,12 +418,12 @@ namespace MTDBFramework.IO
             reader.Close();
         }
 
-        /****
-         * Handle child nodes of AnalysisData element
-         * Called by ReadDataCollection (xml hierarchy)
-         * Currently we are only working with the SpectrumIdentificationList child elements
-         * XmlReader parameter is only valid for the scope of the single AnalysisData element
-         */
+        /// <summary>
+        /// Handle child nodes of AnalysisData element
+        /// Called by ReadDataCollection (xml hierarchy)
+        /// Currently we are only working with the SpectrumIdentificationList child elements
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single AnalysisData element</param>
         private void ReadAnalysisData(XmlReader reader)
         {
             reader.MoveToContent();
@@ -449,11 +451,11 @@ namespace MTDBFramework.IO
             reader.Close();
         }
 
-        /****
-         * Handle the child nodes of a SpectrumIdentificationList element
-         * Called by ReadAnalysisData (xml hierarchy)
-         * XmlReader parameter is only valid for the scope of the single SpectrumIdentificationList element
-         */
+        /// <summary>
+        /// Handle the child nodes of a SpectrumIdentificationList element
+        /// Called by ReadAnalysisData (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single SpectrumIdentificationList element</param>
         private void ReadSpectrumIdentificationList(XmlReader reader)
         {
             reader.MoveToContent();
@@ -481,11 +483,11 @@ namespace MTDBFramework.IO
             reader.Close();
         }
 
-        /****
-         * Handle a single SpectrumIdentificationResult element and child nodes
-         * Called by ReadSpectrumIdentificationList (xml hierarchy)
-         * XmlReader parameter is only valid for the scope of the single SpectrumIdentificationResult element
-         */
+        /// <summary>
+        /// Handle a single SpectrumIdentificationResult element and child nodes
+        /// Called by ReadSpectrumIdentificationList (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single SpectrumIdentificationResult element</param>
         private void ReadSpectrumIdentificationResult(XmlReader reader)
         {
             var specRes = new List<SpectrumIdItem>();
@@ -530,11 +532,12 @@ namespace MTDBFramework.IO
             reader.Close();
         }
 
-        /****
-         * Handle a single SpectrumIdentificationItem element and child nodes
-         * Called by ReadSpectrumIdentificationResult (xml hierarchy)
-         * XmlReader parameter is only valid for the scope of the single SpectrumIdentificationItem element
-         */
+        /// <summary>
+        /// Handle a single SpectrumIdentificationItem element and child nodes
+        /// Called by ReadSpectrumIdentificationResult (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single SpectrumIdentificationItem element</param>
+        /// <param name="specRes">List of SpectrumIdItems that the read data is stored in</param>
         private void ReadSpectrumIdentificationItem(XmlReader reader, List<SpectrumIdItem> specRes)
         {
             reader.MoveToContent(); // Move to the "SpectrumIdentificationItem" element
@@ -598,9 +601,11 @@ namespace MTDBFramework.IO
             reader.Close();
         }
 
-        /*****
-         * Map the results
-         */
+        /// <summary>
+        /// Map the results of a MZIdentML read to MSGF+
+        /// </summary>
+        /// <param name="results">Object to populate with the results of the Mapping</param>
+        /// <param name="path">Path to MZIdentML file</param>
         private void MapToMsgf(List<MsgfPlusResult> results, string path)
         {
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
