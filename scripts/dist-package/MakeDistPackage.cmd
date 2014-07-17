@@ -10,15 +10,20 @@ if [%1]==[] goto usage
 echo Making MTDB Creator Distribution Package - %1 (%2)...
 echo.
 
-IF NOT EXIST "..\..\MTDBCreator\bin\%2\%1\MTDBCreator.exe" goto noreleasebuild
+rem IF NOT EXIST "..\..\MTDBCreator\bin\%2\%1\MTDBCreator.exe" goto noreleasebuild
+IF NOT EXIST "%3\MTDBCreator.exe" goto noreleasebuild
 
 md bin
+
+echo %3
 
 echo Copying Binary Files...
 echo.
 
-xcopy "..\..\MTDBCreator\bin\%2\%1\MTDBCreator.exe" .\bin > nul
-xcopy ..\..\MTDBCreator\bin\%2\%1\*.dll /s .\bin > nul
+rem xcopy "..\..\MTDBCreator\bin\%2\%1\MTDBCreator.exe" .\bin > nul
+rem xcopy ..\..\MTDBCreator\bin\%2\%1\*.dll /s .\bin > nul
+xcopy "%3MTDBCreator.exe" .\bin > nul
+xcopy %3*.dll /s .\bin > nul
 
 echo Building Distribution Package in Zip Format...
 echo.
@@ -42,7 +47,7 @@ echo Please build the MTDB Creator in %1 (%2) configuration first!
 goto quit
 
 :usage
-echo Usage: MakeDistZip ^<Configuration: Debug^|Release^> ^<Platform: Any CPU^|x86^|x64^>
+echo Usage: MakeDistPackage ^<Configuration: Debug^|Release^> ^<Platform: Any CPU^|x86^|x64^> ^<Build Dir ^(TargetDir^)^>
 echo.
 
 :quit
