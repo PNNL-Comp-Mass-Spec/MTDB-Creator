@@ -31,9 +31,9 @@ namespace MTDBFramework.Data
 
         #region Public Properties
 
-        public char PrefixResidue { get { return m_sequence.First(); } private set { char temp = value; } }
+        public char PrefixResidue { get { return (string.IsNullOrWhiteSpace(m_sequence))? '\0' : m_sequence.First(); } private set { char temp = value; } }
 
-        public char SuffixResidue { get { return m_sequence.Last(); } private set { char temp = value; } }
+        public char SuffixResidue { get { return (string.IsNullOrWhiteSpace(m_sequence)) ? '\0' : m_sequence.Last(); } private set { char temp = value; } }
 
         public IList<ConsensusProteinPair> ConsensusProtein { get; set; }
 

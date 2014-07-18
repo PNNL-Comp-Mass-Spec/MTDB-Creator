@@ -9,8 +9,11 @@ namespace MTDBFramework.Database
 
         public int Id { get; set; }
 
-        public int ConsensusId { get { return Consensus.Id; } private set { Consensus.Id = value; } }
-        public int ProteinId { get { return Protein.Id; } private set { Protein.Id = value; } }
+        private int m_consensus;
+        private int m_prot;
+
+        public int ConsensusId { get { return (Consensus != null) ? Consensus.Id : m_consensus; } private set { /*Consensus.Id*/m_consensus = value; } }
+        public int ProteinId { get { return (Protein != null) ? Protein.Id : m_prot; } private set { /*Protein.Id*/        m_prot = value; } }
 
         public short CleavageState { get; set; }
         public short TerminusState { get; set; }

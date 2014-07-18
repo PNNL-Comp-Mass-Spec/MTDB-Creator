@@ -24,20 +24,55 @@ namespace MTDBFramework.IO
             var database = new TargetDatabase();
              
             var readConsensus = new List<ConsensusTarget>();
+            var readPair = new List<ConsensusProteinPair>();
+            var readProt = new List<ProteinInformation>();
+            var readEvidence = new List<Evidence>();
+
             using(var session = sessionFactory.OpenSession())
             {
                 using(var transact = session.BeginTransaction())
-                {                    
+                {
+                    session.CreateCriteria<ProteinInformation>().List(readProt);
                     session.CreateCriteria<ConsensusTarget>().List(readConsensus);
                     transact.Commit();
                 }
-
-                foreach (var evidence in readConsensus)
+                using(var transact = session.BeginTransaction())
                 {
-                    database.AddConsensusTarget(evidence);
+                    session.CreateCriteria<ConsensusProteinPair>().List(readPair);
+                    transact.Commit();
+                }
+                
+                using (var transact = session.BeginTransaction())
+                {
+                    session.CreateCriteria<Evidence>().List(readEvidence);
+                    transact.Commit();
                 }
             }
 
+            foreach (var evidence in readConsensus)
+            {
+                database.AddConsensusTarget(evidence);
+            }
+
+            var datasets = new List<LcmsDataSet>();
+
+            var datasetDic = new Dictionary<string, LcmsDataSet>();
+
+            foreach (var evidence in readEvidence)
+            {
+                if(!datasetDic.ContainsKey(evidence.DataSet.Name))
+                {
+                    datasetDic.Add(evidence.DataSet.Name, new LcmsDataSet());
+                    datasetDic[evidence.DataSet.Name].Name = evidence.DataSet.Name;
+                    datasetDic[evidence.DataSet.Name].Tool = evidence.DataSet.Tool;
+                }
+                datasetDic[evidence.DataSet.Name].Evidences.Add(evidence);
+            }
+
+            foreach(var member in datasetDic)
+            {
+                datasets.Add(member.Value);
+            }
 
             return database;
         }

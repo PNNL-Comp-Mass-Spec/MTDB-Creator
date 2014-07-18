@@ -9,20 +9,8 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id)
-                .Column("ProteinId").GeneratedBy.Assigned();//Increment();
+                .Column("ProteinId").GeneratedBy.Assigned();
             Map(x => x.ProteinName);
-            //Map(x => x.CleavageState);
-            //Map(x => x.TerminusState);
-            //Map(x => x.ResidueStart);
-            //Map(x => x.ResidueEnd);
-
-            //HasManyToMany(x => x.Consensus).Table("ConsensusProteinsOld")
-            //                               .ParentKeyColumn("ProteinId")
-            //                               .ChildKeyColumn("ConsensusId")
-            //                               .Cascade.All().Inverse();
-             
-
-            HasMany(x => x.ConsensusProtein).Cascade.All().Inverse().Table("ConsensusProtein");
         }
     }
 }

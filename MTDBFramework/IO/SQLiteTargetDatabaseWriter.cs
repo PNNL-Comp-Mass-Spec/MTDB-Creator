@@ -72,6 +72,7 @@ namespace MTDBFramework.IO
                             cPPair.ResidueEnd       = (short)cProt.ResidueEnd;
                             protein.ConsensusProtein.Add(cPPair);
                             consensusTarget.ConsensusProtein.Add(cPPair);
+                            session.SaveOrUpdate(cPPair);
                         }
                         
                         consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;

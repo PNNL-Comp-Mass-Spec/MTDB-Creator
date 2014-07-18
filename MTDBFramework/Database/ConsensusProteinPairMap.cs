@@ -14,8 +14,6 @@ namespace MTDBFramework.Database
             Map(x => x.TerminusState);
             Map(x => x.ResidueStart);
             Map(x => x.ResidueEnd);
-            //CompositeId().KeyReference(x => x.Consensus, "ConsensusId")
-            //            .KeyReference(x => x.Protein, "ProteinId");
         }
     }
 }
