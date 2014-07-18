@@ -9,8 +9,16 @@ using PHRPReader;
 
 namespace MTDBFramework.IO
 {
+    /// <summary>
+    /// Read and perform some processing on a MZIdentML file
+    /// Processes the data into an LCMS DataSet
+    /// </summary>
     public class MzIdentMlReader : PHRPReaderBase
     {
+        /// <summary>
+        /// Initialize a MzIdentMlReader object
+        /// </summary>
+        /// <param name="options">Options used for the MSGFPlus Target Filter</param>
         public MzIdentMlReader(Options options)
         {
             ReaderOptions = options;
@@ -124,7 +132,8 @@ namespace MTDBFramework.IO
         }
 
         /// <summary>
-        /// Entry point for MZIdentMLReader
+        /// Entry point for MZIdentMLReader, overriden from PHRPReaderBase
+        /// Read the MZIdentML file, map the data to MSGF+ data, compute the NETs, and return the LCMS DataSet
         /// </summary>
         /// <param name="path">Path to *.mzid/mzIdentML file</param>
         /// <returns>LCMSDataSet</returns>
@@ -180,7 +189,6 @@ namespace MTDBFramework.IO
                 // This is a critical error; we want to stop processing for this file if we encounter this error
                 reader.ReadStartElement("MzIdentML");
                 // Read the next node - should be the first child node
-                /**/
                 while (reader.ReadState == ReadState.Interactive)
                 {
                     // Handle exiting out properly at EndElement tags
