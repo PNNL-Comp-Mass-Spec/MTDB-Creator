@@ -172,6 +172,7 @@
     <Compile Include="Data\LcmsDataSet.cs" />
     <Compile Include="Database\TargetDatabase.cs" />
     <Compile Include="IProcessor.cs" />
+    <Compile Include="MtdbCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\AlignmentProgressChangedEventArgs.cs" />
     <Compile Include="UI\MTDBCreationProgressType.cs" />
