@@ -128,7 +128,7 @@
     <Compile Include="Database\OptionsMap.cs" />
     <Compile Include="Database\ProteinInformationMap.cs" />
     <Compile Include="Database\TargetDatasetMap.cs" />
-    <Compile Include="Database\TargetMap.cs" />
+    <Compile Include="Database\EvidenceMap.cs" />
     <Compile Include="Database\TargetPeptideInfoMap.cs" />
     <Compile Include="Data\AnalysisJobItem.cs" />
     <Compile Include="Data\ConsensusTarget.cs" />
