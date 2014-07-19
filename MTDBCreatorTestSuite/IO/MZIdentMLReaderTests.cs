@@ -26,7 +26,7 @@ namespace MTDBCreatorTestSuite.IO
             var pathName    = jobDirectoryPath;
             var reader      = PhrpReaderFactory.Create(pathName, options);
             var data        = reader.Read(pathName);
-            Assert.AreEqual(data.Evidences.Count, expectedEvidences);
+            Assert.AreEqual(expectedEvidences, data.Evidences.Count);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace MTDBCreatorTestSuite.IO
                     pathName    = Path.Combine(jobDirectoryPath, pathName);
                     var reader  = PhrpReaderFactory.Create(pathName, options);
                     var data    = reader.Read(pathName);
-                    Assert.AreEqual(data.Evidences.Count, expectedEvidences[num]);
+                    Assert.AreEqual(expectedEvidences[num], data.Evidences.Count);
 
                     pathName = sr.ReadLine();
                     num++;
@@ -53,7 +53,7 @@ namespace MTDBCreatorTestSuite.IO
             var pathName    = jobDirectoryPath;
             var reader      = PhrpReaderFactory.Create(pathName, options);
             var data        = reader.Read(pathName);
-            Assert.AreEqual(data.Evidences.Count, expectedEvidences);
+            Assert.AreEqual(expectedEvidences, data.Evidences.Count);
         }
     }
 }
