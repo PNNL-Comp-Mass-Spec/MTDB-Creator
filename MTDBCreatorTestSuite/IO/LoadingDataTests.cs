@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.IO;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
@@ -30,7 +29,7 @@ namespace MTDBCreatorTestSuite.IO
                     pathName    = Path.Combine(jobDirectoryPath, pathName);
                     var reader  = PhrpReaderFactory.Create(pathName, options);
                     var data    = reader.Read(pathName);
-                    Debug.Assert(data.Evidences.Count == expectedEvidences[num]);
+                    Assert.AreEqual(data.Evidences.Count, expectedEvidences[num]);
 
                     pathName = sr.ReadLine();
                     num++;
@@ -54,7 +53,7 @@ namespace MTDBCreatorTestSuite.IO
             var pathName    = jobDirectoryPath;
             var reader      = PhrpReaderFactory.Create(pathName, options);
             var data        = reader.Read(pathName);
-            Debug.Assert(data.Evidences.Count == expectedEvidences);
+            Assert.AreEqual(data.Evidences.Count, expectedEvidences);
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
 using NUnit.Framework;
@@ -27,7 +26,7 @@ namespace MTDBCreatorTestSuite.IO
             var pathName    = jobDirectoryPath;
             var reader      = PhrpReaderFactory.Create(pathName, options);
             var data        = reader.Read(pathName);
-            Debug.Assert(data.Evidences.Count == expectedEvidences);
+            Assert.AreEqual(data.Evidences.Count, expectedEvidences);
         }
     }
 }
