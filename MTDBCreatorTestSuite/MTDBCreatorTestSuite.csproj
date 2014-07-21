@@ -120,6 +120,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Data\UnimodTests.cs" />
     <Compile Include="IO\DatabaseReaderTests.cs" />
     <Compile Include="IO\DatabaseWriterTests.cs" />
     <Compile Include="IO\LoadingDataTests.cs" />
