@@ -123,15 +123,15 @@ namespace MTDBFramework.Data
         }
 
         ///Sequence for the peptide with all PTMs excluded.
-        //public string CleanSequence
-        //{
-        //    get { return m_cleanSequence; }
-        //    set
-        //    {
-        //        m_cleanSequence = value;
-        //        OnPropertyChanged("CleanSequence");
-        //    }
-        //}
+        public string CleanSequence
+        {
+            get { return m_cleanSequence; }
+            set
+            {
+                m_cleanSequence = value;
+                OnPropertyChanged("CleanSequence");
+            }
+        }
 
         public TargetDataSet Dataset
         {
@@ -191,7 +191,7 @@ namespace MTDBFramework.Data
             {
                 Sequence = evidence.Sequence;
             }
-            //CleanSequence = evidence.CleanPeptide;
+            evidence.Sequence = Sequence;
             if (PredictedNet == 0.0)
             {
                 PredictedNet = evidence.PredictedNet;
@@ -220,18 +220,26 @@ namespace MTDBFramework.Data
             string numeric = "";
             string nonNumeric = "";
             string partialSeq = "";
+            string cleanSeq = "";
             int sequencePos = 0;
             foreach (var ptm in tempList)
             {
                 partialSeq = Sequence.Substring(sequencePos, ptm.Location + 2 - sequencePos);
+                cleanSeq += partialSeq;
                 numeric += partialSeq + string.Format("[{0}{1}]", ((ptm.Mass > 0) ? "+" : "-"), ptm.Mass);
                 nonNumeric += partialSeq + string.Format("[{0}{1}]", ((ptm.Mass > 0) ? "+" : "-"), ptm.Formula);
                 sequencePos = ptm.Location + 3;
             }
             partialSeq = Sequence.Substring(sequencePos);
+            cleanSeq += partialSeq;
             numeric += partialSeq;
             nonNumeric += partialSeq;
 
+            CleanSequence = cleanSeq;
+            if(string.IsNullOrWhiteSpace(evidence.CleanPeptide))
+            {
+                evidence.CleanPeptide = cleanSeq;
+            }
             EncodedNumericSequence = numeric;
             EncodedNonNumericSequence = nonNumeric;
 
