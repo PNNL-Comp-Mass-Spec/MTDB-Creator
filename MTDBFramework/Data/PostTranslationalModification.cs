@@ -7,9 +7,17 @@ namespace MTDBFramework.Data
 {
     public class PostTranslationalModification
     {
+        private int m_id;
         private int m_location;
         private string m_formula;
         private double m_mass;
+        private ConsensusTarget m_parent;
+
+        public int Id
+        {
+            get { return m_id; }
+            set { m_id = value; }
+        }
 
         public int Location
         {
@@ -27,6 +35,12 @@ namespace MTDBFramework.Data
         {
             get { return m_mass; }
             set { m_mass = value; }
+        }
+
+        public ConsensusTarget Parent
+        {
+            get { return m_parent; }
+            set { m_parent = value; }
         }
     }
 }

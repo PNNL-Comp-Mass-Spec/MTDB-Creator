@@ -27,6 +27,7 @@ namespace MTDBFramework.IO
             var readPair = new List<ConsensusProteinPair>();
             var readProt = new List<ProteinInformation>();
             var readEvidence = new List<Evidence>();
+            var readPtms = new List<PostTranslationalModification>();
 
             var datasetDic = new Dictionary<string, LcmsDataSet>();
             var consensusDic = new Dictionary<int, ConsensusTarget>();
@@ -47,14 +48,26 @@ namespace MTDBFramework.IO
 
                 using (var transact = session.BeginTransaction())
                 {
+                    session.CreateCriteria<PostTranslationalModification>().List(readPtms);
+                    transact.Commit();
+                }
+
+                using (var transact = session.BeginTransaction())
+                {
                     session.CreateCriteria<Evidence>().List(readEvidence);
                     transact.Commit();
                 }
 
-                foreach (var evidence in readConsensus)
+                foreach (var consensus in readConsensus)
                 {
-                    database.AddConsensusTarget(evidence);
-                    consensusDic.Add(evidence.Id, evidence);
+                    consensus.PTMs.Clear();
+                    database.AddConsensusTarget(consensus);
+                    consensusDic.Add(consensus.Id, consensus);
+                }
+
+                foreach (var ptm in readPtms)
+                {
+                    consensusDic[ptm.Parent.Id].PTMs.Add(ptm);
                 }
 
                 foreach (var evidence in readEvidence)
@@ -67,13 +80,11 @@ namespace MTDBFramework.IO
                     }
                     datasetDic[evidence.DataSet.Name].Evidences.Add(evidence);
                     consensusDic[evidence.Parent.Id].AddEvidence(evidence);
+                    evidence.PTMs = consensusDic[evidence.Parent.Id].PTMs;
                 }
+
+                
             }
-
-
-
-
-
 
             var datasets = new List<LcmsDataSet>();
 
@@ -94,6 +105,7 @@ namespace MTDBFramework.IO
             var readPair = new List<ConsensusProteinPair>();
             var readProt = new List<ProteinInformation>();
             var readEvidence = new List<Evidence>();
+            var readPtms = new List<PostTranslationalModification>();
 
             var datasetDic = new Dictionary<string, LcmsDataSet>();
             var consensusDic = new Dictionary<int, ConsensusTarget>();
@@ -114,14 +126,26 @@ namespace MTDBFramework.IO
 
                 using (var transact = session.BeginTransaction())
                 {
+                    session.CreateCriteria<PostTranslationalModification>().List(readPtms);
+                    transact.Commit();
+                }
+
+                using (var transact = session.BeginTransaction())
+                {
                     session.CreateCriteria<Evidence>().List(readEvidence);
                     transact.Commit();
                 }
 
-                foreach (var evidence in readConsensus)
+                foreach (var consensus in readConsensus)
                 {
-                    database.AddConsensusTarget(evidence);
-                    consensusDic.Add(evidence.Id, evidence);
+                    consensus.PTMs.Clear();
+                    database.AddConsensusTarget(consensus);
+                    consensusDic.Add(consensus.Id, consensus);
+                }
+
+                foreach (var ptm in readPtms)
+                {
+                    consensusDic[ptm.Parent.Id].PTMs.Add(ptm);
                 }
 
                 foreach (var evidence in readEvidence)
@@ -134,13 +158,9 @@ namespace MTDBFramework.IO
                     }
                     datasetDic[evidence.DataSet.Name].Evidences.Add(evidence);
                     consensusDic[evidence.Parent.Id].AddEvidence(evidence);
+                    evidence.PTMs = consensusDic[evidence.Parent.Id].PTMs;
                 }
             }
-
-
-
-
-
 
             var datasets = new List<LcmsDataSet>();
 

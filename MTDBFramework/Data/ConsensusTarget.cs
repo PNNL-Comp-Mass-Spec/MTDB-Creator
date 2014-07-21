@@ -184,6 +184,7 @@ namespace MTDBFramework.Data
                 foreach(var ptm in evidence.PTMs)
                 {
                     PTMs.Add(ptm);
+                    ptm.Parent = this;
                 }
             }
 

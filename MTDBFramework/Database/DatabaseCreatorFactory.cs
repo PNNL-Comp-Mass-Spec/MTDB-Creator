@@ -30,6 +30,7 @@ namespace MTDBFramework.Database
                             .Database(SQLiteConfiguration.Standard
                                 .UsingFile(DatabaseFile))
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusTargetMap>())
+                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<PostTranslationalModificationMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ProteinInformationMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusProteinPairMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<EvidenceMap>())
