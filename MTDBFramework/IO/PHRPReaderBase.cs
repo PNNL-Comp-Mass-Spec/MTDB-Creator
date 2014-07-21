@@ -173,6 +173,13 @@ namespace MTDBFramework.IO
                 foreach (var info in reader.CurrentPSM.ModifiedResidues)
                 {
                     result.ModificationDescription += info.ModDefinition.MassCorrectionTag + ":" + info.ResidueLocInPeptide + " ";
+                    var ptm = new PostTranslationalModification();
+                    ptm.Location = info.ResidueLocInPeptide;
+                    ptm.Mass = info.ModDefinition.ModificationMass;
+                    // Unsure if will be able to make into formula. Having it house the tag for now.
+                    // DEGAN 7/21/14
+                    ptm.Formula = info.ModDefinition.MassCorrectionTag;
+                    result.PTMs.Add(ptm);
                 }
             }
 

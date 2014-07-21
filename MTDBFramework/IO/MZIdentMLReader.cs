@@ -713,6 +713,13 @@ namespace MTDBFramework.IO
                             }
                             numModSeq = numModSeq + mod.Value.Mass;
                         //}
+                        var ptm = new PostTranslationalModification();
+                        ptm.Location = mod.Key;
+                        ptm.Mass = mod.Value.Mass;
+                        // TODO: needs to actually be the unimod definition from the XML
+                        // Change this when it is available - Degan 7/21/14
+                        ptm.Formula = mod.Value.Tag;
+                        result.PTMs.Add(ptm);
                     }
                     for (; j < item.Value.Peptide.Sequence.Length; j++)
                     {
@@ -720,6 +727,8 @@ namespace MTDBFramework.IO
                     }
                     numModSeq = numModSeq + "." + evidence.Post;
                     result.SeqWithNumericMods = numModSeq;
+
+                    
                 }
                 else
                 {

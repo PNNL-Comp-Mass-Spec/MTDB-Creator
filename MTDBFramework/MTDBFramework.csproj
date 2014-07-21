@@ -137,6 +137,7 @@
     <Compile Include="Data\MSAlignTargetFilter.cs" />
     <Compile Include="Data\MSGFPlusResult.cs" />
     <Compile Include="Data\MSGFPlusTargetFilter.cs" />
+    <Compile Include="Data\PostTranslationalModification.cs" />
     <Compile Include="Data\ProteinInformation.cs" />
     <Compile Include="Data\ITargetFilter.cs" />
     <Compile Include="Data\LcmsIdentificationTool.cs" />

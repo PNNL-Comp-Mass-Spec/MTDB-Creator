@@ -14,6 +14,7 @@ namespace MTDBFramework.Data
             Proteins = new List<ProteinInformation>();
             Charges = new List<int>();
             ConsensusProtein = new List<ConsensusProteinPair>();
+            PTMs = new List<PostTranslationalModification>();
         }
 
         #region Private fields
@@ -28,6 +29,7 @@ namespace MTDBFramework.Data
         private IList<Evidence> m_evidences;
         private IList<ProteinInformation> m_proteins;
         private IList<int> m_charges;
+        private IList<PostTranslationalModification> m_ptms;
         #endregion
 
         #region Public Properties
@@ -148,6 +150,16 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("Charges");
             }
         }
+
+        public IList<PostTranslationalModification> PTMs
+        {
+            get { return m_ptms; }
+            set
+            {
+                m_ptms = value;
+                OnPropertyChanged("PTMs");
+            }
+        }
         #endregion
 
         public void AddEvidence(Evidence evidence)
@@ -165,6 +177,14 @@ namespace MTDBFramework.Data
             else
             {
                 evidence.PredictedNet = PredictedNet;
+            }
+
+            if(evidence.PTMs.Count != 0 && PTMs.Count == 0)
+            {
+                foreach(var ptm in evidence.PTMs)
+                {
+                    PTMs.Add(ptm);
+                }
             }
 
             if (!Charges.Contains(evidence.Charge))

@@ -28,6 +28,8 @@ namespace MTDBFramework.Data
 
         private ConsensusTarget m_parent;
 
+        private IList<PostTranslationalModification> m_ptms;
+
         private short m_charge;
         private double m_observedNet;
         private double m_predictedNet;
@@ -55,6 +57,7 @@ namespace MTDBFramework.Data
         public Evidence()
         {
             m_proteins = new List<ProteinInformation>();
+            m_ptms = new List<PostTranslationalModification>();
 
             DataSet = new TargetDataSet{
                 Path = "",
@@ -341,6 +344,16 @@ namespace MTDBFramework.Data
             {
                 m_proteins = value;
                 OnPropertyChanged("Proteins");
+            }
+        }
+
+        public IList<PostTranslationalModification> PTMs
+        {
+            get { return m_ptms; }
+            set
+            {
+                m_ptms = value;
+                OnPropertyChanged("PostTranslationalModifications");
             }
         }
 
