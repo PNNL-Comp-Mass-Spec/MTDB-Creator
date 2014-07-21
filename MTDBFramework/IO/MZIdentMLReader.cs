@@ -697,8 +697,8 @@ namespace MTDBFramework.IO
                     var numModSeq = evidence.Pre + ".";
                     foreach (var mod in item.Value.Peptide.Mods)
                     {
-                        if (mod.Value.Tag != "Carbamidomethyl")
-                        {
+                        //if (mod.Value.Tag != "Carbamidomethyl")
+                        //{
                             for (; j < mod.Key; j++)
                             {
                                 numModSeq = numModSeq + item.Value.Peptide.Sequence[j];
@@ -712,7 +712,7 @@ namespace MTDBFramework.IO
                                 numModSeq += "-";
                             }
                             numModSeq = numModSeq + mod.Value.Mass;
-                        }
+                        //}
                     }
                     for (; j < item.Value.Peptide.Sequence.Length; j++)
                     {
@@ -754,11 +754,11 @@ namespace MTDBFramework.IO
 
                     foreach (var mod in item.Value.Peptide.Mods)
                     {
-                        if (mod.Value.Tag != "Carbamidomethyl")
-                        {
+                        //if (mod.Value.Tag != "Carbamidomethyl")
+                        //{
                             // TODO: Confirm that this is valid math (MEM thinks it may not be)
                             result.SeqInfoMonoisotopicMass += mod.Value.Mass;
-                        }
+                        //}
 
                         result.ModificationDescription += mod.Value.Tag + ":" + mod.Key + "  ";
                     }
