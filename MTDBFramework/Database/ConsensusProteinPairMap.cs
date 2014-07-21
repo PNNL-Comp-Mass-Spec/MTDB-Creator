@@ -7,7 +7,7 @@ namespace MTDBFramework.Database
         public ConsensusProteinPairMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).Column("PairId").GeneratedBy.Increment();
+            Id(x => x.Id).Column("PairId").GeneratedBy.Native();
             Map(x => x.ConsensusId);
             Map(x => x.ProteinId);
             Map(x => x.CleavageState);
