@@ -18,7 +18,7 @@ namespace MTDBCreatorTestSuite.IO
             //var reader          = new SqLiteTargetDatabaseReader();
             //var database        =  reader.Read(path);
             //var numberOfTargets = database.ConsensusTargets.Count;
-            //Assert.AreEqual(numberOfTargets, expectedNumberOfTargets);
+            //Assert.AreEqual(expectedNumberOfTargets, numberOfTargets);
         }
     }
 }
