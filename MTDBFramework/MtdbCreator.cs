@@ -21,14 +21,17 @@ namespace MTDBFramework
             var bWorker = new BackgroundWorker();
             var writer = new SqLiteTargetDatabaseWriter();
 
-            SqLiteTargetDatabaseReader reader = new SqLiteTargetDatabaseReader();
-            IEnumerable<LcmsDataSet> test = new List<LcmsDataSet>();
+            var reader = new SqLiteTargetDatabaseReader();
+            var existingDatabase = new TargetDatabase();
+
+            IEnumerable<LcmsDataSet> priorDataSets = new List<LcmsDataSet>();
+
             if (File.Exists(dbFileName))
             {
-                test = reader.Read(dbFileName);
-                var testDB = reader.ReadDB(dbFileName);
+                priorDataSets = reader.Read(dbFileName);
+                existingDatabase = reader.ReadDB(dbFileName);
             }
-
+            var priorDatasetList = priorDataSets.Select(x => x.Name).ToList();
             var listJobs = new List<AnalysisJobItem>();
 
             foreach (var path in paths)
@@ -36,10 +39,14 @@ namespace MTDBFramework
                 if (File.Exists(path))
                 {
                     var tool = DetermineTool(path);
+                    var jobName = path.Split('\\').Last();
                     if (tool == LcmsIdentificationTool.NOT_SUPPORTED)
                     {
-                        var jobName = path.Split('\\').Last();
                         Console.WriteLine(jobName + " is not a supported LCMS format for MTDBCreator;\nExcluding this file from MTDB creation\n");
+                    }
+                    else if (priorDatasetList.Any(x => jobName.Contains(x)))
+                    {
+                        Console.WriteLine(jobName + " is part of prior analysis;\nExcluding from reading portion of MTDB creation\n");
                     }
                     else
                     {
@@ -52,19 +59,25 @@ namespace MTDBFramework
                     Console.WriteLine(path + " does not exist;\nExcluding this file in MTDB creation\n");
                 }
             }
-
-            var processedjobs = analysisProcessor.Process(listJobs, bWorker);
-
-            var datasetList = processedjobs.Select(job => job.DataSet).ToList();
-            if (test != null)
+            if (listJobs.Count != 0)
             {
-                datasetList.AddRange(test);
+                var processedjobs = analysisProcessor.Process(listJobs, bWorker);
+
+                var datasetList = processedjobs.Select(job => job.DataSet).ToList();
+                if (priorDataSets != null)
+                {
+                    datasetList.AddRange(priorDataSets);
+                }
+                var database = mtdbProcessor.Process(datasetList, bWorker);
+
+                writer.Write(database, options, dbFileName);
+
+                return database;
             }
-            var database = mtdbProcessor.Process(datasetList, bWorker);
-
-            writer.Write(database, options, dbFileName);
-
-            return database;
+            else
+            {
+                return existingDatabase;
+            }
         }
 
         private LcmsIdentificationTool DetermineTool(string path)
