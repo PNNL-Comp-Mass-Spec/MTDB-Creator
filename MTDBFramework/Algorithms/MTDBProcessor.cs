@@ -13,6 +13,7 @@ using PNNLOmics.Algorithms.Alignment.LcmsWarp;
 using PNNLOmics.Algorithms.Regression;
 using PNNLOmics.Annotations;
 using PNNLOmics.Data.Features;
+using MTDBFramework.IO;
 
 #endregion
 
@@ -48,9 +49,8 @@ namespace MTDBFramework.Algorithms
         public TargetDatabase Process(IEnumerable<LcmsDataSet> dataSets, BackgroundWorker bWorker)
         {
             m_abortRequested = false;
-
             m_currentItem = 0;
-            m_totalItems = 2*dataSets.Count();
+            m_totalItems = 2 * dataSets.Count();
 
             OnPercentProgressChanged(new PercentCompleteEventArgs(0));
 
@@ -64,7 +64,7 @@ namespace MTDBFramework.Algorithms
             dataSets = dataSets.ToList();
             foreach (var dataSet in dataSets)
             {
-                float percentComplete = (float)m_currentItem/m_totalItems;
+                float percentComplete = (float)m_currentItem / m_totalItems;
                 UpdateProgress(m_currentItem, m_totalItems, percentComplete, "Determining Consensus Targets");
                 if (bWorker.CancellationPending || m_abortRequested)
                     return targetDatabase;
@@ -96,7 +96,7 @@ namespace MTDBFramework.Algorithms
 
                 epicTargets.AddRange(filteredTargets);
 
-                
+
 
                 if (ProcessorOptions.TargetFilterType == TargetWorkflowType.TOP_DOWN)
                 {
@@ -155,7 +155,7 @@ namespace MTDBFramework.Algorithms
 
                 massTagLightTargets.AddRange(evidence.Charges.Select(charge => new UMCLight
                 {
-                    Net = evidence.Net,
+                    Net = evidence.AverageNet,
                     ChargeState = charge,
                     Mz = (evidence.TheoreticalMonoIsotopicMass / charge),
                     MassMonoisotopic = evidence.TheoreticalMonoIsotopicMass,
@@ -178,7 +178,7 @@ namespace MTDBFramework.Algorithms
             //For performing net warping without mass correction
             options.AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP;
             var lcmsNetAligner = new LcmsWarpAdapter(options);
-            
+
 
             //Foreach dataset
             foreach (var dataSet in dataSets)
@@ -247,7 +247,7 @@ namespace MTDBFramework.Algorithms
                 if (alignedData != null)
                 {
                     alignmentData.Add(alignedData);
-                } 
+                }
                 //var residualList = new List<UMCLight> { Capacity = alignedData.ResidualData.Mz.Length };
                 ////Put the residual data into a list of UMCLights
                 //for (var a = 0; a < alignedData.ResidualData.Mz.Length; a++)
@@ -263,13 +263,13 @@ namespace MTDBFramework.Algorithms
                 //}
 
                 //residualList.Sort(UmcScanComparison);
-                
+
                 //foreach (var umc in umcDataset)
                 //{
                 //    firstSeenPeptide[umc.]
                 //}
                 umcDataset.Sort((x, y) => x.ScanAligned.CompareTo(y.ScanAligned));
-                
+
                 //Copy the residual data back into the evidences
                 for (int a = 0, b = 0; a < dataSet.Evidences.Count; a++)
                 {
@@ -310,7 +310,7 @@ namespace MTDBFramework.Algorithms
                 }
                 m_currentItem++;
             }
-          
+
             if (AlignmentComplete != null)
             {
                 AlignmentComplete(this, new AlignmentCompleteArgs(alignmentData));
@@ -332,7 +332,7 @@ namespace MTDBFramework.Algorithms
         protected void UpdateProgress(int current, int total, float percentComplete, string currentTask)
         {
             float percentCompleteEffective = ProgressPercentStart +
-                                             percentComplete*(ProgressPercentComplete - ProgressPercentStart);
+                                             percentComplete * (ProgressPercentComplete - ProgressPercentStart);
             OnPercentProgressChanged(new PercentCompleteEventArgs(current, total, percentCompleteEffective, currentTask));
         }
 

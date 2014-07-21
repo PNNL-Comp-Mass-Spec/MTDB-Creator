@@ -1,9 +1,11 @@
-﻿using MTDBFramework.Database;
+﻿using MTDBFramework.Data;
+using MTDBFramework.Database;
+using System.Collections.Generic;
 
 namespace MTDBFramework.IO
 {
     public interface ITargetDatabaseReader
     {
-        TargetDatabase Read(string path);
+        IEnumerable<LcmsDataSet> Read(string path);
     }
 }

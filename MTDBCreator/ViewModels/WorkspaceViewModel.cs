@@ -19,12 +19,12 @@ namespace MTDBCreator.ViewModels
         private DatasetPlotViewModel m_datasetPlotViewModel;
         private StatPlotViewModel m_statPlotViewModel;
         private TargetTreeViewModel m_targetTreeViewModel;
-        
-        private const string RefreshBoxText             = "Are you sure you want to refresh the datasets?";
-        private const string RefreshBoxCaption          = "Refresh Datasets";
+
+        private const string RefreshBoxText = "Are you sure you want to refresh the datasets?";
+        private const string RefreshBoxCaption = "Refresh Datasets";
         private const MessageBoxButton RefreshBoxButton = MessageBoxButton.YesNo;
-        private const MessageBoxImage RefreshBoxImage   = MessageBoxImage.Question;
-        
+        private const MessageBoxImage RefreshBoxImage = MessageBoxImage.Question;
+
         #endregion
 
         #region Public Properties
@@ -129,7 +129,7 @@ namespace MTDBCreator.ViewModels
         public bool IsDatabaseSaved { get; set; }
 
         public string SavedDatabasePath { get; set; }
-        
+
         #endregion
 
         #region Command Methods
@@ -149,7 +149,7 @@ namespace MTDBCreator.ViewModels
 
                     UpdateDataViewModels();
                     AnalysisJobViewModel.Options.OptionsChanged = false;
-                    
+
                 }
             }
             else
@@ -200,10 +200,10 @@ namespace MTDBCreator.ViewModels
                 RestoreDirectory = true
             };
 
-            if(dlg.ShowDialog() == true)
+            if (dlg.ShowDialog() == true)
             {
                 var reader = new SqLiteTargetDatabaseReader();
-                AnalysisJobViewModel.Database = reader.Read(dlg.FileName);
+                //AnalysisJobViewModel.Database = reader.Read(dlg.FileName);
             }
         }
 

@@ -15,7 +15,7 @@ namespace MTDBFramework.Database
             Not.LazyLoad();
             Id(x => x.Id)
                 .Column("ConsensusId").GeneratedBy.Native();
-            Map(x => x.Net);
+            Map(x => x.AverageNet);
             Map(x => x.StdevNet);
             Map(x => x.PredictedNet);
             Map(x => x.TheoreticalMonoIsotopicMass);

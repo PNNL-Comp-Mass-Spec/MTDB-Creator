@@ -18,20 +18,21 @@ namespace MTDBFramework.Data
 
         #region Private fields
         private int m_id;
-        private double m_net; 
+        private double m_averageNet;
         private double m_stdevNet;
         private double m_predictedNet;
         private double m_theoreticalMonoIsotopicMass;
         private string m_sequence;
+        private string m_cleanSequence;
         private TargetDataSet m_dataset;
         private IList<Evidence> m_evidences;
         private IList<ProteinInformation> m_proteins;
-        private IList<int> m_charges; 
+        private IList<int> m_charges;
         #endregion
 
         #region Public Properties
 
-        public char PrefixResidue { get { return (string.IsNullOrWhiteSpace(m_sequence))? '\0' : m_sequence.First(); } private set { char temp = value; } }
+        public char PrefixResidue { get { return (string.IsNullOrWhiteSpace(m_sequence)) ? '\0' : m_sequence.First(); } private set { char temp = value; } }
 
         public char SuffixResidue { get { return (string.IsNullOrWhiteSpace(m_sequence)) ? '\0' : m_sequence.Last(); } private set { char temp = value; } }
 
@@ -47,12 +48,12 @@ namespace MTDBFramework.Data
             }
         }
 
-        public double Net
+        public double AverageNet
         {
-            get { return m_net; }
+            get { return m_averageNet; }
             set
             {
-                m_net = value;
+                m_averageNet = value;
                 OnPropertyChanged("Net");
             }
         }
@@ -96,6 +97,17 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("Sequence");
             }
         }
+
+        ///Sequence for the peptide with all PTMs excluded.
+        //public string CleanSequence
+        //{
+        //    get { return m_cleanSequence; }
+        //    set
+        //    {
+        //        m_cleanSequence = value;
+        //        OnPropertyChanged("CleanSequence");
+        //    }
+        //}
 
         public TargetDataSet Dataset
         {
@@ -143,7 +155,22 @@ namespace MTDBFramework.Data
             Evidences.Add(evidence);
 
             Sequence = evidence.Sequence;
-            PredictedNet = evidence.PredictedNet;
+            //CleanSequence = evidence.CleanPeptide;
+            if (PredictedNet == 0.0)
+            {
+                PredictedNet = evidence.PredictedNet;
+            }
+            // For rebuilding and getting the predicted NET into Evidence
+            // when reloading back into the data objects
+            else
+            {
+                evidence.PredictedNet = PredictedNet;
+            }
+
+            if (!Charges.Contains(evidence.Charge))
+            {
+                Charges.Add(evidence.Charge);
+            }
 
             evidence.Parent = this;
         }
@@ -170,7 +197,7 @@ namespace MTDBFramework.Data
         public string ModificationDescription
         {
             get;
-            set; 
+            set;
         }
 
         public int MultiProteinCount
@@ -180,7 +207,7 @@ namespace MTDBFramework.Data
         }
 
         /// <summary>
-        /// Calculate average mass & net and stdev mass & net for each Target.
+        /// Calculate average mass and net and stdev mass and net for each Target.
         /// </summary>
         public void CalculateStatistics()
         {
@@ -188,7 +215,7 @@ namespace MTDBFramework.Data
             var netList = Evidences.Select(c => c.ObservedNet).ToList();
 
             TheoreticalMonoIsotopicMass = massesList.Average();
-            Net = netList.Average();
+            AverageNet = netList.Average();
 
             if (netList.Count == 1)
             {

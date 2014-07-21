@@ -30,7 +30,7 @@ namespace MTDBFramework.IO
                     if (con != null)
                     {
                     }
-                }                
+                }
             }
             catch
             {
@@ -144,7 +144,7 @@ namespace MTDBFramework.IO
                 con.BeginTrans();
                 insertString = string.Format("Insert into ConsensusTargets(ConsensusId,Net,StdevNet,PredictedNet,TheoreticalMonoIsotopicMass,PrefixResidue,SuffixResidue,Sequence,ModificationCount,ModificationDescription,MultiProteinCount) values({0}, {1}, {2}, {3}, {4}, '{5}', '{6}', '{7}', {8}, '{9}', {10})",
                     consensusTarget.Id,
-                    consensusTarget.Net,
+                    consensusTarget.AverageNet,
                     consensusTarget.StdevNet,
                     consensusTarget.PredictedNet,
                     consensusTarget.TheoreticalMonoIsotopicMass,
@@ -159,7 +159,7 @@ namespace MTDBFramework.IO
                 con.CommitTrans();
 
             }
-            
+
             foreach (var protein in m_uniqueProteins)
             {
                 con.BeginTrans();
@@ -189,7 +189,7 @@ namespace MTDBFramework.IO
             string exportPartially = "";
             string exportNon = "";
             bool first = true;
-            foreach(var piece in options.MinXCorrForExportTrytpic)
+            foreach (var piece in options.MinXCorrForExportTrytpic)
             {
                 if (!first)
                     exportTryptic += ", ";

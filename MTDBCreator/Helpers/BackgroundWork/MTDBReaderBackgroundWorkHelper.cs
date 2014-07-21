@@ -35,7 +35,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
             var targetDatabaseReader = new SqLiteTargetDatabaseReader();
 
-            Database = targetDatabaseReader.Read(DatabaseFileName);
+            //Database = targetDatabaseReader.Read(DatabaseFileName);
         }
 
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
