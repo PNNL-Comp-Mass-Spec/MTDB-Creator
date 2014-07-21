@@ -19,7 +19,7 @@ namespace MTDBFramework.Database
             Map(x => x.StdevNet);
             Map(x => x.PredictedNet);
             Map(x => x.TheoreticalMonoIsotopicMass);
-            Map(x => x.SeqWithNumericMods).Column("Sequence");
+            Map(x => x.Sequence);
             Map(x => x.PrefixResidue);
             Map(x => x.SuffixResidue);
             Map(x => x.ModificationCount).Column("ModificationCount");

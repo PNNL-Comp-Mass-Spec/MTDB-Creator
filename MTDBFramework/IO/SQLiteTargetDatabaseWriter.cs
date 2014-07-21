@@ -76,7 +76,7 @@ namespace MTDBFramework.IO
                         }
                         
                         consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
-                        consensusTarget.SeqWithNumericMods = consensusTarget.Evidences[0].SeqWithNumericMods;
+                        consensusTarget.EncodedNumericSequence = consensusTarget.Evidences[0].SeqWithNumericMods;
                         consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
                         consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
                         consensusTarget.MultiProteinCount = consensusTarget.Evidences[0].MultiProteinCount;

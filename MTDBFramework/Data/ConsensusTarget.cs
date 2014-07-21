@@ -24,6 +24,8 @@ namespace MTDBFramework.Data
         private double m_predictedNet;
         private double m_theoreticalMonoIsotopicMass;
         private string m_sequence;
+        private string m_encodedNumericSequence;
+        private string m_encodedNonNumericSequence; // TODO: change name to something more meaningful
         private string m_cleanSequence;
         private TargetDataSet m_dataset;
         private IList<Evidence> m_evidences;
@@ -100,6 +102,26 @@ namespace MTDBFramework.Data
             }
         }
 
+        public string EncodedNumericSequence
+        {
+            get { return m_encodedNumericSequence; }
+            set 
+            { 
+                m_encodedNumericSequence = value;
+                OnPropertyChanged("EncodedNumericSequence");
+            }
+        }
+
+        public string EncodedNonNumericSequence
+        {
+            get { return m_encodedNonNumericSequence; }
+            set
+            {
+                m_encodedNonNumericSequence = value;
+                OnPropertyChanged("EncodedNonNumericSequence");
+            }
+        }
+
         ///Sequence for the peptide with all PTMs excluded.
         //public string CleanSequence
         //{
@@ -165,8 +187,10 @@ namespace MTDBFramework.Data
         public void AddEvidence(Evidence evidence)
         {
             Evidences.Add(evidence);
-
-            Sequence = evidence.Sequence;
+            if (Sequence == null)
+            {
+                Sequence = evidence.Sequence;
+            }
             //CleanSequence = evidence.CleanPeptide;
             if (PredictedNet == 0.0)
             {
@@ -185,8 +209,31 @@ namespace MTDBFramework.Data
                 {
                     PTMs.Add(ptm);
                     ptm.Parent = this;
-                }
+                } 
             }
+            var tempList = PTMs.ToList();
+            tempList.Sort((x, y) => x.Location.CompareTo(y.Location));
+
+            // Copy sequence as is up until you hit a modification
+            //For numeric, add a bracket add +/- and copy the mass
+            //For non numeric, add a bracket add +/- and copy the formula
+            string numeric = "";
+            string nonNumeric = "";
+            string partialSeq = "";
+            int sequencePos = 0;
+            foreach (var ptm in tempList)
+            {
+                partialSeq = Sequence.Substring(sequencePos, ptm.Location + 2 - sequencePos);
+                numeric += partialSeq + string.Format("[{0}{1}]", ((ptm.Mass > 0) ? "+" : "-"), ptm.Mass);
+                nonNumeric += partialSeq + string.Format("[{0}{1}]", ((ptm.Mass > 0) ? "+" : "-"), ptm.Formula);
+                sequencePos = ptm.Location + 3;
+            }
+            partialSeq = Sequence.Substring(sequencePos);
+            numeric += partialSeq;
+            nonNumeric += partialSeq;
+
+            EncodedNumericSequence = numeric;
+            EncodedNonNumericSequence = nonNumeric;
 
             if (!Charges.Contains(evidence.Charge))
             {
@@ -201,12 +248,6 @@ namespace MTDBFramework.Data
             Proteins.Add(protein);
 
             protein.Consensus.Add(this);
-        }
-
-        public string SeqWithNumericMods
-        {
-            get;
-            set;
         }
 
         public int ModificationCount
