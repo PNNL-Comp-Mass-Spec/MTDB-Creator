@@ -13,7 +13,7 @@ namespace MTDBFramework.Database
         public EvidenceMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).Column("EvidenceId").GeneratedBy.Native();
+            Id(x => x.Id).Column("EvidenceId").GeneratedBy.Assigned();
             Map(x => x.Charge);
             Map(x => x.ObservedNet);
             //Map(x => x.PredictedNet);

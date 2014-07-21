@@ -99,7 +99,7 @@ namespace MTDBCreatorTestSuite.IO
 
             SqLiteTargetDatabaseWriter writer = new SqLiteTargetDatabaseWriter();
 
-            writer.Write(database, options, @".\Output.mtdb");
+            writer.Write(database, options, @"..\..\..\TestData\Output.mtdb");
 
         }
     }

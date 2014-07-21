@@ -9,7 +9,7 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id)
-                .Column("ProteinId").GeneratedBy.Native();
+                .Column("ProteinId").GeneratedBy.Assigned();
             Map(x => x.ProteinName);
         }
     }
