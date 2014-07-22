@@ -42,17 +42,17 @@ namespace MTDBFramework.IO
                     {
                         case "umod:elements":
                             // Schema requirements: one instance of this element
-                            ReadElement(reader.ReadSubtree());
+                            ReadElements(reader.ReadSubtree());
                             reader.ReadEndElement(); // "SequenceCollection", if it exists, must have child nodes
                             break;
                         case "umod:modifications":
                             // Schema requirements: zero to one instances of this element
-                            ReadModification(reader.ReadSubtree());
+                            ReadModifications(reader.ReadSubtree());
                             reader.ReadEndElement(); // "SequenceCollection", if it exists, must have child nodes
                             break;
                         case "umod:amino_acids":
                             // Schema requirements: zero to one instances of this element
-                            ReadAminoAcid(reader.ReadSubtree());
+                            ReadAminoAcids(reader.ReadSubtree());
                             reader.ReadEndElement(); // "SequenceCollection", if it exists, must have child nodes
                             break;
                         case "umod:mod_bricks":
@@ -67,50 +67,77 @@ namespace MTDBFramework.IO
                 }
             }
         }
+
+        /// <summary>
+        /// Handle the umod:elements element and child nodes
+        /// Called by Read (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the umod:elements element</param>
+        private void ReadElements(XmlReader reader)
+        {
+            reader.MoveToContent();
+            reader.ReadStartElement("umod:elements");
+            while (reader.Name == "umod:elem")
+            {
+                ReadElement(reader.ReadSubtree());
+                // Consume the element we just processed.
+                reader.Read();
+            }
+        }
         
         /// <summary>
-        /// Handle a single Modification element and child nodes
-        /// Called by (xml hierarchy)
+        /// Handle a single umod:elem element
+        /// Called by ReadElements (xml hierarchy)
         /// </summary>
-        /// <param name="reader">XmlReader that is only valid for the scope of the single Modification element</param>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single umod:elem element</param>
         private void ReadElement(XmlReader reader)
         {
-            //reader.MoveToContent();
-
-            // To advance past the umod:elements node at the top of the subtree
-            reader.ReadStartElement();
+            reader.MoveToContent();
 
             string title;
             string fullName;
             double monoMass;
             double avgMass;
-            // Check where it'll stop when you run out of elements
-            while (reader.Name != "umod:elements")
-            {
-                title = reader.GetAttribute("title");
-                fullName = reader.GetAttribute("full_name");
-                monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-                avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
 
-                var elem = new UniModData.Element(title, fullName, monoMass, avgMass);
-                UniModData.Elements.Add(title, elem);
-                // To advance to the next node
-                reader.Read();
-            }
+            title = reader.GetAttribute("title");
+            fullName = reader.GetAttribute("full_name");
+            monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+            avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
+
+            var elem = new UniModData.Element(title, fullName, monoMass, avgMass);
+            UniModData.Elements.Add(title, elem);
+            // To advance to the next node
+            
             reader.Close();
         }
 
         /// <summary>
-        /// Handle a single Modification element and child nodes
-        /// Called by (xml hierarchy)
+        /// Handle a the umod:modifications element and child nodes
+        /// Called by Read (xml hierarchy)
         /// </summary>
-        /// <param name="reader">XmlReader that is only valid for the scope of the single Modification element</param>
+        /// <param name="reader">XmlReader that is only valid for the scope of the umod:modifications element</param>
+        private void ReadModifications(XmlReader reader)
+        {
+            reader.MoveToContent();
+            reader.ReadStartElement();
+
+            while (reader.Name == "umod:mod")
+            {
+                ReadModification(reader.ReadSubtree());
+                reader.ReadEndElement();
+            }
+
+            reader.Close();
+        }
+
+        /// <summary>
+        /// Handle a single umod:mod element and child nodes
+        /// Called by ReadModifications (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single umod:mod element</param>
         private void ReadModification(XmlReader reader)
         {
-            //reader.MoveToContent();
-
-            // To advance past the umod:elements node at the top of the subtree
-            reader.ReadStartElement();
+            reader.MoveToContent();
 
             string title;
             string fullName;
@@ -118,86 +145,91 @@ namespace MTDBFramework.IO
             double avgMass;
             string composition;
             int recordId;
-            // While there are still elements called umod:mod...
-            while (reader.Name != "")
+            var formula = new List<UniModData.Symbol>();
+
+            title = reader.GetAttribute("title");
+            fullName = reader.GetAttribute("full_name");
+            recordId = Convert.ToInt32(reader.GetAttribute("record_id"));
+
+            reader.ReadToDescendant("umod:delta");
+            monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+            avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
+            composition = reader.GetAttribute("composition");
+
+            while (reader.ReadToFollowing("umod:element"))
             {
-                var formula = new List<UniModData.Symbol>();
-                title = reader.GetAttribute("title");
-                fullName = reader.GetAttribute("full_name");
-                recordId = Convert.ToInt32(reader.GetAttribute("record_id"));
-
-                reader.ReadToDescendant("umod:delta");
-                monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-                avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
-                composition = reader.GetAttribute("composition");
-
-                // Read all child element tags :: Doing this reads EVERY element that's after the tag,
-                //                                not just the ones that belong to the mod.
-                //while (reader.ReadToFollowing("umod:element"))
-                reader.ReadToDescendant("umod:element");
-                while (reader.Name != "umod:delta")
-                {
-                    var component = new UniModData.Symbol();
-                    component.symbol = reader.GetAttribute("symbol");
-                    component.number = Convert.ToInt32(reader.GetAttribute("number"));
-                    formula.Add(component);
-                    reader.Read();
-                }
-
-                var mod = new UniModData.Modification();
-                
-                mod._title = title;
-                mod._fullName = fullName;
-                mod._monoMass = monoMass;
-                mod._avgMass = avgMass;
-                mod._composition = composition;
-                mod._recordId = recordId;
-                mod._formula = formula;
-
-                UniModData.ModList.Add(title, mod);
-                // Read to the next mod element; mod name is "" if there aren't any others
-                reader.ReadToFollowing("umod:mod");
+                var component = new UniModData.Symbol();
+                component.symbol = reader.GetAttribute("symbol");
+                component.number = Convert.ToInt32(reader.GetAttribute("number"));
+                formula.Add(component);
             }
+
+            var mod = new UniModData.Modification();
+            
+            mod._title = title;
+            mod._fullName = fullName;
+            mod._monoMass = monoMass;
+            mod._avgMass = avgMass;
+            mod._composition = composition;
+            mod._recordId = recordId;
+            mod._formula = formula;
+
+            UniModData.ModList.Add(title, mod);
 
             reader.Close();
         }
 
+        /// <summary>
+        /// Handle the umod:amino_acids element and child nodes
+        /// Called by Read (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the umod:amino_acids element</param>
+        private void ReadAminoAcids(XmlReader reader)
+        {
+            reader.MoveToContent();
+            reader.ReadStartElement(); // digest the start element for the xml
+
+            while (reader.Name == "umod:aa")
+            {
+                ReadAminoAcid(reader.ReadSubtree());
+                // There might not be any child nodes, so we should do a Read() instead of a ReadEndElement().
+                reader.Read();
+            }
+            reader.Close();
+        }
+
+        /// <summary>
+        /// Handle a single umod:aa element and child nodes
+        /// Called by ReadAminoAcids (xml hierarchy)
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single umod:aa element</param>
         private void ReadAminoAcid(XmlReader reader)
         {
-            //reader.MoveToContent(); // Move to the "aa" element
-
-            reader.ReadStartElement(); // digest the start element for the xml
+            reader.MoveToContent(); // Move to the "aa" element
 
             string title;
             string shortName;
             string fullName;
             double monoMass;
+			var formula = new List<UniModData.Symbol>();
 
-            while (reader.Name == "umod:aa")
+            title = reader.GetAttribute("title");
+            shortName = reader.GetAttribute("three_letter");
+            fullName = reader.GetAttribute("full_name");
+            monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+
+            // Read all child element tags
+            while (reader.ReadToFollowing("umod:element"))
             {
-
-                var formula = new List<UniModData.Symbol>();
-                title = reader.GetAttribute("title");
-                shortName = reader.GetAttribute("three_letter");
-                fullName = reader.GetAttribute("full_name");
-                monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-
-                // Read all child element tags
-                //while (reader.ReadToFollowing("umod:element"))
-                reader.ReadToDescendant("umod:element");
-                while (reader.Name == "umod:element")
-                {
-                    var component = new UniModData.Symbol();
-                    component.symbol = reader.GetAttribute("symbol");
-                    component.number = Convert.ToInt32(reader.GetAttribute("number"));
-                    formula.Add(component);
-                    reader.Read();
-                }
-                reader.Read();
-
-                var amAcid = new UniModData.AminoAcid(title, shortName, fullName, monoMass, formula);
-                UniModData.AminoAcids.Add(title, amAcid);
+                var component = new UniModData.Symbol();
+                component.symbol = reader.GetAttribute("symbol");
+                component.number = Convert.ToInt32(reader.GetAttribute("number"));
+                formula.Add(component);
             }
+
+            var amAcid = new UniModData.AminoAcid(title, shortName, fullName, monoMass, formula);
+            UniModData.AminoAcids.Add(title, amAcid);
+            
             reader.Close();
         }
     }

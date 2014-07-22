@@ -152,15 +152,18 @@ namespace MTDBFramework.Data
         /// </summary>
         public static Dictionary<string, AminoAcid> AminoAcids;
 
+        /// <summary>
+        /// Initializer, called by the first time access to an item in UniModData
+        /// </summary>
         static UniModData()
         {
             ModList = new Dictionary<string, Modification>();
             Elements = new Dictionary<string, Element>();
             AminoAcids = new Dictionary<string, AminoAcid>();
 
-            // Commented out; was causing it to build all the unimod data multiple times, causing crash
-            //var reader = new UniModReader();
-            //reader.Read("unimod.xml");
+            // This is called the first time the static object is used, which should not be from UniModReader
+            var reader = new UniModReader();
+            reader.Read("unimod.xml");
         }
     }
 }
