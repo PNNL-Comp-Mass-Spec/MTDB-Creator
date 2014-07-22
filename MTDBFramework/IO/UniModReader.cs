@@ -118,10 +118,10 @@ namespace MTDBFramework.IO
             double avgMass;
             string composition;
             int recordId;
-            var formula = new List<UniModData.Symbol>();
             // While there are still elements called umod:mod...
             while (reader.Name != "")
             {
+                var formula = new List<UniModData.Symbol>();
                 title = reader.GetAttribute("title");
                 fullName = reader.GetAttribute("full_name");
                 recordId = Convert.ToInt32(reader.GetAttribute("record_id"));
@@ -172,10 +172,11 @@ namespace MTDBFramework.IO
             string shortName;
             string fullName;
             double monoMass;
-            var formula = new List<UniModData.Symbol>();
 
             while (reader.Name == "umod:aa")
             {
+
+                var formula = new List<UniModData.Symbol>();
                 title = reader.GetAttribute("title");
                 shortName = reader.GetAttribute("three_letter");
                 fullName = reader.GetAttribute("full_name");
