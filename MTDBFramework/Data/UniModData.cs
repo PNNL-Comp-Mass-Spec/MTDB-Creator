@@ -100,7 +100,8 @@ namespace MTDBFramework.Data
             public string _title;
             public string _shortName;
             public string _fullName;
-            public double _monoMass;
+			public double _monoMass;
+			public double _avgMass;
             public List<Symbol> _formula;
 
             /// <summary>
@@ -120,22 +121,75 @@ namespace MTDBFramework.Data
                 private set { }
             }
 
-            /// <summary>
-            /// Populate an AminoAcid object with the appropriate date
-            /// </summary>
-            /// <param name="title">Unique designation of Amino Acid, usually a single letter</param>
-            /// <param name="shortName">3 letter name</param>
-            /// <param name="fullName">full name</param>
-            /// <param name="monoMass">monoisotopic mass</param>
-            public AminoAcid(string title, string shortName, string fullName, double monoMass, List<Symbol> formula)
+
+
+			/// <summary>
+			/// Populate an AminoAcid object with the appropriate date
+			/// </summary>
+			/// <param name="title">Unique designation of Amino Acid, usually a single letter</param>
+			/// <param name="shortName">3 letter name</param>
+			/// <param name="fullName">full name</param>
+			/// <param name="monoMass">monoisotopic mass</param>
+            /// <param name="avgMass">average mass</param>
+            /// <param name="formula">Chemical formula</param>
+            public AminoAcid(string title, string shortName, string fullName, double monoMass, double avgMass, List<Symbol> formula)
             {
                 _title = title;
                 _shortName = shortName;
                 _fullName = fullName;
                 _monoMass = monoMass;
+	            _avgMass = avgMass;
                 _formula = formula;
             }
         }
+
+		/// <summary>
+		/// Store the modification brick data from unimod.xml
+		/// </summary>
+		public class ModBrick
+		{
+			public string _title;
+			public string _fullName;
+			public double _monoMass;
+			public double _avgMass;
+			public List<Symbol> _formula;
+
+			/// <summary>
+			/// Get the chemical formula of the modification
+			/// </summary>
+			public string Formula
+			{
+				get
+				{
+					string formula = "";
+					foreach (var symbol in _formula)
+					{
+						formula += symbol;
+					}
+					return formula;
+				}
+				private set { }
+			}
+
+
+
+			/// <summary>
+			/// Populate a mod brick object with the appropriate date
+			/// </summary>
+			/// <param name="title">Unique designation of mod brick, usually a single letter</param>
+			/// <param name="fullName">full name</param>
+			/// <param name="monoMass">monoisotopic mass</param>
+			/// <param name="avgMass">average mass</param>
+			/// <param name="formula">Chemical formula</param>
+			public ModBrick(string title, string fullName, double monoMass, double avgMass, List<Symbol> formula)
+			{
+				_title = title;
+				_fullName = fullName;
+				_monoMass = monoMass;
+				_avgMass = avgMass;
+				_formula = formula;
+			}
+		}
 
         /// <summary>
         /// All needed modification data from unimod.xml, indexed by name
@@ -150,7 +204,12 @@ namespace MTDBFramework.Data
         /// <summary>
         /// All of the Amino Acid data stored in unimod.xml, indexed by the letter used
         /// </summary>
-        public static Dictionary<string, AminoAcid> AminoAcids;
+		public static Dictionary<string, AminoAcid> AminoAcids;
+
+		/// <summary>
+		/// All of the Modification Brick data stored in unimod.xml, indexed by title
+		/// </summary>
+		public static Dictionary<string, ModBrick> ModBricks;
 
         /// <summary>
         /// Initializer, called by the first time access to an item in UniModData
@@ -160,6 +219,7 @@ namespace MTDBFramework.Data
             ModList = new Dictionary<string, Modification>();
             Elements = new Dictionary<string, Element>();
             AminoAcids = new Dictionary<string, AminoAcid>();
+			ModBricks = new Dictionary<string, ModBrick>();
 
             // This is called the first time the static object is used, which should not be from UniModReader
             var reader = new UniModReader();
