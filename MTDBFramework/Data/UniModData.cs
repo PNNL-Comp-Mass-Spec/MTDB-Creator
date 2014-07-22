@@ -157,8 +157,10 @@ namespace MTDBFramework.Data
             ModList = new Dictionary<string, Modification>();
             Elements = new Dictionary<string, Element>();
             AminoAcids = new Dictionary<string, AminoAcid>();
-            var reader = new UniModReader();
-            reader.Read("unimod.xml");
+
+            // Commented out; was causing it to build all the unimod data multiple times, causing crash
+            //var reader = new UniModReader();
+            //reader.Read("unimod.xml");
         }
     }
 }
