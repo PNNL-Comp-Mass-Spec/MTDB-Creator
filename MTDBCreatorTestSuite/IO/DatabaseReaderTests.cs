@@ -1,4 +1,5 @@
-﻿using MTDBFramework.IO;
+﻿using MTDBFramework.Database;
+using MTDBFramework.IO;
 using NUnit.Framework;
 
 namespace MTDBCreatorTestSuite.IO
@@ -15,10 +16,10 @@ namespace MTDBCreatorTestSuite.IO
         [TestCase(@"..\..\..\TestData\testDatabase-100-3.mtdb", 100, Ignore = false)]
         public void TestLoadDatabase(string path, int expectedNumberOfTargets)
         {
-            //var reader          = new SqLiteTargetDatabaseReader();
-            //var database        =  reader.Read(path);
-            //var numberOfTargets = database.ConsensusTargets.Count;
-            //Assert.AreEqual(expectedNumberOfTargets, numberOfTargets);
+            var reader          = new SqLiteTargetDatabaseReader();
+            var database        = reader.ReadDB(path);
+            var numberOfTargets = database.ConsensusTargets.Count;
+            Assert.AreEqual(expectedNumberOfTargets, numberOfTargets);
         }
     }
 }

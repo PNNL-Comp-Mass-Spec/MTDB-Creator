@@ -96,15 +96,10 @@ namespace MTDBFramework.IO
         {
             reader.MoveToContent();
 
-            string title;
-            string fullName;
-            double monoMass;
-            double avgMass;
-
-            title = reader.GetAttribute("title");
-            fullName = reader.GetAttribute("full_name");
-            monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-            avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
+			string title = reader.GetAttribute("title");
+			string fullName = reader.GetAttribute("full_name");
+			double monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+			double avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
 
             var elem = new UniModData.Element(title, fullName, monoMass, avgMass);
             UniModData.Elements.Add(title, elem);

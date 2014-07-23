@@ -1,10 +1,8 @@
 ﻿#region Namespaces
 
-using System;
 using System.IO;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
-using MathNet.Numerics.Statistics;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
@@ -28,6 +26,11 @@ namespace MTDBFramework.Database
 		/// </summary>
         public static bool ReadOrAppend = true;
 
+		/// <summary>
+		/// Configure and return a session factory for NHibernate
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
         public static ISessionFactory CreateSessionFactory(DatabaseType type)
         {
             // TODO: Add a switch to create different configurations for alternative database types.
@@ -54,16 +57,16 @@ namespace MTDBFramework.Database
                     return null;
             }
         }
+
         private static void BuildSchema(Configuration config)
         {
+			// Allow use for both reading and writing, allowing overwriting as desired
             if (ReadOrAppend && File.Exists(DatabaseFile))
             {
-				Console.WriteLine("Trying a Read or Append....");
 	            try
 				{
 					// Try to validate the schema. If it is correct, we can use it as is.
 					new SchemaValidator(config).Validate();
-					Console.WriteLine("Schema Validation Succeeded!");
 	            }
 	            catch (HibernateException)
 	            {
@@ -71,9 +74,7 @@ namespace MTDBFramework.Database
 					// If this fails, we need to report an error.
 					// If we are supposed to append, then only 'update' the schema
 					// This will also create if it does not exist
-					Console.WriteLine("Schema Validation Failed. Trying to update....");
 					new SchemaUpdate(config).Execute(false, true);
-					Console.WriteLine("Schema Update Succeeded!");
 	            }
             }
             else

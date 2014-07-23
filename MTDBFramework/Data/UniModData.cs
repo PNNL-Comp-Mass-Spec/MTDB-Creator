@@ -23,6 +23,7 @@ namespace MTDBFramework.Data
 		    public override string ToString()
 		    {
 			    string formula = "";
+				// Handle the special ordering first.
 			    foreach (var symbol in _symbolOrder)
 			    {
 				    if (symbols.ContainsKey(symbol))
@@ -30,6 +31,7 @@ namespace MTDBFramework.Data
 					    formula += SymbolOutput(symbol);
 				    }
 			    }
+				// Output all other elements and quantities
 			    foreach (var symbol in symbolOrder)
 			    {
 				    if (!SymbolOrdering.Contains(symbol))
@@ -40,6 +42,11 @@ namespace MTDBFramework.Data
 			    return formula;
 		    }
 
+			/// <summary>
+			/// Handle special formatting of chemical symbols
+			/// </summary>
+			/// <param name="symbol"></param>
+			/// <returns></returns>
 			private string SymbolOutput(string symbol)
 			{
 				string output = "";
