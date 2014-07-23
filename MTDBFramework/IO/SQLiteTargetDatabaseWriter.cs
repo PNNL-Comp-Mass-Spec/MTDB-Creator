@@ -15,9 +15,13 @@ namespace MTDBFramework.IO
 
         public void Write(TargetDatabase database, Options options, string path)
         {
-
-            DatabaseCreatorFactory.DatabaseFile = path;
-            var sessionFactory = DatabaseCreatorFactory.CreateSessionFactory(options.DatabaseType);
+            DatabaseFactory.DatabaseFile = path;
+			/**********************************************************************************************
+			 * TODO: Get the append capability working
+			 * Set to false to avoid problems. Setting it to true will append some items, but not others. 
+			 **********************************************************************************************/
+	        DatabaseFactory.ReadOrAppend = false;
+            var sessionFactory = DatabaseFactory.CreateSessionFactory(options.DatabaseType);
 
             using (var session = sessionFactory.OpenSession())
             {

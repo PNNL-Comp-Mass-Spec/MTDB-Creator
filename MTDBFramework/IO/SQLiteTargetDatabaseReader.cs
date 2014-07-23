@@ -20,7 +20,9 @@ namespace MTDBFramework.IO
         /// <returns>Target Database</returns>
         public TargetDatabase ReadDB(string path)
         {
-            var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
+			//var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
+			DatabaseFactory.DatabaseFile = path;
+			var sessionFactory = DatabaseFactory.CreateSessionFactory(MTDBFramework.Data.DatabaseType.SQLite);
             var database = new TargetDatabase();
 
             var readConsensus = new List<ConsensusTarget>();
@@ -98,7 +100,9 @@ namespace MTDBFramework.IO
 
         public IEnumerable<LcmsDataSet> Read(string path)
         {
-            var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
+			//var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
+	        DatabaseFactory.DatabaseFile = path;
+			var sessionFactory = DatabaseFactory.CreateSessionFactory(MTDBFramework.Data.DatabaseType.SQLite);
             var database = new TargetDatabase();
 
             var readConsensus = new List<ConsensusTarget>();

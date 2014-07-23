@@ -54,12 +54,12 @@
     <DocumentationFile>bin\Release\MTDBFramework.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentNHibernate">
+    <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\FluentNHibernate.1.4.0.0\lib\net35\FluentNHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Iesi.Collections.3.3.3.4001\lib\Net35\Iesi.Collections.dll</HintPath>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="MathNet.Numerics, Version=2.6.1.30, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -72,7 +72,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\NETPrediction.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="PHRPReader, Version=1.1.5192.34732, Culture=neutral, processorArchitecture=MSIL">
@@ -123,8 +124,7 @@
     <Compile Include="Database\ConsensusProteinPair.cs" />
     <Compile Include="Database\ConsensusProteinPairMap.cs" />
     <Compile Include="Database\ConsensusTargetMap.cs" />
-    <Compile Include="Database\DatabaseCreatorFactory.cs" />
-    <Compile Include="Database\DatabaseReaderFactory.cs" />
+    <Compile Include="Database\DatabaseFactory.cs" />
     <Compile Include="Database\OptionsMap.cs" />
     <Compile Include="Database\PostTranslationalModificationMap.cs" />
     <Compile Include="Database\ProteinInformationMap.cs" />
