@@ -198,10 +198,25 @@ namespace MTDBFramework.Data
             }
             // For rebuilding and getting the predicted NET into Evidence
             // when reloading back into the data objects
-            else
+            evidence.PredictedNet = PredictedNet;
+
+            if(MultiProteinCount == 0)
             {
-                evidence.PredictedNet = PredictedNet;
+                MultiProteinCount = evidence.MultiProteinCount;
             }
+            evidence.MultiProteinCount = MultiProteinCount;
+
+            if(string.IsNullOrWhiteSpace(ModificationDescription))
+            {
+                ModificationDescription = evidence.ModificationDescription;
+            }
+            evidence.ModificationDescription = ModificationDescription;
+            
+            if(ModificationCount == 0)
+            {
+                ModificationCount = evidence.ModificationCount;
+            }
+            evidence.ModificationCount = ModificationCount;
 
             if(evidence.PTMs.Count != 0 && PTMs.Count == 0)
             {
@@ -222,13 +237,19 @@ namespace MTDBFramework.Data
             string partialSeq = "";
             string cleanSeq = "";
             int sequencePos = 0;
+            int symbolsRemoved = 0;
             foreach (var ptm in tempList)
             {
-                partialSeq = Sequence.Substring(sequencePos, ptm.Location + 2 - sequencePos);
+                partialSeq = Sequence.Substring(sequencePos, (ptm.Location + 2 + symbolsRemoved) - sequencePos);
                 cleanSeq += partialSeq;
                 numeric += partialSeq + string.Format("[{0}{1}]", ((ptm.Mass > 0) ? "+" : "-"), ptm.Mass);
                 nonNumeric += partialSeq + string.Format("[{0}{1}]", ((ptm.Mass > 0) ? "+" : "-"), ptm.Formula);
-                sequencePos = ptm.Location + 3;
+                sequencePos = ptm.Location + 2;
+                // To skip over non-alphanumeric characters which may show up in sequence such as "*" or "&"
+                if (Sequence[sequencePos + symbolsRemoved] < 65 || Sequence[sequencePos + symbolsRemoved] > 90)
+                {
+                    sequencePos += ++symbolsRemoved;
+                }
             }
             partialSeq = Sequence.Substring(sequencePos);
             cleanSeq += partialSeq;
@@ -240,7 +261,12 @@ namespace MTDBFramework.Data
             {
                 evidence.CleanPeptide = cleanSeq;
             }
-            EncodedNumericSequence = numeric;
+            CleanSequence = cleanSeq;
+
+            if (string.IsNullOrWhiteSpace(evidence.EncodedNonNumericSequence))
+            {
+                evidence.EncodedNonNumericSequence = nonNumeric;
+            }
             EncodedNonNumericSequence = nonNumeric;
 
             if (!Charges.Contains(evidence.Charge))
@@ -258,7 +284,7 @@ namespace MTDBFramework.Data
             protein.Consensus.Add(this);
         }
 
-        public int ModificationCount
+        public short ModificationCount
         {
             get;
             set;
@@ -270,7 +296,7 @@ namespace MTDBFramework.Data
             set;
         }
 
-        public int MultiProteinCount
+        public short MultiProteinCount
         {
             get;
             set;

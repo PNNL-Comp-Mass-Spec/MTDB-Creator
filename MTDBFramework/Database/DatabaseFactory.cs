@@ -43,7 +43,7 @@ namespace MTDBFramework.Database
                         return Fluently.Configure()
                             .Database(SQLiteConfiguration.Standard
                                 .UsingFile(DatabaseFile)
-                                .ShowSql())
+                                /*.ShowSql()*/)
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusTargetMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<PostTranslationalModificationMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ProteinInformationMap>())

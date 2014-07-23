@@ -51,6 +51,7 @@ namespace MTDBFramework.Data
         private string m_modificationDescription;
         private double m_seqInfoMonoisotopicMass;
         private string m_seqWithNumericMods;
+        private string m_encodedNonNumericSequence;
 
         #endregion
 
@@ -332,6 +333,16 @@ namespace MTDBFramework.Data
             {
                 m_seqWithNumericMods = value;
                 OnPropertyChanged("SeqWithNumericMods");
+            }
+        }
+
+        public string EncodedNonNumericSequence
+        {
+            get { return m_encodedNonNumericSequence; }
+            set
+            {
+                m_encodedNonNumericSequence = value;
+                OnPropertyChanged("EncodedNonNumericSequence");
             }
         }
 

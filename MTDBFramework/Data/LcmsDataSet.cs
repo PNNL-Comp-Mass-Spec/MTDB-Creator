@@ -17,6 +17,7 @@ namespace MTDBFramework.Data
         private LcmsIdentificationTool m_tool;
         private LinearRegressionResult m_regressionResult;
         private List<Evidence> m_evidences;
+        private bool m_previouslyAnalyzed;
 
         #endregion
 
@@ -62,10 +63,27 @@ namespace MTDBFramework.Data
             }
         }
 
+        public bool PreviouslyAnalyzed
+        {
+            get { return m_previouslyAnalyzed; }
+            private set { m_previouslyAnalyzed = value; }
+        }
+
         #endregion 
 
         public LcmsDataSet()
         {
+            PreviouslyAnalyzed = false; 
+            Name = String.Empty;
+            Tool = LcmsIdentificationTool.Raw;
+            Evidences = new List<Evidence>();
+            RegressionResult = new LinearRegressionResult();
+            
+        }
+
+        public LcmsDataSet(bool analyzed)
+        {
+            PreviouslyAnalyzed = true; 
             Name = String.Empty;
             Tool = LcmsIdentificationTool.Raw;
             Evidences = new List<Evidence>();
@@ -74,6 +92,7 @@ namespace MTDBFramework.Data
 
         public LcmsDataSet(string name, LcmsIdentificationTool tool, IEnumerable<Evidence> evidences)
         {
+            PreviouslyAnalyzed = false;
             Name = name;
             Tool = tool;
             Evidences = new List<Evidence>(evidences);

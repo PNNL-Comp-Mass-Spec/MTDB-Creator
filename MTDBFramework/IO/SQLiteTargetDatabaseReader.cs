@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
+using PHRPReader;
 
 #endregion
 
@@ -22,6 +23,7 @@ namespace MTDBFramework.IO
         {
 			//var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
 			DatabaseFactory.DatabaseFile = path;
+            DatabaseFactory.ReadOrAppend = true;
 			var sessionFactory = DatabaseFactory.CreateSessionFactory(MTDBFramework.Data.DatabaseType.SQLite);
             var database = new TargetDatabase();
 
@@ -101,7 +103,8 @@ namespace MTDBFramework.IO
         public IEnumerable<LcmsDataSet> Read(string path)
         {
 			//var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
-	        DatabaseFactory.DatabaseFile = path;
+            DatabaseFactory.DatabaseFile = path;
+            DatabaseFactory.ReadOrAppend = true;
 			var sessionFactory = DatabaseFactory.CreateSessionFactory(MTDBFramework.Data.DatabaseType.SQLite);
             var database = new TargetDatabase();
 
@@ -113,6 +116,8 @@ namespace MTDBFramework.IO
 
             var datasetDic = new Dictionary<string, LcmsDataSet>();
             var consensusDic = new Dictionary<int, ConsensusTarget>();
+            var consensusProtDic = new Dictionary<int, List<ConsensusProteinPair>>();
+            var protDic = new Dictionary<int, ProteinInformation>();
 
             using (var session = sessionFactory.OpenSession())
             {
@@ -143,8 +148,24 @@ namespace MTDBFramework.IO
                 foreach (var consensus in readConsensus)
                 {
                     consensus.PTMs.Clear();
+                    consensus.Evidences.Clear();
+                    consensus.Sequence = consensus.CleanSequence;
                     database.AddConsensusTarget(consensus);
                     consensusDic.Add(consensus.Id, consensus);
+                }
+
+                foreach (var pair in readPair)
+                {
+                    if(!consensusProtDic.ContainsKey(pair.ConsensusId))
+                    {
+                        consensusProtDic.Add(pair.ConsensusId, new List<ConsensusProteinPair>());
+                    }
+                    consensusProtDic[pair.ConsensusId].Add(pair);
+                }
+
+                foreach (var prot in readProt)
+                {
+                    protDic.Add(prot.Id, prot);
                 }
 
                 foreach (var ptm in readPtms)
@@ -154,15 +175,28 @@ namespace MTDBFramework.IO
 
                 foreach (var evidence in readEvidence)
                 {
+                    foreach(var pair in consensusProtDic[evidence.Parent.Id])
+                    {
+                        var prot = protDic[pair.ProteinId];
+                        prot.ResidueEnd = pair.ResidueEnd;
+                        prot.ResidueStart = pair.ResidueStart;
+                        prot.TerminusState = (clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants)pair.TerminusState;
+                        prot.CleavageState = (clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants)prot.CleavageState;
+                        prot.Id = 0;
+                        evidence.AddProtein(prot);
+                    }
+                    evidence.MonoisotopicMass = consensusDic[evidence.Parent.Id].TheoreticalMonoIsotopicMass;
+                    evidence.PTMs = consensusDic[evidence.Parent.Id].PTMs;
+
                     if (!datasetDic.ContainsKey(evidence.DataSet.Name))
                     {
-                        datasetDic.Add(evidence.DataSet.Name, new LcmsDataSet());
+                        var dataset = new LcmsDataSet(true);
+                        datasetDic.Add(evidence.DataSet.Name, dataset);
                         datasetDic[evidence.DataSet.Name].Name = evidence.DataSet.Name;
                         datasetDic[evidence.DataSet.Name].Tool = evidence.DataSet.Tool;
                     }
                     datasetDic[evidence.DataSet.Name].Evidences.Add(evidence);
                     consensusDic[evidence.Parent.Id].AddEvidence(evidence);
-                    evidence.PTMs = consensusDic[evidence.Parent.Id].PTMs;
                 }
             }
 

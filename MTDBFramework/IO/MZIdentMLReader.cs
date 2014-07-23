@@ -694,45 +694,45 @@ namespace MTDBFramework.IO
                     // TODO: This code needs be updated to support additional mods
 
                     var j = 0;
+                    
                     var numModSeq = evidence.Pre + ".";
+                    var encodedSeq = numModSeq;
                     foreach (var mod in item.Value.Peptide.Mods)
                     {
-                        //if (mod.Value.Tag != "Carbamidomethyl")
-                        //{
-                            for (; j < mod.Key; j++)
-                            {
-                                numModSeq = numModSeq + item.Value.Peptide.Sequence[j];
-                            }
-                            if (mod.Value.Mass > 0)
-                            {
-                                numModSeq += "+";
-                            }
-                            else
-                            {
-                                numModSeq += "-";
-                            }
-                            numModSeq = numModSeq + mod.Value.Mass;
-                        //}
                         var ptm = new PostTranslationalModification();
                         ptm.Location = mod.Key;
                         ptm.Mass = mod.Value.Mass;
-                        // TODO: needs to actually be the unimod definition from the XML
-                        // Change this when it is available - Degan 7/21/14
-                        ptm.Formula = mod.Value.Tag;
+                        ptm.Formula = UniModData.ModList[mod.Value.Tag]._formula.ToString();
                         result.PTMs.Add(ptm);
+                        //if (mod.Value.Tag != "Carbamidomethyl")
+                        //{
+                        for (; j < ptm.Location; j++)
+                        {
+                            numModSeq = numModSeq + item.Value.Peptide.Sequence[j];
+                            encodedSeq = encodedSeq + item.Value.Peptide.Sequence[j];
+                        }
+
+                        numModSeq += (ptm.Mass > 0) ? "+" : "-";
+                        numModSeq = numModSeq + ptm.Mass;
+
+                        encodedSeq += "[" + ((ptm.Mass > 0)? "+":"-") + ptm.Formula + "]";
+                        //}
+
                     }
                     for (; j < item.Value.Peptide.Sequence.Length; j++)
                     {
                         numModSeq = numModSeq + item.Value.Peptide.Sequence[j];
+                        encodedSeq += item.Value.Peptide.Sequence[j];
                     }
                     numModSeq = numModSeq + "." + evidence.Post;
+                    encodedSeq += "." + evidence.Post;
                     result.SeqWithNumericMods = numModSeq;
-
-                    
+                    result.EncodedNonNumericSequence = encodedSeq;                    
                 }
                 else
                 {
                     result.SeqWithNumericMods = result.Sequence;
+                    result.EncodedNonNumericSequence = result.Sequence;
                 }
 
                 result.PeptideInfo = new TargetPeptideInfo

@@ -176,11 +176,46 @@ namespace MTDBFramework.IO
                     var ptm = new PostTranslationalModification();
                     ptm.Location = info.ResidueLocInPeptide;
                     ptm.Mass = info.ModDefinition.ModificationMass;
-                    // Unsure if will be able to make into formula. Having it house the tag for now.
-                    // DEGAN 7/21/14
                     ptm.Formula = info.ModDefinition.MassCorrectionTag;
                     result.PTMs.Add(ptm);
                 }
+                // Build the PTMs
+                // TODO: build an encoded non=numeric sequence here.
+
+                var encodedSeq = result.Sequence[0] + ".";
+                int j = 0;
+                foreach (var ptm in result.PTMs)
+                {
+                    for (; j < ptm.Location; j++)
+                    {
+                        encodedSeq = encodedSeq + result.CleanPeptide[j];
+                    }
+
+                    encodedSeq += "[" + ((ptm.Mass > 0)? "+":"-") + ptm.Formula + "]";
+                    //}
+
+                }
+                for (; j < result.CleanPeptide.Length; j++)
+                {
+                    encodedSeq += result.CleanPeptide[j];
+                }
+                encodedSeq += "." + result.Sequence.Last();
+                result.EncodedNonNumericSequence = encodedSeq;
+
+
+
+
+
+
+                // END TEST PLACE
+
+
+
+                
+            }
+            else
+            {
+                result.EncodedNonNumericSequence = result.Sequence;
             }
 
         }

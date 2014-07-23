@@ -81,7 +81,8 @@ namespace MTDBFramework.Algorithms
                     // Would be evidenced by a sizable difference between observed net and predicted net
                     if (t.ObservedNet > CarryOverThreshold)
                     {
-                        if (!targetFilter.ShouldFilter(t))
+                        // To prevent filtration of evidences which have previously passed alignment, 
+                        if (dataSet.PreviouslyAnalyzed || !targetFilter.ShouldFilter(t))
                         {
                             filteredTargets.Add(t);
 

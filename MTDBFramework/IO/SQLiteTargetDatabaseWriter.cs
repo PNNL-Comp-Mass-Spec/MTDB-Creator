@@ -43,18 +43,23 @@ namespace MTDBFramework.IO
                     {
                         OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, MtdbCreationProgressType.COMMIT.ToString()));
                         consensusTarget.Id = ++current;
+                        foreach(var ptm in consensusTarget.PTMs)
+                        {
+                            ptm.Id = 0;
+                        }
                         foreach (var evidence in consensusTarget.Evidences)
                         {
-                            if (!m_uniquePeptides.ContainsKey(evidence.PeptideInfo.Peptide))
+                            //if (!m_uniquePeptides.ContainsKey(evidence.PeptideInfo.Peptide))
+                            //{
+                            //    m_uniquePeptides.Add(evidence.PeptideInfo.Peptide, evidence.PeptideInfo);
+                            //}
+                            //evidence.PeptideInfo = m_uniquePeptides[evidence.PeptideInfo.Peptide];
+                            if (!m_uniqueDataSets.ContainsKey(evidence.DataSet.Name))
                             {
-                                m_uniquePeptides.Add(evidence.PeptideInfo.Peptide, evidence.PeptideInfo);
+                                evidence.DataSet.Id = 0;
+                                m_uniqueDataSets.Add(evidence.DataSet.Name, evidence.DataSet);
                             }
-                            evidence.PeptideInfo = m_uniquePeptides[evidence.PeptideInfo.Peptide];
-                            if (!m_uniqueDataSets.ContainsKey(evidence.DataSet.Path))
-                            {
-                                m_uniqueDataSets.Add(evidence.DataSet.Path, evidence.DataSet);
-                            }
-                            evidence.DataSet = m_uniqueDataSets[evidence.DataSet.Path];
+                            evidence.DataSet = m_uniqueDataSets[evidence.DataSet.Name];
                             evidence.Parent = consensusTarget;
                             
                         }
@@ -80,7 +85,7 @@ namespace MTDBFramework.IO
                         }
                         
                         consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
-                        consensusTarget.EncodedNumericSequence = consensusTarget.Evidences[0].SeqWithNumericMods;
+                        //consensusTarget.EncodedNumericSequence = consensusTarget.Evidences[0].SeqWithNumericMods;
                         consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
                         consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
                         consensusTarget.MultiProteinCount = consensusTarget.Evidences[0].MultiProteinCount;

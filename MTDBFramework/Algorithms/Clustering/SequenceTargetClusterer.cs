@@ -16,7 +16,7 @@ namespace MTDBFramework.Algorithms.Clustering
 
             foreach (var t in evidences)
             {
-                var sequence = t.Sequence;
+                var sequence = t.EncodedNonNumericSequence;
                  
                 if (!targetMap.ContainsKey(sequence))
                 {
