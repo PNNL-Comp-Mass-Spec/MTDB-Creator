@@ -170,7 +170,7 @@ namespace MTDBFramework.Data
         private static readonly int[] MaxPeptideLens = { 100, 15, 25, 50, 50 };
         private static readonly int[] NumFrags = { 2, 2, 4, 6, 6 };
 
-        public static double CalculatePeptideProphetDistriminantScore(SequestResult result)
+        public static double CalculatePeptideProphetDiscriminantScore(SequestResult result)
         {
             var charge = result.Charge;
 

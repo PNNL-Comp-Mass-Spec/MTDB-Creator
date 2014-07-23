@@ -82,7 +82,7 @@ namespace MTDBFramework.IO
                 result.XCorr = xcorr;
                 result.XcRatio = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XcRatio, 0);
 
-                result.FScore = SequestResult.CalculatePeptideProphetDistriminantScore(result);
+                result.FScore = SequestResult.CalculatePeptideProphetDiscriminantScore(result);
 		
                 results.Add(result);             
             }
