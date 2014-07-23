@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Activation;
-using System.Text;
 using MTDBFramework.IO;
 
 namespace MTDBFramework.Data
@@ -12,19 +9,73 @@ namespace MTDBFramework.Data
     /// </summary>
     public static class UniModData
     {
-        /// <summary>
-        /// A basic class for storing an element of a chemical formula
-        /// </summary>
-        public class Symbol
-        {
-            public string symbol;
-            public int number;
+		/// <summary>
+		/// Class to facilitate working with chemical formulas
+		/// </summary>
+	    public class ChemFormula
+	    {
+		    private List<string> symbolOrder;
+			private Dictionary<string, int> symbols; 
 
-            public override string ToString()
-            {
-                return symbol + number;
-            }
-        }
+			private const string SymbolOrdering = "C,13C,H,2H,O,18O,N,15N,S";
+			private string[] _symbolOrder;
+
+		    public override string ToString()
+		    {
+			    string formula = "";
+			    foreach (var symbol in _symbolOrder)
+			    {
+				    if (symbols.ContainsKey(symbol))
+				    {
+					    formula += SymbolOutput(symbol);
+				    }
+			    }
+			    foreach (var symbol in symbolOrder)
+			    {
+				    if (!SymbolOrdering.Contains(symbol))
+				    {
+					    formula += SymbolOutput(symbol);
+				    }
+			    }
+			    return formula;
+		    }
+
+			private string SymbolOutput(string symbol)
+			{
+				string output = "";
+				if (Char.IsDigit(symbol[0]))
+				{
+					output += "(" + symbol + ")";
+				}
+				else
+				{
+					output += symbol;
+				}
+				output += symbols[symbol];
+				return output;
+			}
+
+			/// <summary>
+			/// Initialize the symbol list
+			/// </summary>
+			public ChemFormula()
+			{
+				symbolOrder = new List<string>();
+				symbols = new Dictionary<string, int>();
+				_symbolOrder = SymbolOrdering.Split(',');
+			}
+
+			/// <summary>
+			/// Add an item to the chemical formula
+			/// </summary>
+			/// <param name="symbol"></param>
+			/// <param name="number"></param>
+			public void Add(string symbol, int number)
+			{
+				symbols.Add(symbol, number);
+				symbolOrder.Add(symbol);
+			}
+	    }
 
         /// <summary>
         /// Store the UNIMOD modification data - title, formula, etc.
@@ -38,31 +89,27 @@ namespace MTDBFramework.Data
             public string _composition;
             public int _recordId;
 
-            public List<Symbol> _formula;
+			public ChemFormula _formula;
 
             /// <summary>
-            /// Get the chemical formula of the modification
+            /// Populate a modification object with the appropriate data
             /// </summary>
-            public string Formula
+            /// <param name="title">Modification title</param>
+            /// <param name="fullName">Modification full name</param>
+            /// <param name="monoMass">Modification monoisotopic mass</param>
+            /// <param name="avgMass">Modification average mass</param>
+            /// <param name="comp">Modifcation composition (UNIMOD style)</param>
+            /// <param name="id">UNIMOD record id for modification</param>
+            /// <param name="formula">Chemical formula of modification</param>
+            public Modification(string title, string fullName, double monoMass, double avgMass, string comp, int id, ChemFormula formula)
             {
-                get
-                {
-                    string formula = "";
-                    foreach (var symbol in _formula)
-                    {
-                        formula += symbol;
-                    }
-                    return formula;
-                }
-                private set { }
-            }
-
-            /// <summary>
-            /// 
-            /// </summary>
-            public Modification()
-            {
-                _formula = new List<Symbol>();
+	            _title = title;
+	            _fullName = fullName;
+	            _monoMass = monoMass;
+	            _avgMass = avgMass;
+	            _composition = comp;
+	            _recordId = id;
+                _formula = formula;
             }
         }
 
@@ -102,26 +149,7 @@ namespace MTDBFramework.Data
             public string _fullName;
 			public double _monoMass;
 			public double _avgMass;
-            public List<Symbol> _formula;
-
-            /// <summary>
-            /// Get the chemical formula of the modification
-            /// </summary>
-            public string Formula
-            {
-                get
-                {
-                    string formula = "";
-                    foreach (var symbol in _formula)
-                    {
-                        formula += symbol;
-                    }
-                    return formula;
-                }
-                private set { }
-            }
-
-
+			public ChemFormula _formula;
 
 			/// <summary>
 			/// Populate an AminoAcid object with the appropriate date
@@ -132,7 +160,7 @@ namespace MTDBFramework.Data
 			/// <param name="monoMass">monoisotopic mass</param>
             /// <param name="avgMass">average mass</param>
             /// <param name="formula">Chemical formula</param>
-            public AminoAcid(string title, string shortName, string fullName, double monoMass, double avgMass, List<Symbol> formula)
+			public AminoAcid(string title, string shortName, string fullName, double monoMass, double avgMass, ChemFormula formula)
             {
                 _title = title;
                 _shortName = shortName;
@@ -152,26 +180,7 @@ namespace MTDBFramework.Data
 			public string _fullName;
 			public double _monoMass;
 			public double _avgMass;
-			public List<Symbol> _formula;
-
-			/// <summary>
-			/// Get the chemical formula of the modification
-			/// </summary>
-			public string Formula
-			{
-				get
-				{
-					string formula = "";
-					foreach (var symbol in _formula)
-					{
-						formula += symbol;
-					}
-					return formula;
-				}
-				private set { }
-			}
-
-
+			public ChemFormula _formula;
 
 			/// <summary>
 			/// Populate a mod brick object with the appropriate date
@@ -181,7 +190,7 @@ namespace MTDBFramework.Data
 			/// <param name="monoMass">monoisotopic mass</param>
 			/// <param name="avgMass">average mass</param>
 			/// <param name="formula">Chemical formula</param>
-			public ModBrick(string title, string fullName, double monoMass, double avgMass, List<Symbol> formula)
+			public ModBrick(string title, string fullName, double monoMass, double avgMass, ChemFormula formula)
 			{
 				_title = title;
 				_fullName = fullName;

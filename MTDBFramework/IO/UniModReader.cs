@@ -1,11 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using MTDBFramework.Data;
 
 namespace MTDBFramework.IO
 {
+	/// <summary>
+	/// Read the data from a UniMod XML format file to a Unimod data static object.
+	/// Configured for http://www.unimod.org/xmlns/schema/unimod_2 schema from http://www.unimod.org/downloads.html
+	/// </summary>
     public class UniModReader
     {
         /// <summary>
@@ -22,8 +25,8 @@ namespace MTDBFramework.IO
             {
                 // Guarantee a move to the root node
                 reader.MoveToContent();
-                // Consume the MzIdentML root tag
-                // Throws exception if we are not at the "MzIdentML" tag.
+                // Consume the umod:unimod root tag
+                // Throws exception if we are not at the "umod:unimod" tag.
                 // This is a critical error; we want to stop processing for this file if we encounter this error
                 reader.ReadStartElement("umod:unimod");
                 // Read the next node - should be the first child node
@@ -138,35 +141,19 @@ namespace MTDBFramework.IO
         {
             reader.MoveToContent();
 
-            string title;
-            string fullName;
-            double monoMass;
-            double avgMass;
-            string composition;
-            int recordId;
-	        List<UniModData.Symbol> formula;
-
-	        title = reader.GetAttribute("title");
-            fullName = reader.GetAttribute("full_name");
-            recordId = Convert.ToInt32(reader.GetAttribute("record_id"));
+			string title = reader.GetAttribute("title");
+			string fullName = reader.GetAttribute("full_name");
+            int recordId = Convert.ToInt32(reader.GetAttribute("record_id"));
 
             reader.ReadToDescendant("umod:delta");
-            monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-            avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
-            composition = reader.GetAttribute("composition");
+			double monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+			double avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
+			string composition = reader.GetAttribute("composition");
 
-			formula = ReadFormula(reader.ReadSubtree());
+			UniModData.ChemFormula formula = ReadFormula(reader.ReadSubtree());
 
-            var mod = new UniModData.Modification();
+            var mod = new UniModData.Modification(title, fullName, monoMass, avgMass, composition, recordId, formula);
             
-            mod._title = title;
-            mod._fullName = fullName;
-            mod._monoMass = monoMass;
-            mod._avgMass = avgMass;
-            mod._composition = composition;
-            mod._recordId = recordId;
-            mod._formula = formula;
-
             UniModData.ModList.Add(title, mod);
 
             reader.Close();
@@ -200,20 +187,13 @@ namespace MTDBFramework.IO
         {
             reader.MoveToContent(); // Move to the "aa" element
 
-            string title;
-            string shortName;
-            string fullName;
-			double monoMass;
-			double avgMass;
-	        List<UniModData.Symbol> formula;
+            string title = reader.GetAttribute("title");
+            string shortName = reader.GetAttribute("three_letter");
+            string fullName = reader.GetAttribute("full_name");
+			double monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+			double avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
 
-            title = reader.GetAttribute("title");
-            shortName = reader.GetAttribute("three_letter");
-            fullName = reader.GetAttribute("full_name");
-			monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-			avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
-
-	        formula = ReadFormula(reader.ReadSubtree());
+			UniModData.ChemFormula formula = ReadFormula(reader.ReadSubtree());
 
             var amAcid = new UniModData.AminoAcid(title, shortName, fullName, monoMass, avgMass, formula);
             UniModData.AminoAcids.Add(title, amAcid);
@@ -249,18 +229,12 @@ namespace MTDBFramework.IO
 		{
 			reader.MoveToContent(); // Move to the "aa" element
 
-			string title;
-			string fullName;
-			double monoMass;
-			double avgMass;
-			List<UniModData.Symbol> formula;
+			string title = reader.GetAttribute("title");
+			string fullName = reader.GetAttribute("full_name");
+			double monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+			double avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
 
-			title = reader.GetAttribute("title");
-			fullName = reader.GetAttribute("full_name");
-			monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-			avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
-
-			formula = ReadFormula(reader.ReadSubtree());
+			UniModData.ChemFormula formula = ReadFormula(reader.ReadSubtree());
 
 			var brick = new UniModData.ModBrick(title, fullName, monoMass, avgMass, formula);
 			UniModData.ModBricks.Add(title, brick);
@@ -273,17 +247,16 @@ namespace MTDBFramework.IO
 		/// </summary>
 		/// <param name="reader">XmlReader that is only valid for the scope containing the chemical formula</param>
 		/// <returns>List containing the chemical formula</returns>
-		private List<UniModData.Symbol> ReadFormula(XmlReader reader)
+		private UniModData.ChemFormula ReadFormula(XmlReader reader)
 		{
-			var formula = new List<UniModData.Symbol>();
+			var formula = new UniModData.ChemFormula();
 
 			reader.MoveToContent();
 			while (reader.ReadToFollowing("umod:element"))
 			{
-				var component = new UniModData.Symbol();
-				component.symbol = reader.GetAttribute("symbol");
-				component.number = Convert.ToInt32(reader.GetAttribute("number"));
-				formula.Add(component);
+				var symbol = reader.GetAttribute("symbol");
+				var number = Convert.ToInt32(reader.GetAttribute("number"));
+				formula.Add(symbol, number);
 			}
 
 			return formula;
