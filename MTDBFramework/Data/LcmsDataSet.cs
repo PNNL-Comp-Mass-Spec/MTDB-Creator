@@ -9,6 +9,9 @@ using PNNLOmics.Algorithms.Regression;
 
 namespace MTDBFramework.Data
 {
+	/// <summary>
+	/// LCMS dataset
+	/// </summary>
     public class LcmsDataSet : ObservableObject
     {
         #region Private Fields
@@ -23,6 +26,9 @@ namespace MTDBFramework.Data
 
         #region Public Properties
 
+		/// <summary>
+		/// Name of the dataset
+		/// </summary>
         public string Name
         {
             get { return m_name; }
@@ -33,6 +39,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Format of input data
+		/// </summary>
         public LcmsIdentificationTool Tool
         {
             get { return m_tool; }
@@ -43,6 +52,9 @@ namespace MTDBFramework.Data
             }
         }
         
+		/// <summary>
+		/// Evidences in the dataset
+		/// </summary>
         public List<Evidence> Evidences
         {
             get { return m_evidences; }
@@ -53,6 +65,9 @@ namespace MTDBFramework.Data
             }
         } 
 
+		/// <summary>
+		/// Result of Linear Regression
+		/// </summary>
         public LinearRegressionResult RegressionResult
         {
             get { return m_regressionResult; }
@@ -63,6 +78,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Whether data has been previously analyzed
+		/// </summary>
         public bool PreviouslyAnalyzed
         {
             get { return m_previouslyAnalyzed; }
@@ -71,6 +89,9 @@ namespace MTDBFramework.Data
 
         #endregion 
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
         public LcmsDataSet()
         {
             PreviouslyAnalyzed = false; 
@@ -81,6 +102,10 @@ namespace MTDBFramework.Data
             
         }
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="analyzed">Whether the dataset has already been analyzed</param>
         public LcmsDataSet(bool analyzed)
         {
             PreviouslyAnalyzed = true; 
@@ -90,6 +115,12 @@ namespace MTDBFramework.Data
             RegressionResult = new LinearRegressionResult();
         }
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="name">Name of dataset</param>
+		/// <param name="tool">Format of dataset</param>
+		/// <param name="evidences">Evidences in dataset</param>
         public LcmsDataSet(string name, LcmsIdentificationTool tool, IEnumerable<Evidence> evidences)
         {
             PreviouslyAnalyzed = false;

@@ -11,8 +11,17 @@ using System.Text;
 
 namespace MTDBFramework
 {
+	/// <summary>
+	/// API for using MTDBCreator in other applications
+	/// </summary>
     public class MtdbCreator
     {
+		/// <summary>
+		/// Create a MTDB with the given files
+		/// </summary>
+		/// <param name="paths">Paths to the files to process</param>
+		/// <param name="dbFileName">Name of MTDB to create</param>
+		/// <returns></returns>
         public TargetDatabase CreateDB(List<string> paths, string dbFileName)
         {
             var options = new Options();

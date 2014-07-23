@@ -14,6 +14,9 @@ namespace MTDBFramework.Database
     {
         private readonly Dictionary<int, ProteinInformation> m_uniqueProteins;
  
+		/// <summary>
+		/// Constructor
+		/// </summary>
         public TargetDatabase()
         {
             ConsensusTargets    = new List<ConsensusTarget>();
@@ -38,7 +41,14 @@ namespace MTDBFramework.Database
             Proteins.Clear();
         }
         
+		/// <summary>
+		/// All consensus targets
+		/// </summary>
         public IList<ConsensusTarget>    ConsensusTargets { get; private set; }
+
+		/// <summary>
+		/// All proteins
+		/// </summary>
         public IList<ProteinInformation> Proteins { get; private set; }
     }
 }

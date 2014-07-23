@@ -10,6 +10,9 @@ using PNNLOmics.Data;
 
 namespace MTDBFramework.Data
 {
+	/// <summary>
+	/// Collection of data pertaining to a single peptide evidence
+	/// </summary>
     public class Evidence : ObservableObject
     {
         #region Private Fields
@@ -55,6 +58,9 @@ namespace MTDBFramework.Data
 
         #endregion
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
         public Evidence()
         {
             m_proteins = new List<ProteinInformation>();
@@ -69,6 +75,9 @@ namespace MTDBFramework.Data
         #region Public Properties
 
         // Not used - Put off
+		/// <summary>
+		/// Spectra data
+		/// </summary>
         public MSSpectra Spectrum
         {
             get
@@ -83,6 +92,9 @@ namespace MTDBFramework.Data
         }
 
         //For 3NF:
+		/// <summary>
+		/// Dataset the evidence occurs in
+		/// </summary>
         public TargetDataSet DataSet
         {
             get { return m_dataSet; }
@@ -94,6 +106,9 @@ namespace MTDBFramework.Data
         }
 
         // Metadata
+		/// <summary>
+		/// Peptide that is evidenced
+		/// </summary>
         public TargetPeptideInfo PeptideInfo
         {
             get { return m_peptideInfo; }
@@ -104,6 +119,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Id
+		/// </summary>
         public int Id
         {
             get { return m_id; }
@@ -114,6 +132,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Scan id number
+		/// </summary>
         public int Scan
         {
             get { return m_scan; }
@@ -124,6 +145,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Analysis Id
+		/// </summary>
         public int AnalysisId
         {
             get { return m_analysisId; }
@@ -134,6 +158,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Number of proteins the evidenced peptide occurs in
+		/// </summary>
         public short MultiProteinCount
         {
             get { return m_multiProteinCount; }
@@ -170,6 +197,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// The evidenced protein
+		/// </summary>
         public ConsensusTarget Parent
         {
             get { return m_parent; }
@@ -180,6 +210,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Charge
+		/// </summary>
         public short Charge
         {
             get { return m_charge; }
@@ -190,6 +223,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Observed Elution time
+		/// </summary>
         public double ObservedNet
         {
             get { return m_observedNet; }
@@ -200,6 +236,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Predicted Elution time
+		/// </summary>
         public double PredictedNet
         {
             get { return m_predictedNet; }
@@ -224,6 +263,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// SpecProb
+		/// </summary>
         public double SpecProb
         {
             get { return m_specProb; }
@@ -236,6 +278,9 @@ namespace MTDBFramework.Data
 
         // PeptideInfo
 
+		/// <summary>
+		/// Sequence that is evidenced
+		/// </summary>
         public string Sequence
         {
             get { return m_sequence; }
@@ -246,6 +291,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Clean peptide sequence - letters only
+		/// </summary>
         public string CleanPeptide
         {
             get { return m_cleanPeptide; }
@@ -256,6 +304,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// DelM
+		/// </summary>
         public double DelM
         {
             get
@@ -268,6 +319,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("DelM");
             }
         }
+
+		/// <summary>
+		/// DelMPpm
+		/// </summary>
         public double DelMPpm
         {
             get
@@ -283,6 +338,9 @@ namespace MTDBFramework.Data
 
         // SequenceInfo
 
+		/// <summary>
+		/// Is Sequence Information Existing?
+		/// </summary>
         public short IsSeqInfoExist
         {
             get { return m_isSeqInfoExist; }
@@ -293,6 +351,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Modifications occurring in sequence
+		/// </summary>
         public short ModificationCount
         {
             get { return m_modificationCount; }
@@ -303,6 +364,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Description of modifications occurring in sequence
+		/// </summary>
         public string ModificationDescription
         {
             get { return m_modificationDescription; }
@@ -326,6 +390,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Sequence containing numeric modifications
+		/// </summary>
         public string SeqWithNumericMods
         {
             get { return m_seqWithNumericMods; }
@@ -336,6 +403,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Encoded sequence with modification data
+		/// </summary>
         public string EncodedNonNumericSequence
         {
             get { return m_encodedNonNumericSequence; }
@@ -346,8 +416,14 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Spectral Probability
+		/// </summary>
         public double SpectralProbability { get; set; }
 
+		/// <summary>
+		/// Proteins evidenced
+		/// </summary>
         public IList<ProteinInformation> Proteins
         {
             get { return m_proteins; }
@@ -358,6 +434,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Post Translational Modifications in sequence
+		/// </summary>
         public IList<PostTranslationalModification> PTMs
         {
             get { return m_ptms; }
@@ -371,11 +450,20 @@ namespace MTDBFramework.Data
 
         #endregion
 
+		/// <summary>
+		/// Add a protein to the list of proteins evidenced
+		/// </summary>
+		/// <param name="protein"></param>
         public void AddProtein(ProteinInformation protein)
         {
             Proteins.Add(protein);
         }
 
+		/// <summary>
+		/// Extract the clean sequence
+		/// </summary>
+		/// <param name="sequence"></param>
+		/// <returns></returns>
         public static string CleanSequence(string sequence)
         {
             var peptideChar = sequence.ToCharArray();

@@ -4,8 +4,16 @@ using System.Linq;
 
 namespace MTDBFramework.IO
 {    
+	/// <summary>
+	/// Tools for working with dataset paths
+	/// </summary>
     public static class DatasetPathUtility
     {        
+		/// <summary>
+		/// Get a clean dataset path
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
         public static string CleanPath(string path)
         {
             var fiFile = new FileInfo(path);
