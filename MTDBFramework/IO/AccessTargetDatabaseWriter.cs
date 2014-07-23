@@ -189,7 +189,7 @@ namespace MTDBFramework.IO
             string exportPartially = "";
             string exportNon = "";
             bool first = true;
-            foreach (var piece in options.MinXCorrForExportTrytpic)
+            foreach (var piece in options.MinXCorrForExportTryptic)
             {
                 if (!first)
                     exportTryptic += ", ";
@@ -197,7 +197,7 @@ namespace MTDBFramework.IO
                 first = false;
             }
             first = true;
-            foreach (var piece in options.MinXCorrForExportPartiallyTrytpic)
+            foreach (var piece in options.MinXCorrForExportPartiallyTryptic)
             {
                 if (!first)
                     exportPartially += ", ";
@@ -205,7 +205,7 @@ namespace MTDBFramework.IO
                 first = false;
             }
             first = true;
-            foreach (var piece in options.MinXCorrForExportNonTrytpic)
+            foreach (var piece in options.MinXCorrForExportNonTryptic)
             {
                 if (!first)
                     exportNon += ", ";

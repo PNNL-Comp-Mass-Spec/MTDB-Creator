@@ -133,21 +133,21 @@ namespace MTDBCreator.ViewModels
 
                 // Tryptic Peptides
                 Options.ExportTryptic = (Convert.ToBoolean(parameter[9]));
-                Options.MinXCorrForExportTrytpic[0] = Convert.ToDouble(parameter[10]);
-                Options.MinXCorrForExportTrytpic[1] = Convert.ToDouble(parameter[11]);
-                Options.MinXCorrForExportTrytpic[2] = Convert.ToDouble(parameter[12]);
+                Options.MinXCorrForExportTryptic[0] = Convert.ToDouble(parameter[10]);
+                Options.MinXCorrForExportTryptic[1] = Convert.ToDouble(parameter[11]);
+                Options.MinXCorrForExportTryptic[2] = Convert.ToDouble(parameter[12]);
 
                 // Partially Tryptic Peptides
                 Options.ExportPartiallyTryptic = (Convert.ToBoolean(parameter[13]));
-                Options.MinXCorrForExportPartiallyTrytpic[0] = Convert.ToDouble(parameter[14]);
-                Options.MinXCorrForExportPartiallyTrytpic[1] = Convert.ToDouble(parameter[15]);
-                Options.MinXCorrForExportPartiallyTrytpic[2] = Convert.ToDouble(parameter[16]);
+                Options.MinXCorrForExportPartiallyTryptic[0] = Convert.ToDouble(parameter[14]);
+                Options.MinXCorrForExportPartiallyTryptic[1] = Convert.ToDouble(parameter[15]);
+                Options.MinXCorrForExportPartiallyTryptic[2] = Convert.ToDouble(parameter[16]);
 
                 // Non Tryptic Peptides
                 Options.ExportNonTryptic = (Convert.ToBoolean(parameter[17]));
-                Options.MinXCorrForExportNonTrytpic[0] = Convert.ToDouble(parameter[18]);
-                Options.MinXCorrForExportNonTrytpic[1] = Convert.ToDouble(parameter[19]);
-                Options.MinXCorrForExportNonTrytpic[2] = Convert.ToDouble(parameter[20]);
+                Options.MinXCorrForExportNonTryptic[0] = Convert.ToDouble(parameter[18]);
+                Options.MinXCorrForExportNonTryptic[1] = Convert.ToDouble(parameter[19]);
+                Options.MinXCorrForExportNonTryptic[2] = Convert.ToDouble(parameter[20]);
 
                 // Sequest dlCN
                 Options.UseDelCn = (Convert.ToBoolean(parameter[21]));

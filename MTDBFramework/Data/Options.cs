@@ -24,9 +24,9 @@ namespace MTDBFramework.Data
         private bool m_exportTryptic;
         private bool m_exportPartiallyTryptic;
         private bool m_exportNonTryptic;
-        private double[] m_minXCorrForExportTrytpic;
-        private double[] m_minXCorrForExportPartiallyTrytpic;
-        private double[] m_minXCorrForExportNonTrytpic;
+        private double[] m_minXCorrForExportTryptic;
+        private double[] m_minXCorrForExportPartiallyTryptic;
+        private double[] m_minXCorrForExportNonTryptic;
         private double m_minXCorrForAlignment;
         private bool m_useDelCn;
         private double m_maxDelCn;
@@ -176,42 +176,42 @@ namespace MTDBFramework.Data
             }
         }
 
-        public double[] MinXCorrForExportTrytpic
+        public double[] MinXCorrForExportTryptic
         {
             get
             {
-                return m_minXCorrForExportTrytpic;
+                return m_minXCorrForExportTryptic;
             }
             set
             {
-                m_minXCorrForExportTrytpic = value;
-                OnPropertyChanged("MinXCorrForExportTrytpic");
+                m_minXCorrForExportTryptic = value;
+                OnPropertyChanged("MinXCorrForExportTryptic");
             }
         }
 
-        public double[] MinXCorrForExportPartiallyTrytpic
+        public double[] MinXCorrForExportPartiallyTryptic
         {
             get
             {
-                return m_minXCorrForExportPartiallyTrytpic;
+                return m_minXCorrForExportPartiallyTryptic;
             }
             set
             {
-                m_minXCorrForExportPartiallyTrytpic = value;
-                OnPropertyChanged("MinXCorrForExportPartiallyTrytpic");
+                m_minXCorrForExportPartiallyTryptic = value;
+                OnPropertyChanged("MinXCorrForExportPartiallyTryptic");
             }
         }
 
-        public double[] MinXCorrForExportNonTrytpic
+        public double[] MinXCorrForExportNonTryptic
         {
             get
             {
-                return m_minXCorrForExportNonTrytpic;
+                return m_minXCorrForExportNonTryptic;
             }
             set
             {
-                m_minXCorrForExportNonTrytpic = value;
-                OnPropertyChanged("MinXCorrForExportNonTrytpic");
+                m_minXCorrForExportNonTryptic = value;
+                OnPropertyChanged("MinXCorrForExportNonTryptic");
             }
         }
 
@@ -356,9 +356,9 @@ namespace MTDBFramework.Data
             ExportPartiallyTryptic = true;
             ExportNonTryptic = true;
 
-            MinXCorrForExportTrytpic = new [] { 1.5, 2.0, 2.5 };
-            MinXCorrForExportPartiallyTrytpic = new [] { 1.5, 2.0, 2.5 };
-            MinXCorrForExportNonTrytpic = new [] { 3.0, 3.5, 4.0 };
+            MinXCorrForExportTryptic = new [] { 1.5, 2.0, 2.5 };
+            MinXCorrForExportPartiallyTryptic = new [] { 1.5, 2.0, 2.5 };
+            MinXCorrForExportNonTryptic = new [] { 3.0, 3.5, 4.0 };
 
             MinXCorrForAlignment = 3.0;
             UseDelCn = false;

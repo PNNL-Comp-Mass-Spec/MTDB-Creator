@@ -30,9 +30,9 @@ namespace MTDBFramework.Database
 
             //// TODO: These three are arrays of length 3. Try to do error detection
 
-            Map(x => x.MinXCorrForExportTrytpic);
-            Map(x => x.MinXCorrForExportPartiallyTrytpic);
-            Map(x => x.MinXCorrForExportNonTrytpic);
+            Map(x => x.MinXCorrForExportTryptic);
+            Map(x => x.MinXCorrForExportPartiallyTryptic);
+            Map(x => x.MinXCorrForExportNonTryptic);
 
             //// Sequest
             Map(x => x.MinXCorrForAlignment);
