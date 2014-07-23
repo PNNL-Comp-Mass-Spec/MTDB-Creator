@@ -702,7 +702,7 @@ namespace MTDBFramework.IO
                         var ptm = new PostTranslationalModification();
                         ptm.Location = mod.Key;
                         ptm.Mass = mod.Value.Mass;
-                        ptm.Formula = UniModData.ModList[mod.Value.Tag]._formula.ToString();
+                        ptm.Formula = UniModData.ModList[mod.Value.Tag].Formula.ToString();
                         result.PTMs.Add(ptm);
                         //if (mod.Value.Tag != "Carbamidomethyl")
                         //{

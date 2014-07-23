@@ -89,14 +89,76 @@ namespace MTDBFramework.Data
         /// </summary>
         public class Modification
         {
-            public string _title;
-            public string _fullName;
-            public double _monoMass;
-            public double _avgMass;
-            public string _composition;
-            public int _recordId;
+            private string _title;
+            private string _fullName;
+            private double _monoMass;
+            private double _avgMass;
+            private string _composition;
+            private int _recordId;
+			private ChemFormula _formula;
 
-			public ChemFormula _formula;
+			/// <summary>
+			/// UNIMOD title - short name of modification
+			/// </summary>
+	        public string Title
+	        {
+				get { return _title; }
+				private set { _title = value; }
+	        }
+
+			/// <summary>
+			/// Full name of modification
+			/// </summary>
+			public string FullName
+			{
+				get { return _fullName; }
+				private set { _fullName = value; }
+			}
+
+			/// <summary>
+			/// MonoIsotopic Mass
+			/// </summary>
+			public double MonoIsotopicMass
+			{
+				get { return _monoMass; }
+				private set { _monoMass = value; }
+			}
+
+			/// <summary>
+			/// Average Mass
+			/// </summary>
+			public double AverageMass
+			{
+				get { return _avgMass; }
+				private set { _avgMass = value; }
+			}
+
+			/// <summary>
+			/// UNIMOD Composition - Includes Bricks
+			/// </summary>
+			public string Composition
+			{
+				get { return _composition; }
+				private set { _composition = value; }
+			}
+
+			/// <summary>
+			/// UNIMOD record Id
+			/// </summary>
+			public int Id
+			{
+				get { return _recordId; }
+				private set { _recordId = value; }
+			}
+
+			/// <summary>
+			/// Chemical Formula
+			/// </summary>
+			public ChemFormula Formula
+			{
+				get { return _formula; }
+				private set { _formula = value; }
+			}
 
             /// <summary>
             /// Populate a modification object with the appropriate data
@@ -125,10 +187,46 @@ namespace MTDBFramework.Data
         /// </summary>
         public class Element
         {
-            public string _title;
-            public string _fullName;
-            public double _avgMass;
-            public double _monoMass;
+            private string _title;
+            private string _fullName;
+            private double _avgMass;
+            private double _monoMass;
+
+			/// <summary>
+			/// UNIMOD title - chemical symbol, may have isotope prefix
+			/// </summary>
+			public string Title
+			{
+				get { return _title; }
+				private set { _title = value; }
+			}
+
+			/// <summary>
+			/// Full name of element
+			/// </summary>
+			public string FullName
+			{
+				get { return _fullName; }
+				private set { _fullName = value; }
+			}
+
+			/// <summary>
+			/// MonoIsotopic Mass
+			/// </summary>
+			public double MonoIsotopicMass
+			{
+				get { return _monoMass; }
+				private set { _monoMass = value; }
+			}
+
+			/// <summary>
+			/// Average Mass
+			/// </summary>
+			public double AverageMass
+			{
+				get { return _avgMass; }
+				private set { _avgMass = value; }
+			}
 
             /// <summary>
             /// Populate an element object with the appropriate data
@@ -151,12 +249,66 @@ namespace MTDBFramework.Data
         /// </summary>
         public class AminoAcid
         {
-            public string _title;
-            public string _shortName;
-            public string _fullName;
-			public double _monoMass;
-			public double _avgMass;
-			public ChemFormula _formula;
+            private string _title;
+            private string _shortName;
+            private string _fullName;
+			private double _monoMass;
+			private double _avgMass;
+			private ChemFormula _formula;
+
+			/// <summary>
+			/// 1-letter abbreviation
+			/// </summary>
+			public string Title
+			{
+				get { return _title; }
+				private set { _title = value; }
+			}
+
+			/// <summary>
+			/// 3-letter Abbreviation
+			/// </summary>
+			public string ShortName
+			{
+				get { return _shortName; }
+				private set { _shortName = value; }
+			}
+
+			/// <summary>
+			/// Full name of Amino Acid
+			/// </summary>
+			public string FullName
+			{
+				get { return _fullName; }
+				private set { _fullName = value; }
+			}
+
+			/// <summary>
+			/// MonoIsotopic Mass
+			/// </summary>
+			public double MonoIsotopicMass
+			{
+				get { return _monoMass; }
+				private set { _monoMass = value; }
+			}
+
+			/// <summary>
+			/// Average Mass
+			/// </summary>
+			public double AverageMass
+			{
+				get { return _avgMass; }
+				private set { _avgMass = value; }
+			}
+
+			/// <summary>
+			/// Chemical Formula
+			/// </summary>
+			public ChemFormula Formula
+			{
+				get { return _formula; }
+				private set { _formula = value; }
+			}
 
 			/// <summary>
 			/// Populate an AminoAcid object with the appropriate date
@@ -183,11 +335,56 @@ namespace MTDBFramework.Data
 		/// </summary>
 		public class ModBrick
 		{
-			public string _title;
-			public string _fullName;
-			public double _monoMass;
-			public double _avgMass;
-			public ChemFormula _formula;
+			private string _title;
+			private string _fullName;
+			private double _monoMass;
+			private double _avgMass;
+			private ChemFormula _formula;
+
+			/// <summary>
+			/// UNIMOD title - Brick name
+			/// </summary>
+			public string Title
+			{
+				get { return _title; }
+				private set { _title = value; }
+			}
+
+			/// <summary>
+			/// Full name of modification brick
+			/// </summary>
+			public string FullName
+			{
+				get { return _fullName; }
+				private set { _fullName = value; }
+			}
+
+			/// <summary>
+			/// MonoIsotopic Mass
+			/// </summary>
+			public double MonoIsotopicMass
+			{
+				get { return _monoMass; }
+				private set { _monoMass = value; }
+			}
+
+			/// <summary>
+			/// Average Mass
+			/// </summary>
+			public double AverageMass
+			{
+				get { return _avgMass; }
+				private set { _avgMass = value; }
+			}
+
+			/// <summary>
+			/// Chemical Formula
+			/// </summary>
+			public ChemFormula Formula
+			{
+				get { return _formula; }
+				private set { _formula = value; }
+			}
 
 			/// <summary>
 			/// Populate a mod brick object with the appropriate date
