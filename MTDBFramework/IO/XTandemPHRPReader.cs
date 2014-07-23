@@ -13,11 +13,20 @@ namespace MTDBFramework.IO
     /// </summary>
     public class XTandemPhrpReader : PHRPReaderBase
     {
+		/// <summary>
+		/// Configure the options for XTandemPhrpReader
+		/// </summary>
+		/// <param name="options"></param>
         public XTandemPhrpReader(Options options)
         {
             ReaderOptions = options;
         }
 
+		/// <summary>
+		/// Read and process a XTandem PHRP file
+		/// </summary>
+		/// <param name="path">XTandem file to read</param>
+		/// <returns></returns>
         public override LcmsDataSet Read(string path)
         {
             var results = new List<XTandemResult>();

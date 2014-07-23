@@ -1,5 +1,8 @@
 ﻿namespace MTDBFramework.Data
 {
+	/// <summary>
+	/// Addition properties for MSAlign input files
+	/// </summary>
     public class MsAlignResult : Evidence
     {
         #region Private Fields

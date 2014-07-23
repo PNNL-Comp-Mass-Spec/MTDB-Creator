@@ -1,5 +1,4 @@
-﻿using MTDBFramework.Database;
-using MTDBFramework.IO;
+﻿using MTDBFramework.IO;
 using NUnit.Framework;
 
 namespace MTDBCreatorTestSuite.IO

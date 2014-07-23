@@ -19,6 +19,9 @@ using MTDBFramework.IO;
 
 namespace MTDBFramework.Algorithms
 {
+	/// <summary>
+	/// Perform the data transform from an LCMS dataset to MTDB
+	/// </summary>
     public class MtdbProcessor : IProcessor
     {
         private const int ProgressPercentStart = 0;
@@ -31,20 +34,39 @@ namespace MTDBFramework.Algorithms
         private bool m_abortRequested;
         private const double CarryOverThreshold = 0.05;
 
+		/// <summary>
+		/// Event handler
+		/// </summary>
         public event EventHandler<AlignmentCompleteArgs> AlignmentComplete;
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="options"></param>
         public MtdbProcessor(Options options)
         {
             ProcessorOptions = options;
         }
 
+		/// <summary>
+		/// Options accessor
+		/// </summary>
         public Options ProcessorOptions { get; set; }
 
+		/// <summary>
+		/// Allow for thread cancellation
+		/// </summary>
         public void AbortProcessing()
         {
             m_abortRequested = true;
         }
 
+		/// <summary>
+		/// Main work function - Transform LCMS Datasets into MTDB datasets
+		/// </summary>
+		/// <param name="dataSets"></param>
+		/// <param name="bWorker"></param>
+		/// <returns></returns>
         [UsedImplicitly]
         public TargetDatabase Process(IEnumerable<LcmsDataSet> dataSets, BackgroundWorker bWorker)
         {
@@ -330,6 +352,13 @@ namespace MTDBFramework.Algorithms
             return targetDatabase;
         }
 
+		/// <summary>
+		/// Progress handler
+		/// </summary>
+		/// <param name="current"></param>
+		/// <param name="total"></param>
+		/// <param name="percentComplete"></param>
+		/// <param name="currentTask"></param>
         protected void UpdateProgress(int current, int total, float percentComplete, string currentTask)
         {
             float percentCompleteEffective = ProgressPercentStart +
@@ -337,8 +366,15 @@ namespace MTDBFramework.Algorithms
             OnPercentProgressChanged(new PercentCompleteEventArgs(current, total, percentCompleteEffective, currentTask));
         }
 
+		/// <summary>
+		/// Progress event
+		/// </summary>
         public PercentCompleteEventHandler ProgressChanged;
 
+		/// <summary>
+		/// Progress event handler
+		/// </summary>
+		/// <param name="e"></param>
         protected void OnPercentProgressChanged(PercentCompleteEventArgs e)
         {
             if (ProgressChanged != null)

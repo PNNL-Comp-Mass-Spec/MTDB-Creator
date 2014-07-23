@@ -3,15 +3,23 @@ using PHRPReader;
 
 namespace MTDBFramework.IO
 {
+	/// <summary>
+	/// Wrapper for reading input files, specifically PHRP-generated files
+	/// </summary>
     public static class PhrpReaderFactory
     {
-		// Entry point for creating an LCMS Dataset using the PHRP Reader. Takes the options from
-		// the Analysis Job Processor's options and the file path for the job item and returns a reader
-		// for the appropriate data file.
-		// If the path ends with "msgfplus.mzid" then it's an MZIdentML file, but if it's not, then
-		// it determines the type of reader to return based on the extension of the file, using that to 
-		// determine if it is a Sequest, XTandem, MSAlign or MSGF+ file
-		// The if statement is due to the PHRP Reader not meaning to be used on .mzid files
+		/// <summary>
+		/// Entry point for creating an LCMS Dataset using the PHRP Reader.
+		/// </summary>
+		/// <remarks>
+		/// If the path ends with "msgfplus.mzid" then it's an MZIdentML file, but if it's not, then
+		/// it determines the type of reader to return based on the extension of the file, using that to 
+		/// determine if it is a Sequest, XTandem, MSAlign or MSGF+ file
+		/// The if statement is due to the PHRP Reader not meaning to be used on .mzid files
+		/// </remarks>
+		/// <param name="path">File to be read</param>
+		/// <param name="options">Reader options</param>
+		/// <returns>An appropriate reader for the file</returns>
         public static PHRPReaderBase Create(string path, Options options)
         {
             PHRPReaderBase reader = null;

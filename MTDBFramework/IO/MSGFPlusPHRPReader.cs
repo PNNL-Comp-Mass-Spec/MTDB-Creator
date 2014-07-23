@@ -12,12 +12,21 @@ namespace MTDBFramework.IO
     /// Summary Description for MSGFPlusPHRP Reader
     /// </summary>
     public class MsgfPlusPhrpReader : PHRPReaderBase
-    {
+	{
+		/// <summary>
+		/// Configure the options for MSGFPlusReader
+		/// </summary>
+		/// <param name="options"></param>
         public MsgfPlusPhrpReader(Options options)
         {
             ReaderOptions = options;
         }
 
+		/// <summary>
+		/// Read and process a MSGF+ PHRP file
+		/// </summary>
+		/// <param name="path">MSGF+ file to read</param>
+		/// <returns></returns>
         public override LcmsDataSet Read(string path)
         {
             var results = new List<MsgfPlusResult>();

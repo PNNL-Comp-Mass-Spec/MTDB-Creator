@@ -13,11 +13,20 @@ namespace MTDBFramework.IO
     /// </summary>
     public class SequestPhrpReader : PHRPReaderBase
     {
+		/// <summary>
+		/// Configure the options for SequestReader
+		/// </summary>
+		/// <param name="options"></param>
         public SequestPhrpReader(Options options)
         {
             ReaderOptions = options;
         }
 
+		/// <summary>
+		/// Read and process a Sequest PHRP file
+		/// </summary>
+		/// <param name="path">Sequest file to read</param>
+		/// <returns></returns>
         public override LcmsDataSet Read(string path)
         {
             var results = new List<SequestResult>();
