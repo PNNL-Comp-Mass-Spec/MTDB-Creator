@@ -3,8 +3,18 @@ using NUnit.Framework;
 
 namespace MTDBCreatorTestSuite.Data
 {
+	[TestFixture]
     class UnimodTests : TestBase
 	{
+		/// <summary>
+		/// Configuration: read the file only once for all tests.
+		/// </summary>
+		[TestFixtureSetUp]
+		public void Init()
+		{
+			var temp = UniModData.Elements.Count;
+		}
+
 		/// <summary>
 		/// Test for proper counts after a read.
 		/// </summary>
