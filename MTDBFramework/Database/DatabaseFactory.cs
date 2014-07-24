@@ -1,8 +1,11 @@
 ﻿#region Namespaces
 
+using System;
 using System.IO;
+using FluentNHibernate;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
+using FluentNHibernate.Conventions;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
@@ -45,12 +48,15 @@ namespace MTDBFramework.Database
                                 .UsingFile(DatabaseFile)
                                 /*.ShowSql()*/)
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusTargetMap>())
-                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<PostTranslationalModificationMap>())
-                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ProteinInformationMap>())
-                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusProteinPairMap>())
-                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusPtmPairMap>())
-                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<EvidenceMap>())
-                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<OptionsMap>())
+							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<PostTranslationalModificationMap>())
+							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<ProteinInformationMap>())
+							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusProteinPairMap>()
+								.Conventions.AddFromAssemblyOf<CustomForeignKeyConvention>())
+							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusPtmPairMap>()
+								.Conventions.AddFromAssemblyOf<CustomForeignKeyConvention>())
+							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<EvidenceMap>()
+								.Conventions.AddFromAssemblyOf<CustomForeignKeyConvention>())
+							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<OptionsMap>())
                             .ExposeConfiguration(BuildSchema)
                             .BuildSessionFactory();
                     }
@@ -91,4 +97,26 @@ namespace MTDBFramework.Database
             }
         }
     }
+
+	/// <summary>
+	/// Custom naming convention for foreign keys
+	/// </summary>
+	public class CustomForeignKeyConvention : ForeignKeyConvention
+	{
+		/// <summary>
+		/// Overloaded function to retrieve foreign key names
+		/// </summary>
+		/// <param name="property"></param>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		protected override string GetKeyName(Member property, Type type)
+		{
+			if (property == null)
+			{
+				return type.Name + "Id";  // many-to-many, one-to-many, join
+			}
+
+			return property.Name + "Id"; // many-to-one
+		}
+	}
 }
