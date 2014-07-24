@@ -65,5 +65,17 @@
             get { return m_parent; }
             set { m_parent = value; }
         }
+
+		/// <summary>
+		/// Overloaded string for debugging output
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
+		{
+			var temp = "Name:" + m_name + ";";
+			temp += "Mass:" + m_mass + ";";
+			temp += "Formula:" + m_formula;
+			return temp;
+		}
     }
 }

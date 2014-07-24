@@ -248,6 +248,7 @@ namespace MTDBFramework.IO
                     ptm.Location = info.ResidueLocInPeptide;
                     ptm.Mass = info.ModDefinition.ModificationMass;
                     ptm.Formula = info.ModDefinition.MassCorrectionTag;
+	                ptm.Name = info.ModDefinition.MassCorrectionTag;
                     result.PTMs.Add(ptm);
                 }
                 // Build the PTMs
