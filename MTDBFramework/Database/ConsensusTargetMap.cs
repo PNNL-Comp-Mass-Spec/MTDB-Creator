@@ -31,7 +31,7 @@ namespace MTDBFramework.Database
             Map(x => x.ModificationDescription).Column("ModificationDescription");
             Map(x => x.MultiProteinCount).Column("MultiProteinCount");
 
-            HasMany(x => x.PTMs).KeyColumn("ConsensusId").Cascade.All();
+            //HasMany(x => x.PTMs).KeyColumn("ConsensusId").Cascade.All();
             HasMany(x => x.Evidences).KeyColumn("ConsensusId").Cascade.All();
 
         }

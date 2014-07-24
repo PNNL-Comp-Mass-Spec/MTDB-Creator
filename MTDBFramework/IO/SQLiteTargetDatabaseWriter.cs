@@ -15,6 +15,7 @@ namespace MTDBFramework.IO
         private readonly Dictionary<string, TargetPeptideInfo> m_uniquePeptides = new Dictionary<string, TargetPeptideInfo>();
         private readonly Dictionary<string, TargetDataSet> m_uniqueDataSets = new Dictionary<string, TargetDataSet>();
         private readonly Dictionary<string, ProteinInformation> m_uniqueProteins = new Dictionary<string, ProteinInformation>();
+        private readonly Dictionary<string, PostTranslationalModification> m_uniquePtms = new Dictionary<string, PostTranslationalModification>();
 
 		/// <summary>
 		/// Write to the SQLite database
@@ -46,6 +47,7 @@ namespace MTDBFramework.IO
                      * */
                     var current = 0;
                     var currentProt = 0;
+                    var currentPtm = 0;
                     var total = database.ConsensusTargets.Count;
                     session.Save(options);
                     foreach (var consensusTarget in database.ConsensusTargets)
@@ -92,6 +94,23 @@ namespace MTDBFramework.IO
                             consensusTarget.ConsensusProtein.Add(cPPair);
                             session.SaveOrUpdate(cPPair);
                         }
+
+                        foreach(var ptm in consensusTarget.PTMs)
+                        {
+                            
+                            if(!m_uniquePtms.ContainsKey(ptm.Name))
+                            {
+                                ptm.Id = ++currentPtm;
+                                m_uniquePtms.Add(ptm.Name, ptm);
+                            }
+                            ptm.Id = m_uniquePtms[ptm.Name].Id;
+                            var cPtm = m_uniquePtms[ptm.Name];
+                            var cPtmPair = new ConsensusPtmPair();
+                            cPtmPair.Location = ptm.Location;
+                            cPtmPair.PtmId = ptm.Id;
+                            cPtmPair.ConsensusId = consensusTarget.Id;
+                            session.SaveOrUpdate(cPtmPair);
+                        }
                         
                         consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
                         //consensusTarget.EncodedNumericSequence = consensusTarget.Evidences[0].SeqWithNumericMods;
@@ -105,6 +124,11 @@ namespace MTDBFramework.IO
                     foreach(var protein in m_uniqueProteins)
                     {
                         session.SaveOrUpdate(protein.Value);
+                    }
+
+                    foreach(var ptm in m_uniquePtms)
+                    {
+                        session.SaveOrUpdate(ptm.Value);
                     }
 
                     //session.SaveOrUpdate(database.ConsensusTargets);

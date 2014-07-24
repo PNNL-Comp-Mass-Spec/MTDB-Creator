@@ -9,6 +9,7 @@
         private int m_location;
         private string m_formula;
         private double m_mass;
+        private string m_name;
         private ConsensusTarget m_parent;
 
 		/// <summary>
@@ -47,7 +48,16 @@
             set { m_mass = value; }
         }
 
-		/// <summary>
+        /// <summary>
+        /// Short name of the PTM
+        /// </summary>
+        public string Name
+        {
+            get { return m_name; }
+            set { m_name = value; }
+        }
+
+        /// <summary>
 		/// Target containing the modification
 		/// </summary>
         public ConsensusTarget Parent

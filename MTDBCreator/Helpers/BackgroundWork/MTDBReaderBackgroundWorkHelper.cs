@@ -15,7 +15,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
         private Options DatabaseOptions { get; set; }
         private string DatabaseFileName { get; set; }
 
-        private bool mAbortRequested;
+        //private bool mAbortRequested;
 
         public MtdbReaderBackgroundWorkHelper(AnalysisJobViewModel analysisJobViewModel, string fileName)
         {
@@ -26,12 +26,12 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         public void BackgroundWorker_AbortProcessing()
         {
-            mAbortRequested = true;
+            //mAbortRequested = true;
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            mAbortRequested = false;
+            //mAbortRequested = false;
 
             var targetDatabaseReader = new SqLiteTargetDatabaseReader();
 

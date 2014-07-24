@@ -700,9 +700,10 @@ namespace MTDBFramework.IO
                     foreach (var mod in item.Value.Peptide.Mods)
                     {
                         var ptm = new PostTranslationalModification();
-                        ptm.Location = mod.Key;
-                        ptm.Mass = mod.Value.Mass;
-                        ptm.Formula = UniModData.ModList[mod.Value.Tag].Formula.ToString();
+                        ptm.Location = mod.Key; // specific to consensus
+                        ptm.Mass = mod.Value.Mass; // shared across all of same mod
+                        ptm.Formula = UniModData.ModList[mod.Value.Tag].Formula.ToString(); // shared across all of same mod
+                        ptm.Name = UniModData.ModList[mod.Value.Tag].Title; // shared across all of same mod
                         result.PTMs.Add(ptm);
                         //if (mod.Value.Tag != "Carbamidomethyl")
                         //{

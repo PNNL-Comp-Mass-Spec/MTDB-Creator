@@ -12,12 +12,13 @@ namespace MTDBFramework.Database
         public PostTranslationalModificationMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).Column("PostTranslationModId").GeneratedBy.Identity();
+            Id(x => x.Id).Column("PostTranslationModId").GeneratedBy.Assigned();
             Map(x => x.Formula);
             Map(x => x.Mass);
-            Map(x => x.Location);
+            Map(x => x.Name);
+            //Map(x => x.Location); // Move me to the join table(?)
 
-            References(x => x.Parent).Column("ConsensusId").Cascade.SaveUpdate();
+            //References(x => x.Parent).Column("ConsensusId").Cascade.SaveUpdate();
         }
     }
 }

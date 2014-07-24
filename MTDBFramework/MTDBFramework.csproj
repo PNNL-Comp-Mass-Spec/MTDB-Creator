@@ -123,6 +123,7 @@
     <Compile Include="Algorithms\TargetWorkflowType.cs" />
     <Compile Include="Database\ConsensusProteinPair.cs" />
     <Compile Include="Database\ConsensusProteinPairMap.cs" />
+    <Compile Include="Database\ConsensusPtmPairMap.cs" />
     <Compile Include="Database\ConsensusTargetMap.cs" />
     <Compile Include="Database\DatabaseFactory.cs" />
     <Compile Include="Database\OptionsMap.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Database\EvidenceMap.cs" />
     <Compile Include="Database\TargetPeptideInfoMap.cs" />
     <Compile Include="Data\AnalysisJobItem.cs" />
+    <Compile Include="Data\ConsensusPtmPair.cs" />
     <Compile Include="Data\ConsensusTarget.cs" />
     <Compile Include="Data\DatabaseType.cs" />
     <Compile Include="Data\MSAlignResult.cs" />

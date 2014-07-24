@@ -48,6 +48,7 @@ namespace MTDBFramework.Database
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<PostTranslationalModificationMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ProteinInformationMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusProteinPairMap>())
+                            .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusPtmPairMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<EvidenceMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<OptionsMap>())
                             .ExposeConfiguration(BuildSchema)
