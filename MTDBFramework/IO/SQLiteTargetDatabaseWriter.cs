@@ -97,7 +97,6 @@ namespace MTDBFramework.IO
 
                         foreach(var ptm in consensusTarget.PTMs)
                         {
-                            
                             if(!m_uniquePtms.ContainsKey(ptm.Name))
                             {
                                 ptm.Id = ++currentPtm;

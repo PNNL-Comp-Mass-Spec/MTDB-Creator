@@ -41,10 +41,10 @@ namespace MTDBCreatorTestSuite.IO
 		}
 
 		[Test]
-		[TestCase(@"Output4.mtdb", @"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", Ignore = false)]
-		[TestCase(@"Output4.mtdb", @"Mzml\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfplus.mzid", Ignore = false)]
-		[TestCase(@"Output4.mtdb", @"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", Ignore = false)]
-		[TestCase(@"Output4.mtdb", @"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", Ignore = false)]
+		[TestCase(@"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", @"Output4.mtdb", Ignore = false)]
+		[TestCase(@"Mzml\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfplus.mzid", @"Output4.mtdb", Ignore = false)]
+		[TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", @"Output4.mtdb", Ignore = false)]
+		[TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", @"Output4.mtdb", Ignore = false)]
 		public void TestAppendMZID(string path, string outputPath)
 		{
 			var mtdbCreator = new MTDBFramework.MtdbCreator();
