@@ -126,6 +126,7 @@
     <Compile Include="IO\LoadingDataTests.cs" />
     <Compile Include="Algorithms\MathRegressionTests.cs" />
     <Compile Include="Data\PeptideSequenceTests.cs" />
+    <Compile Include="IO\MTDBFramework_MtdbCreatorTests.cs" />
     <Compile Include="IO\MZIdentMLReaderTests.cs" />
     <Compile Include="IO\ObservedNetTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
