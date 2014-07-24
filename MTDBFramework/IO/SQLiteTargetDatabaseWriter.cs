@@ -74,33 +74,43 @@ namespace MTDBFramework.IO
                             evidence.Parent = consensusTarget;
                             
                         }
+                        
+                        
+                        consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
+                        consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
+                        consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
+                        consensusTarget.MultiProteinCount = consensusTarget.Evidences[0].MultiProteinCount;
+                        session.SaveOrUpdate(consensusTarget);
+
                         foreach (var protein in consensusTarget.Proteins)
                         {
-                            if(!m_uniqueProteins.ContainsKey(protein.ProteinName))
+                            if (!m_uniqueProteins.ContainsKey(protein.ProteinName))
                             {
-                                protein.Id = ++currentProt;
+                                //protein.Id = ++currentProt;
                                 m_uniqueProteins.Add(protein.ProteinName, protein);
+                                session.SaveOrUpdate(protein);
                             }
                             protein.Id = m_uniqueProteins[protein.ProteinName].Id;
                             var cProt = m_uniqueProteins[protein.ProteinName];
                             ConsensusProteinPair cPPair = new ConsensusProteinPair();
-                            cPPair.Consensus        = consensusTarget;
-                            cPPair.Protein          = cProt;
-                            cPPair.CleavageState    = (short)cProt.CleavageState;
-                            cPPair.TerminusState    = (short)cProt.TerminusState;
-                            cPPair.ResidueStart     = (short)cProt.ResidueStart;
-                            cPPair.ResidueEnd       = (short)cProt.ResidueEnd;
+                            cPPair.Consensus = consensusTarget;
+                            cPPair.Protein = cProt;
+                            cPPair.CleavageState = (short)cProt.CleavageState;
+                            cPPair.TerminusState = (short)cProt.TerminusState;
+                            cPPair.ResidueStart = (short)cProt.ResidueStart;
+                            cPPair.ResidueEnd = (short)cProt.ResidueEnd;
                             protein.ConsensusProtein.Add(cPPair);
-                            consensusTarget.ConsensusProtein.Add(cPPair);
                             session.SaveOrUpdate(cPPair);
+                            consensusTarget.ConsensusProtein.Add(cPPair);
                         }
 
-                        foreach(var ptm in consensusTarget.PTMs)
+                        foreach (var ptm in consensusTarget.PTMs)
                         {
-                            if(!m_uniquePtms.ContainsKey(ptm.Name))
+                            if (!m_uniquePtms.ContainsKey(ptm.Name))
                             {
-                                ptm.Id = ++currentPtm;
+                                //ptm.Id = ++currentPtm;
                                 m_uniquePtms.Add(ptm.Name, ptm);
+                                session.SaveOrUpdate(ptm);
                             }
                             ptm.Id = m_uniquePtms[ptm.Name].Id;
                             var cPtm = m_uniquePtms[ptm.Name];
@@ -110,25 +120,15 @@ namespace MTDBFramework.IO
                             cPtmPair.ConsensusId = consensusTarget.Id;
                             session.SaveOrUpdate(cPtmPair);
                         }
-                        
-                        consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
-                        //consensusTarget.EncodedNumericSequence = consensusTarget.Evidences[0].SeqWithNumericMods;
-                        consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
-                        consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
-                        consensusTarget.MultiProteinCount = consensusTarget.Evidences[0].MultiProteinCount;
-                        session.SaveOrUpdate(consensusTarget);
-                        //session.Save(consensusTarget);
                     }
 
-                    foreach(var protein in m_uniqueProteins)
-                    {
-                        session.SaveOrUpdate(protein.Value);
-                    }
+                    //foreach(var protein in m_uniqueProteins)
+                    //{
+                    //}
 
-                    foreach(var ptm in m_uniquePtms)
-                    {
-                        session.SaveOrUpdate(ptm.Value);
-                    }
+                    //foreach(var ptm in m_uniquePtms)
+                    //{
+                    //}
 
                     //session.SaveOrUpdate(database.ConsensusTargets);
 

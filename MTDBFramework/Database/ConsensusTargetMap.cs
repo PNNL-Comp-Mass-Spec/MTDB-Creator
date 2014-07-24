@@ -19,7 +19,7 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id)
-                .Column("ConsensusId").GeneratedBy.Assigned();
+                .Column("ConsensusId").GeneratedBy.Native();
             Map(x => x.AverageNet);
             Map(x => x.StdevNet);
             Map(x => x.PredictedNet);
