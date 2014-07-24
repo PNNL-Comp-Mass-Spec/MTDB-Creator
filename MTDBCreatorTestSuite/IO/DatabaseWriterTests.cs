@@ -99,7 +99,21 @@ namespace MTDBCreatorTestSuite.IO
             SqLiteTargetDatabaseWriter writer = new SqLiteTargetDatabaseWriter();
 
             writer.Write(database, options, GetTestSuiteDataPath(@"Output.mtdb"));
+        }
 
+		[Test]
+		[TestCase(@"Output2.mtdb", @"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", Ignore = false)]
+		[TestCase(@"Output3.mtdb", @"Mzml\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfplus.mzid", @"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", Ignore = false)]
+		public void TestWriteMZID(string outputPath, params string[] paths)
+		{
+			var mtdbCreator = new MTDBFramework.MtdbCreator();
+			var testPaths = new List<string>();
+			foreach (var path in paths)
+			{
+				testPaths.Add(GetPath(path));
+			}
+			mtdbCreator.CreateDB(testPaths, GetTestSuiteDataPath(outputPath));
+		}
         }
     }
 }

@@ -62,7 +62,10 @@ namespace MTDBFramework.Data
 				{
 					output += symbol;
 				}
-				output += symbols[symbol];
+				if (symbols[symbol] != 1)
+				{
+					output += symbols[symbol];
+				}
 				return output;
 			}
 
