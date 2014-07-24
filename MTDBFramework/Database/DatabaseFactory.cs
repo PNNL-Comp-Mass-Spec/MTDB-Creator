@@ -47,6 +47,8 @@ namespace MTDBFramework.Database
                             .Database(SQLiteConfiguration.Standard
                                 .UsingFile(DatabaseFile)
                                 /*.ShowSql()*/)
+							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<OptionsMap>())
+							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<TargetDatasetMap>())
                             .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ConsensusTargetMap>())
 							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<PostTranslationalModificationMap>())
 							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<ProteinInformationMap>())
@@ -56,7 +58,6 @@ namespace MTDBFramework.Database
 								.Conventions.AddFromAssemblyOf<CustomForeignKeyConvention>())
 							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<EvidenceMap>()
 								.Conventions.AddFromAssemblyOf<CustomForeignKeyConvention>())
-							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<OptionsMap>())
                             .ExposeConfiguration(BuildSchema)
                             .BuildSessionFactory();
                     }

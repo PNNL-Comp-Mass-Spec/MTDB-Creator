@@ -18,12 +18,10 @@ namespace MTDBFramework.Database
         public EvidenceMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).Column("EvidenceId").GeneratedBy.Assigned();
+            Id(x => x.Id).Column("EvidenceId").GeneratedBy.Native();
             Map(x => x.Charge);
             Map(x => x.ObservedNet);
-            //Map(x => x.PredictedNet);
             Map(x => x.Mz);
-            //Map(x => x.MultiProteinCount);
             Map(x => x.Scan);
             Map(x => x.DelM);
             Map(x => x.DelMPpm);

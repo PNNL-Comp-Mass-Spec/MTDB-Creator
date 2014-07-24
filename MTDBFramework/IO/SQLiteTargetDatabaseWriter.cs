@@ -36,10 +36,10 @@ namespace MTDBFramework.IO
             using (var session = sessionFactory.OpenSession())
             {
                 // populate the database
-                using (var transaction = session.BeginTransaction())
-                {
-
-                    /* This section breaks up the Target object, pulling out the individual TargetDataSet,  SequenceInfo,
+	            using (var transaction = session.BeginTransaction())
+	            {
+		            session.Save(options);
+					/* This section breaks up the Target object, pulling out the individual TargetDataSet,  SequenceInfo,
                      * and TargetPeptideInfo. These objects are then "reverse linked", so that each of these objects 
                      * relates to multiple evidences. This is because these objects need to know what they are related to.
                      * Additionally, these objects are saved before the Evidences are, because these objects need to already
@@ -49,88 +49,74 @@ namespace MTDBFramework.IO
                     var currentProt = 0;
                     var currentPtm = 0;
                     var total = database.ConsensusTargets.Count;
-                    session.Save(options);
-                    foreach (var consensusTarget in database.ConsensusTargets)
-                    {
-                        OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, MtdbCreationProgressType.COMMIT.ToString()));
-                        consensusTarget.Id = ++current;
-                        foreach(var ptm in consensusTarget.PTMs)
-                        {
-                            ptm.Id = 0;
-                        }
-                        foreach (var evidence in consensusTarget.Evidences)
-                        {
-                            //if (!m_uniquePeptides.ContainsKey(evidence.PeptideInfo.Peptide))
-                            //{
-                            //    m_uniquePeptides.Add(evidence.PeptideInfo.Peptide, evidence.PeptideInfo);
-                            //}
-                            //evidence.PeptideInfo = m_uniquePeptides[evidence.PeptideInfo.Peptide];
-                            if (!m_uniqueDataSets.ContainsKey(evidence.DataSet.Name))
-                            {
-                                evidence.DataSet.Id = 0;
-                                m_uniqueDataSets.Add(evidence.DataSet.Name, evidence.DataSet);
-                            }
-                            evidence.DataSet = m_uniqueDataSets[evidence.DataSet.Name];
-                            evidence.Parent = consensusTarget;
-                            
-                        }
-                        
-                        
-                        consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
-                        consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
-                        consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
-                        consensusTarget.MultiProteinCount = consensusTarget.Evidences[0].MultiProteinCount;
-                        session.SaveOrUpdate(consensusTarget);
+		            foreach (var consensusTarget in database.ConsensusTargets)
+		            {
+			            OnProgressChanged(new MtdbProgressChangedEventArgs(current, total,
+				            MtdbCreationProgressType.COMMIT.ToString()));
+			            consensusTarget.Id = 0;
+			            foreach (var ptm in consensusTarget.PTMs)
+			            {
+				            ptm.Id = 0;
+			            }
+			            foreach (var evidence in consensusTarget.Evidences)
+			            {
+				            //if (!m_uniquePeptides.ContainsKey(evidence.PeptideInfo.Peptide))
+				            //{
+				            //    m_uniquePeptides.Add(evidence.PeptideInfo.Peptide, evidence.PeptideInfo);
+				            //}
+				            //evidence.PeptideInfo = m_uniquePeptides[evidence.PeptideInfo.Peptide];
+				            if (!m_uniqueDataSets.ContainsKey(evidence.DataSet.Name))
+				            {
+					            evidence.DataSet.Id = 0;
+					            m_uniqueDataSets.Add(evidence.DataSet.Name, evidence.DataSet);
+				            }
+				            evidence.Id = 0;
+				            evidence.DataSet = m_uniqueDataSets[evidence.DataSet.Name];
+				            evidence.Parent = consensusTarget;
 
-                        foreach (var protein in consensusTarget.Proteins)
-                        {
-                            if (!m_uniqueProteins.ContainsKey(protein.ProteinName))
-                            {
-                                //protein.Id = ++currentProt;
-                                m_uniqueProteins.Add(protein.ProteinName, protein);
-                                session.SaveOrUpdate(protein);
-                            }
-                            protein.Id = m_uniqueProteins[protein.ProteinName].Id;
-                            var cProt = m_uniqueProteins[protein.ProteinName];
-                            ConsensusProteinPair cPPair = new ConsensusProteinPair();
-                            cPPair.Consensus = consensusTarget;
-                            cPPair.Protein = cProt;
-                            cPPair.CleavageState = (short)cProt.CleavageState;
-                            cPPair.TerminusState = (short)cProt.TerminusState;
-                            cPPair.ResidueStart = (short)cProt.ResidueStart;
-                            cPPair.ResidueEnd = (short)cProt.ResidueEnd;
-                            protein.ConsensusProtein.Add(cPPair);
-                            session.SaveOrUpdate(cPPair);
-                            consensusTarget.ConsensusProtein.Add(cPPair);
-                        }
+			            }
 
-                        foreach (var ptm in consensusTarget.PTMs)
-                        {
-                            if (!m_uniquePtms.ContainsKey(ptm.Name))
-                            {
-                                //ptm.Id = ++currentPtm;
-                                m_uniquePtms.Add(ptm.Name, ptm);
-                                session.SaveOrUpdate(ptm);
-                            }
-                            ptm.Id = m_uniquePtms[ptm.Name].Id;
-                            var cPtm = m_uniquePtms[ptm.Name];
-                            var cPtmPair = new ConsensusPtmPair();
-                            cPtmPair.Location = ptm.Location;
-                            cPtmPair.PtmId = ptm.Id;
-                            cPtmPair.ConsensusId = consensusTarget.Id;
-                            session.SaveOrUpdate(cPtmPair);
-                        }
-                    }
+			            consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
+			            consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
+			            consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
+			            consensusTarget.MultiProteinCount = consensusTarget.Evidences[0].MultiProteinCount;
+			            session.SaveOrUpdate(consensusTarget);
 
-                    //foreach(var protein in m_uniqueProteins)
-                    //{
-                    //}
+			            foreach (var protein in consensusTarget.Proteins)
+			            {
+				            if (!m_uniqueProteins.ContainsKey(protein.ProteinName))
+				            {
+					            m_uniqueProteins.Add(protein.ProteinName, protein);
+					            session.SaveOrUpdate(protein);
+				            }
+				            //protein.Id = m_uniqueProteins[protein.ProteinName].Id;
+				            var cProt = m_uniqueProteins[protein.ProteinName];
+				            ConsensusProteinPair cPPair = new ConsensusProteinPair();
+				            cPPair.Consensus = consensusTarget;
+				            cPPair.Protein = cProt;
+				            cPPair.CleavageState = (short) cProt.CleavageState;
+				            cPPair.TerminusState = (short) cProt.TerminusState;
+				            cPPair.ResidueStart = (short) cProt.ResidueStart;
+				            cPPair.ResidueEnd = (short) cProt.ResidueEnd;
+				            //protein.ConsensusProtein.Add(cPPair);
+				            session.SaveOrUpdate(cPPair);
+				            consensusTarget.ConsensusProtein.Add(cPPair);
+			            }
 
-                    //foreach(var ptm in m_uniquePtms)
-                    //{
-                    //}
-
-                    //session.SaveOrUpdate(database.ConsensusTargets);
+			            foreach (var ptm in consensusTarget.PTMs)
+			            {
+				            if (!m_uniquePtms.ContainsKey(ptm.Name))
+				            {
+					            m_uniquePtms.Add(ptm.Name, ptm);
+					            session.SaveOrUpdate(ptm);
+				            }
+				            var cPtmPair = new ConsensusPtmPair();
+				            cPtmPair.Location = ptm.Location;
+				            cPtmPair.PtmId = m_uniquePtms[ptm.Name].Id;
+				            cPtmPair.ConsensusId = consensusTarget.Id;
+				            session.SaveOrUpdate(cPtmPair);
+			            }
+		            }
 
                     OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, MtdbCreationProgressType.COMMIT.ToString()));
 

@@ -11,14 +11,14 @@ namespace MTDBCreatorTestSuite.IO
 		public void DeleteOutputFiles()
 		{
 			var paths = new List<string>();
-			paths.Add("Output2.mtdb");
-			paths.Add("Output3.mtdb");
-			paths.Add("Output4.mtdb");
+			paths.Add(@"Output2.mtdb");
+			paths.Add(@"Output3.mtdb");
+			paths.Add(@"Output4.mtdb");
 			foreach (var path in paths)
 			{
-				if (File.Exists(path))
+				if (File.Exists(GetTestSuiteDataPath(path)))
 				{
-					File.Delete(path);
+					File.Delete(GetTestSuiteDataPath(path));
 				}
 			}
 		}
@@ -50,6 +50,16 @@ namespace MTDBCreatorTestSuite.IO
 			var mtdbCreator = new MTDBFramework.MtdbCreator();
 			var testPaths = new List<string>();
 			testPaths.Add(GetPath(path));
+			mtdbCreator.CreateDB(testPaths, GetTestSuiteDataPath(outputPath));
+		}
+
+		[TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", @"Output4.mtdb", Ignore = false)]
+		public void TestAppendDuplicateMZID(string path, string outputPath)
+		{
+			var mtdbCreator = new MTDBFramework.MtdbCreator();
+			var testPaths = new List<string>();
+			testPaths.Add(GetPath(path));
+			mtdbCreator.CreateDB(testPaths, GetTestSuiteDataPath(outputPath));
 			mtdbCreator.CreateDB(testPaths, GetTestSuiteDataPath(outputPath));
 		}
     }
