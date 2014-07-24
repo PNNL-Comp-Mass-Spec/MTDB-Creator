@@ -70,6 +70,20 @@ namespace MTDBFramework.Data
 			}
 
 			/// <summary>
+			/// Return the count of an element from the formula
+			/// </summary>
+			/// <param name="element"></param>
+			/// <returns></returns>
+			public int GetElementCount(string element)
+			{
+				if (symbols.ContainsKey(element))
+				{
+					return symbols[element];
+				}
+				return 0;
+			}
+
+			/// <summary>
 			/// Initialize the symbol list
 			/// </summary>
 			public ChemFormula()
