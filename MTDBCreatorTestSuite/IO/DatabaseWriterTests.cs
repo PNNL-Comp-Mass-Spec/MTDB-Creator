@@ -7,7 +7,6 @@ using PHRPReader;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using PNNLOmics.Algorithms.Regression;
 
 
 namespace MTDBCreatorTestSuite.IO
@@ -23,10 +22,10 @@ namespace MTDBCreatorTestSuite.IO
         /// <param name="numberOfEvidences">Number of evidences to put in each target.</param>
         /// All ignored right now until I get mtdbs locally
         [Test]
-        [TestCase(@"..\..\..\TestData\testDatabase-1-1.mtdb", 1, 1, Ignore = false)]
-        [TestCase(@"..\..\..\TestData\testDatabase-1-2.mtdb", 1, 2, Ignore = false)]
-        [TestCase(@"..\..\..\TestData\testDatabase-2-1.mtdb", 2, 1, Ignore = false)]
-        [TestCase(@"..\..\..\TestData\testDatabase-100-3.mtdb", 100, 3, Ignore = false)]
+        [TestCase(@"testDatabase-1-1.mtdb", 1, 1, Ignore = false)]
+        [TestCase(@"testDatabase-1-2.mtdb", 1, 2, Ignore = false)]
+        [TestCase(@"testDatabase-2-1.mtdb", 2, 1, Ignore = false)]
+		[TestCase(@"testDatabase-100-3.mtdb", 100, 3, Ignore = false)]
         public void TestWriteDatabase(string path, int numberOfTargets, int numberOfEvidences)
         {
             var reader       = new SqLiteTargetDatabaseWriter();
@@ -69,7 +68,7 @@ namespace MTDBCreatorTestSuite.IO
                 target.CalculateStatistics();
                 database.ConsensusTargets.Add(target);
             }
-            reader.Write(database, options, path);            
+            reader.Write(database, options, GetTestSuiteDataPath(path));            
         }
 
         [Test]
@@ -99,7 +98,7 @@ namespace MTDBCreatorTestSuite.IO
 
             SqLiteTargetDatabaseWriter writer = new SqLiteTargetDatabaseWriter();
 
-            writer.Write(database, options, @"..\..\..\TestData\Output.mtdb");
+            writer.Write(database, options, GetTestSuiteDataPath(@"Output.mtdb"));
 
         }
     }
