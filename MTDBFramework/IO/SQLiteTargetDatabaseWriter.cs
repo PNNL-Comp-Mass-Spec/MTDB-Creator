@@ -5,6 +5,9 @@ using MTDBFramework.UI;
 
 namespace MTDBFramework.IO
 {
+	/// <summary>
+	/// Writing to a SQLite MTDB
+	/// </summary>
     public class SqLiteTargetDatabaseWriter : ITargetDatabaseWriter
     {
 
@@ -13,6 +16,12 @@ namespace MTDBFramework.IO
         private readonly Dictionary<string, TargetDataSet> m_uniqueDataSets = new Dictionary<string, TargetDataSet>();
         private readonly Dictionary<string, ProteinInformation> m_uniqueProteins = new Dictionary<string, ProteinInformation>();
 
+		/// <summary>
+		/// Write to the SQLite database
+		/// </summary>
+		/// <param name="database"></param>
+		/// <param name="options"></param>
+		/// <param name="path"></param>
         public void Write(TargetDatabase database, Options options, string path)
         {
             DatabaseFactory.DatabaseFile = path;
@@ -109,8 +118,15 @@ namespace MTDBFramework.IO
         }
         #region Events
 
+		/// <summary>
+		/// Progress change reporting
+		/// </summary>
         public event MtdbProgressChangedEventHandler ProgressChanged;
 
+		/// <summary>
+		/// Event Handler
+		/// </summary>
+		/// <param name="e"></param>
         protected void OnProgressChanged(MtdbProgressChangedEventArgs e)
         {
             if (ProgressChanged != null)

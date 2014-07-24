@@ -10,6 +10,9 @@ using ADODB;
 
 namespace MTDBFramework.IO
 {
+	/// <summary>
+	/// Create and output to a Microsoft Access format database
+	/// </summary>
     public class AccessTargetDatabaseWriter : ITargetDatabaseWriter
     {
         private Connection CreateNewAccessDatabase(string path)
@@ -42,6 +45,12 @@ namespace MTDBFramework.IO
         private readonly Dictionary<string, TargetDataSet> m_uniqueDataSets = new Dictionary<string, TargetDataSet>();
         private readonly Dictionary<string, ProteinInformation> m_uniqueProteins = new Dictionary<string, ProteinInformation>();
 
+		/// <summary>
+		/// Write the data to the database
+		/// </summary>
+		/// <param name="database"></param>
+		/// <param name="options"></param>
+		/// <param name="path"></param>
         public void Write(TargetDatabase database, Options options, string path)
         {
             if (File.Exists(path))
@@ -243,8 +252,15 @@ namespace MTDBFramework.IO
 
         #region Events
 
+		/// <summary>
+		/// Progress update reporting
+		/// </summary>
         public event MtdbProgressChangedEventHandler ProgressChanged;
 
+		/// <summary>
+		/// Event handler
+		/// </summary>
+		/// <param name="e"></param>
         protected void OnProgressChanged(MtdbProgressChangedEventArgs e)
         {
             if (ProgressChanged != null)

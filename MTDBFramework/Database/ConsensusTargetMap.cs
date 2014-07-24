@@ -7,9 +7,14 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Database
 {
-    //This is our map for the ConsensusTarget class. Note the "Not.LazyLoad"
+    /// <summary>
+	/// This is our map for the ConsensusTarget class. Note the "Not.LazyLoad"
+    /// </summary>
     public class ConsensusTargetMap : ClassMap<ConsensusTarget>
     {
+		/// <summary>
+		/// Constructor
+		/// </summary>
         public ConsensusTargetMap()
         {
             Not.LazyLoad();

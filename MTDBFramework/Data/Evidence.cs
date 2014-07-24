@@ -503,6 +503,10 @@ namespace MTDBFramework.Data
             return cleanPeptide;
         }
 
+		/// <summary>
+		/// Overloaded string return
+		/// </summary>
+		/// <returns></returns>
         public override string ToString()
         {
             return Sequence;

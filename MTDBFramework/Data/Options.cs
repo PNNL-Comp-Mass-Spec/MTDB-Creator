@@ -10,6 +10,9 @@ using PNNLOmics.Algorithms.Regression;
 
 namespace MTDBFramework.Data
 {
+	/// <summary>
+	/// MTDBFramework configuration options
+	/// </summary>
     public class Options : ObservableObject
     {
         #region Private Fields
@@ -41,9 +44,14 @@ namespace MTDBFramework.Data
 
         #region Public Properties
 
+		/// <summary>
+		/// Id
+		/// </summary>
         public int Id;
 
-        // Format of saved Database
+        /// <summary>
+        /// Format of saved Database
+        /// </summary>
         public DatabaseType DatabaseType
         {
             get { return m_databaseType; }
@@ -54,7 +62,9 @@ namespace MTDBFramework.Data
             }
         }
 
-        // Regression
+        /// <summary>
+		/// Regression
+        /// </summary>
         public RegressionType RegressionType
         {
             get
@@ -68,8 +78,14 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Options Changed
+		/// </summary>
         public bool OptionsChanged { get; set; }
 
+		/// <summary>
+		/// Regression Order
+		/// </summary>
         public short RegressionOrder
         {
             get
@@ -84,6 +100,9 @@ namespace MTDBFramework.Data
         }
         
         // General
+		/// <summary>
+		/// Target Filter Type
+		/// </summary>
         public TargetWorkflowType TargetFilterType
         {
             get
@@ -97,6 +116,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Retention Time Predictor Type
+		/// </summary>
         public RetentionTimePredictionType PredictorType
         {
             get
@@ -111,6 +133,9 @@ namespace MTDBFramework.Data
         }
 
         // Peptides
+		/// <summary>
+		/// Maximum mods for peptide alignment
+		/// </summary>
         public int MaxModsForAlignment
         {
             get
@@ -124,6 +149,9 @@ namespace MTDBFramework.Data
             }  
         }
 
+		/// <summary>
+		/// Minimum observations for export
+		/// </summary>
         public short MinObservationsForExport
         {
             get
@@ -137,6 +165,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Whether to export Tryptic peptides
+		/// </summary>
         public bool ExportTryptic
         {
             get
@@ -150,6 +181,9 @@ namespace MTDBFramework.Data
             } 
         }
 
+		/// <summary>
+		/// Whether to export partially Tryptic peptides
+		/// </summary>
         public bool ExportPartiallyTryptic
         {
             get
@@ -163,6 +197,9 @@ namespace MTDBFramework.Data
             } 
         }
 
+		/// <summary>
+		/// Whether to export non-Tryptic peptides
+		/// </summary>
         public bool ExportNonTryptic
         {
             get
@@ -176,6 +213,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Minimum XCorr for exporting Tryptic peptides
+		/// </summary>
         public double[] MinXCorrForExportTryptic
         {
             get
@@ -189,6 +229,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Minimum XCorr for exporting partially Tryptic peptides
+		/// </summary>
         public double[] MinXCorrForExportPartiallyTryptic
         {
             get
@@ -202,6 +245,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Minimum XCorr for exporting non-Tryptic peptides
+		/// </summary>
         public double[] MinXCorrForExportNonTryptic
         {
             get
@@ -216,6 +262,9 @@ namespace MTDBFramework.Data
         }
 
         // Sequest
+		/// <summary>
+		/// Minimum XCorr for Sequest Alignment
+		/// </summary>
         public double MinXCorrForAlignment
         {
             get
@@ -229,6 +278,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Use DelCn for Sequest
+		/// </summary>
         public bool UseDelCn
         {
             get
@@ -242,6 +294,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Maximum DelCn for Sequest
+		/// </summary>
         public double MaxDelCn
         {
             get
@@ -256,6 +311,9 @@ namespace MTDBFramework.Data
         }
 
         // Xtandem
+		/// <summary>
+		/// Maximum LogEVal for XTandem Alignment
+		/// </summary>
         public double MaxLogEValForXTandemAlignment
         {
             get
@@ -269,6 +327,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Maximum LogEVal for XTandem export
+		/// </summary>
         public double MaxLogEValForXTandemExport 
 {
             get
@@ -282,7 +343,10 @@ namespace MTDBFramework.Data
             }
         }
 
-        // MSAlign
+		// MSAlign
+		/// <summary>
+		/// Maximum LogEVal for MSAlign Alignment
+		/// </summary>
         public double MaxLogEValForMsAlignAlignment
         {
             get
@@ -296,6 +360,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// MSGF FDR
+		/// </summary>
         public double MsgfFdr
         {
             get
@@ -309,6 +376,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Maximum MSGF SpecProb
+		/// </summary>
         public double MaxMsgfSpecProb
         {
             get
@@ -323,6 +393,9 @@ namespace MTDBFramework.Data
         }
 
         // Other
+		/// <summary>
+		/// Maximum Rank for export
+		/// </summary>
         public short MaxRankForExport
         {
             get
@@ -338,6 +411,9 @@ namespace MTDBFramework.Data
 
         #endregion
 
+		/// <summary>
+		/// Constructor to default values
+		/// </summary>
         public Options()
         {
             DatabaseType = DatabaseType.SQLite;

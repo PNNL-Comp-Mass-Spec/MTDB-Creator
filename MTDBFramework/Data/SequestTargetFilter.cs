@@ -1,9 +1,19 @@
 ﻿namespace MTDBFramework.Data
 {
+	/// <summary>
+	/// Target filtering for Sequest workflows
+	/// </summary>
     public class SequestTargetFilter : ITargetFilter
     {
+		/// <summary>
+		/// Options
+		/// </summary>
         public Options FilterOptions { get; set; }
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="options"></param>
         public SequestTargetFilter(Options options)
         {
             FilterOptions = options;
@@ -25,7 +35,6 @@
 
             return ShouldFilter(result.XCorr, result.SpecProb);
         }
-
 
         /// <summary>
         /// Determine whether the given evidence should be filtered out

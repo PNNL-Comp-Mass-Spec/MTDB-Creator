@@ -6,6 +6,9 @@ using System;
 
 namespace MTDBFramework.Data
 {
+	/// <summary>
+	/// XTandem input storage for evidence
+	/// </summary>
     public class XTandemResult : Evidence
     {
         #region Private Fields
@@ -25,6 +28,9 @@ namespace MTDBFramework.Data
 
         #region Public Properties
 
+		/// <summary>
+		/// Group Id
+		/// </summary>
         public int GroupId
         {
             get
@@ -38,6 +44,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// B Score
+		/// </summary>
         public double BScore
         {
             get
@@ -51,6 +60,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Delta CN2
+		/// </summary>
         public double DeltaCn2
         {
             get
@@ -64,6 +76,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Log Intensity
+		/// </summary>
         public double LogIntensity
         {
             get
@@ -77,6 +92,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Log Peptide E Value
+		/// </summary>
         public double LogPeptideEValue
         {
             get
@@ -90,6 +108,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Number of Y Ions
+		/// </summary>
         public short NumberYIons
         {
             get
@@ -103,6 +124,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Number of B Ions
+		/// </summary>
         public short NumberBIons
         {
             get
@@ -116,6 +140,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Peptide Hyperscore
+		/// </summary>
         public double PeptideHyperscore
         {
             get
@@ -129,6 +156,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Y Score
+		/// </summary>
         public double YScore
         {
             get
@@ -142,6 +172,9 @@ namespace MTDBFramework.Data
             }
         }
 
+		/// <summary>
+		/// Number of Tryptic Ends
+		/// </summary>
         public short NumTrypticEnds
         {
             get

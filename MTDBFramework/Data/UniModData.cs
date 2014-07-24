@@ -20,6 +20,10 @@ namespace MTDBFramework.Data
 			private const string SymbolOrdering = "C,13C,H,2H,O,18O,N,15N,S";
 			private string[] _symbolOrder;
 
+			/// <summary>
+			/// Overloaded string output
+			/// </summary>
+			/// <returns>Formatted chemical formula</returns>
 		    public override string ToString()
 		    {
 			    string formula = "";

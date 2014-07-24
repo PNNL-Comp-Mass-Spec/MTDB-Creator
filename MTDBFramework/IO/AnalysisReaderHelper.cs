@@ -13,6 +13,9 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.IO
 {
+	/// <summary>
+	/// Peptide Cache
+	/// </summary>
     public static class PeptideCache
     {
         private static readonly ConcurrentDictionary<string, double> Cache;
@@ -26,27 +29,51 @@ namespace MTDBFramework.IO
             Cache = new ConcurrentDictionary<string, double>(concurrencyLevel, initialCapacity);
         }
 
+		/// <summary>
+		/// Clear the peptide cache
+		/// </summary>
         public static void Clear()
         {
             Cache.Clear();
         }
 
+		/// <summary>
+		/// Query for existence of a peptide in the cache
+		/// </summary>
+		/// <param name="peptide"></param>
+		/// <returns></returns>
         [Obsolete("Use TryGetValue")]
         public static bool HasValue(string peptide)
         {
             return Cache.ContainsKey(peptide);
         }
 
+		/// <summary>
+		/// If the peptide exists in the cache, returns its predictedNET 
+		/// </summary>
+		/// <param name="peptide"></param>
+		/// <param name="predictedNET"></param>
+		/// <returns>True if successful, false otherwise</returns>
         public static bool TryGetValue(string peptide, out double predictedNET)
         {
             return Cache.TryGetValue(peptide, out predictedNET);
         }
 
+		/// <summary>
+		/// Add a peptide and its NET to the cache
+		/// </summary>
+		/// <param name="peptide"></param>
+		/// <param name="net"></param>
         public static void Add(string peptide, double net)
         {
             Cache.TryAdd(peptide, net);
         }
 
+		/// <summary>
+		/// Retrieves the predictedNET of peptide from the cache
+		/// </summary>
+		/// <param name="peptide"></param>
+		/// <returns></returns>
         [Obsolete("Use TryGetValue")]
         public static double RetrieveValue(string peptide)
         {
@@ -59,6 +86,9 @@ namespace MTDBFramework.IO
         }
     }
 
+	/// <summary>
+	/// Analysis Reader Helper
+	/// </summary>
     public class AnalysisReaderHelper
     {
 
@@ -205,17 +235,21 @@ namespace MTDBFramework.IO
             return scanToTime;
         }
 
-        // Entry point for calculating the predicted NET.
-        // Accepts a Retention time predictor and an IEnumerable of Evidences
-        // For each evidence, it passes the clean peptide sequence through the peptideCache alongside
-        // the predictor to determine the predicted NET. If the peptide has been seen before, it has
-        // already been added into a dictionary and so it simply looks up the relevant NET for the
-        // peptide and returns that. Otherwise, it passes the peptide through the predictor's
-        // GetElutionTime method, adds that value to the peptide cache with the sequence as the key
-        // so that if it is seen again it will get the value faster.
+		/// <summary>
+		/// Calculate the predicted NETs of the evidences
+		/// </summary>
+		/// <param name="predictor">Retention Time Predictor</param>
+		/// <param name="evidences">Evidences to process</param>
+		/// <remarks>
+		/// For each evidence, it passes the clean peptide sequence through the peptideCache alongside
+		/// the predictor to determine the predicted NET. If the peptide has been seen before, it has
+		/// already been added into a dictionary and so it simply looks up the relevant NET for the
+		/// peptide and returns that. Otherwise, it passes the peptide through the predictor's
+		/// GetElutionTime method, adds that value to the peptide cache with the sequence as the key
+		/// so that if it is seen again it will get the value faster.
+		/// </remarks>
         public void CalculatePredictedNet(IRetentionTimePredictor predictor, IEnumerable<Evidence> evidences)
         {
-
             Parallel.ForEach(evidences, evidence =>
             {
                 evidence.PredictedNet = ComputePeptideNET(evidence.CleanPeptide, predictor);
@@ -223,6 +257,12 @@ namespace MTDBFramework.IO
 
         }
 
+		/// <summary>
+		/// Calculate the predicted NET of a single peptide
+		/// </summary>
+		/// <param name="peptide"></param>
+		/// <param name="predictor">Retention Time Predictor</param>
+		/// <returns></returns>
         public double ComputePeptideNET(string peptide, IRetentionTimePredictor predictor)
         {
             double predictedNET;

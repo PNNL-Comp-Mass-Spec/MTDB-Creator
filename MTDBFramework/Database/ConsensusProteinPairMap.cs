@@ -2,8 +2,14 @@
 
 namespace MTDBFramework.Database
 {
+	/// <summary>
+	/// NHibernate mapping for ConsensusProteinPair class
+	/// </summary>
     public class ConsensusProteinPairMap : ClassMap<ConsensusProteinPair>
     {
+		/// <summary>
+		/// Constructor
+		/// </summary>
         public ConsensusProteinPairMap()
         {
             Not.LazyLoad();

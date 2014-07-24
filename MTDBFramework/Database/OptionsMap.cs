@@ -3,8 +3,14 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Database
 {
-    class OptionsMap : ClassMap<Options>
+	/// <summary>
+	/// NHibernate mapping for the Options class
+	/// </summary>
+    public class OptionsMap : ClassMap<Options>
     {
+		/// <summary>
+		/// Constructor
+		/// </summary>
         public OptionsMap()
         {
             Not.LazyLoad();

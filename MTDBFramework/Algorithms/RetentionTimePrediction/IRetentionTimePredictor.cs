@@ -1,5 +1,8 @@
 ﻿namespace MTDBFramework.Algorithms.RetentionTimePrediction
 {
+	/// <summary>
+	/// Interface for Elution time prediction of a clean peptide sequence
+	/// </summary>
     public interface IRetentionTimePredictor
     {
         /// <summary>

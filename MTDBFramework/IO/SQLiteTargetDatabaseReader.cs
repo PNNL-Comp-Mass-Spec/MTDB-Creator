@@ -100,6 +100,11 @@ namespace MTDBFramework.IO
             return database;
         }
 
+		/// <summary>
+		/// Reads a LCMS Dataset from the path provided.
+		/// </summary>
+		/// <param name="path">Path to SQLite database file.</param>
+		/// <returns>Target Database</returns>
         public IEnumerable<LcmsDataSet> Read(string path)
         {
 			//var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);

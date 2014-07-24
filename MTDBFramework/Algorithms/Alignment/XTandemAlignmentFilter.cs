@@ -6,10 +6,20 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Algorithms.Alignment
 {
+	/// <summary>
+	/// Alignment Filtering for XTandem Workflows
+	/// </summary>
     public class XTandemAlignmentFilter : ITargetFilter
     {
+		/// <summary>
+		/// Options
+		/// </summary>
         public Options FilterOptions { get; set; }
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="options"></param>
         public XTandemAlignmentFilter(Options options)
         {
             FilterOptions = options;

@@ -3,8 +3,14 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Database
 {
+	/// <summary>
+	/// NHibernate mapping for the ProteinInformation class
+	/// </summary>
     public class ProteinInformationMap : ClassMap<ProteinInformation>
     {
+		/// <summary>
+		/// Constructor
+		/// </summary>
         public ProteinInformationMap()
         {
             Not.LazyLoad();

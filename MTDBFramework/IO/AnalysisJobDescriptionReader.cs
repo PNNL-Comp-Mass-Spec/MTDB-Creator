@@ -9,8 +9,16 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.IO
 {
+	/// <summary>
+	/// Configuration of Analysis Job Descriptions
+	/// </summary>
     public class AnalysisJobDescriptionReader : TableDataReaderBase<AnalysisJobItem>
     {
+		/// <summary>
+		/// Read the job description data for an analysis job item
+		/// </summary>
+		/// <param name="path"></param>
+		/// <returns></returns>
         public IEnumerable<AnalysisJobItem> Read(string path)
         {
             // ArgumentNullException?
@@ -37,6 +45,10 @@ namespace MTDBFramework.IO
             return analysisJobItems;
         }
 
+		/// <summary>
+		/// Set the header indices
+		/// </summary>
+		/// <param name="actualHeader"></param>
         protected override void SetHeaderIndices(string actualHeader)
         {
             var actualHeaders = actualHeader.Split(Delimiters, StringSplitOptions.None);
@@ -47,6 +59,11 @@ namespace MTDBFramework.IO
             }
         }
 
+		/// <summary>
+		/// Create an analysis job item from formatted string input
+		/// </summary>
+		/// <param name="line"></param>
+		/// <returns></returns>
         protected override AnalysisJobItem ProcessLine(string line)
         {
             var lineCells = line.Split(Delimiters, StringSplitOptions.None);

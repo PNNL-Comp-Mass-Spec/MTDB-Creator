@@ -10,6 +10,9 @@ using MTDBFramework.UI;
 
 namespace MTDBFramework.IO
 {
+	/// <summary>
+	/// Processing for analysis jobs
+	/// </summary>
     public class AnalysisJobProcessor : IProcessor
     {
         private int mCurrentItem;
@@ -19,22 +22,35 @@ namespace MTDBFramework.IO
 
         private PHRPReaderBase mAnalysisReader;
 
+		/// <summary>
+		/// Options
+		/// </summary>
         public Options ProcessorOptions { get; set; }
 
+		/// <summary>
+		/// Support thread cancellation
+		/// </summary>
         public void AbortProcessing()
         {
             mAbortRequested = true;
             mAnalysisReader.AbortProcessing();
         }
 
+		/// <summary>
+		/// Constructor
+		/// </summary>
+		/// <param name="options"></param>
         public AnalysisJobProcessor(Options options)
         {
             ProcessorOptions = options;
         }
 
-		// Entry point for processing analysis job items. Accepts a IEnumerable of Analysis Job Items
-		// and returns the same.
-		// It will Analyse each one individually depending on the file type using PHRP Reader
+		/// <summary>
+		/// Process Analysis Job Items according to their individual file types
+		/// </summary>
+		/// <param name="analysisJobItems">Analysis Job Items</param>
+		/// <param name="bWorker"></param>
+		/// <returns>Processed Analysis Job Items</returns>
         public IEnumerable<AnalysisJobItem> Process(IEnumerable<AnalysisJobItem> analysisJobItems, BackgroundWorker bWorker)
         {
             // analysisJobItems should have LcmsDataSet field be null
@@ -76,8 +92,15 @@ namespace MTDBFramework.IO
 
         #region Events
 
+		/// <summary>
+		/// Progress changed Event handler
+		/// </summary>
         public event MtdbProgressChangedEventHandler ProgressChanged;
 
+		/// <summary>
+		/// Event handler
+		/// </summary>
+		/// <param name="e"></param>
         protected void OnProgressChanged(MtdbProgressChangedEventArgs e)
         {
             if (ProgressChanged != null)

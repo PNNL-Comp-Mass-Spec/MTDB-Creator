@@ -2,6 +2,9 @@
 
 namespace MTDBFramework.Data
 {
+	/// <summary>
+	/// MSGF+ input storage for evidence
+	/// </summary>
     public class MsgfPlusResult : Evidence
     {
         private string m_reference;
@@ -15,6 +18,9 @@ namespace MTDBFramework.Data
         private double m_pepQValue;
         private int m_isotopeError;
         
+		/// <summary>
+		/// Reference
+		/// </summary>
         public string Reference
         {
             get
@@ -27,6 +33,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("Reference");
             }
         }
+
+		/// <summary>
+		/// Number of Tryptic Ends
+		/// </summary>
         public short NumTrypticEnds 
         {
             get
@@ -39,6 +49,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("NumTrypticEnds");
             }
         }
+
+		/// <summary>
+		/// DeNovo Score
+		/// </summary>
         public int DeNovoScore
         {
             get
@@ -51,6 +65,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("DeNovoScore");
             }
         }
+
+		/// <summary>
+		/// MSGF Score
+		/// </summary>
         public int MsgfScore
         {
             get
@@ -63,6 +81,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("MSGFScore");
             }
         }
+
+		/// <summary>
+		/// Spec E Value
+		/// </summary>
         public double SpecEValue
         {
             get
@@ -75,6 +97,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("SpecEValue");
             }
         }
+
+		/// <summary>
+		/// Rank Spec E Value
+		/// </summary>
         public int RankSpecEValue
         {
             get
@@ -87,6 +113,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("Rank_SpecEValue");
             }
         }
+
+		/// <summary>
+		/// E Value
+		/// </summary>
         public double EValue
         {
             get
@@ -99,6 +129,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("EValue");
             }
         }
+
+		/// <summary>
+		/// Q Value
+		/// </summary>
         public double QValue 
         {
             get
@@ -111,6 +145,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("QValue");
             }
         }
+
+		/// <summary>
+		/// Peptide Q Value
+		/// </summary>
         public double PepQValue
         {
             get
@@ -123,6 +161,10 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("PepQValue");
             }
         }
+
+		/// <summary>
+		/// Isotope Error
+		/// </summary>
         public int IsotopeError
         {
             get

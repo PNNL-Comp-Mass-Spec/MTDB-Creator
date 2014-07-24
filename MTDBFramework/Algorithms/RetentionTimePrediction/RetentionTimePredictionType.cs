@@ -5,7 +5,13 @@
     /// </summary>
     public enum RetentionTimePredictionType
     {
+		/// <summary>
+		/// KANGAS predictor
+		/// </summary>
         KANGAS,
+		/// <summary>
+		/// KROKHIN predictor
+		/// </summary>
         KROKHIN
     }
 }
