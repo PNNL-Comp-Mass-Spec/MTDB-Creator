@@ -14,7 +14,7 @@ namespace MTDBFramework
 	/// <summary>
 	/// API for using MTDBCreator in other applications
 	/// </summary>
-    public class MtdbCreator
+    public static class MtdbCreator
     {
 		/// <summary>
 		/// Create a MTDB with the given files
@@ -22,7 +22,7 @@ namespace MTDBFramework
 		/// <param name="paths">Paths to the files to process</param>
 		/// <param name="dbFileName">Name of MTDB to create</param>
 		/// <returns></returns>
-        public TargetDatabase CreateDB(List<string> paths, string dbFileName)
+        public static TargetDatabase CreateDB(List<string> paths, string dbFileName)
         {
             var options = new Options();
             var analysisProcessor = new AnalysisJobProcessor(options);
@@ -89,7 +89,22 @@ namespace MTDBFramework
             }
         }
 
-        private LcmsIdentificationTool DetermineTool(string path)
+		/// <summary>
+		/// Load an existing MTDB database into a TargetDatabase
+		/// </summary>
+		/// <param name="path">Path to MTDB file</param>
+		/// <returns></returns>
+		public static TargetDatabase LoadDB(string path)
+		{
+			if (File.Exists(path) && Path.GetExtension(path) == "mtdb")
+			{
+				var mtdbReader = new SqLiteTargetDatabaseReader();
+				return mtdbReader.ReadDB(path);
+			}
+			return new TargetDatabase();
+		}
+
+        private static LcmsIdentificationTool DetermineTool(string path)
         {
             LcmsIdentificationTool tool = LcmsIdentificationTool.NOT_SUPPORTED;
             if (path.EndsWith("msgfdb_syn.txt"))
