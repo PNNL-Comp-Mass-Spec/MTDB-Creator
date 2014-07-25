@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
-using MTDBFramework.Database;
 using PHRPReader;
 
 namespace MTDBFramework.IO

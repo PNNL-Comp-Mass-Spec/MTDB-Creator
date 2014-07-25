@@ -1,10 +1,4 @@
-﻿#region Namespaces
-
-using System;
-
-#endregion
-
-namespace MTDBFramework.Data
+﻿namespace MTDBFramework.Data
 {
 	/// <summary>
 	/// XTandem input storage for evidence

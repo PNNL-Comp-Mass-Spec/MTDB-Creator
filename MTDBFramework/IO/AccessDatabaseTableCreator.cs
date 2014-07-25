@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace MTDBFramework.IO
 {
@@ -9,33 +6,33 @@ namespace MTDBFramework.IO
     {
         public static List<ADOX.Table> CreateTables()
         {
-            var tableList = new List<ADOX.Table>();
-
-            tableList.Add(CreateConsensusTargetTable());
-            tableList.Add(CreateConsensusProteinPairTable());
-            tableList.Add(CreateEvidenceTable());
-            tableList.Add(CreateDatasetTable());
-            tableList.Add(CreateOptionsTable());
-            tableList.Add(CreateProteinTable());
+            var tableList = new List<ADOX.Table>
+            {
+                CreateConsensusTargetTable(),
+                CreateConsensusProteinPairTable(),
+                CreateEvidenceTable(),
+                CreateDatasetTable(),
+                CreateOptionsTable(),
+                CreateProteinTable()
+            };
 
             return tableList;
         }
 
         private static ADOX.Table CreateConsensusTargetTable()
         {
-            var consensusTable = new ADOX.Table();
+            var consensusTable = new ADOX.Table {Name = "ConsensusTargets"};
 
-            consensusTable.Name = "ConsensusTargets";
             consensusTable.Columns.Append("ConsensusId", ADOX.DataTypeEnum.adInteger);
             consensusTable.Columns.Append("Net", ADOX.DataTypeEnum.adDouble);
             consensusTable.Columns.Append("StdevNet", ADOX.DataTypeEnum.adDouble);
             consensusTable.Columns.Append("PredictedNet", ADOX.DataTypeEnum.adDouble);
             consensusTable.Columns.Append("TheoreticalMonoIsotopicMass", ADOX.DataTypeEnum.adDouble);
-            consensusTable.Columns.Append("PrefixResidue", ADOX.DataTypeEnum.adVarWChar);
-            consensusTable.Columns.Append("SuffixResidue", ADOX.DataTypeEnum.adVarWChar);
-            consensusTable.Columns.Append("Sequence", ADOX.DataTypeEnum.adVarWChar);
+            consensusTable.Columns.Append("PrefixResidue");
+            consensusTable.Columns.Append("SuffixResidue");
+            consensusTable.Columns.Append("Sequence");
             consensusTable.Columns.Append("ModificationCount", ADOX.DataTypeEnum.adInteger);
-            consensusTable.Columns.Append("ModificationDescription", ADOX.DataTypeEnum.adVarWChar);
+            consensusTable.Columns.Append("ModificationDescription");
             consensusTable.Columns.Append("MultiProteinCount", ADOX.DataTypeEnum.adInteger);
 
             return consensusTable;
@@ -43,9 +40,8 @@ namespace MTDBFramework.IO
 
         private static ADOX.Table CreateConsensusProteinPairTable()
         {
-            var CPPTable = new ADOX.Table();
+            var CPPTable = new ADOX.Table {Name = "ConsensusProteinPair"};
 
-            CPPTable.Name = "ConsensusProteinPair";
             CPPTable.Columns.Append("PairId", ADOX.DataTypeEnum.adInteger);
             CPPTable.Columns.Append("ConsensusId", ADOX.DataTypeEnum.adInteger);
             CPPTable.Columns.Append("ProteinId", ADOX.DataTypeEnum.adInteger);
@@ -59,9 +55,8 @@ namespace MTDBFramework.IO
 
         private static ADOX.Table CreateEvidenceTable()
         {
-            var evidenceTable = new ADOX.Table();
+            var evidenceTable = new ADOX.Table {Name = "Evidence"};
 
-            evidenceTable.Name = "Evidence";
             evidenceTable.Columns.Append("EvidenceId", ADOX.DataTypeEnum.adInteger);
             evidenceTable.Columns.Append("Charge", ADOX.DataTypeEnum.adInteger);
             evidenceTable.Columns.Append("ObservedNet", ADOX.DataTypeEnum.adDouble);
@@ -79,36 +74,34 @@ namespace MTDBFramework.IO
 
         private static ADOX.Table CreateDatasetTable()
         {
-            var datasetTable = new ADOX.Table();
+            var datasetTable = new ADOX.Table {Name = "TargetDataSet"};
 
-            datasetTable.Name = "TargetDataSet";
             datasetTable.Columns.Append("DatasetId", ADOX.DataTypeEnum.adInteger);
-            datasetTable.Columns.Append("Name", ADOX.DataTypeEnum.adVarWChar);
-            datasetTable.Columns.Append("SearchTool", ADOX.DataTypeEnum.adVarWChar);
+            datasetTable.Columns.Append("Name");
+            datasetTable.Columns.Append("SearchTool");
 
             return datasetTable;
         }
 
         private static ADOX.Table CreateOptionsTable()
         {
-            var optionsTable = new ADOX.Table();
+            var optionsTable = new ADOX.Table {Name = "Options"};
 
-            optionsTable.Name = "Options";
             optionsTable.Columns.Append("OptionsId", ADOX.DataTypeEnum.adInteger);
-            optionsTable.Columns.Append("RegressionType", ADOX.DataTypeEnum.adVarWChar);
+            optionsTable.Columns.Append("RegressionType");
             optionsTable.Columns.Append("RegressionOrder", ADOX.DataTypeEnum.adInteger);
-            optionsTable.Columns.Append("TargetFilterType", ADOX.DataTypeEnum.adVarWChar);
-            optionsTable.Columns.Append("PredictorType", ADOX.DataTypeEnum.adVarWChar);
+            optionsTable.Columns.Append("TargetFilterType");
+            optionsTable.Columns.Append("PredictorType");
             optionsTable.Columns.Append("MaxModsForAlignment", ADOX.DataTypeEnum.adInteger);
             optionsTable.Columns.Append("MinObservationsForExport", ADOX.DataTypeEnum.adInteger);
-            optionsTable.Columns.Append("ExportTryptic", ADOX.DataTypeEnum.adVarWChar);
-            optionsTable.Columns.Append("ExportPartiallyTryptic", ADOX.DataTypeEnum.adVarWChar);
-            optionsTable.Columns.Append("ExportNonTryptic", ADOX.DataTypeEnum.adVarWChar);
-            optionsTable.Columns.Append("MinXCorrForExportTryptic", ADOX.DataTypeEnum.adVarWChar);
-            optionsTable.Columns.Append("MinXCorrForExportPartiallyTryptic", ADOX.DataTypeEnum.adVarWChar);
-            optionsTable.Columns.Append("MinXCorrForExportNonTryptic", ADOX.DataTypeEnum.adVarWChar);
+            optionsTable.Columns.Append("ExportTryptic");
+            optionsTable.Columns.Append("ExportPartiallyTryptic");
+            optionsTable.Columns.Append("ExportNonTryptic");
+            optionsTable.Columns.Append("MinXCorrForExportTryptic");
+            optionsTable.Columns.Append("MinXCorrForExportPartiallyTryptic");
+            optionsTable.Columns.Append("MinXCorrForExportNonTryptic");
             optionsTable.Columns.Append("MinXCorrForAlignment", ADOX.DataTypeEnum.adDouble);
-            optionsTable.Columns.Append("UseDelCn", ADOX.DataTypeEnum.adVarWChar);
+            optionsTable.Columns.Append("UseDelCn");
             optionsTable.Columns.Append("MaxDelCn", ADOX.DataTypeEnum.adDouble);
             optionsTable.Columns.Append("MaxLogEValForXTandemAlignment", ADOX.DataTypeEnum.adDouble);
             optionsTable.Columns.Append("MaxLogEValForXTandemExport", ADOX.DataTypeEnum.adDouble);
@@ -119,11 +112,10 @@ namespace MTDBFramework.IO
 
         private static ADOX.Table CreateProteinTable()
         {
-            var proteinTable = new ADOX.Table();
+            var proteinTable = new ADOX.Table {Name = "ProteinInformation"};
 
-            proteinTable.Name = "ProteinInformation";
             proteinTable.Columns.Append("ProteinId", ADOX.DataTypeEnum.adInteger);
-            proteinTable.Columns.Append("ProteinName", ADOX.DataTypeEnum.adVarWChar);
+            proteinTable.Columns.Append("ProteinName");
 
             return proteinTable;
         }

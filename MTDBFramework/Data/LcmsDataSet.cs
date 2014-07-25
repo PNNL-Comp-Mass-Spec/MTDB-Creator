@@ -108,7 +108,7 @@ namespace MTDBFramework.Data
 		/// <param name="analyzed">Whether the dataset has already been analyzed</param>
         public LcmsDataSet(bool analyzed)
         {
-            PreviouslyAnalyzed = true; 
+            PreviouslyAnalyzed = analyzed; 
             Name = String.Empty;
             Tool = LcmsIdentificationTool.Raw;
             Evidences = new List<Evidence>();

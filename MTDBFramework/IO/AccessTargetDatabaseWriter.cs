@@ -2,10 +2,7 @@
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
-using System.Data.OleDb;
-using System;
 using System.IO;
-using ADOX;
 using ADODB;
 
 namespace MTDBFramework.IO
@@ -20,7 +17,7 @@ namespace MTDBFramework.IO
             var cat = new ADOX.Catalog();
             var tables = AccessDatabaseTableCreator.CreateTables();
 
-            ADODB.Connection con = null;
+            Connection con = null;
 
             try
             {
@@ -29,7 +26,7 @@ namespace MTDBFramework.IO
                 foreach (var member in tables)
                 {
                     cat.Tables.Append(member);
-                    con = cat.ActiveConnection as ADODB.Connection;
+                    con = cat.ActiveConnection as Connection;
                     if (con != null)
                     {
                     }
@@ -58,8 +55,8 @@ namespace MTDBFramework.IO
                 File.Delete(path);
             }
 
-            ADODB.Connection con = CreateNewAccessDatabase(path);
-            var record = new ADODB.Recordset();
+            Connection con = CreateNewAccessDatabase(path);
+            var record = new Recordset();
             /* This section breaks up the Target object, pulling out the individual TargetDataSet,  SequenceInfo,
              * and TargetPeptideInfo. These objects are then "reverse linked", so that each of these objects 
              * relates to multiple evidences. This is because these objects need to know what they are related to.
@@ -121,14 +118,16 @@ namespace MTDBFramework.IO
                     protein.Id = m_uniqueProteins[protein.ProteinName].Id;
                     var cProt = m_uniqueProteins[protein.ProteinName];
                     currentPair++;
-                    ConsensusProteinPair cPPair = new ConsensusProteinPair();
-                    cPPair.Id = currentPair;
-                    cPPair.Consensus = consensusTarget;
-                    cPPair.Protein = cProt;
-                    cPPair.CleavageState = (short)cProt.CleavageState;
-                    cPPair.TerminusState = (short)cProt.TerminusState;
-                    cPPair.ResidueStart = (short)cProt.ResidueStart;
-                    cPPair.ResidueEnd = (short)cProt.ResidueEnd;
+                    var cPPair = new ConsensusProteinPair
+                    {
+                        Id = currentPair,
+                        Consensus = consensusTarget,
+                        Protein = cProt,
+                        CleavageState = (short) cProt.CleavageState,
+                        TerminusState = (short) cProt.TerminusState,
+                        ResidueStart = (short) cProt.ResidueStart,
+                        ResidueEnd = (short) cProt.ResidueEnd
+                    };
                     protein.ConsensusProtein.Add(cPPair);
                     consensusTarget.ConsensusProtein.Add(cPPair);
                     con.BeginTrans();

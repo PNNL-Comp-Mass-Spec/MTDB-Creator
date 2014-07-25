@@ -1,6 +1,5 @@
 ﻿#region Namespaces
 
-using System;
 using MTDBFramework.Algorithms;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.UI;
