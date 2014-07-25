@@ -14,8 +14,9 @@ namespace MTDBFramework.IO
     /// </summary>
     public sealed class SqLiteTargetDatabaseReader : ITargetDatabaseReader
     {
-		private readonly TargetDatabase _TargetDB = new TargetDatabase();
-		private readonly Dictionary<string, LcmsDataSet> _LcmsDataDic = new Dictionary<string, LcmsDataSet>();
+		private readonly TargetDatabase _targetDB = new TargetDatabase();
+		private readonly Dictionary<string, LcmsDataSet> _lcmsDataDic = new Dictionary<string, LcmsDataSet>();
+	    private string _lastReadFile;
 		
 		/// <summary>
 		/// Reads a target database from the path provided.
@@ -25,7 +26,7 @@ namespace MTDBFramework.IO
 		public TargetDatabase ReadDB(string path)
 		{
 			ReadSQLite(path);
-			return _TargetDB;
+			return _targetDB;
 		}
 
 		/// <summary>
@@ -36,10 +37,9 @@ namespace MTDBFramework.IO
 		public IEnumerable<LcmsDataSet> Read(string path)
 		{
 			ReadSQLite(path);
-
 			var datasets = new List<LcmsDataSet>();
 
-			foreach (var member in _LcmsDataDic)
+			foreach (var member in _lcmsDataDic)
 			{
 				datasets.Add(member.Value);
 			}
@@ -49,6 +49,15 @@ namespace MTDBFramework.IO
 
 		private void ReadSQLite(string path)
 		{
+			// Don't read again if we just read the file
+			if (path == _lastReadFile)
+			{
+				return;
+			}
+			// Reset the data
+			_targetDB.ClearTargets();
+			_lcmsDataDic.Clear();
+
 			//var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
 			DatabaseFactory.DatabaseFile = path;
             DatabaseFactory.ReadOrAppend = true;
@@ -92,7 +101,7 @@ namespace MTDBFramework.IO
                     consensus.PTMs.Clear();
                     consensus.Evidences.Clear();
                     consensus.Sequence = consensus.CleanSequence;
-                    _TargetDB.AddConsensusTarget(consensus);
+                    _targetDB.AddConsensusTarget(consensus);
                     consensusDic.Add(consensus.Id, consensus);
                 }
 
@@ -154,17 +163,19 @@ namespace MTDBFramework.IO
                     evidence.MonoisotopicMass = consensusDic[evidence.Parent.Id].TheoreticalMonoIsotopicMass;
                     evidence.PTMs = consensusDic[evidence.Parent.Id].PTMs;
 
-                    if (!_LcmsDataDic.ContainsKey(evidence.DataSet.Name))
+                    if (!_lcmsDataDic.ContainsKey(evidence.DataSet.Name))
                     {
                         var dataset = new LcmsDataSet(true);
-                        _LcmsDataDic.Add(evidence.DataSet.Name, dataset);
-                        _LcmsDataDic[evidence.DataSet.Name].Name = evidence.DataSet.Name;
-                        _LcmsDataDic[evidence.DataSet.Name].Tool = evidence.DataSet.Tool;
+                        _lcmsDataDic.Add(evidence.DataSet.Name, dataset);
+                        _lcmsDataDic[evidence.DataSet.Name].Name = evidence.DataSet.Name;
+                        _lcmsDataDic[evidence.DataSet.Name].Tool = evidence.DataSet.Tool;
                     }
-                    _LcmsDataDic[evidence.DataSet.Name].Evidences.Add(evidence);
+                    _lcmsDataDic[evidence.DataSet.Name].Evidences.Add(evidence);
                     consensusDic[evidence.Parent.Id].AddEvidence(evidence);
                 }
             }
+			// Set the member variable to avoid double reads.
+			_lastReadFile = path;
 		}
     }
 }

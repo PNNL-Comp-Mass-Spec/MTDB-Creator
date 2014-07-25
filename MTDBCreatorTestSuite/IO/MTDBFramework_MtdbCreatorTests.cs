@@ -17,6 +17,7 @@ namespace MTDBCreatorTestSuite.IO
 			paths.Add(@"Output4.mtdb");
 			paths.Add(@"Output5.mtdb");
 			paths.Add(@"Output6.mtdb");
+			paths.Add(@"Output7.mtdb");
 			foreach (var path in paths)
 			{
 				if (File.Exists(GetTestSuiteDataPath(path)))
@@ -75,13 +76,17 @@ namespace MTDBCreatorTestSuite.IO
 			Assert.AreEqual(atomic.ConsensusTargets.Count, appended.ConsensusTargets.Count);
 		}
 
-		[TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", @"Output4.mtdb", Ignore = false)]
+		[TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", @"Output7.mtdb", Ignore = false)]
 		public void TestAppendDuplicateMZID(string path, string outputPath)
 		{
 			var testPaths = new List<string>();
 			testPaths.Add(GetPath(path));
-			MTDBFramework.MtdbCreator.CreateDB(testPaths, GetTestSuiteDataPath(outputPath));
-			MTDBFramework.MtdbCreator.CreateDB(testPaths, GetTestSuiteDataPath(outputPath));
+			Console.WriteLine("Running dataset: First time");
+			var target1 = MTDBFramework.MtdbCreator.CreateDB(testPaths, GetTestSuiteDataPath(outputPath));
+			Console.WriteLine("Running dataset: Second time");
+			var target2 = MTDBFramework.MtdbCreator.CreateDB(testPaths, GetTestSuiteDataPath(outputPath));
+			// The number of consensus targets should not increase
+			Assert.AreEqual(target1.ConsensusTargets.Count, target2.ConsensusTargets.Count);
 		}
     }
 }
