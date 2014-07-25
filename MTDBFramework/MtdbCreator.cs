@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace MTDBFramework
 {
@@ -96,7 +95,7 @@ namespace MTDBFramework
 		/// <returns></returns>
 		public static TargetDatabase LoadDB(string path)
 		{
-			if (File.Exists(path) && Path.GetExtension(path) == "mtdb")
+			if (File.Exists(path) && Path.GetExtension(path) == ".mtdb")
 			{
 				var mtdbReader = new SqLiteTargetDatabaseReader();
 				return mtdbReader.ReadDB(path);
