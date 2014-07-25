@@ -306,7 +306,9 @@ namespace MTDBFramework.Data
                 nonNumeric += partialSeq + string.Format("[{0}{1}]", ((ptm.Mass > 0) ? "+" : "-"), ptm.Formula);
                 sequencePos = ptm.Location + 2;
                 // To skip over non-alphanumeric characters which may show up in sequence such as "*" or "&"
-                if (Sequence[sequencePos + symbolsRemoved] < 65 || Sequence[sequencePos + symbolsRemoved] > 90)
+                if ((Sequence[sequencePos + symbolsRemoved] != 46) && 
+                            (Sequence[sequencePos + symbolsRemoved] < 65 || 
+                            Sequence[sequencePos + symbolsRemoved] > 90))
                 {
                     sequencePos += ++symbolsRemoved;
                 }

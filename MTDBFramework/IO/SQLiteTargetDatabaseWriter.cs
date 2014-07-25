@@ -46,8 +46,8 @@ namespace MTDBFramework.IO
                      * exist in order to properly generate the relation. 
                      * */
                     var current = 0;
-                    var currentProt = 0;
-                    var currentPtm = 0;
+                    //var currentProt = 0;
+                    //var currentPtm = 0;
                     var total = database.ConsensusTargets.Count;
 		            foreach (var consensusTarget in database.ConsensusTargets)
 		            {
