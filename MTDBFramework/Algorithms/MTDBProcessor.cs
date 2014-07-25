@@ -10,10 +10,8 @@ using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
 using PNNLOmics.Algorithms.Alignment.LcmsWarp;
-using PNNLOmics.Algorithms.Regression;
 using PNNLOmics.Annotations;
 using PNNLOmics.Data.Features;
-using MTDBFramework.IO;
 
 #endregion
 
@@ -26,7 +24,6 @@ namespace MTDBFramework.Algorithms
     {
         private const int ProgressPercentStart = 0;
         private const int ProgressPercentComplete = 100;
-        private const int ProgressPercentMORESTUFF = 0;
 
         private int m_currentItem;
         private int m_totalItems;
@@ -126,21 +123,6 @@ namespace MTDBFramework.Algorithms
                     dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
                 }
 
-                //const bool PERFORM_LINEAR_REGRESSION = false;
-                //if (PERFORM_LINEAR_REGRESSION)
-                //{
-                //    if (ProcessorOptions.TargetFilterType != TargetWorkflowType.TOP_DOWN)
-                //    {
-                //        var regressor = LinearRegressorFactory.Create(ProcessorOptions.RegressionType);
-                //        dataSet.RegressionResult =
-                //            regressor.CalculateRegression(alignedTargets.Select(t => (double)t.Scan).ToList(),
-                //                                          alignedTargets.Select(t => t.PredictedNet).ToList());
-                //    }
-                //    else
-                //    {
-                //        dataSet.RegressionResult = aligner.AlignTargets(filteredTargets, alignedTargets);
-                //    }
-                //}
                 m_currentItem++;
             }
 
@@ -266,31 +248,11 @@ namespace MTDBFramework.Algorithms
                     }
                 }
 
-                //var alignedData = lcmsAligner.Align(datasetMassTagLight, umcDataset);
                 if (alignedData != null)
                 {
                     alignmentData.Add(alignedData);
                 }
-                //var residualList = new List<UMCLight> { Capacity = alignedData.ResidualData.Mz.Length };
-                ////Put the residual data into a list of UMCLights
-                //for (var a = 0; a < alignedData.ResidualData.Mz.Length; a++)
-                //{
-                //    var residual = new UMCLight
-                //    {
-                //        MassMonoisotopic = alignedData.ResidualData.MassErrorCorrected[a],
-                //        Net = alignedData.ResidualData.LinearCustomNet[a],
-                //        Scan = Convert.ToInt32(alignedData.ResidualData.Scan[a])
-                //    };
-                //    //Not actually monoisotopic mass here, it's the corrected massError from the warping
-                //    residualList.Add(residual);
-                //}
 
-                //residualList.Sort(UmcScanComparison);
-
-                //foreach (var umc in umcDataset)
-                //{
-                //    firstSeenPeptide[umc.]
-                //}
                 umcDataset.Sort((x, y) => x.ScanAligned.CompareTo(y.ScanAligned));
 
                 //Copy the residual data back into the evidences
@@ -303,18 +265,7 @@ namespace MTDBFramework.Algorithms
                         b++;
                     }
                 }
-
-                //foreach (var evidence in dataSet.Evidences)
-                //{
-                //    UMCLight value;
-                //    firstSeenPeptide.TryGetValue(evidence.Sequence, out value);
-                //    if (value != null)
-                //    {
-                //        evidence.MonoisotopicMass = value.MassMonoisotopicAligned;
-                //        evidence.ObservedNet = value.NetAligned;
-                //    }
-                //}
-
+                
                 foreach (var data in dataSet.Evidences.Where(data => !evidenceMap.ContainsKey(data.Id)))
                 {
                     evidenceMap.Add(data.Id, data);

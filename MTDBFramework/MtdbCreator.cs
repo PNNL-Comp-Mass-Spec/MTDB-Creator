@@ -82,10 +82,8 @@ namespace MTDBFramework
 
                 return database;
             }
-            else
-            {
-                return existingDatabase;
-            }
+                
+            return existingDatabase;
         }
 
 		/// <summary>
@@ -105,7 +103,7 @@ namespace MTDBFramework
 
         private static LcmsIdentificationTool DetermineTool(string path)
         {
-            LcmsIdentificationTool tool = LcmsIdentificationTool.NOT_SUPPORTED;
+            var tool = LcmsIdentificationTool.NOT_SUPPORTED;
             if (path.EndsWith("msgfdb_syn.txt"))
             {
                 tool = LcmsIdentificationTool.MsgfPlus;

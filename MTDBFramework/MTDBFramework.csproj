@@ -131,7 +131,6 @@
     <Compile Include="Database\ProteinInformationMap.cs" />
     <Compile Include="Database\TargetDatasetMap.cs" />
     <Compile Include="Database\EvidenceMap.cs" />
-    <Compile Include="Database\TargetPeptideInfoMap.cs" />
     <Compile Include="Data\AnalysisJobItem.cs" />
     <Compile Include="Data\ConsensusPtmPair.cs" />
     <Compile Include="Data\ConsensusTarget.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Statistics;
 using MTDBFramework.Database;
@@ -20,7 +21,7 @@ namespace MTDBFramework.Data
             Proteins = new List<ProteinInformation>();
             Charges = new List<int>();
             ConsensusProtein = new List<ConsensusProteinPair>();
-            PTMs = new List<PostTranslationalModification>();
+            Ptms = new List<PostTranslationalModification>();
         }
 
         #region Private fields
@@ -38,6 +39,8 @@ namespace MTDBFramework.Data
         private IList<ProteinInformation> m_proteins;
         private IList<int> m_charges;
         private IList<PostTranslationalModification> m_ptms;
+
+	    private const int PreCharCount = 2;
         #endregion
 
         #region Public Properties
@@ -229,7 +232,7 @@ namespace MTDBFramework.Data
 		/// <summary>
 		/// List of all Post-Translational Modifications observed in the ConsensusTarget
 		/// </summary>
-        public IList<PostTranslationalModification> PTMs
+        public IList<PostTranslationalModification> Ptms
         {
             get { return m_ptms; }
             set
@@ -252,7 +255,7 @@ namespace MTDBFramework.Data
                 Sequence = evidence.Sequence;
             }
             evidence.Sequence = Sequence;
-            if (PredictedNet == 0.0)
+            if (Math.Abs(PredictedNet) < double.Epsilon)
             {
                 PredictedNet = evidence.PredictedNet;
             }
@@ -278,37 +281,43 @@ namespace MTDBFramework.Data
             }
             evidence.ModificationCount = ModificationCount;
 
-            if(evidence.PTMs.Count != 0 && PTMs.Count == 0)
+            if(evidence.Ptms.Count != 0 && Ptms.Count == 0)
             {
-                foreach(var ptm in evidence.PTMs)
+                foreach(var ptm in evidence.Ptms)
                 {
-                    PTMs.Add(ptm);
+                    Ptms.Add(ptm);
                     ptm.Parent = this;
                 } 
             }
-            var tempList = PTMs.ToList();
+            var tempList = Ptms.ToList();
             tempList.Sort((x, y) => x.Location.CompareTo(y.Location));
 
             // Copy sequence as is up until you hit a modification
             //For numeric, add a bracket add +/- and copy the mass
             //For non numeric, add a bracket add +/- and copy the formula
-            string numeric = "";
-            string nonNumeric = "";
-            string partialSeq = "";
-            string cleanSeq = "";
-            int sequencePos = 0;
-            int symbolsRemoved = 0;
+            var numeric = "";
+            var nonNumeric = "";
+            var cleanSeq = "";
+
+            var sequencePos = 0;
+            var symbolsRemoved = 0;
+
+            string partialSeq;
+            
             foreach (var ptm in tempList)
             {
-                partialSeq = Sequence.Substring(sequencePos, (ptm.Location + 2 + symbolsRemoved) - sequencePos);
+                partialSeq = Sequence.Substring(sequencePos, (ptm.Location + PreCharCount + symbolsRemoved) - sequencePos);
                 cleanSeq += partialSeq;
                 numeric += partialSeq + string.Format("[{0}{1}]", ((ptm.Mass > 0) ? "+" : "-"), ptm.Mass);
                 nonNumeric += partialSeq + string.Format("[{0}{1}]", ((ptm.Mass > 0) ? "+" : "-"), ptm.Formula);
-                sequencePos = ptm.Location + 2;
-                // To skip over non-alphanumeric characters which may show up in sequence such as "*" or "&"
-                if ((Sequence[sequencePos + symbolsRemoved] != 46) && 
-                            (Sequence[sequencePos + symbolsRemoved] < 65 || 
-                            Sequence[sequencePos + symbolsRemoved] > 90))
+                sequencePos = ptm.Location + PreCharCount;
+                // To skip over non-alphanumeric characters in the sequence such as "*" or "&"
+                // which can be used to denote ptms in .txt files, but not skip over "." or "-"
+                // which are standard characters in peptide sequences to separate peptide from
+                // pre/post residues and to denote the lack of a pre/post residue respectively
+                int indexCheck = sequencePos + symbolsRemoved;
+                if ((Sequence[indexCheck] != 46 && Sequence[indexCheck] != 45) && 
+                        (Sequence[indexCheck] < 65 || Sequence[indexCheck] > 90))
                 {
                     sequencePos += ++symbolsRemoved;
                 }
@@ -318,7 +327,6 @@ namespace MTDBFramework.Data
             numeric += partialSeq;
             nonNumeric += partialSeq;
 
-            CleanSequence = cleanSeq;
             if(string.IsNullOrWhiteSpace(evidence.CleanPeptide))
             {
                 evidence.CleanPeptide = cleanSeq;
@@ -330,6 +338,12 @@ namespace MTDBFramework.Data
                 evidence.EncodedNonNumericSequence = nonNumeric;
             }
             EncodedNonNumericSequence = nonNumeric;
+
+		    if (string.IsNullOrWhiteSpace((evidence.SeqWithNumericMods)))
+		    {
+		        evidence.SeqWithNumericMods = numeric;
+		    }
+		    EncodedNumericSequence = numeric;
 
             if (!Charges.Contains(evidence.Charge))
             {
@@ -388,14 +402,7 @@ namespace MTDBFramework.Data
             TheoreticalMonoIsotopicMass = massesList.Average();
             AverageNet = netList.Average();
 
-            if (netList.Count == 1)
-            {
-                StdevNet = 0;
-            }
-            else
-            {
-                StdevNet = netList.StandardDeviation();
-            }
+            StdevNet = (netList.Count == 1) ? 0 : netList.StandardDeviation();
         }
     }
 }

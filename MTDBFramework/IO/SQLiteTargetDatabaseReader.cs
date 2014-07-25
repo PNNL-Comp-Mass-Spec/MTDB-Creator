@@ -61,7 +61,7 @@ namespace MTDBFramework.IO
 			//var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
 			DatabaseFactory.DatabaseFile = path;
             DatabaseFactory.ReadOrAppend = true;
-			var sessionFactory = DatabaseFactory.CreateSessionFactory(MTDBFramework.Data.DatabaseType.SQLite);
+			var sessionFactory = DatabaseFactory.CreateSessionFactory(DatabaseType.SQLite);
             
             var readConsensus = new List<ConsensusTarget>();
             var readPair = new List<ConsensusProteinPair>();
@@ -98,7 +98,7 @@ namespace MTDBFramework.IO
 
                 foreach (var consensus in readConsensus)
                 {
-                    consensus.PTMs.Clear();
+                    consensus.Ptms.Clear();
                     consensus.Evidences.Clear();
                     consensus.Sequence = consensus.CleanSequence;
                     _targetDB.AddConsensusTarget(consensus);
@@ -137,14 +137,16 @@ namespace MTDBFramework.IO
                 {
                     foreach (var pair in consensus.Value)
                     {
-                        var ptm = new PostTranslationalModification();
+                        var ptm = new PostTranslationalModification
+                        {
+                            Mass = ptmDic[pair.PtmId].Mass,
+                            Name = ptmDic[pair.PtmId].Name,
+                            Formula = ptmDic[pair.PtmId].Formula,
+                            Location = pair.Location,
+                            Parent = consensusDic[pair.ConsensusId]
+                        };
 
-                        ptm.Mass = ptmDic[pair.PtmId].Mass;
-                        ptm.Name = ptmDic[pair.PtmId].Name;
-                        ptm.Formula = ptmDic[pair.PtmId].Formula;
-                        ptm.Location = pair.Location;
-                        ptm.Parent = consensusDic[pair.ConsensusId];
-                        consensusDic[pair.ConsensusId].PTMs.Add(ptm);
+                        consensusDic[pair.ConsensusId].Ptms.Add(ptm);
                     }
                 }
 
@@ -161,7 +163,7 @@ namespace MTDBFramework.IO
                         evidence.AddProtein(prot);
                     }
                     evidence.MonoisotopicMass = consensusDic[evidence.Parent.Id].TheoreticalMonoIsotopicMass;
-                    evidence.PTMs = consensusDic[evidence.Parent.Id].PTMs;
+                    evidence.Ptms = consensusDic[evidence.Parent.Id].Ptms;
 
                     if (!_lcmsDataDic.ContainsKey(evidence.DataSet.Name))
                     {

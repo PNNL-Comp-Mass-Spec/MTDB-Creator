@@ -106,7 +106,7 @@ namespace MTDBFramework.IO
         {
             mAbortRequested = false;
 
-            var oStartupOptions = new PHRPReader.clsPHRPStartupOptions
+            var oStartupOptions = new clsPHRPStartupOptions
             {
                 LoadModsAndSeqInfo = true,
                 LoadMSGFResults = true,
@@ -244,19 +244,19 @@ namespace MTDBFramework.IO
                 foreach (var info in reader.CurrentPSM.ModifiedResidues)
                 {
                     result.ModificationDescription += info.ModDefinition.MassCorrectionTag + ":" + info.ResidueLocInPeptide + " ";
-                    var ptm = new PostTranslationalModification();
-                    ptm.Location = info.ResidueLocInPeptide;
-                    ptm.Mass = info.ModDefinition.ModificationMass;
-                    ptm.Formula = info.ModDefinition.MassCorrectionTag;
-	                ptm.Name = info.ModDefinition.MassCorrectionTag;
-                    result.PTMs.Add(ptm);
+                    var ptm = new PostTranslationalModification
+                    {
+                        Location = info.ResidueLocInPeptide,
+                        Mass = info.ModDefinition.ModificationMass,
+                        Formula = info.ModDefinition.MassCorrectionTag,
+                        Name = info.ModDefinition.MassCorrectionTag
+                    };
+                    result.Ptms.Add(ptm);
                 }
-                // Build the PTMs
-                // TODO: build an encoded non=numeric sequence here.
 
                 var encodedSeq = result.Sequence[0] + ".";
                 int j = 0;
-                foreach (var ptm in result.PTMs)
+                foreach (var ptm in result.Ptms)
                 {
                     for (; j < ptm.Location; j++)
                     {
@@ -264,26 +264,13 @@ namespace MTDBFramework.IO
                     }
 
                     encodedSeq += "[" + ((ptm.Mass > 0)? "+":"-") + ptm.Formula + "]";
-                    //}
-
                 }
                 for (; j < result.CleanPeptide.Length; j++)
                 {
                     encodedSeq += result.CleanPeptide[j];
                 }
                 encodedSeq += "." + result.Sequence.Last();
-                result.EncodedNonNumericSequence = encodedSeq;
-
-
-
-
-
-
-                // END TEST PLACE
-
-
-
-                
+                result.EncodedNonNumericSequence = encodedSeq;              
             }
             else
             {

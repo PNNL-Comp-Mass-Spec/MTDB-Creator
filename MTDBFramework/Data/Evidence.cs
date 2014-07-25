@@ -1,6 +1,5 @@
 ﻿#region Namespaces
 
-using System;
 using System.Collections.Generic;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
@@ -437,7 +436,7 @@ namespace MTDBFramework.Data
 		/// <summary>
 		/// Post Translational Modifications in sequence
 		/// </summary>
-        public IList<PostTranslationalModification> PTMs
+        public IList<PostTranslationalModification> Ptms
         {
             get { return m_ptms; }
             set

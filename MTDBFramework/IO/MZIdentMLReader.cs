@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using PHRPReader;
@@ -691,22 +690,21 @@ namespace MTDBFramework.IO
 
                 if (result.ModificationCount > 0)
                 {
-                    // TODO: This code needs be updated to support additional mods
-
                     var j = 0;
                     
                     var numModSeq = evidence.Pre + ".";
                     var encodedSeq = numModSeq;
                     foreach (var mod in item.Value.Peptide.Mods)
                     {
-                        var ptm = new PostTranslationalModification();
-                        ptm.Location = mod.Key; // specific to consensus
-                        ptm.Mass = mod.Value.Mass; // shared across all of same mod
-                        ptm.Formula = UniModData.ModList[mod.Value.Tag].Formula.ToString(); // shared across all of same mod
-                        ptm.Name = UniModData.ModList[mod.Value.Tag].Title; // shared across all of same mod
-                        result.PTMs.Add(ptm);
-                        //if (mod.Value.Tag != "Carbamidomethyl")
-                        //{
+                        var ptm = new PostTranslationalModification
+                        {
+                            Location = mod.Key,
+                            Mass = mod.Value.Mass,
+                            Formula = UniModData.ModList[mod.Value.Tag].Formula.ToString(),
+                            Name = UniModData.ModList[mod.Value.Tag].Title
+                        };
+                        result.Ptms.Add(ptm);
+
                         for (; j < ptm.Location; j++)
                         {
                             numModSeq = numModSeq + item.Value.Peptide.Sequence[j];
@@ -717,8 +715,6 @@ namespace MTDBFramework.IO
                         numModSeq = numModSeq + ptm.Mass;
 
                         encodedSeq += "[" + ((ptm.Mass > 0)? "+":"-") + ptm.Formula + "]";
-                        //}
-
                     }
                     for (; j < item.Value.Peptide.Sequence.Length; j++)
                     {
