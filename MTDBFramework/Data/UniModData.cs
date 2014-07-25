@@ -54,17 +54,20 @@ namespace MTDBFramework.Data
 			private string SymbolOutput(string symbol)
 			{
 				string output = "";
-				if (Char.IsDigit(symbol[0]))
+				if (symbols[symbol] != 0)
 				{
-					output += "(" + symbol + ")";
-				}
-				else
-				{
-					output += symbol;
-				}
-				if (symbols[symbol] != 1)
-				{
-					output += symbols[symbol];
+					if (Char.IsDigit(symbol[0]))
+					{
+						output += "(" + symbol + ")";
+					}
+					else
+					{
+						output += symbol;
+					}
+					if (symbols[symbol] != 1)
+					{
+						output += symbols[symbol];
+					}
 				}
 				return output;
 			}
@@ -81,6 +84,24 @@ namespace MTDBFramework.Data
 					return symbols[element];
 				}
 				return 0;
+			}
+
+			/// <summary>
+			/// Return the count of an element (including isotopes) from the formula
+			/// </summary>
+			/// <param name="element"></param>
+			/// <returns></returns>
+			public int GetElementCountWithIsotopes(string element)
+			{
+				int count = 0;
+				foreach (var symbol in symbols)
+				{
+					if (symbol.Key.EndsWith(element))
+					{
+						count += symbol.Value;
+					}
+				}
+				return count;
 			}
 
 			/// <summary>

@@ -53,7 +53,7 @@ namespace MTDBCreatorTestSuite.Data
 			Assert.AreEqual(57.021464, UniModData.ModList["Carbamidomethyl"].MonoIsotopicMass, "Modification Check: Carbamidomethyl:");
 			Assert.AreEqual(57.0513, UniModData.ModList["Carbamidomethyl"].AverageMass, "Modification Check: Carbamidomethyl:");
 			Assert.AreEqual("H(3) C(2) N O", UniModData.ModList["Carbamidomethyl"].Composition, "Modification Check: Carbamidomethyl:");
-			Assert.AreEqual("C2H3O1N1", UniModData.ModList["Carbamidomethyl"].Formula.ToString(), "Modification Check: Carbamidomethyl:");
+			Assert.AreEqual("C2H3ON", UniModData.ModList["Carbamidomethyl"].Formula.ToString(), "Modification Check: Carbamidomethyl:");
 
 			Assert.AreEqual("alpha-amino adipic acid", UniModData.ModList["Lys->AminoadipicAcid"].FullName, "Modification Check: Lys->AminoadipicAcid:");
 			Assert.AreEqual(381, UniModData.ModList["Lys->AminoadipicAcid"].Id, "Modification Check: Lys->AminoadipicAcid:");
@@ -73,13 +73,13 @@ namespace MTDBCreatorTestSuite.Data
 			Assert.AreEqual("Methionine", UniModData.AminoAcids["M"].FullName, "Amino Acid Check: Methionine:");
 			Assert.AreEqual(131.040485, UniModData.AminoAcids["M"].MonoIsotopicMass, "Amino Acid Check: Methionine:");
 			Assert.AreEqual(131.1961, UniModData.AminoAcids["M"].AverageMass, "Amino Acid Check: Methionine:");
-			Assert.AreEqual("C5H9O1N1S1", UniModData.AminoAcids["M"].Formula.ToString(), "Amino Acid Check: Methionine:");
+			Assert.AreEqual("C5H9ONS", UniModData.AminoAcids["M"].Formula.ToString(), "Amino Acid Check: Methionine:");
 
 			Assert.AreEqual("Arg", UniModData.AminoAcids["R"].ShortName, "Amino Acid Check: Arginine:");
 			Assert.AreEqual("Arginine", UniModData.AminoAcids["R"].FullName, "Amino Acid Check: Arginine:");
 			Assert.AreEqual(156.101111, UniModData.AminoAcids["R"].MonoIsotopicMass, "Amino Acid Check: Arginine:");
 			Assert.AreEqual(156.1857, UniModData.AminoAcids["R"].AverageMass, "Amino Acid Check: Arginine:");
-			Assert.AreEqual("C6H12O1N4", UniModData.AminoAcids["R"].Formula.ToString(), "Amino Acid Check: Arginine:");
+			Assert.AreEqual("C6H12ON4", UniModData.AminoAcids["R"].Formula.ToString(), "Amino Acid Check: Arginine:");
 
 			Assert.AreEqual("Asn", UniModData.AminoAcids["N"].ShortName, "Amino Acid Check: Asparagine:");
 			Assert.AreEqual("Asparagine", UniModData.AminoAcids["N"].FullName, "Amino Acid Check: Asparagine:");
@@ -97,12 +97,12 @@ namespace MTDBCreatorTestSuite.Data
 			Assert.AreEqual("N-Acetyl Hexosamine", UniModData.ModBricks["HexNAc"].FullName, "Mod Brick Check: HexNAc:");
 			Assert.AreEqual(203.079372605, UniModData.ModBricks["HexNAc"].MonoIsotopicMass, "Mod Brick Check: HexNAc:");
 			Assert.AreEqual(203.19252, UniModData.ModBricks["HexNAc"].AverageMass, "Mod Brick Check: HexNAc:");
-			Assert.AreEqual("C8H13O5N1", UniModData.ModBricks["HexNAc"].Formula.ToString(), "Mod Brick Check: HexNAc:");
+			Assert.AreEqual("C8H13O5N", UniModData.ModBricks["HexNAc"].Formula.ToString(), "Mod Brick Check: HexNAc:");
 
 			Assert.AreEqual("N-glycoyl neuraminic acid", UniModData.ModBricks["NeuGc"].FullName, "Mod Brick Check: NeuGc:");
 			Assert.AreEqual(307.09033126500003, UniModData.ModBricks["NeuGc"].MonoIsotopicMass, "Mod Brick Check: NeuGc:");
 			Assert.AreEqual(307.25398, UniModData.ModBricks["NeuGc"].AverageMass, "Mod Brick Check: NeuGc:");
-			Assert.AreEqual("C11H17O9N1", UniModData.ModBricks["NeuGc"].Formula.ToString(), "Mod Brick Check: NeuGc:");
+			Assert.AreEqual("C11H17O9N", UniModData.ModBricks["NeuGc"].Formula.ToString(), "Mod Brick Check: NeuGc:");
 		}
     }
 }
