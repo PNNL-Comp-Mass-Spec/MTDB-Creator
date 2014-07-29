@@ -40,17 +40,17 @@ namespace MTDBFramework.IO
 
         private static ADOX.Table CreateConsensusProteinPairTable()
         {
-            var CPPTable = new ADOX.Table {Name = "ConsensusProteinPair"};
+            var conProtPairTable = new ADOX.Table {Name = "ConsensusProteinPair"};
 
-            CPPTable.Columns.Append("PairId", ADOX.DataTypeEnum.adInteger);
-            CPPTable.Columns.Append("ConsensusId", ADOX.DataTypeEnum.adInteger);
-            CPPTable.Columns.Append("ProteinId", ADOX.DataTypeEnum.adInteger);
-            CPPTable.Columns.Append("CleavageState", ADOX.DataTypeEnum.adInteger);
-            CPPTable.Columns.Append("TerminusState", ADOX.DataTypeEnum.adInteger);
-            CPPTable.Columns.Append("ResidueStart", ADOX.DataTypeEnum.adInteger);
-            CPPTable.Columns.Append("ResidueEnd", ADOX.DataTypeEnum.adInteger);
+            conProtPairTable.Columns.Append("PairId", ADOX.DataTypeEnum.adInteger);
+            conProtPairTable.Columns.Append("ConsensusId", ADOX.DataTypeEnum.adInteger);
+            conProtPairTable.Columns.Append("ProteinId", ADOX.DataTypeEnum.adInteger);
+            conProtPairTable.Columns.Append("CleavageState", ADOX.DataTypeEnum.adInteger);
+            conProtPairTable.Columns.Append("TerminusState", ADOX.DataTypeEnum.adInteger);
+            conProtPairTable.Columns.Append("ResidueStart", ADOX.DataTypeEnum.adInteger);
+            conProtPairTable.Columns.Append("ResidueEnd", ADOX.DataTypeEnum.adInteger);
 
-            return CPPTable;
+            return conProtPairTable;
         }
 
         private static ADOX.Table CreateEvidenceTable()

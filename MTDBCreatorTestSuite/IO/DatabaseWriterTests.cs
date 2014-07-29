@@ -95,7 +95,7 @@ namespace MTDBCreatorTestSuite.IO
 
             var database = databaseProcess.Process(jobs.Select(job => job.DataSet).ToList(), bWorker);
 
-            SqLiteTargetDatabaseWriter writer = new SqLiteTargetDatabaseWriter();
+            var writer = new SqLiteTargetDatabaseWriter();
 
             writer.Write(database, options, GetTestSuiteDataPath(@"Output.mtdb"));
         }

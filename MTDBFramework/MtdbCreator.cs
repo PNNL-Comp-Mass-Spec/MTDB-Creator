@@ -37,7 +37,7 @@ namespace MTDBFramework
             if (File.Exists(dbFileName))
             {
                 priorDataSets = reader.Read(dbFileName);
-                existingDatabase = reader.ReadDB(dbFileName);
+                existingDatabase = reader.ReadDb(dbFileName);
             }
             var priorDatasetList = priorDataSets.Select(x => x.Name).ToList();
             var listJobs = new List<AnalysisJobItem>();
@@ -96,7 +96,7 @@ namespace MTDBFramework
 			if (File.Exists(path) && Path.GetExtension(path) == ".mtdb")
 			{
 				var mtdbReader = new SqLiteTargetDatabaseReader();
-				return mtdbReader.ReadDB(path);
+				return mtdbReader.ReadDb(path);
 			}
 			return new TargetDatabase();
 		}

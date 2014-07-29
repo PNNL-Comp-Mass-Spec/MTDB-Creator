@@ -32,28 +32,28 @@ namespace MTDBFramework.IO
 		/// <summary>
 		/// Data storage
 		/// </summary>
-        protected readonly Dictionary<string, TargetDataSet> mDatasetCache;
+        protected readonly Dictionary<string, TargetDataSet> DatasetCache;
 
 		/// <summary>
 		/// Elution time prediction
 		/// </summary>
-        protected readonly AnalysisReaderHelper mNETPredictor;
+        protected readonly AnalysisReaderHelper NETPredictor;
 
 		/// <summary>
 		/// Allow thread cancellation
 		/// </summary>
-        protected bool mAbortRequested;
+        protected bool AbortRequested;
 
         /// <summary>
         /// Constructor
         /// </summary>
         protected PHRPReaderBase()
         {
-            mDatasetCache = new Dictionary<string, TargetDataSet>(StringComparer.CurrentCultureIgnoreCase);
+            DatasetCache = new Dictionary<string, TargetDataSet>(StringComparer.CurrentCultureIgnoreCase);
 
-            mNETPredictor = new AnalysisReaderHelper();
+            NETPredictor = new AnalysisReaderHelper();
             
-            mAbortRequested = false;
+            AbortRequested = false;
         }       
 
 		/// <summary>
@@ -73,26 +73,26 @@ namespace MTDBFramework.IO
 		/// </summary>
         public void AbortProcessing()
         {
-            mAbortRequested = true;
+            AbortRequested = true;
         }
 
 		/// <summary>
 		/// Calculate the Normal Elution Time
 		/// </summary>
 		/// <param name="results"></param>
-        protected void ComputeNETs(IEnumerable<Evidence> results)
+        protected void ComputeNets(IEnumerable<Evidence> results)
         {
-            if (!mAbortRequested)
+            if (!AbortRequested)
             {
                 UpdateProgress(99, "Loading elution times");
 
-                mNETPredictor.CalculateObservedNet(results);
+                NETPredictor.CalculateObservedNet(results);
 
                 UpdateProgress(99, "Initializing NET predictor");
                 var netPredictor = RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType);
 
                 UpdateProgress(99, "Computing NET values");
-                mNETPredictor.CalculatePredictedNet(netPredictor, results);
+                NETPredictor.CalculatePredictedNet(netPredictor, results);
             }
         }
 
@@ -103,7 +103,7 @@ namespace MTDBFramework.IO
 		/// <returns></returns>
         protected clsPHRPReader InitializeReader(string path)
         {
-            mAbortRequested = false;
+            AbortRequested = false;
 
             var oStartupOptions = new clsPHRPStartupOptions
             {
@@ -158,7 +158,7 @@ namespace MTDBFramework.IO
 
             TargetDataSet dataset;
 
-            if (!mDatasetCache.TryGetValue(dataFilePath, out dataset))
+            if (!DatasetCache.TryGetValue(dataFilePath, out dataset))
             {
                 dataset = new TargetDataSet
                 {
@@ -170,7 +170,7 @@ namespace MTDBFramework.IO
                 {
                     dataset.Name = DatasetPathUtility.CleanPath(dataFilePath);
                 }
-                mDatasetCache.Add(dataFilePath, dataset);
+                DatasetCache.Add(dataFilePath, dataset);
             }
 
             result.DataSet = dataset;
@@ -205,7 +205,7 @@ namespace MTDBFramework.IO
 		/// <param name="result"></param>
 		/// <param name="reader"></param>
 		/// <param name="specProb"></param>
-        protected void StorePSMData(Evidence result, clsPHRPReader reader, double specProb)
+        protected void StorePsmData(Evidence result, clsPHRPReader reader, double specProb)
         {
             result.Charge = reader.CurrentPSM.Charge;
             result.CleanPeptide = reader.CurrentPSM.PeptideCleanSequence;
@@ -301,12 +301,12 @@ namespace MTDBFramework.IO
             OnProgressChanged(new PercentCompleteEventArgs(percentCompleteEffective, currentTask));
         }
 
-        void mNETPredictor_ProgressChanged(object sender, PercentCompleteEventArgs e)
-        {
-            float percentCompleteEffective = PROGRESS_PCT_PEPTIDES_LOADED + e.PercentComplete * (PROGRESS_PCT_COMPLETE - PROGRESS_PCT_PEPTIDES_LOADED) / 100;
+        //void mNETPredictor_ProgressChanged(object sender, PercentCompleteEventArgs e)
+        //{
+        //    float percentCompleteEffective = PROGRESS_PCT_PEPTIDES_LOADED + e.PercentComplete * (PROGRESS_PCT_COMPLETE - PROGRESS_PCT_PEPTIDES_LOADED) / 100;
 
-            OnProgressChanged(new PercentCompleteEventArgs(percentCompleteEffective, "Computing NETs"));
-        }
+        //    OnProgressChanged(new PercentCompleteEventArgs(percentCompleteEffective, "Computing NETs"));
+        //}
 
         #endregion
 

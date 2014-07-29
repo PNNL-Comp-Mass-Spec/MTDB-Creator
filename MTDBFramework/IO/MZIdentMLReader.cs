@@ -127,7 +127,7 @@ namespace MTDBFramework.IO
 
             public PeptideRef PeptideRef { get; set; }
 
-            public DatabaseSequence DBSeq { get; set; }
+            public DatabaseSequence DbSeq { get; set; }
         }
 
         /// <summary>
@@ -157,13 +157,13 @@ namespace MTDBFramework.IO
             var results = new List<MsgfPlusResult>();
 
             // Read in the file
-            ReadMzIdentML(path);
+            ReadMzIdentMl(path);
 
             // Map to MSGF+ results
             MapToMsgf(results, path);
 
             // Calculate the Normal Elution Times
-            ComputeNETs(results);
+            ComputeNets(results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MZIdentML, results);
         }
@@ -173,7 +173,7 @@ namespace MTDBFramework.IO
         /// Files are commonly larger than 30 MB, so use a streaming reader instead of a DOM reader
         /// </summary>
         /// <param name="path">System path of file to read in</param>
-        private void ReadMzIdentML(string path)
+        private void ReadMzIdentMl(string path)
         {
             var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
             var sr = new StreamReader(path);
@@ -274,7 +274,7 @@ namespace MTDBFramework.IO
                     case "DBSequence":
                         // Schema requirements: one to many instances of this element
                         // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
-                        ReadDBSequence(reader.ReadSubtree());
+                        ReadDbSequence(reader.ReadSubtree());
                         // "DBSequence" might not have any child nodes
                         // We will either consume the EndElement, or the same element that was passed to ReadDBSequence (in case of no child nodes)
                         reader.Read();
@@ -308,7 +308,7 @@ namespace MTDBFramework.IO
         /// Called by ReadSequenceCollection (xml hierarchy)
         /// </summary>
         /// <param name="reader">XmlReader that is only valid for the scope of the single DBSequence element</param>
-        private void ReadDBSequence(XmlReader reader)
+        private void ReadDbSequence(XmlReader reader)
         {
             reader.MoveToContent();
             string id = reader.GetAttribute("id");
@@ -386,7 +386,7 @@ namespace MTDBFramework.IO
                 End = Convert.ToInt32(reader.GetAttribute("end")),
                 Start = Convert.ToInt32(reader.GetAttribute("start")),
                 PeptideRef = m_peptides[reader.GetAttribute("peptide_ref")],
-                DBSeq = m_database[reader.GetAttribute("dBSequence_ref")]
+                DbSeq = m_database[reader.GetAttribute("dBSequence_ref")]
             };
             m_evidences.Add(reader.GetAttribute("id"), pepEvidence);
             reader.Close();
@@ -620,7 +620,6 @@ namespace MTDBFramework.IO
             var cleavageStateCalculator = new clsPeptideCleavageStateCalculator();
 
             var i = 0;
-
             // Go through each Spectrum ID and map it to an MSGF+ result
             foreach (var item in m_specItems)
             {
@@ -660,7 +659,6 @@ namespace MTDBFramework.IO
                 // Populate some mass related items
                 result.DelM = result.ObservedMonoisotopicMass - result.MonoisotopicMass;
                 result.DelMPpm = clsPeptideMassCalculator.MassToPPM(result.DelM, result.ObservedMonoisotopicMass);
-
                 // We could compute m/z:
                 //     Mz = clsPeptideMassCalculator.ConvoluteMass(result.ObservedMonoisotopicMass, 0, result.Charge);                
                 // But it's stored in the mzid file, so we'll use that
@@ -672,7 +670,7 @@ namespace MTDBFramework.IO
 
                 // Populate items specific to the MSGF+ results (stored as mzid)
 
-                result.Reference = evidence.DBSeq.Accession;
+                result.Reference = evidence.DbSeq.Accession;
 
                 var eCleavageState = cleavageStateCalculator.ComputeCleavageState(item.Value.Peptide.Sequence, evidence.Pre, evidence.Post);
                 result.NumTrypticEnds = clsPeptideCleavageStateCalculator.CleavageStateToShort(eCleavageState);
@@ -747,7 +745,7 @@ namespace MTDBFramework.IO
                 {
                     var protein = new ProteinInformation
                     {
-                        ProteinName = thing.DBSeq.Accession,
+                        ProteinName = thing.DbSeq.Accession,
                         ResidueStart = thing.Start,
                         ResidueEnd = thing.End
                     };
@@ -760,11 +758,8 @@ namespace MTDBFramework.IO
 
                     foreach (var mod in item.Value.Peptide.Mods)
                     {
-                        //if (mod.Value.Tag != "Carbamidomethyl")
-                        //{
-                            // TODO: Confirm that this is valid math (MEM thinks it may not be)
-                            result.SeqInfoMonoisotopicMass += mod.Value.Mass;
-                        //}
+                        // TODO: Confirm that this is valid math (MEM thinks it may not be)
+                        result.SeqInfoMonoisotopicMass += mod.Value.Mass;
 
                         result.ModificationDescription += mod.Value.Tag + ":" + mod.Key + "  ";
                     }
@@ -811,9 +806,6 @@ namespace MTDBFramework.IO
                     break;
                 case 2:
                     protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
-                    break;
-                default:
-                    //ERROR!!! Should never be more than 2 or less than 0 tryptic ends!\
                     break;
             }
         }

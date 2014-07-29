@@ -17,7 +17,7 @@ namespace MTDBCreatorTestSuite.IO
         public void TestLoadDatabase(string path, int expectedNumberOfTargets)
         {
             var reader          = new SqLiteTargetDatabaseReader();
-            var database        = reader.ReadDB(GetTestSuiteDataPath(path));
+            var database        = reader.ReadDb(GetTestSuiteDataPath(path));
             var numberOfTargets = database.ConsensusTargets.Count;
             Assert.AreEqual(expectedNumberOfTargets, numberOfTargets);
         }

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
+using PNNLOmics.Annotations;
 
 #endregion
 
@@ -15,12 +16,12 @@ namespace MTDBFramework.IO
 	/// </summary>
     public class AnalysisJobProcessor : IProcessor
     {
-        private int mCurrentItem;
-        private int mTotalItems;
-        private AnalysisJobItem mCurrentJob;
-        private bool mAbortRequested;
+        private int m_currentItem;
+        private int m_totalItems;
+        private AnalysisJobItem m_currentJob;
+        private bool m_abortRequested;
 
-        private PHRPReaderBase mAnalysisReader;
+        private PHRPReaderBase m_analysisReader;
 
 		/// <summary>
 		/// Options
@@ -32,8 +33,8 @@ namespace MTDBFramework.IO
 		/// </summary>
         public void AbortProcessing()
         {
-            mAbortRequested = true;
-            mAnalysisReader.AbortProcessing();
+            m_abortRequested = true;
+            m_analysisReader.AbortProcessing();
         }
 
 		/// <summary>
@@ -54,27 +55,27 @@ namespace MTDBFramework.IO
         public IEnumerable<AnalysisJobItem> Process(IEnumerable<AnalysisJobItem> analysisJobItems, BackgroundWorker bWorker)
         {
             // analysisJobItems should have LcmsDataSet field be null
-            mAbortRequested = false;
+            m_abortRequested = false;
 
-            mCurrentItem = 0;
-            mTotalItems = analysisJobItems.Count();
+            m_currentItem = 0;
+            m_totalItems = analysisJobItems.Count();
 
             foreach (var jobItem in analysisJobItems)
             {
-                if (bWorker.CancellationPending || mAbortRequested)
+                if (bWorker.CancellationPending || m_abortRequested)
                     break;
                 
-                OnProgressChanged(new MtdbProgressChangedEventArgs(mCurrentItem, mTotalItems, jobItem));
-                mCurrentJob = jobItem;
+                OnProgressChanged(new MtdbProgressChangedEventArgs(m_currentItem, m_totalItems, jobItem));
+                m_currentJob = jobItem;
 
-                mAnalysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
+                m_analysisReader = PhrpReaderFactory.Create(jobItem.FilePath, ProcessorOptions);
 
-                mAnalysisReader.ProgressChanged += analysisReader_ProgressChanged;
+                m_analysisReader.ProgressChanged += analysisReader_ProgressChanged;
 
                 // Reads the jobItem using the reader returned by the Reader Factory
-                jobItem.DataSet = mAnalysisReader.Read(jobItem.FilePath);
+                jobItem.DataSet = m_analysisReader.Read(jobItem.FilePath);
 
-                mCurrentItem++;
+                m_currentItem++;
                 
             }
             
@@ -83,11 +84,11 @@ namespace MTDBFramework.IO
 
         private void analysisReader_ProgressChanged(object sender, PercentCompleteEventArgs e)
         {
-            float percentComplete = (mCurrentItem * 100 + e.PercentComplete) / (mTotalItems * 100);
+            float percentComplete = (m_currentItem * 100 + e.PercentComplete) / (m_totalItems * 100);
 
-            var effectiveItemCount = (int)(mCurrentItem * 100 + e.PercentComplete);
+            var effectiveItemCount = (int)(m_currentItem * 100 + e.PercentComplete);
 
-            OnProgressChanged(new MtdbProgressChangedEventArgs(effectiveItemCount, mTotalItems * 100, e.CurrentTask, mCurrentJob));
+            OnProgressChanged(new MtdbProgressChangedEventArgs(effectiveItemCount, m_totalItems * 100, e.CurrentTask, m_currentJob));
         }
 
         #region Events

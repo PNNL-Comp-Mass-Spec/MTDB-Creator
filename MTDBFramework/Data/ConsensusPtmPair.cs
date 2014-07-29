@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MTDBFramework.Data
+﻿namespace MTDBFramework.Data
 {
     /// <summary>
     /// Relation between a ConsensusTarget object and a PostTranslationalModification object for database use

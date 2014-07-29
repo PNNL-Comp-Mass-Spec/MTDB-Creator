@@ -14,7 +14,7 @@ namespace MTDBFramework.UI
 		/// <summary>
 		/// Name of currently running task
 		/// </summary>
-        protected readonly string mCurrentTask = string.Empty;
+        private readonly string m_currentTask = string.Empty;
 
 		/// <summary>
 		/// Constructor
@@ -37,7 +37,7 @@ namespace MTDBFramework.UI
         {
             Current = current;
             Total = total;
-            mCurrentTask = currentTask;
+            m_currentTask = currentTask;
         }
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace MTDBFramework.UI
 		/// </summary>
         public string CurrentTask
         {
-            get { return mCurrentTask; }
+            get { return m_currentTask; }
         }
 
 		/// <summary>

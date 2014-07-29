@@ -17,7 +17,7 @@ namespace MTDBCreatorTestSuite
                                                 now.Second);
 
 			// The Execution directory
-			var dirFinder = System.Environment.CurrentDirectory;
+			var dirFinder = Environment.CurrentDirectory;
 			// Find the bin folder...
 	        while (!string.IsNullOrWhiteSpace(dirFinder) && !dirFinder.EndsWith("bin"))
 	        {

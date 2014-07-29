@@ -40,7 +40,7 @@ namespace MTDBFramework.IO
                 if (resultsProcessed % 500 == 0)
                     UpdateProgress(reader.PercentComplete, "Reading peptides");
 
-                if (mAbortRequested)
+                if (AbortRequested)
                     break;
 
                 // Skip this PSM if it doesn't pass the import filters
@@ -63,7 +63,7 @@ namespace MTDBFramework.IO
                     AnalysisId = reader.CurrentPSM.ResultID                    
                 };
 
-                StorePSMData(result, reader, specProb);
+                StorePsmData(result, reader, specProb);
 
                 StoreDatasetInfo(result, reader, path);
                 result.DataSet.Tool = LcmsIdentificationTool.XTandem;
@@ -83,7 +83,7 @@ namespace MTDBFramework.IO
                 results.Add(result);
             }
 
-            ComputeNETs(results);
+            ComputeNets(results);
             
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.XTandem, results);
         }

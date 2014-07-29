@@ -31,7 +31,7 @@ namespace MTDBFramework.IO
                 if (resultsProcessed % 500 == 0)
                     UpdateProgress(reader.PercentComplete);
 
-                if (mAbortRequested)
+                if (AbortRequested)
                     break;
 
                 // Skip this PSM if it doesn't pass the import filters
@@ -54,7 +54,7 @@ namespace MTDBFramework.IO
                     AnalysisId = reader.CurrentPSM.ResultID
                 };
 
-                StorePSMData(result, reader, specProb);
+                StorePsmData(result, reader, specProb);
 
                 StoreDatasetInfo(result, reader, path);
                 result.DataSet.Tool = LcmsIdentificationTool.MSAlign;
@@ -65,7 +65,7 @@ namespace MTDBFramework.IO
                 results.Add(result);              
             }
 
-            ComputeNETs(results);
+            ComputeNets(results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MSAlign, results);
         }
