@@ -25,7 +25,7 @@ namespace MTDBFramework.IO
             PHRPReaderBase reader = null;
             var resultType = clsPHRPReader.AutoDetermineResultType(path);
 
-            if (path.EndsWith("msgfplus.mzid"))
+            if (path.EndsWith("msgfplus.mzid") || path.EndsWith("mzid.gz"))
 			{
 			    reader = new MzIdentMlReader(options);
 				return reader;
@@ -48,8 +48,11 @@ namespace MTDBFramework.IO
                 case clsPHRPReader.ePeptideHitResultType.MSAlign:
                     reader = new MsAlignPhrpReader(options);
                     break;
-					
-					
+                default:
+                    //Unsupported format!! Oh no!!
+                    reader = null;
+                    break;
+
             }
             return reader;
         }

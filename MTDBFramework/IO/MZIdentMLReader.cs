@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Xml;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
@@ -155,9 +156,22 @@ namespace MTDBFramework.IO
         public override LcmsDataSet Read(string path)
         {
             var results = new List<MsgfPlusResult>();
+            XmlReader reader = null;
+            var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
+            
+            if (path.EndsWith(".gz"))
+            {
+                var gstream = new GZipStream(new FileStream(path, FileMode.Open), CompressionMode.Decompress);
+                reader = XmlReader.Create(gstream, xSettings);
+            }
+            else
+            {
+                var sr = new StreamReader(path);
+                reader = XmlReader.Create(sr, xSettings);
+            }
 
             // Read in the file
-            ReadMzIdentMl(path);
+            ReadMzIdentMl(reader);
 
             // Map to MSGF+ results
             MapToMsgf(results, path);
@@ -172,14 +186,11 @@ namespace MTDBFramework.IO
         /// Read and parse a .mzid file, or mzIdentML
         /// Files are commonly larger than 30 MB, so use a streaming reader instead of a DOM reader
         /// </summary>
-        /// <param name="path">System path of file to read in</param>
-        private void ReadMzIdentMl(string path)
+        /// <param name="reader">XmlReader object for the file to be read</param>
+        private void ReadMzIdentMl(XmlReader reader)
         {
-            var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
-            var sr = new StreamReader(path);
-
             // Handle disposal of allocated object correctly
-            using (var reader = XmlReader.Create(sr, xSettings))
+            using (reader)
             {
                 // Guarantee a move to the root node
                 reader.MoveToContent();
