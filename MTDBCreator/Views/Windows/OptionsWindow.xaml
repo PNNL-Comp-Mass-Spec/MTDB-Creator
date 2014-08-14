@@ -266,19 +266,19 @@
                                                  Grid.Row="0" Grid.Column="1" Margin="0,8,0,8" 
                                                  IsEnabled="{Binding ElementName=TrypticPeptidesCheckBox, Path=IsChecked}"
                                                  PreviewTextInput="Control_PreviewTextInput"
-                                                 Text="{Binding Path=Options.MinXCorrForExportTrytpic[0], UpdateSourceTrigger=Explicit}" />
+                                                 Text="{Binding Path=Options.MinXCorrForExportTryptic[0], UpdateSourceTrigger=Explicit}" />
                                         <Label Grid.Row="1" Grid.Column="0" Margin="8">Charge 2</Label>
                                         <TextBox x:Name="TrypticCharge2TextBox"
                                                  Grid.Row="1" Grid.Column="1" Margin="0,8,0,8" 
                                                  PreviewTextInput="Control_PreviewTextInput"
                                                  IsEnabled="{Binding ElementName=TrypticPeptidesCheckBox, Path=IsChecked}"
-                                                 Text="{Binding Path=Options.MinXCorrForExportTrytpic[1], UpdateSourceTrigger=Explicit}"/>
+                                                 Text="{Binding Path=Options.MinXCorrForExportTryptic[1], UpdateSourceTrigger=Explicit}"/>
                                         <Label Grid.Row="0" Grid.Column="3" Margin="8">Charge >= 3</Label>
                                         <TextBox x:Name="TrypticCharge3TextBox"
                                                  Grid.Row="0" Grid.Column="4" Margin="0,8,0,8" 
                                                  PreviewTextInput="Control_PreviewTextInput"
                                                  IsEnabled="{Binding ElementName=TrypticPeptidesCheckBox, Path=IsChecked}"
-                                                 Text="{Binding Path=Options.MinXCorrForExportTrytpic[2], UpdateSourceTrigger=Explicit}"/>
+                                                 Text="{Binding Path=Options.MinXCorrForExportTryptic[2], UpdateSourceTrigger=Explicit}"/>
                                     </Grid>
                                 </GroupBox>
                             </StackPanel>
@@ -309,19 +309,19 @@
                                                  Grid.Row="0" Grid.Column="1" Margin="0,8,0,8" 
                                                  PreviewTextInput="Control_PreviewTextInput"
                                                  IsEnabled="{Binding ElementName=PartiallyTrypticPeptidesCheckBox, Path=IsChecked}"
-                                                 Text="{Binding Path=Options.MinXCorrForExportPartiallyTrytpic[0], UpdateSourceTrigger=Explicit}" />
+                                                 Text="{Binding Path=Options.MinXCorrForExportPartiallyTryptic[0], UpdateSourceTrigger=Explicit}" />
                                         <Label Grid.Row="1" Grid.Column="0" Margin="8">Charge 2</Label>
                                         <TextBox x:Name="PartiallyTrypticCharge2TextBox"
                                                  Grid.Row="1" Grid.Column="1" Margin="0,8,0,8" 
                                                  PreviewTextInput="Control_PreviewTextInput"
                                                  IsEnabled="{Binding ElementName=PartiallyTrypticPeptidesCheckBox, Path=IsChecked}"
-                                                 Text="{Binding Path=Options.MinXCorrForExportPartiallyTrytpic[1], UpdateSourceTrigger=Explicit}"/>
+                                                 Text="{Binding Path=Options.MinXCorrForExportPartiallyTryptic[1], UpdateSourceTrigger=Explicit}"/>
                                         <Label Grid.Row="0" Grid.Column="3" Margin="8">Charge >= 3</Label>
                                         <TextBox x:Name="PartiallyTrypticCharge3TextBox"
                                                  Grid.Row="0" Grid.Column="4" Margin="0,10,0,6" 
                                                  PreviewTextInput="Control_PreviewTextInput"
                                                  IsEnabled="{Binding ElementName=PartiallyTrypticPeptidesCheckBox, Path=IsChecked}"
-                                                 Text="{Binding Path=Options.MinXCorrForExportPartiallyTrytpic[2], UpdateSourceTrigger=Explicit}"/>
+                                                 Text="{Binding Path=Options.MinXCorrForExportPartiallyTryptic[2], UpdateSourceTrigger=Explicit}"/>
                                     </Grid>
                                 </GroupBox>
                             </StackPanel>
@@ -350,19 +350,19 @@
                                                  Grid.Row="0" Grid.Column="1" Margin="0,8,0,8" 
                                                  PreviewTextInput="Control_PreviewTextInput"
                                                  IsEnabled="{Binding ElementName=NonTrypticPeptidesCheckBox, Path=IsChecked}"
-                                                 Text="{Binding Path=Options.MinXCorrForExportNonTrytpic[0], UpdateSourceTrigger=Explicit}"/>
+                                                 Text="{Binding Path=Options.MinXCorrForExportNonTryptic[0], UpdateSourceTrigger=Explicit}"/>
                                         <Label Grid.Row="1" Grid.Column="0" Margin="8">Charge 2</Label>
                                         <TextBox x:Name="NonTrypticalCharge2TextBox"
                                                  Grid.Row="1" Grid.Column="1" Margin="0,8,0,8" 
                                                  PreviewTextInput="Control_PreviewTextInput"
                                                  IsEnabled="{Binding ElementName=NonTrypticPeptidesCheckBox, Path=IsChecked}"
-                                                 Text="{Binding Path=Options.MinXCorrForExportNonTrytpic[1], UpdateSourceTrigger=Explicit}"/>
+                                                 Text="{Binding Path=Options.MinXCorrForExportNonTryptic[1], UpdateSourceTrigger=Explicit}"/>
                                         <Label Grid.Row="0" Grid.Column="3" Margin="8">Charge >= 3</Label>
                                         <TextBox x:Name="NonTrypticalCharge3TextBox"
                                                  Grid.Row="0" Grid.Column="4" Margin="0,8,0,8" 
                                                  PreviewTextInput="Control_PreviewTextInput"
                                                  IsEnabled="{Binding ElementName=NonTrypticPeptidesCheckBox, Path=IsChecked}"
-                                                 Text="{Binding Path=Options.MinXCorrForExportNonTrytpic[2], UpdateSourceTrigger=Explicit}"/>
+                                                 Text="{Binding Path=Options.MinXCorrForExportNonTryptic[2], UpdateSourceTrigger=Explicit}"/>
                                     </Grid>
                                 </GroupBox>
                             </StackPanel>
