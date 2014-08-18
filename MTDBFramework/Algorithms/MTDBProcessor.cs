@@ -140,11 +140,6 @@ namespace MTDBFramework.Algorithms
             {
                 consensusTarget.Id = ++i;
 
-                if (consensusTarget.Sequence == "K.AVTKYTSSK.-")
-                {
-                    Console.WriteLine("Something that should be here that isn't");
-                }
-
                 foreach (var target in consensusTarget.Evidences)
                 {
                     target.Id = ++j;
