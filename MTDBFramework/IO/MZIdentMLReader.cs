@@ -156,7 +156,7 @@ namespace MTDBFramework.IO
         public override LcmsDataSet Read(string path)
         {
             var results = new List<MsgfPlusResult>();
-            XmlReader reader = null;
+            XmlReader reader;
             var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
             
             if (path.EndsWith(".gz"))

@@ -38,6 +38,8 @@ namespace MTDBFramework.Data
         private short m_maxRankForExport;
         private double m_msgfFdr;
         private double m_maxMsgfSpecProb;
+	    private double m_minimumObservedNet;
+	    private double m_maximumObservedNet;
 
         #endregion
 
@@ -408,6 +410,38 @@ namespace MTDBFramework.Data
             }
         }
 
+        /// <summary>
+        /// Minimum Observed Net for export
+        /// </summary>
+	    public double MinimumObservedNet
+	    {
+	        get
+	        {
+	            return m_minimumObservedNet;
+	        }
+	        set
+	        {
+	            m_minimumObservedNet = value;
+	            OnPropertyChanged("MinimumObservedNet");
+	        }
+	    }
+
+        /// <summary>
+        /// Maximum Observed Net for export
+        /// </summary>
+        public double MaximumObservedNet
+        {
+            get
+            {
+                return m_maximumObservedNet;
+            }
+            set
+            {
+                m_maximumObservedNet = value;
+                OnPropertyChanged("MaximumObservedNet");
+            }
+        }
+
         #endregion
 
 		/// <summary>
@@ -449,7 +483,12 @@ namespace MTDBFramework.Data
             MsgfFdr = .01;
             MaxMsgfSpecProb = 1E-10;
 
+		    MinimumObservedNet = 0.01;
+		    MaximumObservedNet = 1.0;
+
             OptionsChanged = false;
         }
+
+        
     }
 }

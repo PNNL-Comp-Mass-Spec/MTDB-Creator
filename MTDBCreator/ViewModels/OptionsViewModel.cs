@@ -115,6 +115,8 @@ namespace MTDBCreator.ViewModels
             {
                 Options.MaxModsForAlignment = Convert.ToInt32(parameter[0]);
                 Options.MinObservationsForExport = Convert.ToInt16(parameter[1]);
+                Options.MinimumObservedNet = Convert.ToDouble(parameter[24]);
+                Options.MaximumObservedNet = Convert.ToDouble(parameter[25]);
                 Options.MinXCorrForAlignment = Convert.ToInt32(parameter[2]);
                 Options.MaxLogEValForXTandemAlignment = Convert.ToInt32(parameter[3]);
                 Options.MaxMsgfSpecProb = Convert.ToDouble(parameter[4]);
@@ -155,6 +157,7 @@ namespace MTDBCreator.ViewModels
 
                 // X!Tandem Export
                 Options.MaxLogEValForXTandemExport = Convert.ToDouble(parameter[23]);
+
                 Options.OptionsChanged = true;
             }
         }

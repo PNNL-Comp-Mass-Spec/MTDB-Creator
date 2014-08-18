@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helpers="clr-namespace:MTDBCreator.Helpers"        
         xmlns:retentionTimePrediction="clr-namespace:MTDBFramework.Algorithms.RetentionTimePrediction;assembly=MTDBFramework"
-        Title="Options" Height="740" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Options" Height="820" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
         <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
         <helpers:OptionsParameterConverter x:Key="OptionsParameterConverter"/>
@@ -23,6 +23,10 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="8" />
                                 <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*"/>
                                 <RowDefinition Height="8" />
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="8" />
@@ -54,6 +58,28 @@
                                      Text="{Binding Path=Options.MinObservationsForExport, UpdateSourceTrigger=Explicit}">
                                 <TextBox.ToolTip>
                                     Specifies the minimum number of observations needed for a mass tag to be exported into the database
+                                </TextBox.ToolTip>
+                            </TextBox>
+                            <Label Grid.Row="5" Grid.Column="1">
+                                Minimum Observed NET
+                            </Label>
+                            <TextBox x:Name="MinimObservNetTextBox"
+                                     Grid.Row="5" Grid.Column="3" 
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     Text="{Binding Path=Options.MinimumObservedNet, UpdateSourceTrigger=Explicit}">
+                                <TextBox.ToolTip>
+                                    Specifies the minimum normalized elution time of observations for a mass tag to be exported into the database
+                                </TextBox.ToolTip>
+                            </TextBox>
+                            <Label Grid.Row="7" Grid.Column="1">
+                                Maximum Observed NET
+                            </Label>
+                            <TextBox x:Name="MaximObservNetTextBox"
+                                     Grid.Row="7" Grid.Column="3" 
+                                     PreviewTextInput="Control_PreviewTextInput"
+                                     Text="{Binding Path=Options.MaximumObservedNet, UpdateSourceTrigger=Explicit}">
+                                <TextBox.ToolTip>
+                                    Specifies the maximum normalized elution time of observations for a mass tag to be exported into the database
                                 </TextBox.ToolTip>
                             </TextBox>
                         </Grid>
@@ -483,6 +509,8 @@
                         <Binding ElementName="SequestDelCnCheckBox" Path="IsChecked"/>
                         <Binding ElementName="MinDelCnTextBox" Path="Text"/>
                         <Binding ElementName="MaxLogEForExporTextBox" Path="Text"/>
+                        <Binding ElementName="MinimObservNetTextBox" Path="Text"/>
+                        <Binding ElementName="MaximObservNetTextBox" Path="Text"/>
                     </MultiBinding>
                 </Button.CommandParameter>
             </Button>

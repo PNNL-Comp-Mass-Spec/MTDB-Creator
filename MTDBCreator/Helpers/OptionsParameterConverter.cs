@@ -50,6 +50,9 @@ namespace MTDBCreator.Helpers
             // X!Tandem Export
             results.Add((string)values[23]);
 
+            results.Add((string)values[24]);
+            results.Add((string)values[25]);
+
             for(int i = 0; i < results.Count; i++)
             {
                 if (results[i] == "")

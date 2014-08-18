@@ -3,7 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Data;
@@ -98,11 +100,14 @@ namespace MTDBFramework.Algorithms
                 {
                     // Exclude carryover peptides.
                     // Would be evidenced by a sizable difference between observed net and predicted net
-                    if (t.ObservedNet > CarryOverThreshold)
+                    
+                    if (t.ObservedNet > ProcessorOptions.MinimumObservedNet && 
+                        t.ObservedNet < ProcessorOptions.MaximumObservedNet)
                     {
                         // To prevent filtration of evidences which have previously passed alignment, 
                         if (dataSet.PreviouslyAnalyzed || !targetFilter.ShouldFilter(t))
                         {
+                            
                             filteredTargets.Add(t);
 
                             if (!alignmentFilter.ShouldFilter(t))
@@ -115,8 +120,6 @@ namespace MTDBFramework.Algorithms
                 }
 
                 epicTargets.AddRange(filteredTargets);
-
-
 
                 if (ProcessorOptions.TargetFilterType == TargetWorkflowType.TOP_DOWN)
                 {
@@ -136,6 +139,11 @@ namespace MTDBFramework.Algorithms
             foreach (var consensusTarget in newTargets)
             {
                 consensusTarget.Id = ++i;
+
+                if (consensusTarget.Sequence == "K.AVTKYTSSK.-")
+                {
+                    Console.WriteLine("Something that should be here that isn't");
+                }
 
                 foreach (var target in consensusTarget.Evidences)
                 {
