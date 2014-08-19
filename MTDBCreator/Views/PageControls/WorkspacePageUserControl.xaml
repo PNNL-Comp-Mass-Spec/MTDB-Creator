@@ -73,9 +73,19 @@
         <TabControl Grid.Row="0" Grid.Column="1">
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Mass Vs. Scan" />
+                    <TextBlock Text="Observed Net Vs. Scan" />
                 </TabItem.Header>
-                <oxy:Plot x:Name="DatasetOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding NETScanPlotModel}">
+                <oxy:Plot x:Name="NetScanOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding NETScanPlotModel}">
+                    <oxy:Plot.InputBindings>
+                        <KeyBinding Key="Z" Command="{Binding ZoomExtentsCommand}"/>
+                    </oxy:Plot.InputBindings>
+                </oxy:Plot>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text ="Mass Vs. Scan"/>
+                </TabItem.Header>
+                <oxy:Plot x:Name="MassScanOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding MassScanPlotModel}">
                     <oxy:Plot.InputBindings>
                         <KeyBinding Key="Z" Command="{Binding ZoomExtentsCommand}"/>
                     </oxy:Plot.InputBindings>
