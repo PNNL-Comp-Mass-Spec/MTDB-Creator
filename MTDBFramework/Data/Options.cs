@@ -483,7 +483,7 @@ namespace MTDBFramework.Data
             MsgfFdr = .01;
             MaxMsgfSpecProb = 1E-10;
 
-		    MinimumObservedNet = 0.01;
+		    MinimumObservedNet = 0.0;
 		    MaximumObservedNet = 1.0;
 
             OptionsChanged = false;

@@ -21,6 +21,7 @@ namespace MTDBFramework.Data
         private LinearRegressionResult m_regressionResult;
         private List<Evidence> m_evidences;
         private bool m_previouslyAnalyzed;
+        private double[] m_medNetDiffs;
 
         #endregion
 
@@ -77,6 +78,19 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("RegressionResult");
             }
         }
+
+        /// <summary>
+        /// Collection of the median NET differences from warping
+        /// </summary>
+	    public double[] MedianNetDifference
+	    {
+	        get { return m_medNetDiffs; }
+	        set
+	        {
+	            m_medNetDiffs = value;
+	            OnPropertyChanged("MedianNetDifferences");
+	        }
+	    }
 
 		/// <summary>
 		/// Whether data has been previously analyzed

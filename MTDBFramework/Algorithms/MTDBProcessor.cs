@@ -3,9 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Threading;
+using MathNet.Numerics.Statistics;
 using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Data;
@@ -258,15 +257,38 @@ namespace MTDBFramework.Algorithms
 
                 umcDataset.Sort((x, y) => x.ScanAligned.CompareTo(y.ScanAligned));
 
+                var netDiffList = new List<double>();
+                var medNetDiff = new double[100];
+                var numPerBin = (int)Math.Ceiling(dataSet.Evidences.Count/100.0);
+                var binNum = 0;
+
                 //Copy the residual data back into the evidences
                 for (int a = 0, b = 0; a < dataSet.Evidences.Count; a++)
                 {
                     if (dataSet.Evidences[a].ObservedNet >= ProcessorOptions.MinimumObservedNet)
                     {
                         dataSet.Evidences[a].MonoisotopicMass = umcDataset[b].MassMonoisotopicAligned;
-                        dataSet.Evidences[a].ObservedNet = umcDataset[b].NetAligned;
+                        var netShift = umcDataset[b].NetAligned - umcDataset[b].Net;
+                        netDiffList.Add(netShift);
+                        dataSet.Evidences[a].ObservedNet += netShift;
+                        
+                        if (netDiffList.Count % numPerBin == 0)
+                        {
+                            medNetDiff[binNum] = netDiffList.Median();
+                            netDiffList.Clear();
+                            binNum++;
+                        }
+
                         b++;
                     }
+                }
+
+                medNetDiff[binNum] = netDiffList.Median();
+                netDiffList.Clear();
+
+                for (var a = 0; a < dataSet.Evidences.Count; a++)
+                {
+                    dataSet.Evidences[a].NetShift = medNetDiff[a/numPerBin];
                 }
                 
                 foreach (var data in dataSet.Evidences.Where(data => !evidenceMap.ContainsKey(data.Id)))

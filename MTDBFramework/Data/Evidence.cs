@@ -55,6 +55,8 @@ namespace MTDBFramework.Data
         private string m_seqWithNumericMods;
         private string m_encodedNonNumericSequence;
 
+	    private double m_netShift;
+
         #endregion
 
 		/// <summary>
@@ -419,6 +421,19 @@ namespace MTDBFramework.Data
 		/// Spectral Probability
 		/// </summary>
         public double SpectralProbability { get; set; }
+
+        /// <summary>
+        /// NET amount evidence was shifted by from LCMS Warp
+        /// </summary>
+	    public double NetShift
+	    {
+	        get { return m_netShift; }
+	        set
+	        {
+	            m_netShift = value;
+	            OnPropertyChanged("NetShift");
+	        }
+	    }
 
 		/// <summary>
 		/// Proteins evidenced
