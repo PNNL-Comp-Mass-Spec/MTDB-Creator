@@ -13,7 +13,8 @@ namespace MTDBCreatorTestSuite.IO
         /// <param name="expectedNumberOfTargets"></param>
         [Test]
 		[TestCase(@"testDatabase-100-3.mtdb", 100, Ignore = false)]
-		[TestCase(@"Output.mtdb", 5528, Ignore = false)]
+        // Updated due to user setting for NET cutoff being introduced
+		[TestCase(@"Output.mtdb", 5730, Ignore = false)]
         public void TestLoadDatabase(string path, int expectedNumberOfTargets)
         {
             var reader          = new SqLiteTargetDatabaseReader();

@@ -43,7 +43,10 @@ namespace MTDBCreatorTestSuite.Algorithms
             foreach (var set in dataSets)
             {
                 Assert.Greater(set.RegressionResult.RSquared, 0.8);
-                Assert.Less(set.RegressionResult.RSquared, 1.0);
+                
+                // Set to 1.000001 due to (for some reason) RSquared occasionally
+                // being calculated as 1.00000000000044
+                Assert.Less(set.RegressionResult.RSquared, 1.000001);
             }
         }
     }
