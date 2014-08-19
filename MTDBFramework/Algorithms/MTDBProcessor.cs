@@ -31,7 +31,6 @@ namespace MTDBFramework.Algorithms
         private int m_totalItems;
 
         private bool m_abortRequested;
-        private const double CarryOverThreshold = 0.05;
 
 		/// <summary>
 		/// Event handler
@@ -101,9 +100,10 @@ namespace MTDBFramework.Algorithms
                     // Exclude carryover peptides.
                     // Would be evidenced by a sizable difference between observed net and predicted net
                     
-                    if (t.ObservedNet > ProcessorOptions.MinimumObservedNet && 
-                        t.ObservedNet < ProcessorOptions.MaximumObservedNet)
+                    if (t.ObservedNet >= ProcessorOptions.MinimumObservedNet && 
+                        t.ObservedNet <= ProcessorOptions.MaximumObservedNet)
                     {
+                        
                         // To prevent filtration of evidences which have previously passed alignment, 
                         if (dataSet.PreviouslyAnalyzed || !targetFilter.ShouldFilter(t))
                         {
@@ -207,7 +207,7 @@ namespace MTDBFramework.Algorithms
                 var backupDataset = new List<UMCLight>();
                 foreach (var evidence in dataSet.Evidences)
                 {
-                    if (evidence.ObservedNet > CarryOverThreshold)
+                    if (evidence.ObservedNet >= ProcessorOptions.MinimumObservedNet)
                     {
                         UMCLight umc;
                         {
@@ -261,7 +261,7 @@ namespace MTDBFramework.Algorithms
                 //Copy the residual data back into the evidences
                 for (int a = 0, b = 0; a < dataSet.Evidences.Count; a++)
                 {
-                    if (dataSet.Evidences[a].ObservedNet > CarryOverThreshold)
+                    if (dataSet.Evidences[a].ObservedNet >= ProcessorOptions.MinimumObservedNet)
                     {
                         dataSet.Evidences[a].MonoisotopicMass = umcDataset[b].MassMonoisotopicAligned;
                         dataSet.Evidences[a].ObservedNet = umcDataset[b].NetAligned;
