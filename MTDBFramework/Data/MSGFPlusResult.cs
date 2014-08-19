@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MTDBFramework.Data
+﻿namespace MTDBFramework.Data
 {
 	/// <summary>
 	/// MSGF+ input storage for evidence

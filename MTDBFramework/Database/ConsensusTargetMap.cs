@@ -25,6 +25,7 @@ namespace MTDBFramework.Database
             Map(x => x.PredictedNet);
             Map(x => x.TheoreticalMonoIsotopicMass);
             Map(x => x.CleanSequence).Column("Sequence");
+		    //Map(x => x.Sequence).Column("REMOVE"); For Comparison testing with VIPER
             Map(x => x.PrefixResidue);
             Map(x => x.SuffixResidue);
             Map(x => x.ModificationCount).Column("ModificationCount");

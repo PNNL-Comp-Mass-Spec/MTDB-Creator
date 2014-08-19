@@ -28,12 +28,12 @@ namespace MTDBFramework.Database
 		/// <summary>
 		/// ConsensusTarget Id
 		/// </summary>
-        public int ConsensusId { get { return (Consensus != null) ? Consensus.Id : m_consensus; } private set { /*Consensus.Id*/m_consensus = value; } }
+        public int ConsensusId { get { return (Consensus != null) ? Consensus.Id : m_consensus; } private set { m_consensus = value; } }
 
 		/// <summary>
 		/// ProteinInformation Id
 		/// </summary>
-        public int ProteinId { get { return (Protein != null) ? Protein.Id : m_prot; } private set { /*Protein.Id*/        m_prot = value; } }
+        public int ProteinId { get { return (Protein != null) ? Protein.Id : m_prot; } private set { m_prot = value; } }
 
 		/// <summary>
 		/// Cleavage State
