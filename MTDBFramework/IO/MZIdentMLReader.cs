@@ -156,19 +156,15 @@ namespace MTDBFramework.IO
         public override LcmsDataSet Read(string path)
         {
             var results = new List<MsgfPlusResult>();
-            XmlReader reader;
-            var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
+	        Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             
-            if (path.EndsWith(".gz"))
+            if (path.EndsWith(".mzid.gz"))
             {
-                var gstream = new GZipStream(new FileStream(path, FileMode.Open), CompressionMode.Decompress);
-                reader = XmlReader.Create(gstream, xSettings);
+                file = new GZipStream(file, CompressionMode.Decompress);
             }
-            else
-            {
-                var sr = new StreamReader(path);
-                reader = XmlReader.Create(sr, xSettings);
-            }
+
+            var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
+            var reader = XmlReader.Create(file, xSettings);
 
             // Read in the file
             ReadMzIdentMl(reader);
