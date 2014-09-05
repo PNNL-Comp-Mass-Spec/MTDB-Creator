@@ -156,7 +156,8 @@ namespace MTDBFramework.IO
         public override LcmsDataSet Read(string path)
         {
             var results = new List<MsgfPlusResult>();
-	        Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+			// Set a large buffer size. Doesn't affect gzip reading speed, but speeds up non-gzipped
+	        Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 65536);
             
             if (path.EndsWith(".mzid.gz"))
             {
