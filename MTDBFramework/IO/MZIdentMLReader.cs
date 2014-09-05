@@ -165,7 +165,7 @@ namespace MTDBFramework.IO
             }
 
             var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
-            var reader = XmlReader.Create(file, xSettings);
+            var reader = XmlReader.Create(new StreamReader(file, System.Text.Encoding.UTF8, true, 65536), xSettings);
 
             // Read in the file
             ReadMzIdentMl(reader);
