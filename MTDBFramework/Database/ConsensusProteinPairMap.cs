@@ -14,12 +14,16 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id).Column("PairId").GeneratedBy.Native();
-            Map(x => x.ConsensusId).Column("TargetId");
-            Map(x => x.ProteinId);
+            //Map(x => x.ConsensusId).Column("TargetId");
+            //Map(x => x.ProteinId);
             Map(x => x.CleavageState);
             Map(x => x.TerminusState);
             Map(x => x.ResidueStart);
             Map(x => x.ResidueEnd);
+
+
+            References(x => x.Consensus).Column("TargetId").Cascade.All();
+            References(x => x.Protein).Cascade.All();
         }
     }
 }

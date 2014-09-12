@@ -33,7 +33,7 @@ namespace MTDBFramework.Database
 		    // Map(x => x.MaximumObservedNet); Should always be 1
 
 		    Map(x => x.MaxMsgfSpecProb);
-		    Map(x => x.MsgfFdr);
+		    Map(x => x.MsgfFdr).Column("MaxMsgfFDR");
         }
     }
 }

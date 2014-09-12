@@ -57,6 +57,8 @@ namespace MTDBFramework.Data
 
 	    private double m_netShift;
 
+	    private double m_normalizedScore;
+
         #endregion
 
 		/// <summary>
@@ -461,6 +463,18 @@ namespace MTDBFramework.Data
             }
         }
 
+        /// <summary>
+        /// Normalized score for the evidence
+        /// </summary>
+	    public double NormalizedScore
+	    {
+	        get { return m_normalizedScore; }
+	        set
+	        {
+	            m_normalizedScore = value;
+	            OnPropertyChanged("NormalizedScore");
+	        }
+	    }
 
         #endregion
 

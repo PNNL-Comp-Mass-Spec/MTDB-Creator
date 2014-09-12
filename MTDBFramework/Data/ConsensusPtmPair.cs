@@ -9,6 +9,8 @@
         private int m_consensusId;
         private int m_ptmId;
         private int m_location;
+        private ConsensusTarget m_target;
+        private PostTranslationalModification m_ptm;
 
         /// <summary>
         /// Id
@@ -45,5 +47,18 @@
             get { return m_location; }
             set { m_location = value; }
         }
+
+        public ConsensusTarget Target
+        {
+            get { return m_target; }
+            set { m_target = value; }
+        }
+
+        public PostTranslationalModification PostTranslationalModification
+        {
+            get { return m_ptm; }
+            set { m_ptm = value; }
+        }
+
     }
 }
