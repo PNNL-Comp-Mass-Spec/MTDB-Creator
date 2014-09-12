@@ -21,36 +21,19 @@ namespace MTDBFramework.Database
             Map(x => x.RegressionOrder);
 
             // General
-            Map(x => x.TargetFilterType);
+            //Map(x => x.TargetFilterType);
 
             //// NET Prediction
-            Map(x => x.PredictorType);
+            Map(x => x.PredictorType).Column("NetPredictionType");
 
             //// Peptides
-            Map(x => x.MaxModsForAlignment);
-            Map(x => x.MinObservationsForExport);
+            // Map(x => x.MaxModsForAlignment); Should always be 0
+            // Map(x => x.MinObservationsForExport); Never used
+		    // Map(x => x.MinimumObservedNet); Should always be 0
+		    // Map(x => x.MaximumObservedNet); Should always be 1
 
-            Map(x => x.ExportTryptic);
-            Map(x => x.ExportPartiallyTryptic);
-            Map(x => x.ExportNonTryptic);
-
-            //// TODO: These three are arrays of length 3. Try to do error detection
-
-            Map(x => x.MinXCorrForExportTryptic);
-            Map(x => x.MinXCorrForExportPartiallyTryptic);
-            Map(x => x.MinXCorrForExportNonTryptic);
-
-            //// Sequest
-            Map(x => x.MinXCorrForAlignment);
-            Map(x => x.UseDelCn);
-            Map(x => x.MaxDelCn);
-
-            //// Xtandem
-            Map(x => x.MaxLogEValForXTandemAlignment);
-            Map(x => x.MaxLogEValForXTandemExport);
-
-            //// Other
-            Map(x => x.MaxRankForExport);
+		    Map(x => x.MaxMsgfSpecProb);
+		    Map(x => x.MsgfFdr);
         }
     }
 }

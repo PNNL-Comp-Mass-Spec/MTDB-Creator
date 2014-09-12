@@ -15,8 +15,8 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id).Column("PairId").GeneratedBy.Native();
-            Map(x => x.ConsensusId);
-            Map(x => x.PtmId);
+            Map(x => x.ConsensusId).Column("TargetId");
+            Map(x => x.PtmId).Column("PostTranslationModId");
             Map(x => x.Location);
         }
     }

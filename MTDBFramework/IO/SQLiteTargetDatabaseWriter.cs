@@ -65,7 +65,7 @@ namespace MTDBFramework.IO
 				            }
 				            evidence.Id = 0;
 				            evidence.DataSet = m_uniqueDataSets[evidence.DataSet.Name];
-				            evidence.Parent = consensusTarget;
+				            //evidence.Parent = consensusTarget;
 
 			            }
 

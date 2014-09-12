@@ -28,7 +28,7 @@ namespace MTDBFramework.Database
             Map(x => x.DelMPpm);
             Map(x => x.SpecProb);
 
-            References(x => x.Parent).Cascade.SaveUpdate();
+            //References(x => x.Parent).Cascade.SaveUpdate();
             References(x => x.DataSet).Cascade.SaveUpdate();
         }
     }

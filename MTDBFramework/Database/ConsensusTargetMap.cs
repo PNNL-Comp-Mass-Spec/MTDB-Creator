@@ -16,24 +16,23 @@ namespace MTDBFramework.Database
 		/// Constructor
 		/// </summary>
         public ConsensusTargetMap()
-        {
+		{
+		    Table("Target");
             Not.LazyLoad();
             Id(x => x.Id)
-                .Column("ConsensusId").GeneratedBy.Native();
+                .Column("TargetId").GeneratedBy.Native();
             Map(x => x.AverageNet);
             Map(x => x.StdevNet);
             Map(x => x.PredictedNet);
             Map(x => x.TheoreticalMonoIsotopicMass);
-            Map(x => x.CleanSequence).Column("Sequence");
-		    //Map(x => x.Sequence).Column("REMOVE"); For Comparison testing with VIPER
+            Map(x => x.CleanSequence).Column("CleanSequence");
             Map(x => x.PrefixResidue);
             Map(x => x.SuffixResidue);
             Map(x => x.ModificationCount).Column("ModificationCount");
             Map(x => x.ModificationDescription).Column("ModificationDescription");
             Map(x => x.MultiProteinCount).Column("MultiProteinCount");
 
-            HasMany(x => x.Evidences).Cascade.All();
-
+            HasMany(x => x.Evidences).KeyColumn("TargetId").Cascade.All();
         }
     }
 }

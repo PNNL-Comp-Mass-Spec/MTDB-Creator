@@ -458,8 +458,8 @@ namespace MTDBFramework.Data
 
             PredictorType = RetentionTimePredictionType.KANGAS;
 
-            MaxModsForAlignment = 2;
-            MinObservationsForExport = 2;
+            MaxModsForAlignment = 0;
+            MinObservationsForExport = 1;
 
             ExportTryptic = true;
             ExportPartiallyTryptic = true;

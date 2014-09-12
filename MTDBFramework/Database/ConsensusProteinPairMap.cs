@@ -14,7 +14,7 @@ namespace MTDBFramework.Database
         {
             Not.LazyLoad();
             Id(x => x.Id).Column("PairId").GeneratedBy.Native();
-            Map(x => x.ConsensusId);
+            Map(x => x.ConsensusId).Column("TargetId");
             Map(x => x.ProteinId);
             Map(x => x.CleavageState);
             Map(x => x.TerminusState);
