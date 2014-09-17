@@ -1,4 +1,6 @@
-﻿namespace MTDBFramework.Data
+﻿using MathNet.Numerics.Distributions;
+
+namespace MTDBFramework.Data
 {
 	/// <summary>
 	/// MSGF+ input storage for evidence
@@ -72,10 +74,31 @@
             get
             {
                 return m_msgfScore;
+
             }
             set
             {
                 m_msgfScore = value;
+
+                switch (Charge)
+                {
+                    case 1:
+                        NormalizedScore = (0.0197 * value) + 0.75;
+                        break;
+
+                    case 2:
+                        NormalizedScore = (0.0165*value) + 1.3;
+                        break;
+
+                    default:
+                        NormalizedScore = (0.0267*value) + 1;
+                        break;
+                }
+                if (NormalizedScore < 0)
+                {
+                    NormalizedScore = 0;
+                }
+
                 OnPropertyChanged("MSGFScore");
             }
         }

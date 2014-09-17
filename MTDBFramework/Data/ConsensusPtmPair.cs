@@ -48,12 +48,18 @@
             set { m_location = value; }
         }
 
+        /// <summary>
+        /// Consensus target this pair maps to
+        /// </summary>
         public ConsensusTarget Target
         {
             get { return m_target; }
             set { m_target = value; }
         }
 
+        /// <summary>
+        /// Post Translational Modification this pair maps to
+        /// </summary>
         public PostTranslationalModification PostTranslationalModification
         {
             get { return m_ptm; }

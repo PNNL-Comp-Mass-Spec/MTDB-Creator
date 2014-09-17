@@ -65,8 +65,7 @@ namespace MTDBFramework.IO
 				            }
 				            evidence.Id = 0;
 				            evidence.DataSet = m_uniqueDataSets[evidence.DataSet.Name];
-				            //evidence.Parent = consensusTarget;
-
+				            evidence.Parent = consensusTarget;
 			            }
 
 			            consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
@@ -79,6 +78,7 @@ namespace MTDBFramework.IO
 			            {
 				            if (!m_uniqueProteins.ContainsKey(protein.ProteinName))
 				            {
+				                protein.Id = 0;
 					            m_uniqueProteins.Add(protein.ProteinName, protein);
 					            session.SaveOrUpdate(protein);
 				            }
@@ -106,7 +106,9 @@ namespace MTDBFramework.IO
 				            var cPtmPair = new ConsensusPtmPair
 				            {
 				                Location = ptm.Location,
+                                PostTranslationalModification = m_uniquePtms[ptm.Name],
 				                PtmId = m_uniquePtms[ptm.Name].Id,
+                                Target = consensusTarget,
 				                ConsensusId = consensusTarget.Id
 				            };
 			                session.SaveOrUpdate(cPtmPair);

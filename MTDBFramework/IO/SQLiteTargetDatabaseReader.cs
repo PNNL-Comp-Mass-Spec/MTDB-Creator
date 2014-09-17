@@ -107,20 +107,20 @@ namespace MTDBFramework.IO
 
                 foreach (var pair in readPair)
                 {
-                    if(!consensusProtDic.ContainsKey(pair.ConsensusId))
+                    if (!consensusProtDic.ContainsKey(pair.Consensus.Id))
                     {
-                        consensusProtDic.Add(pair.ConsensusId, new List<ConsensusProteinPair>());
+                        consensusProtDic.Add(pair.Consensus.Id, new List<ConsensusProteinPair>());
                     }
-                    consensusProtDic[pair.ConsensusId].Add(pair);
+                    consensusProtDic[pair.Consensus.Id].Add(pair);
                 }
                 
                 foreach (var pair in readPtmPairs)
                 {
-                    if (!consensusPtmDic.ContainsKey(pair.ConsensusId))
+                    if (!consensusPtmDic.ContainsKey(pair.Target.Id))
                     {
-                        consensusPtmDic.Add(pair.ConsensusId, new List<ConsensusPtmPair>());
+                        consensusPtmDic.Add(pair.Target.Id, new List<ConsensusPtmPair>());
                     }
-                    consensusPtmDic[pair.ConsensusId].Add(pair);
+                    consensusPtmDic[pair.Target.Id].Add(pair);
                 }
 
                 foreach (var prot in readProt)
@@ -139,14 +139,14 @@ namespace MTDBFramework.IO
                     {
                         var ptm = new PostTranslationalModification
                         {
-                            Mass = ptmDic[pair.PtmId].Mass,
-                            Name = ptmDic[pair.PtmId].Name,
-                            Formula = ptmDic[pair.PtmId].Formula,
+                            Mass = ptmDic[pair.PostTranslationalModification.Id].Mass,
+                            Name = ptmDic[pair.PostTranslationalModification.Id].Name,
+                            Formula = ptmDic[pair.PostTranslationalModification.Id].Formula,
                             Location = pair.Location,
-                            Parent = consensusDic[pair.ConsensusId]
+                            Parent = consensusDic[pair.Target.Id]
                         };
 
-                        consensusDic[pair.ConsensusId].Ptms.Add(ptm);
+                        consensusDic[pair.Target.Id].Ptms.Add(ptm);
                     }
                 }
 
@@ -154,12 +154,12 @@ namespace MTDBFramework.IO
                 {
                     foreach(var pair in consensusProtDic[evidence.Parent.Id])
                     {
-                        var prot = protDic[pair.ProteinId];
+                        var prot = protDic[pair.Protein.Id];
                         prot.ResidueEnd = pair.ResidueEnd;
                         prot.ResidueStart = pair.ResidueStart;
                         prot.TerminusState = (clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants)pair.TerminusState;
                         prot.CleavageState = (clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants)pair.CleavageState;
-                        prot.Id = 0;
+                        //prot.Id = 0;
                         evidence.AddProtein(prot);
                     }
                     evidence.MonoisotopicMass = consensusDic[evidence.Parent.Id].TheoreticalMonoIsotopicMass;

@@ -12,7 +12,7 @@ namespace MTDBFramework.IO
 		/// Entry point for creating an LCMS Dataset using the PHRP Reader.
 		/// </summary>
 		/// <remarks>
-		/// If the path ends with "msgfplus.mzid" then it's an MZIdentML file, but if it's not, then
+		/// If the path ends with "msgfplus.mzid" or "mzid.gz" then it's an MZIdentML file, but if it's not, then
 		/// it determines the type of reader to return based on the extension of the file, using that to 
 		/// determine if it is a Sequest, XTandem, MSAlign or MSGF+ file
 		/// The if statement is due to the PHRP Reader not meaning to be used on .mzid files

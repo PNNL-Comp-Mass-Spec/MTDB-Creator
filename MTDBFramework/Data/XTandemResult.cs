@@ -146,6 +146,23 @@
             set
             {
                 m_peptideHyperscore = value;
+
+                switch (Charge)
+                {
+                    case 1:
+                        NormalizedScore = 0.082*value;
+                        break;
+
+                    case 2:
+                        NormalizedScore = 0.085*value;
+                        break;
+
+                    default:
+                        NormalizedScore = 0.0874*value;
+                        break;
+                }
+                
+
                 OnPropertyChanged("PeptideHyperscore");
             }
         }

@@ -154,8 +154,6 @@
     <Compile Include="Data\UniModData.cs" />
     <Compile Include="Data\XTandemResult.cs" />
     <Compile Include="Data\XTandemTargetFilter.cs" />
-    <Compile Include="IO\AccessDatabaseTableCreator.cs" />
-    <Compile Include="IO\AccessTargetDatabaseWriter.cs" />
     <Compile Include="IO\AnalysisJobDescriptionReader.cs" />
     <Compile Include="IO\AnalysisReaderHelper.cs" />
     <Compile Include="IO\AnalysisJobProcessor.cs" />
@@ -188,26 +186,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="ADODB">
-      <Guid>{2A75196C-D9EB-4129-B803-931327F72D5C}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>8</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="ADOX">
-      <Guid>{00000600-0000-0010-8000-00AA006D2EA4}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>8</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="unimod.xml">

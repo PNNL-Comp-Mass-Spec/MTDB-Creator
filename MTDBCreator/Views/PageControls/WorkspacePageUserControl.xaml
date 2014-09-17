@@ -91,6 +91,16 @@
                     </oxy:Plot.InputBindings>
                 </oxy:Plot>
             </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text ="Predicted Net Vs. Observed Net"/>
+                </TabItem.Header>
+                <oxy:Plot x:Name="ObservedPredictedOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding ObservedPredictedPlotModel}">
+                    <oxy:Plot.InputBindings>
+                        <KeyBinding Key="Z" Command="{Binding ZoomExtentsCommand}"/>
+                    </oxy:Plot.InputBindings>
+                </oxy:Plot>
+            </TabItem>
             <TabItem Visibility="Hidden">
                 <TabItem.Header>
                     <TextBlock Text="Database Statistics" />

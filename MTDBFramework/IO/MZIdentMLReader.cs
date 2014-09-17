@@ -628,11 +628,15 @@ namespace MTDBFramework.IO
             var cleavageStateCalculator = new clsPeptideCleavageStateCalculator();
 
             var i = 0;
+            var total = m_specItems.Count;
             // Go through each Spectrum ID and map it to an MSGF+ result
             foreach (var item in m_specItems)
             {
                 i++;
-
+                if (i % 500 == 0)
+                {
+                    UpdateProgress((100 * ((float)i / total)));
+                }
                 // Skip this PSM if it doesn't pass the import filters
                 // Note that qValue is basically FDR
                 double qValue = item.Value.QValue;

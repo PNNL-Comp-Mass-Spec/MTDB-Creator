@@ -23,6 +23,7 @@ namespace MTDBCreator.ViewModels
         private IList<PlotModel> m_plotModels;
         private PlotModel m_NETScanPlotModel;
         private PlotModel m_massScanPlotModel;
+        private PlotModel m_observedPredictedPlotModel;
 
         private ICommand m_ZoomExtentsCommand;
         private ICommand m_SelectItemsCommand;
@@ -74,6 +75,19 @@ namespace MTDBCreator.ViewModels
             {
                 m_massScanPlotModel = value;
                 OnPropertyChanged("MassScanPlotModel");
+            }
+        }
+
+        public PlotModel ObservedPredictedPlotModel
+        {
+            get
+            {
+                return m_observedPredictedPlotModel;
+            }
+            set
+            {
+                m_observedPredictedPlotModel = value;
+                OnPropertyChanged("ObservedPredictedPlotModel");
             }
         }
 
@@ -225,6 +239,38 @@ namespace MTDBCreator.ViewModels
             return scatterSeries;
         }
 
+        public ScatterSeries MakePredictedAnalysisScatterSeries(AnalysisJobItem analysisJobItem, Options options)
+        {
+            var color = m_SeriesColorDictionary[analysisJobItem.FilePath];
+
+            var scatterSeries = new ScatterSeries
+            {
+                MarkerSize = 2,
+                // Use Cross MarkerType and MarkerStroke (instead of MarkerFill) to improve the graphing performance
+                MarkerStroke = OxyColor.FromArgb(color.A, color.R, color.G, color.B),
+                MarkerType = MarkerType.Cross,
+                Title = analysisJobItem.Title,
+                Tag = analysisJobItem,
+            };
+
+            foreach (var evidence in analysisJobItem.DataSet.Evidences)
+            {
+                var filter = AlignmentFilterFactory.Create(analysisJobItem.Format, options);
+
+                if (!filter.ShouldFilter(evidence))
+                {
+                    var scatterPoint = new ScatterPoint(evidence.ObservedNet, evidence.PredictedNet)
+                    {
+                        Tag = evidence
+                    };
+
+                    scatterSeries.Points.Add(scatterPoint);
+                }
+            }
+
+            return scatterSeries;
+        }
+
         // DEGAN TESTING END
 
         public LineAnnotation MakeRegressionLineAnnotation(AnalysisJobItem analysisJobItem)
@@ -284,6 +330,10 @@ namespace MTDBCreator.ViewModels
                                 
                             case 1:
                                 plotModel.Series.Add(MakeMassAnalysisScatterSeries(analysisJobItem, options));
+                                break;
+
+                            case 2:
+                                plotModel.Series.Add(MakePredictedAnalysisScatterSeries(analysisJobItem, options));
                                 break;
                         }
                     }
@@ -370,6 +420,7 @@ namespace MTDBCreator.ViewModels
                 }
             }
             m_plotModels.Add(NETScanPlotModel);
+
             MassScanPlotModel = new PlotModel
             {
                 Title = "Monoisotopic Mass Vs. Scan",
@@ -400,6 +451,37 @@ namespace MTDBCreator.ViewModels
                 }
             }
             m_plotModels.Add(MassScanPlotModel);
+
+            ObservedPredictedPlotModel = new PlotModel
+            {
+                Title = "Predicted Net Vs. Observed Net",
+                IsLegendVisible = true,
+                LegendTitle = "LEGEND",
+                LegendPosition = LegendPosition.RightMiddle,
+                LegendPlacement = LegendPlacement.Outside,
+                LegendOrientation = LegendOrientation.Vertical,
+                LegendBorder = OxyColors.Black,
+                LegendSymbolPlacement = LegendSymbolPlacement.Left,
+                LegendBackground = OxyColors.Transparent,
+            };
+
+            ObservedPredictedPlotModel.Axes.Add(MakeLinerAxis(AxisPosition.Left));
+            ObservedPredictedPlotModel.Axes.Add(MakeLinerAxis(AxisPosition.Bottom));
+
+            foreach (var axis in MassScanPlotModel.Axes)
+            {
+                switch (axis.Position)
+                {
+                    case AxisPosition.Left:
+                        axis.Title = "Predicted Net";
+                        break;
+                    case AxisPosition.Bottom:
+                        axis.Title = "Observed Net";
+                        axis.AbsoluteMinimum = 0;
+                        break;
+                }
+            }
+            m_plotModels.Add(ObservedPredictedPlotModel);
             UpdatePlotViewModel(analysisJobViewModel);
         }
 

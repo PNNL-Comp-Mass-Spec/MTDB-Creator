@@ -53,6 +53,7 @@ namespace MTDBFramework.Data
             set
             {
                 m_xCorr = value;
+                NormalizedScore = value;
                 OnPropertyChanged("XCorr");
             }
         }

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using MathNet.Numerics.Statistics;
 using MTDBFramework.Algorithms.Alignment;
@@ -162,7 +163,7 @@ namespace MTDBFramework.Algorithms
 
                 massTagLightTargets.AddRange(evidence.Charges.Select(charge => new UMCLight
                 {
-                    Net = evidence.AverageNet,
+                    Net = evidence.PredictedNet,
                     ChargeState = charge,
                     Mz = (evidence.TheoreticalMonoIsotopicMass / charge),
                     MassMonoisotopic = evidence.TheoreticalMonoIsotopicMass,
@@ -186,6 +187,8 @@ namespace MTDBFramework.Algorithms
             options.AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP;
             var lcmsNetAligner = new LcmsWarpAdapter(options);
 
+            //var allShift = File.CreateText(@"D:\testResults\AllNetShifts.txt");
+            //var medShift = File.CreateText(@"D:\testResults\MedNetShifts.txt");
 
             //Foreach dataset
             foreach (var dataSet in dataSets)
@@ -258,10 +261,12 @@ namespace MTDBFramework.Algorithms
                 umcDataset.Sort((x, y) => x.ScanAligned.CompareTo(y.ScanAligned));
 
                 var netDiffList = new List<double>();
-                var medNetDiff = new double[100];
-                var numPerBin = (int)Math.Ceiling(dataSet.Evidences.Count/100.0);
-                var binNum = 0;
+                var numBins = Math.Min(50, dataSet.Evidences.Count);
+                var medNetDiff  = new double[numBins];
+                var numPerBin   = (int)Math.Ceiling((double)dataSet.Evidences.Count / numBins);
+                var binNum      = 0;
 
+                
                 //Copy the residual data back into the evidences
                 for (int a = 0, b = 0; a < dataSet.Evidences.Count; a++)
                 {
@@ -269,12 +274,15 @@ namespace MTDBFramework.Algorithms
                     {
                         dataSet.Evidences[a].MonoisotopicMass = umcDataset[b].MassMonoisotopicAligned;
                         var netShift = umcDataset[b].NetAligned - umcDataset[b].Net;
+                        //allShift.WriteLine(netShift);
                         netDiffList.Add(netShift);
+                        dataSet.Evidences[a].NetShift = netShift;
                         dataSet.Evidences[a].ObservedNet += netShift;
                         
                         if (netDiffList.Count % numPerBin == 0)
                         {
                             medNetDiff[binNum] = netDiffList.Median();
+                            //medShift.WriteLine(netDiffList.Median());
                             netDiffList.Clear();
                             binNum++;
                         }
@@ -282,13 +290,16 @@ namespace MTDBFramework.Algorithms
                         b++;
                     }
                 }
-
-                medNetDiff[binNum] = netDiffList.Median();
-                netDiffList.Clear();
+                if (netDiffList.Count != 0)
+                {
+                    medNetDiff[binNum] = netDiffList.Median();
+                    //medShift.WriteLine(netDiffList.Median());
+                    netDiffList.Clear();
+                }
 
                 for (var a = 0; a < dataSet.Evidences.Count; a++)
                 {
-                    dataSet.Evidences[a].NetShift = medNetDiff[a/numPerBin];
+                    //dataSet.Evidences[a].NetShift = medNetDiff[a/numPerBin];
                 }
                 
                 foreach (var data in dataSet.Evidences.Where(data => !evidenceMap.ContainsKey(data.Id)))
@@ -310,6 +321,9 @@ namespace MTDBFramework.Algorithms
                 m_currentItem++;
             }
 
+            //allShift.Close();
+            //medShift.Close();
+
             if (AlignmentComplete != null)
             {
                 AlignmentComplete(this, new AlignmentCompleteArgs(alignmentData));
@@ -326,6 +340,7 @@ namespace MTDBFramework.Algorithms
             }
 
             return targetDatabase;
+
         }
 
 		/// <summary>

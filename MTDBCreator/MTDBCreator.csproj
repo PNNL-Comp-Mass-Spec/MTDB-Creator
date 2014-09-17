@@ -302,6 +302,10 @@
     <SplashScreen Include="Images\PNNL.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MTDBAccessIO\MTDBAccessIO.csproj">
+      <Project>{57ae3323-1592-4cfe-a054-3eb2f468bc5c}</Project>
+      <Name>MTDBAccessIO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MTDBFramework\MTDBFramework.csproj">
       <Project>{3ee14e5d-3881-410e-86df-611bae112e90}</Project>
       <Name>MTDBFramework</Name>

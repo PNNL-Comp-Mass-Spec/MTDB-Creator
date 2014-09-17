@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System;
 using MTDBCreator.Commands;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
-using System;
 using System.Collections;
 using System.Windows.Input;
 using PNNLOmics.Algorithms.Regression;
@@ -36,6 +36,7 @@ namespace MTDBCreator.ViewModels
                 DatabaseType.SQLite,
                 DatabaseType.NotSaved
             };
+            
             PredictionText = "Kangas ANN algorithm developed by Lars Kangas and Kostas Petritis.  See:  " +
                    "K. Petritis, L.J. Kangas, P.L. Ferguson, G.A. Anderson, L. Paša-Tolic, M.S. Lipton, K.J. Auberry, " +
                    "E.F. Strittmatter, Y. Shen, R. Zhao, R.D. Smith. 2003. \"Use of artificial neural networks for the " +

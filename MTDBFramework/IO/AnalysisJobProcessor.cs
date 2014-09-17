@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using MTDBFramework.Data;
 using MTDBFramework.UI;
-using PNNLOmics.Annotations;
 
 #endregion
 
