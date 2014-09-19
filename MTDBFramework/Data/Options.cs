@@ -23,23 +23,14 @@ namespace MTDBFramework.Data
         private RetentionTimePredictionType m_predictorType;
         private int m_maxModsForAlignment;
         private short m_minObservationsForExport;
-        private bool m_exportTryptic;
-        private bool m_exportPartiallyTryptic;
-        private bool m_exportNonTryptic;
-        private double[] m_minXCorrForExportTryptic;
-        private double[] m_minXCorrForExportPartiallyTryptic;
-        private double[] m_minXCorrForExportNonTryptic;
         private double m_minXCorrForAlignment;
-        private bool m_useDelCn;
-        private double m_maxDelCn;
         private double m_maxLogEValForXTandemAlignment;
-        private double m_maxLogEValForXTandemExport;
         private double m_maxLogEValForMsAlignAlignment;
         private short m_maxRankForExport;
         private double m_msgfFdr;
         private double m_maxMsgfSpecProb;
-	    private double m_minimumObservedNet;
-	    private double m_maximumObservedNet;
+        private double m_minimumObservedNet;
+        private double m_maximumObservedNet;
 
         #endregion
 
@@ -134,9 +125,9 @@ namespace MTDBFramework.Data
         }
 
         // Peptides
-		/// <summary>
-		/// Maximum mods for peptide alignment
-		/// </summary>
+        /// <summary>
+        /// Maximum mods for peptide alignment
+        /// </summary>
         public int MaxModsForAlignment
         {
             get
@@ -147,12 +138,12 @@ namespace MTDBFramework.Data
             {
                 m_maxModsForAlignment = value;
                 OnPropertyChanged("MaxModsForAlignment");
-            }  
+            }
         }
 
-		/// <summary>
-		/// Minimum observations for export
-		/// </summary>
+        /// <summary>
+        /// Minimum observations for export
+        /// </summary>
         public short MinObservationsForExport
         {
             get
@@ -166,106 +157,10 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Whether to export Tryptic peptides
-		/// </summary>
-        public bool ExportTryptic
-        {
-            get
-            {
-                return m_exportTryptic;
-            }
-            set
-            {
-                m_exportTryptic = value;
-                OnPropertyChanged("ExportTryptic");
-            } 
-        }
-
-		/// <summary>
-		/// Whether to export partially Tryptic peptides
-		/// </summary>
-        public bool ExportPartiallyTryptic
-        {
-            get
-            {
-                return m_exportPartiallyTryptic;
-            }
-            set
-            {
-                m_exportPartiallyTryptic = value;
-                OnPropertyChanged("ExportPartiallyTryptic");
-            } 
-        }
-
-		/// <summary>
-		/// Whether to export non-Tryptic peptides
-		/// </summary>
-        public bool ExportNonTryptic
-        {
-            get
-            {
-                return m_exportNonTryptic;
-            }
-            set
-            {
-                m_exportNonTryptic = value;
-                OnPropertyChanged("ExportNonTryptic");
-            }
-        }
-
-		/// <summary>
-		/// Minimum XCorr for exporting Tryptic peptides
-		/// </summary>
-        public double[] MinXCorrForExportTryptic
-        {
-            get
-            {
-                return m_minXCorrForExportTryptic;
-            }
-            set
-            {
-                m_minXCorrForExportTryptic = value;
-                OnPropertyChanged("MinXCorrForExportTryptic");
-            }
-        }
-
-		/// <summary>
-		/// Minimum XCorr for exporting partially Tryptic peptides
-		/// </summary>
-        public double[] MinXCorrForExportPartiallyTryptic
-        {
-            get
-            {
-                return m_minXCorrForExportPartiallyTryptic;
-            }
-            set
-            {
-                m_minXCorrForExportPartiallyTryptic = value;
-                OnPropertyChanged("MinXCorrForExportPartiallyTryptic");
-            }
-        }
-
-		/// <summary>
-		/// Minimum XCorr for exporting non-Tryptic peptides
-		/// </summary>
-        public double[] MinXCorrForExportNonTryptic
-        {
-            get
-            {
-                return m_minXCorrForExportNonTryptic;
-            }
-            set
-            {
-                m_minXCorrForExportNonTryptic = value;
-                OnPropertyChanged("MinXCorrForExportNonTryptic");
-            }
-        }
-
         // Sequest
-		/// <summary>
-		/// Minimum XCorr for Sequest Alignment
-		/// </summary>
+        /// <summary>
+        /// Minimum XCorr for Sequest Alignment
+        /// </summary>
         public double MinXCorrForAlignment
         {
             get
@@ -278,39 +173,7 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("MinXCorrForAlignment");
             }
         }
-
-		/// <summary>
-		/// Use DelCn for Sequest
-		/// </summary>
-        public bool UseDelCn
-        {
-            get
-            {
-                return m_useDelCn;
-            }
-            set
-            {
-                m_useDelCn = value;
-                OnPropertyChanged("UseDelCN");
-            }
-        }
-
-		/// <summary>
-		/// Maximum DelCn for Sequest
-		/// </summary>
-        public double MaxDelCn
-        {
-            get
-            {
-                return m_maxDelCn;
-            }
-            set
-            {
-                m_maxDelCn = value;
-                OnPropertyChanged("MaxDelCN");
-            }
-        }
-
+        
         // Xtandem
 		/// <summary>
 		/// Maximum LogEVal for XTandem Alignment
@@ -325,22 +188,6 @@ namespace MTDBFramework.Data
             {
                 m_maxLogEValForXTandemAlignment = value;
                 OnPropertyChanged("MaxLogEValForXTandemAlignment");
-            }
-        }
-
-		/// <summary>
-		/// Maximum LogEVal for XTandem export
-		/// </summary>
-        public double MaxLogEValForXTandemExport 
-{
-            get
-            {
-                return m_maxLogEValForXTandemExport;
-            }
-            set
-            {
-                m_maxLogEValForXTandemExport = value;
-                OnPropertyChanged("MaxLogEValForXTandemExport");
             }
         }
 
@@ -413,18 +260,18 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Minimum Observed Net for export
         /// </summary>
-	    public double MinimumObservedNet
-	    {
-	        get
-	        {
-	            return m_minimumObservedNet;
-	        }
-	        set
-	        {
-	            m_minimumObservedNet = value;
-	            OnPropertyChanged("MinimumObservedNet");
-	        }
-	    }
+        public double MinimumObservedNet
+        {
+            get
+            {
+                return m_minimumObservedNet;
+            }
+            set
+            {
+                m_minimumObservedNet = value;
+                OnPropertyChanged("MinimumObservedNet");
+            }
+        }
 
         /// <summary>
         /// Maximum Observed Net for export
@@ -461,20 +308,9 @@ namespace MTDBFramework.Data
             MaxModsForAlignment = 0;
             MinObservationsForExport = 1;
 
-            ExportTryptic = true;
-            ExportPartiallyTryptic = true;
-            ExportNonTryptic = true;
-
-            MinXCorrForExportTryptic = new [] { 1.5, 2.0, 2.5 };
-            MinXCorrForExportPartiallyTryptic = new [] { 1.5, 2.0, 2.5 };
-            MinXCorrForExportNonTryptic = new [] { 3.0, 3.5, 4.0 };
-
             MinXCorrForAlignment = 3.0;
-            UseDelCn = false;
-            MaxDelCn = 0.1;
 
             MaxLogEValForXTandemAlignment = -2.0;
-            MaxLogEValForXTandemExport = -2.0;
 
             MaxLogEValForMsAlignAlignment = 1E-4;
 
@@ -483,8 +319,8 @@ namespace MTDBFramework.Data
             MsgfFdr = .01;
             MaxMsgfSpecProb = 1E-10;
 
-		    MinimumObservedNet = 0.0;
-		    MaximumObservedNet = 1.0;
+            MinimumObservedNet = 0.0;
+            MaximumObservedNet = 1.0;
 
             OptionsChanged = false;
         }

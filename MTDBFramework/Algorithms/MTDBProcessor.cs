@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using MathNet.Numerics.Statistics;
 using MTDBFramework.Algorithms.Alignment;
@@ -261,7 +260,7 @@ namespace MTDBFramework.Algorithms
                 umcDataset.Sort((x, y) => x.ScanAligned.CompareTo(y.ScanAligned));
 
                 var netDiffList = new List<double>();
-                var numBins = Math.Min(50, dataSet.Evidences.Count);
+                var numBins     = Math.Min(50, dataSet.Evidences.Count);
                 var medNetDiff  = new double[numBins];
                 var numPerBin   = (int)Math.Ceiling((double)dataSet.Evidences.Count / numBins);
                 var binNum      = 0;
@@ -274,7 +273,6 @@ namespace MTDBFramework.Algorithms
                     {
                         dataSet.Evidences[a].MonoisotopicMass = umcDataset[b].MassMonoisotopicAligned;
                         var netShift = umcDataset[b].NetAligned - umcDataset[b].Net;
-                        //allShift.WriteLine(netShift);
                         netDiffList.Add(netShift);
                         dataSet.Evidences[a].NetShift = netShift;
                         dataSet.Evidences[a].ObservedNet += netShift;
@@ -282,7 +280,6 @@ namespace MTDBFramework.Algorithms
                         if (netDiffList.Count % numPerBin == 0)
                         {
                             medNetDiff[binNum] = netDiffList.Median();
-                            //medShift.WriteLine(netDiffList.Median());
                             netDiffList.Clear();
                             binNum++;
                         }
@@ -293,14 +290,9 @@ namespace MTDBFramework.Algorithms
                 if (netDiffList.Count != 0)
                 {
                     medNetDiff[binNum] = netDiffList.Median();
-                    //medShift.WriteLine(netDiffList.Median());
                     netDiffList.Clear();
                 }
 
-                for (var a = 0; a < dataSet.Evidences.Count; a++)
-                {
-                    //dataSet.Evidences[a].NetShift = medNetDiff[a/numPerBin];
-                }
                 
                 foreach (var data in dataSet.Evidences.Where(data => !evidenceMap.ContainsKey(data.Id)))
                 {
@@ -320,10 +312,7 @@ namespace MTDBFramework.Algorithms
                 }
                 m_currentItem++;
             }
-
-            //allShift.Close();
-            //medShift.Close();
-
+            
             if (AlignmentComplete != null)
             {
                 AlignmentComplete(this, new AlignmentCompleteArgs(alignmentData));
@@ -340,7 +329,6 @@ namespace MTDBFramework.Algorithms
             }
 
             return targetDatabase;
-
         }
 
 		/// <summary>

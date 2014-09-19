@@ -20,6 +20,7 @@ namespace MTDBCreator.ViewModels
 
         private ICommand m_updatePredictionCommand;
         private ICommand m_saveCommand;
+        private bool m_enabled;
 
         #endregion
 
@@ -83,11 +84,23 @@ namespace MTDBCreator.ViewModels
 
             set
             {
+                OrderEnabled = (value != RegressionType.LinearEm);
                 if (m_options.RegressionType == value) return;
                 m_options.RegressionType = value;
                 OnPropertyChanged("RegressionType");
             }
         }
+
+        public bool OrderEnabled
+        {
+            get { return m_enabled; }
+            private set
+            {
+                m_enabled = value;
+                OnPropertyChanged("OrderEnabled");
+            }
+        }
+
         public DatabaseType SelectedDatabaseType
         {
 
@@ -114,50 +127,19 @@ namespace MTDBCreator.ViewModels
             // General
             if (parameter != null)
             {
-                Options.MaxModsForAlignment = Convert.ToInt32(parameter[0]);
-                Options.MinObservationsForExport = Convert.ToInt16(parameter[1]);
-                Options.MinimumObservedNet = Convert.ToDouble(parameter[24]);
-                Options.MaximumObservedNet = Convert.ToDouble(parameter[25]);
-                Options.MinXCorrForAlignment = Convert.ToInt32(parameter[2]);
-                Options.MaxLogEValForXTandemAlignment = Convert.ToInt32(parameter[3]);
-                Options.MaxMsgfSpecProb = Convert.ToDouble(parameter[4]);
-                Options.MsgfFdr = Convert.ToDouble(parameter[5]);
+                Options.MaxMsgfSpecProb = Convert.ToDouble(parameter[0]);
+                Options.MsgfFdr = Convert.ToDouble(parameter[1]);
 
                 // Regression type
-                Options.RegressionType = (Convert.ToString(parameter[6]) == "LinearEm")
+                Options.RegressionType = (Convert.ToString(parameter[2]) == "LinearEm")
                     ? RegressionType.LinearEm
                     : RegressionType.MixtureRegression;
-                Options.RegressionOrder = (Convert.ToInt16(parameter[7]));
+                Options.RegressionOrder = (Convert.ToInt16(parameter[3]));
 
                 // Predictor Type
-                Options.PredictorType = (Convert.ToBoolean(parameter[8]))
+                Options.PredictorType = (Convert.ToBoolean(parameter[4]))
                     ? RetentionTimePredictionType.KANGAS
                     : RetentionTimePredictionType.KROKHIN;
-
-                // Tryptic Peptides
-                Options.ExportTryptic = (Convert.ToBoolean(parameter[9]));
-                Options.MinXCorrForExportTryptic[0] = Convert.ToDouble(parameter[10]);
-                Options.MinXCorrForExportTryptic[1] = Convert.ToDouble(parameter[11]);
-                Options.MinXCorrForExportTryptic[2] = Convert.ToDouble(parameter[12]);
-
-                // Partially Tryptic Peptides
-                Options.ExportPartiallyTryptic = (Convert.ToBoolean(parameter[13]));
-                Options.MinXCorrForExportPartiallyTryptic[0] = Convert.ToDouble(parameter[14]);
-                Options.MinXCorrForExportPartiallyTryptic[1] = Convert.ToDouble(parameter[15]);
-                Options.MinXCorrForExportPartiallyTryptic[2] = Convert.ToDouble(parameter[16]);
-
-                // Non Tryptic Peptides
-                Options.ExportNonTryptic = (Convert.ToBoolean(parameter[17]));
-                Options.MinXCorrForExportNonTryptic[0] = Convert.ToDouble(parameter[18]);
-                Options.MinXCorrForExportNonTryptic[1] = Convert.ToDouble(parameter[19]);
-                Options.MinXCorrForExportNonTryptic[2] = Convert.ToDouble(parameter[20]);
-
-                // Sequest dlCN
-                Options.UseDelCn = (Convert.ToBoolean(parameter[21]));
-                Options.MaxDelCn = Convert.ToDouble(parameter[22]);
-
-                // X!Tandem Export
-                Options.MaxLogEValForXTandemExport = Convert.ToDouble(parameter[23]);
 
                 Options.OptionsChanged = true;
             }
