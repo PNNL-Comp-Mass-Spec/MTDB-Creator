@@ -177,6 +177,11 @@ namespace MTDBFramework.Data
             }
         }
 
+        /// <summary>
+        /// Sequence for the peptide with all PTMs excluded and without pre and post residues
+        /// </summary>
+	    public string StrippedSequence { get; set; }
+
 		/// <summary>
 		/// Dataset the Consensus target occurs in
 		/// </summary>
@@ -326,6 +331,12 @@ namespace MTDBFramework.Data
             cleanSeq += partialSeq;
             numeric += partialSeq;
             nonNumeric += partialSeq;
+		    StrippedSequence = cleanSeq;
+		    var pieces = cleanSeq.Split('.');
+		    if (pieces.Count() != 1)
+		    {
+		        StrippedSequence = pieces[1];
+		    }
 
             if(string.IsNullOrWhiteSpace(evidence.CleanPeptide))
             {

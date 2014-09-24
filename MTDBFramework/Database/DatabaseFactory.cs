@@ -46,6 +46,7 @@ namespace MTDBFramework.Database
                         return Fluently.Configure()
                             .Database(SQLiteConfiguration.Standard
                                 .UsingFile(DatabaseFile)
+                                //.AdoNetBatchSize(100)
                                 /*.ShowSql()*/)
 							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<OptionsMap>())
 							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<TargetDatasetMap>())
@@ -75,7 +76,8 @@ namespace MTDBFramework.Database
 				{
 					// Try to validate the schema. If it is correct, we can use it as is.
 					new SchemaValidator(config).Validate();
-	            }
+				    config.SetProperty("adonet.batch_size", "100");
+				}
 	            catch (HibernateException)
 	            {
 					// Validation failed; we need to update the schema.
