@@ -24,6 +24,7 @@ rem xcopy "..\..\MTDBCreator\bin\%2\%1\MTDBCreator.exe" .\bin > nul
 rem xcopy ..\..\MTDBCreator\bin\%2\%1\*.dll /s .\bin > nul
 xcopy "%3MTDBCreator.exe" .\bin > nul
 xcopy %3*.dll /s .\bin > nul
+xcopy %4\MTDBFramework\unimod.xml .\bin > nul
 
 echo Building Distribution Package in Zip Format...
 echo.

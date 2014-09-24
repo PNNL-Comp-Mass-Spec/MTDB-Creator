@@ -321,7 +321,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(SolutionDir)\scripts\dist-package
-MakeDistPackage $(ConfigurationName) $(PlatformName) $(TargetDir)</PostBuildEvent>
+MakeDistPackage $(ConfigurationName) $(PlatformName) $(TargetDir) $(SolutionDir)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>rem del $(TargetDir)*.* /s /q</PreBuildEvent>
