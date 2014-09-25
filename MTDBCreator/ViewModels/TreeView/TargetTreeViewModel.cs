@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Documents;
 using MTDBCreator.ViewModels.TreeView;
 using MTDBFramework.UI;
 
@@ -8,12 +7,14 @@ namespace MTDBCreator.ViewModels
     public class TargetTreeViewModel : ObservableObject
     {
         private IEnumerable<TargetDatabaseTreeNodeViewModel> m_targetDatabaseTreeNodeViewModels;
-        private IEnumerable<ProteinDatabaseTreeNodeViewModel> m_proteinDatabaseTreeNodeViewModels; 
+        private IEnumerable<ProteinDatabaseTreeNodeViewModel> m_proteinDatabaseTreeNodeViewModels;
+        private string m_searchFilter;
 
         public TargetTreeViewModel(AnalysisJobViewModel analysisJobViewModel)
         {
             m_targetDatabaseTreeNodeViewModels = new List<TargetDatabaseTreeNodeViewModel> { new TargetDatabaseTreeNodeViewModel(analysisJobViewModel.Database) };
             m_proteinDatabaseTreeNodeViewModels = new List<ProteinDatabaseTreeNodeViewModel> { new ProteinDatabaseTreeNodeViewModel(analysisJobViewModel.Database) };
+            m_searchFilter = "";
         }
 
         public IEnumerable<TargetDatabaseTreeNodeViewModel> TargetDatabaseTreeNodeViewModels
@@ -39,6 +40,27 @@ namespace MTDBCreator.ViewModels
             {
                 m_proteinDatabaseTreeNodeViewModels = value;
                 OnPropertyChanged("ProteinDatabaseTreeNodeViewModels");
+            }
+        }
+
+        public string SearchFilter
+        {
+            get
+            {
+                return m_searchFilter;
+            }
+            set
+            {
+                m_searchFilter = value;
+                foreach (var model in m_proteinDatabaseTreeNodeViewModels)
+                {
+                    model.SearchFilter = value;
+                }
+                foreach (var model in m_targetDatabaseTreeNodeViewModels)
+                {
+                    model.SearchFilter = value;
+                }
+                OnPropertyChanged("SearchFilter");
             }
         }
     }

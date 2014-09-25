@@ -162,6 +162,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\MTDBResultChangedEvent.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="DelegateCommand.cs" />
     <Compile Include="Helpers\BackgroundWorkProcessHelper.cs" />
     <Compile Include="Helpers\BackgroundWork\AnalysisJobBackgroundWorkHelper.cs" />
     <Compile Include="Helpers\BackgroundWork\MTDBProcessorBackgroundWorkHelper.cs" />

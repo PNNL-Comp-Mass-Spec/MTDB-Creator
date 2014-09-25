@@ -12,6 +12,8 @@ namespace MTDBCreator.ViewModels.TreeView
         private bool m_isExpanded;
         private bool m_isLoaded;
 
+        private static string m_searchFilter = "";
+
         protected TreeNodeViewModel m_Parent;
 
         protected ObservableCollection<TreeNodeViewModel> m_ChildNodes;
@@ -127,6 +129,19 @@ namespace MTDBCreator.ViewModels.TreeView
             : this(text, hasChildNodes)
         {
             m_Parent = parent;
+        }
+
+        public string SearchFilter
+        {
+            get
+            {
+                return m_searchFilter;
+            }
+            set
+            {
+                m_searchFilter = value;
+                OnPropertyChanged("SearchFilter");
+            }
         }
     }
 }
