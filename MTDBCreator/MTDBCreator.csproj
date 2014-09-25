@@ -27,8 +27,8 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>1.3.0.%2a</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.4.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -127,6 +127,10 @@
     <Reference Include="OxyPlot.Xps">
       <HintPath>..\packages\OxyPlot.Wpf.2014.1.277.1\lib\NET40\OxyPlot.Xps.dll</HintPath>
     </Reference>
+    <Reference Include="PHRPReader, Version=1.1.5303.30734, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\PHRPReader.dll</HintPath>
+    </Reference>
     <Reference Include="PNNLOmics">
       <HintPath>..\libs\PNNLOmics.dll</HintPath>
     </Reference>
@@ -174,6 +178,8 @@
     <Compile Include="ViewModels\OxyPlot\DatasetPlotViewModel.cs" />
     <Compile Include="ViewModels\TreeView\ConsensusTargetTreeNodeViewModel.cs" />
     <Compile Include="ViewModels\TreeView\ITreeNodeViewModel.cs" />
+    <Compile Include="ViewModels\TreeView\ProteinDatabaseTreeNodeViewModel.cs" />
+    <Compile Include="ViewModels\TreeView\ProteinTreeNodeViewModel.cs" />
     <Compile Include="ViewModels\TreeView\TargetCollectionTreeNodeViewModel.cs" />
     <Compile Include="ViewModels\TreeView\TargetDatabaseTreeNodeViewModel.cs" />
     <Compile Include="ViewModels\TreeView\TargetTreeNodeViewModel.cs" />

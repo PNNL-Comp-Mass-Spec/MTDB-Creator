@@ -135,20 +135,33 @@ namespace MTDBFramework.Algorithms
             var newTargets = clusterer.Cluster(epicTargets);
             int i = 0, j = 0;
             var tempConsensusTargets = new List<ConsensusTarget>();
-            foreach (var consensusTarget in newTargets)
-            {
-                consensusTarget.Id = ++i;
+		    var proteinDict = new Dictionary<string, ProteinInformation>();
+		    foreach (var consensusTarget in newTargets)
+		    {
+		        consensusTarget.Id = ++i;
 
-                foreach (var target in consensusTarget.Evidences)
-                {
-                    target.Id = ++j;
-                }
-                consensusTarget.CalculateStatistics();
-                tempConsensusTargets.Add(consensusTarget);
-                targetDatabase.AddConsensusTarget(consensusTarget);
-            }
+		        foreach (var target in consensusTarget.Evidences)
+		        {
+		            target.Id = ++j;
+		        }
+		        consensusTarget.CalculateStatistics();
+		        tempConsensusTargets.Add(consensusTarget);
+		        targetDatabase.AddConsensusTarget(consensusTarget);
+		        foreach (var protein in consensusTarget.Proteins)
+		        {
+		            if (!proteinDict.ContainsKey(protein.ProteinName))
+		            {
+		                proteinDict.Add(protein.ProteinName, protein);
+                        // Don't need to manually link the first consensus to the protein
+		                continue;
+		            }
+                    proteinDict[protein.ProteinName].Consensus.Add(consensusTarget);
+		        }
+		    }
 
-            var massTagLightTargets = new List<UMCLight>();
+		    targetDatabase.Proteins = proteinDict.Values.ToList();
+
+		    var massTagLightTargets = new List<UMCLight>();
             foreach (var evidence in tempConsensusTargets)
             {
                 var driftStart = double.MaxValue;

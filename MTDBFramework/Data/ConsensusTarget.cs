@@ -10,7 +10,7 @@ namespace MTDBFramework.Data
 	/// <summary>
 	/// Store all information pertaining to a single consensus target
 	/// </summary>
-    public class ConsensusTarget : ObservableObject
+    public class ConsensusTarget : ObservableObject, IComparable
     {
 		/// <summary>
 		/// Constructor
@@ -414,6 +414,26 @@ namespace MTDBFramework.Data
             AverageNet = netList.Average();
 
             StdevNet = (netList.Count == 1) ? 0 : netList.StandardDeviation();
+        }
+
+        /// <summary>
+        /// Default comparer used when sorting for the tree view
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public int CompareTo(object obj)
+        {
+            if(obj == null) return 1;
+
+            var otherTarget = obj as ConsensusTarget;
+            if (otherTarget != null)
+            {
+                return this.EncodedNumericSequence.CompareTo(otherTarget.EncodedNumericSequence);
+            }
+            else
+            {
+                throw new ArgumentException("Object is not a Consensus Target");
+            }
         }
     }
 }

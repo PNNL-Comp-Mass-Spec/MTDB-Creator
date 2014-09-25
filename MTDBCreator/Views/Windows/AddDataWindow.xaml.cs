@@ -5,8 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using Microsoft.Win32;
+using System.Windows.Forms;
 using Microsoft.VisualBasic;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
@@ -17,6 +16,10 @@ using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.IO;
+using Application = System.Windows.Application;
+using MenuItem = System.Windows.Controls.MenuItem;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 #endregion
 
@@ -72,6 +75,49 @@ namespace MTDBCreator.Windows
         private void AddFolderFileMenuItem_Click(object sender, RoutedEventArgs e)
         {
             var addFolderFileMenuItem = e.Source as MenuItem;
+
+            if (addFolderFileMenuItem != null)
+            {
+                var formatInfo = FileDialogFormatInfoFactory.Create(addFolderFileMenuItem.Tag.ToString());
+
+                var folderBrowser = new FolderBrowserDialog();
+                var result = folderBrowser.ShowDialog();
+                var thing = "";
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    thing = folderBrowser.SelectedPath;
+                }
+
+                var filters = formatInfo.Filter.Split('|');
+                if (thing != "")
+                {
+                    var directory = new DirectoryInfo(thing);
+                    foreach(var filter in filters)
+                    {
+                        if (filter.Contains(" "))
+                            continue;
+
+                        foreach (var file in directory.GetFiles(filter, SearchOption.AllDirectories))
+                        {
+                            //Check to separate Sequest Files from MSGF+ files due to similar extensions
+                            if ((formatInfo.Format == LcmsIdentificationTool.Sequest) &&
+                                file.Name.EndsWith("msgfdb_syn.txt"))
+                            {
+                                continue;
+                            }
+                            AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file.FullName,
+                                formatInfo.Format));
+
+                            if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
+                            {
+                                AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
+                            }
+                        }
+                    }
+                }
+            }
+
+
 
             if (addFolderFileMenuItem != null)
             {

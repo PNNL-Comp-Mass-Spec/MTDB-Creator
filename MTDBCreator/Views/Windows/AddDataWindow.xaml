@@ -66,6 +66,12 @@
                 </Button.Content>
                 <Button.ContextMenu>
                     <ContextMenu>
+                        <MenuItem Name="MZIdentMLMenuItem" Header="_MZIdentML..." Tag="MZIdentML" Click="AddFileMenuItem_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/Menus/AnalysisFile.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
                         <MenuItem Name="SequestMenuItem" Header="_SEQUEST..." Tag="Sequest" Click="AddFileMenuItem_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Images/Menus/AnalysisFile.png"/>
@@ -82,11 +88,6 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Name="MSGFPlusMenuItem" Header="_MSGFPlus..." Tag="MSGFPlus" Click="AddFileMenuItem_Click">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/Menus/AnalysisFile.png"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Name="MZIdentMLMenuItem" Header="_MZIdentML..." Tag="MZIdentML" Click="AddFileMenuItem_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Images/Menus/AnalysisFile.png"/>
                             </MenuItem.Icon>
@@ -110,6 +111,12 @@
                 </Button.Content>
                 <Button.ContextMenu>
                     <ContextMenu>
+                        <MenuItem Name="MZIdentMLFolderItem" Header="_MZIdentML..." Tag="MZIdentML" Click="AddFolderFileMenuItem_Click">
+                            <MenuItem.Icon>
+                                <Image Source="/Images/Menus/AnalysisFile.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
                         <MenuItem Name="SequestFolderItem" Header="_SEQUEST..." Tag="Sequest" Click="AddFolderFileMenuItem_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Images/Menus/AnalysisFile.png"/>
@@ -130,11 +137,7 @@
                                 <Image Source="/Images/Menus/AnalysisFile.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Name="MZIdentMLFolderItem" Header="_MZIdentML..." Tag="MZIdentML" Click="AddFolderFileMenuItem_Click">
-                            <MenuItem.Icon>
-                                <Image Source="/Images/Menus/AnalysisFile.png"/>
-                            </MenuItem.Icon>
-                        </MenuItem>
+                        
                         
                     </ContextMenu>
                 </Button.ContextMenu>

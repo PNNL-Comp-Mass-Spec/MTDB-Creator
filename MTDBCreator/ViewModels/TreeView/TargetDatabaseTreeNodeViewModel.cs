@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MTDBFramework.Database;
 
 namespace MTDBCreator.ViewModels.TreeView
@@ -19,7 +20,10 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             base.LoadChildNodes();
 
-            foreach (var ct in m_targetDatabase.ConsensusTargets)
+            var targets = m_targetDatabase.ConsensusTargets.ToList();
+            targets.Sort();
+
+            foreach (var ct in targets)
             {
                 m_ChildNodes.Add(new ConsensusTargetTreeNodeViewModel(ct, this));
             }

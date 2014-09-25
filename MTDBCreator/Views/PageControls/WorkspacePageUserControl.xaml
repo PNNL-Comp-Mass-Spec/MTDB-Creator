@@ -26,49 +26,111 @@
             <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
         
-        <TreeView x:Name="DatabaseTreeView" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
-                  DataContext="{Binding TargetTreeViewModel}" ItemsSource="{Binding TargetDatabaseTreeNodeViewModels}"
-                  Grid.Row="0" Grid.Column="0" Grid.RowSpan="3">
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                    <Setter Property="FontWeight" Value="Normal" />
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="FontWeight" Value="Bold" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type treeView:TargetDatabaseTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
-                    <Grid>
-                        <Label Content="{Binding Text}"/>
-                    </Grid>
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type treeView:ConsensusTargetTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
-                    <Grid>
-                        <Label Content="{Binding Text}"/>
-                    </Grid>
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type treeView:TargetCollectionTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
-                    <Grid>
-                        <Label Content="{Binding Text}"/>
-                    </Grid>
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type treeView:TargetTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
-                    <Grid>
-                        <Label Content="{Binding Text}"/>
-                    </Grid>
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type treeView:TreeNodeViewModel}">
-                    <Grid>
-                        <Label Content="{Binding Text}"/>
-                    </Grid>
-                </HierarchicalDataTemplate>
-            </TreeView.Resources>
-        </TreeView>
+        <TabControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="3">
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Target List"/>
+                </TabItem.Header>
+                <TreeView x:Name="DatabaseTreeView" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
+                          DataContext="{Binding TargetTreeViewModel}" ItemsSource="{Binding TargetDatabaseTreeNodeViewModels}">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:TargetDatabaseTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:ConsensusTargetTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:TargetCollectionTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:TargetTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:TreeNodeViewModel}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock Text="Protein List"/>
+                </TabItem.Header>
+
+                <TreeView x:Name="ProteinTreeView" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling"
+                          DataContext="{Binding TargetTreeViewModel}" ItemsSource="{Binding ProteinDatabaseTreeNodeViewModels}">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:ProteinDatabaseTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:ProteinTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:ConsensusTargetTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:TargetCollectionTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:TargetTreeNodeViewModel}" ItemsSource="{Binding ChildNodes}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type treeView:TreeNodeViewModel}">
+                            <Grid>
+                                <Label Content="{Binding Text}"/>
+                            </Grid>
+                        </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+
+            </TabItem>
+        </TabControl>
 
         <TabControl Grid.Row="0" Grid.Column="1">
             <TabItem>

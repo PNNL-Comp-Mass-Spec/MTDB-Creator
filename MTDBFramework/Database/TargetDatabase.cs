@@ -49,6 +49,6 @@ namespace MTDBFramework.Database
 		/// <summary>
 		/// All proteins
 		/// </summary>
-        public IList<ProteinInformation> Proteins { get; private set; }
+        public IList<ProteinInformation> Proteins { get; set; }
     }
 }

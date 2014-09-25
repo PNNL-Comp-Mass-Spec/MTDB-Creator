@@ -8,7 +8,7 @@ namespace MTDBFramework.Data
 	/// <summary>
 	/// Protein information container
 	/// </summary>
-    public class ProteinInformation:IEquatable<ProteinInformation>
+    public class ProteinInformation: IComparable, IEquatable<ProteinInformation>
     {
 		/// <summary>
 		/// Constructor
@@ -99,6 +99,26 @@ namespace MTDBFramework.Data
                 return false;
             }
             return (ProteinName.Equals(other.ProteinName));
+        }
+
+        /// <summary>
+        /// Default comparer used when sorting for the tree view
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
+
+            var otherTarget = obj as ProteinInformation;
+            if (otherTarget != null)
+            {
+                return this.ProteinName.CompareTo(otherTarget.ProteinName);
+            }
+            else
+            {
+                throw new ArgumentException("Object is not a ProteinInformation object");
+            }
         }
     }
 }
