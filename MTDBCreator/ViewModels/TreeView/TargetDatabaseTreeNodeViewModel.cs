@@ -25,7 +25,7 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             base.LoadChildNodes();
 
-            var targets = m_targetDatabase.ConsensusTargets.Where(x => x.Sequence.Contains(SearchFilter.ToUpper())).ToList();
+            var targets = m_targetDatabase.ConsensusTargets.Where(x => x.EncodedNumericSequence.Contains(SearchFilter.ToUpper())).ToList();
             targets.Sort();
             Text = string.Format("Target Database ({0})", targets.Count);
             foreach (var ct in targets)

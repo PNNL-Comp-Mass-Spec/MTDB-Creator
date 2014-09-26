@@ -25,7 +25,7 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             base.LoadChildNodes();
 
-            var proteins = m_targetDatabase.Proteins.Where(x => x.ProteinName.Contains(SearchFilter.ToUpper())).ToList();
+            var proteins = m_targetDatabase.Proteins.Where(x => x.ProteinName.ToUpper().Contains(SearchFilter.ToUpper())).ToList();
             proteins.Sort();
             Text = string.Format("Target Database ({0})", proteins.Count);
 
