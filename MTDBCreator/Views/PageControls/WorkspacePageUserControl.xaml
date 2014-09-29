@@ -37,8 +37,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            <TabControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <TabItem>
+            <TabControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" SelectedIndex="{Binding Path=SelectedTabIndex}">
+                <TabItem Name="PeptideTab">
                     <TabItem.Header>
                         <TextBlock Text="Target List"/>
                     </TabItem.Header>
@@ -143,7 +143,7 @@
             </TabControl>
             
             <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"
-                     Name="SearchTextBox" DataContext="{Binding TargetTreeViewModel}"  Text="{Binding Path=SearchFilter}"></TextBox>
+                     Name="SearchTextBox" DataContext="{Binding TargetTreeViewModel}"  Text="{Binding Path=SearchFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  KeyDown="SearchTextBox_OnKeyDown"></TextBox>
             <Button Grid.Row="2" Grid.Column="0" Margin="5" DataContext="{Binding TargetTreeViewModel.TargetDatabaseTreeNodeViewModels}" Command="{Binding Path=PeptideSearchCommand}" >Search Peptides</Button>
             <Button Grid.Row="2" Grid.Column="1" Margin="5" DataContext="{Binding TargetTreeViewModel.ProteinDatabaseTreeNodeViewModels}" Command="{Binding Path=ProteinSearchCommand}">Search Proteins</Button>
         </Grid>

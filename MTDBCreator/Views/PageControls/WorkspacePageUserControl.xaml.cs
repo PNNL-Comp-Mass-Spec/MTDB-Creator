@@ -2,6 +2,7 @@
 
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using MTDBCreator.ViewModels;
 using MTDBCreator.ViewModels.TreeView;
 using MTDBCreator.Views;
@@ -60,6 +61,14 @@ namespace MTDBCreator.PageControls
             WorkspaceGrid.RowDefinitions[2].Height = new GridLength(25);
 
             DataGridExpander.Header = "Show Data Grid";
+        }
+
+        private void SearchTextBox_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                WorkspaceViewModel.TargetTreeViewModel.EnterHandler();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MTDBCreator.ViewModels.TreeView;
 using MTDBFramework.UI;
 
@@ -9,6 +10,7 @@ namespace MTDBCreator.ViewModels
         private IEnumerable<TargetDatabaseTreeNodeViewModel> m_targetDatabaseTreeNodeViewModels;
         private IEnumerable<ProteinDatabaseTreeNodeViewModel> m_proteinDatabaseTreeNodeViewModels;
         private string m_searchFilter;
+        private int m_selectedTabIndex;
 
         public TargetTreeViewModel(AnalysisJobViewModel analysisJobViewModel)
         {
@@ -43,6 +45,19 @@ namespace MTDBCreator.ViewModels
             }
         }
 
+        public void EnterHandler()
+        {
+            if (SelectedTabIndex == 0)
+            {
+                TargetDatabaseTreeNodeViewModels.First().PeptideSearch();
+            }
+            else
+            {
+                ProteinDatabaseTreeNodeViewModels.First().ProteinSearch();
+            }
+            
+        }
+
         public string SearchFilter
         {
             get
@@ -61,6 +76,19 @@ namespace MTDBCreator.ViewModels
                     model.SearchFilter = value;
                 }
                 OnPropertyChanged("SearchFilter");
+            }
+        }
+
+        public int SelectedTabIndex
+        {
+            get
+            {
+                return m_selectedTabIndex;
+            }
+            set
+            {
+                m_selectedTabIndex = value;
+                OnPropertyChanged("SelectedTab");
             }
         }
     }

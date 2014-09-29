@@ -116,44 +116,6 @@ namespace MTDBCreator.Windows
                     }
                 }
             }
-
-
-
-            if (addFolderFileMenuItem != null)
-            {
-                var formatInfo = FileDialogFormatInfoFactory.Create(addFolderFileMenuItem.Tag.ToString());
-
-                string rootPath = Interaction.InputBox("Enter the root folder for the datasets.", "Add dataset folder");
-                if (string.IsNullOrWhiteSpace(rootPath))
-                    return;
-
-                var filter = formatInfo.Filter.Split('|').Last();
-
-                var dataFolder = new DirectoryInfo(rootPath);
-                if (!dataFolder.Exists)
-                {
-                    Interaction.MsgBox("Folder not found: " + rootPath, MsgBoxStyle.Exclamation, "Error");
-                    return;
-                }
-
-                foreach (var file in dataFolder.GetFiles(filter, SearchOption.AllDirectories))                    
-                {
-                    {
-                        //Check to separate Sequest Files from MSGF+ files due to similar extensions
-                        if ((formatInfo.Format == LcmsIdentificationTool.Sequest) && file.Name.EndsWith("msgfdb_syn.txt"))
-                        {
-                            continue;
-                        }
-                        AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file.FullName, formatInfo.Format));
-
-                        if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
-                        {
-                            AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
-                        }
-                    }
-                }
-
-            }
         }
 
         private void AddFileMenuItem_Click(object sender, RoutedEventArgs e)

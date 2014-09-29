@@ -15,6 +15,8 @@ namespace MTDBCreator.ViewModels
         private ICommand m_loadDatabaseCommand;
         private ICommand m_refreshCommand;
 
+        private int m_selectedTabIndex;
+
         private AnalysisJobViewModel m_analysisJobViewModel;
         private DatasetPlotViewModel m_datasetPlotViewModel;
         private StatPlotViewModel m_statPlotViewModel;
@@ -123,6 +125,20 @@ namespace MTDBCreator.ViewModels
             {
                 m_targetTreeViewModel = value;
                 OnPropertyChanged("TargetTreeViewModel");
+            }
+        }
+
+        public int SelectedTabIndex
+        {
+            get
+            {
+                return m_selectedTabIndex;
+            }
+            set
+            {
+                m_selectedTabIndex = value;
+                TargetTreeViewModel.SelectedTabIndex = m_selectedTabIndex;
+                OnPropertyChanged("SelectedTab");
             }
         }
 
