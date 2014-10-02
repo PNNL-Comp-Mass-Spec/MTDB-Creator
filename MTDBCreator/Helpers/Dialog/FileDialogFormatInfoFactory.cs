@@ -15,7 +15,7 @@ namespace MTDBCreator.Helpers.Dialog
                 case "MSGFPlus":
                     return new FileDialogFormatInfo("Open MSGF+ analysis files", "MSGF+ Analysis Files (*msgfdb_syn.txt)|*msgfdb_syn.txt", LcmsIdentificationTool.MsgfPlus);
                 case "MZIdentML":
-                    return new FileDialogFormatInfo("Open MZIdent analysis files", "MZIdentML Analysis Files (*msgfplus.mzid)|*msgfplus.mzid|Zipped MZIdentML Analysis Files (*mzid.gz)|*mzid.gz", LcmsIdentificationTool.MZIdentML);
+                    return new FileDialogFormatInfo("Open MZIdent analysis files", "MZIdentML Analysis Files (*msgfplus.mzid[.gz])|*msgfplus.mzid;*msgfplus.mzid.gz", LcmsIdentificationTool.MZIdentML);
                 case "MSAlign":
                     return new FileDialogFormatInfo("Open MSAlign analysis files", "MSAlign Analysis Files (*msalign_syn.txt)|*msalign_syn.txt", LcmsIdentificationTool.MSAlign);
                 case "Description":
