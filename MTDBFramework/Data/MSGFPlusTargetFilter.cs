@@ -44,17 +44,25 @@
         /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
         public bool ShouldFilter(double qValue, double specProb)
         {
-            if (qValue > FilterOptions.MsgfFdr)
+            var passFilter = false;
+            switch (FilterOptions.MsgfFilter)
             {
-                return true;
+                case MsgfFilterType.Q_VALUE:
+                    if (qValue > FilterOptions.MsgfQValue)
+                    {
+                        passFilter = true;
+                    }
+                    break;
+
+                case MsgfFilterType.SPECTRAL_PROBABILITY:
+                    if (specProb > FilterOptions.MaxMsgfSpecProb)
+                    {
+                        passFilter = true;
+                    }
+                    break;        
             }
 
-            if (specProb > FilterOptions.MaxMsgfSpecProb)
-            {
-                return true;
-            }
-
-            return false;
+            return passFilter;
         }
     }
 }

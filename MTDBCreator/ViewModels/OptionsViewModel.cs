@@ -128,7 +128,7 @@ namespace MTDBCreator.ViewModels
             if (parameter != null)
             {
                 Options.MaxMsgfSpecProb = Convert.ToDouble(parameter[0]);
-                Options.MsgfFdr = Convert.ToDouble(parameter[1]);
+                Options.MsgfQValue = Convert.ToDouble(parameter[1]);
 
                 // Regression type
                 Options.RegressionType = (Convert.ToString(parameter[2]) == "LinearEm")
@@ -140,6 +140,10 @@ namespace MTDBCreator.ViewModels
                 Options.PredictorType = (Convert.ToBoolean(parameter[4]))
                     ? RetentionTimePredictionType.KANGAS
                     : RetentionTimePredictionType.KROKHIN;
+
+                Options.MsgfFilter = (Convert.ToBoolean(parameter[5]))
+                    ? MsgfFilterType.SPECTRAL_PROBABILITY
+                    : MsgfFilterType.Q_VALUE;
 
                 Options.OptionsChanged = true;
             }

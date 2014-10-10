@@ -137,6 +137,7 @@
     <Compile Include="Data\DatabaseType.cs" />
     <Compile Include="Data\MSAlignResult.cs" />
     <Compile Include="Data\MSAlignTargetFilter.cs" />
+    <Compile Include="Data\MsgfFilterType.cs" />
     <Compile Include="Data\MSGFPlusResult.cs" />
     <Compile Include="Data\MSGFPlusTargetFilter.cs" />
     <Compile Include="Data\PostTranslationalModification.cs" />

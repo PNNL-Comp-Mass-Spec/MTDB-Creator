@@ -20,6 +20,9 @@ namespace MTDBCreator.Helpers
             // Predictor Type
             results.Add(values[4].ToString());
 
+            // Filtering Type
+            results.Add(values[5].ToString());
+
             for(int i = 0; i < results.Count; i++)
             {
                 if (results[i] == "")

@@ -31,9 +31,9 @@ namespace MTDBFramework.Database
             // Map(x => x.MinObservationsForExport); Never used
 		    // Map(x => x.MinimumObservedNet); Should always be 0
 		    // Map(x => x.MaximumObservedNet); Should always be 1
-
+		    Map(x => x.MsgfFilter).Column("MsgfFilterParameter");
 		    Map(x => x.MaxMsgfSpecProb);
-		    Map(x => x.MsgfFdr).Column("MaxMsgfFDR");
+		    Map(x => x.MsgfQValue).Column("MaxMsgfQValue");
         }
     }
 }

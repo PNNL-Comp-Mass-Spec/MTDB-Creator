@@ -76,7 +76,7 @@ namespace MTDBFramework.Database
 				{
 					// Try to validate the schema. If it is correct, we can use it as is.
 					new SchemaValidator(config).Validate();
-				    config.SetProperty("adonet.batch_size", "100");
+				    //config.SetProperty("adonet.batch_size", "100");
 				}
 	            catch (HibernateException)
 	            {

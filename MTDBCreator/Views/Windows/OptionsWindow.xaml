@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:helpers="clr-namespace:MTDBCreator.Helpers"        
         xmlns:retentionTimePrediction="clr-namespace:MTDBFramework.Algorithms.RetentionTimePrediction;assembly=MTDBFramework"
-        Title="Options" Height="600" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        xmlns:msgfFilterType="clr-namespace:MTDBFramework.Data;assembly=MTDBFramework"
+        Title="Options" Height="670" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.Resources>
         <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
         <helpers:OptionsParameterConverter x:Key="OptionsParameterConverter"/>
@@ -48,16 +49,45 @@
                                 </TextBox.ToolTip>
                             </TextBox>
                             <Label Grid.Row="3" Grid.Column="1">
-                                Max FDR For Alignment
+                                Max Q Value For Alignment
                             </Label>
-                            <TextBox x:Name="MaxMsgffdrBox"
+                            <TextBox x:Name="MaxMsgfQvalueBox"
                                      Grid.Row="3" Grid.Column="3" 
                                      PreviewTextInput="Control_PreviewTextInput"
-                                     Text="{Binding Path=Options.MsgfFdr, UpdateSourceTrigger=Explicit}">
+                                     Text="{Binding Path=Options.MsgfQValue, UpdateSourceTrigger=Explicit}">
                                 <TextBox.ToolTip>
-                                    Specifies the maximum FDR that a match from MSGF+ or MzIdent can have for it to be used in the alignment
+                                    Specifies the maximum Q Value that a match from MSGF+ or MzIdent can have for it to be used in the alignment
                                 </TextBox.ToolTip>
                             </TextBox>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="MSGF+ Filter Type">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="8" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="8"/>
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="8"/>
+                            </Grid.ColumnDefinitions>
+
+                            <RadioButton x:Name="SpectralValueRadioButton"
+                                         Grid.Row="1" Grid.Column="1" 
+                                         IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter}, 
+                                         ConverterParameter={x:Static msgfFilterType:MsgfFilterType.SPECTRAL_PROBABILITY}, UpdateSourceTrigger=Explicit}" >
+                                Spectral E Value
+                            </RadioButton>
+                            <RadioButton x:Name="QValueRadioButton"
+                                         Grid.Row="3" Grid.Column="1"
+                                         IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter}, 
+                                         ConverterParameter={x:Static msgfFilterType:MsgfFilterType.Q_VALUE}, UpdateSourceTrigger=Explicit}">
+                                Q Value
+                            </RadioButton>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Alignment Type" >
@@ -177,10 +207,11 @@
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OptionsParameterConverter}">
                         <Binding ElementName="MaxMsgfSpecProbBox" Path="Text"/>
-                        <Binding ElementName="MaxMsgffdrBox" Path ="Text"/>
+                        <Binding ElementName="MaxMsgfQvalueBox" Path ="Text"/>
                         <Binding ElementName="AlignmentComboBox" Path="Text"/>
                         <Binding ElementName="OrderTextBox" Path="Text"/>
                         <Binding ElementName="KangasRadioButton" Path="IsChecked"/>
+                        <Binding ElementName="SpectralValueRadioButton" Path="IsChecked"/>
                     </MultiBinding>
                 </Button.CommandParameter>
             </Button>

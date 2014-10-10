@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MTDBFramework.Data;
@@ -63,15 +64,42 @@ namespace MTDBAccessIO
                 var msmsObsCount = target.Evidences.Count;
                 var highestNormalized = target.Evidences.Max(x => x.NormalizedScore);
                 var seqPieces = target.CleanSequence.Split('.');
+
+                var test = target.EncodedNumericSequence.Split('.');
+                var numSeq = "";
+                if (test.Count() != 1)
+                {
+                    bool first = true;
+                    for (var i = 1; i < test.Count() - 1; i++)
+                    {
+                        if (!first)
+                        {
+                            numSeq += ".";
+                        }
+                        numSeq += test[i];
+                        first = false;
+                    }
+                }
+                else
+                {
+                    numSeq = test[0];
+                }
+
+                if (numSeq.Contains("."))
+                {
+                    Console.WriteLine("Here I am");
+                }
+
+
                 var cleanPeptide = (seqPieces.ToList().Count == 1) ? seqPieces[0] : seqPieces[1];
-                var targetLine = string.Format("{0},{1},{2},{3},{4},{5},{6}",
+                var targetLine = string.Format("{0},{1},{2},{3},{4},{5},\"{6}\"",
                     target.Id,
                     target.TheoreticalMonoIsotopicMass,
                     target.AverageNet,
                     target.PredictedNet,
                     msmsObsCount,
                     highestNormalized,
-                    cleanPeptide
+                    numSeq
                     );
                 targetWriter.WriteLine(targetLine);
 
@@ -129,6 +157,9 @@ namespace MTDBAccessIO
 		    ExportToText(path, database);
 
 		    TextToAccessConvert(path);
+
+		    //var reader = new AccessTargetDatabaseReader();
+		    //reader.Read(path);
         }
 
         private void TextToAccessConvert(string path)
@@ -161,9 +192,9 @@ namespace MTDBAccessIO
                 TableName: "AMT_to_Protein_Map", FileName: directory + "tempAMT_to_Protein_Map.txt", HasFieldNames: true);
             accApplicaiton.CloseCurrentDatabase();
             accApplicaiton.Quit();
-            File.Delete(directory + "tempAMT.txt");
-            File.Delete(directory + "tempAMT_Proteins.txt");
-            File.Delete(directory + "tempAMT_to_Protein_Map.txt");
+            //File.Delete(directory + "tempAMT.txt");
+            //File.Delete(directory + "tempAMT_Proteins.txt");
+            //File.Delete(directory + "tempAMT_to_Protein_Map.txt");
         }
 
 

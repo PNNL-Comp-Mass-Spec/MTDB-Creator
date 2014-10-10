@@ -27,10 +27,11 @@ namespace MTDBFramework.Data
         private double m_maxLogEValForXTandemAlignment;
         private double m_maxLogEValForMsAlignAlignment;
         private short m_maxRankForExport;
-        private double m_msgfFdr;
+        private double m_msgfQValue;
         private double m_maxMsgfSpecProb;
         private double m_minimumObservedNet;
         private double m_maximumObservedNet;
+        private MsgfFilterType m_msfgFilterType;
 
         #endregion
 
@@ -211,15 +212,15 @@ namespace MTDBFramework.Data
 		/// <summary>
 		/// MSGF FDR
 		/// </summary>
-        public double MsgfFdr
+        public double MsgfQValue
         {
             get
             {
-                return m_msgfFdr;
+                return m_msgfQValue;
             }
             set
             {
-                m_msgfFdr = value;
+                m_msgfQValue = value;
                 OnPropertyChanged("MsgfFDR");
             }
         }
@@ -289,6 +290,22 @@ namespace MTDBFramework.Data
             }
         }
 
+        /// <summary>
+        /// Filter type for MSGF+ analysis
+        /// </summary>
+        public MsgfFilterType MsgfFilter 
+        {
+            get
+            {
+                return m_msfgFilterType;
+            }
+            set
+            {
+                m_msfgFilterType = value;
+                OnPropertyChanged("MsgfFilter");
+            } 
+        }
+
         #endregion
 
 		/// <summary>
@@ -316,8 +333,9 @@ namespace MTDBFramework.Data
 
             MaxRankForExport = 2;
 
-            MsgfFdr = .01;
+            MsgfQValue = .01;
             MaxMsgfSpecProb = 1E-10;
+		    MsgfFilter = MsgfFilterType.SPECTRAL_PROBABILITY;
 
             MinimumObservedNet = 0.0;
             MaximumObservedNet = 1.0;
@@ -325,6 +343,5 @@ namespace MTDBFramework.Data
             OptionsChanged = false;
         }
 
-        
     }
 }
