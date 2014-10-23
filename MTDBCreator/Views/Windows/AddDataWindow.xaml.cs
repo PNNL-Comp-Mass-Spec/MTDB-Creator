@@ -97,20 +97,25 @@ namespace MTDBCreator.Windows
                         if (filter.Contains(" "))
                             continue;
 
-                        foreach (var file in directory.GetFiles(filter, SearchOption.AllDirectories))
-                        {
-                            //Check to separate Sequest Files from MSGF+ files due to similar extensions
-                            if ((formatInfo.Format == LcmsIdentificationTool.Sequest) &&
-                                file.Name.EndsWith("msgfdb_syn.txt"))
-                            {
-                                continue;
-                            }
-                            AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file.FullName,
-                                formatInfo.Format));
+                        filters = filter.Split(';');
 
-                            if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
+                        foreach (var fileExt in filters)
+                        {
+                            foreach (var file in directory.GetFiles(fileExt, SearchOption.AllDirectories))
                             {
-                                AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
+                                //Check to separate Sequest Files from MSGF+ files due to similar extensions
+                                if ((formatInfo.Format == LcmsIdentificationTool.Sequest) &&
+                                    file.Name.EndsWith("msgfdb_syn.txt"))
+                                {
+                                    continue;
+                                }
+                                AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file.FullName,
+                                    formatInfo.Format));
+
+                                if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
+                                {
+                                    AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
+                                }
                             }
                         }
                     }
