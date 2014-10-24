@@ -15,7 +15,7 @@ namespace MTDBFramework.Database
         public TargetDatasetMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).Column("DatasetId").GeneratedBy.Identity();
+            Id(x => x.Id).Column("DatasetId").GeneratedBy.Assigned();
             Map(x => x.Name);
             Map(x => x.Tool).Column("SearchTool");
         }

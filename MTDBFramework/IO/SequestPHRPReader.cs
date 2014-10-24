@@ -78,6 +78,7 @@ namespace MTDBFramework.IO
                 result.RankXc = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserSequest.DATA_COLUMN_RankXc, 0);
                 result.Sp = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_Sp, 0);
                 result.XCorr = xcorr;
+                result.DiscriminantValue = xcorr;
                 result.XcRatio = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XcRatio, 0);
 
                 result.FScore = SequestResult.CalculatePeptideProphetDiscriminantScore(result);

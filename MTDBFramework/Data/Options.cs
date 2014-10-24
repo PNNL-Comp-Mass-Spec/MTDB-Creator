@@ -335,7 +335,7 @@ namespace MTDBFramework.Data
 
             MsgfQValue = .01;
             MaxMsgfSpecProb = 1E-10;
-		    MsgfFilter = MsgfFilterType.SPECTRAL_PROBABILITY;
+		    MsgfFilter = MsgfFilterType.Q_VALUE;
 
             MinimumObservedNet = 0.0;
             MaximumObservedNet = 1.0;

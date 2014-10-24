@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Xml;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
+using NHibernate.Criterion;
 using PHRPReader;
 
 namespace MTDBFramework.IO
@@ -694,6 +695,8 @@ namespace MTDBFramework.IO
 
                 result.EValue = item.Value.EValue;
                 result.QValue = qValue;
+                if(qValue > 0 && qValue < 1e-8)
+                result.DiscriminantValue = qValue;
                 result.PepQValue = item.Value.PepQValue;
 
                 result.IsotopeError = item.Value.IsoError;

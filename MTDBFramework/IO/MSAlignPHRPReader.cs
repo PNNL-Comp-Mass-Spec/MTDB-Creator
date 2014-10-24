@@ -61,6 +61,7 @@ namespace MTDBFramework.IO
 
                 // Populate items specific to MSAlign
                 result.EValue = eValue;
+                result.DiscriminantValue = eValue;
 				              
                 results.Add(result);              
             }

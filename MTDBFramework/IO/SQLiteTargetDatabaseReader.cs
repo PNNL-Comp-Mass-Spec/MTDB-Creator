@@ -77,7 +77,7 @@ namespace MTDBFramework.IO
             var protDic = new Dictionary<int, ProteinInformation>();
             var ptmDic = new Dictionary<int, PostTranslationalModification>();
 
-            using (var session = sessionFactory.OpenSession())
+            using (var session = sessionFactory.OpenStatelessSession())
             {
                 using (var transact = session.BeginTransaction())
                 {
@@ -85,9 +85,13 @@ namespace MTDBFramework.IO
                     session.CreateCriteria<ConsensusTarget>().List(readConsensus);
                     session.CreateCriteria<PostTranslationalModification>().List(readPtms);
 	                session.CreateCriteria<Options>().List(readOptions);
+                    session.CreateCriteria<ConsensusProteinPair>().List(readPair);
+                    session.CreateCriteria<ConsensusPtmPair>().List(readPtmPairs);
+                    session.CreateCriteria<Evidence>().List(readEvidence);
                     transact.Commit();
                 }
 
+                /*
                 using (var transact = session.BeginTransaction())
                 {
 					session.CreateCriteria<ConsensusProteinPair>().List(readPair);
@@ -95,11 +99,13 @@ namespace MTDBFramework.IO
                     session.CreateCriteria<Evidence>().List(readEvidence);
                     transact.Commit();
                 }
+                */
 
                 foreach (var consensus in readConsensus)
                 {
                     consensus.Ptms.Clear();
-                    consensus.Evidences.Clear();
+                    //consensus.Evidences.Clear();
+                    consensus.Evidences = new List<Evidence>();
                     consensus.Sequence = consensus.CleanSequence;
                     m_targetDb.AddConsensusTarget(consensus);
                     consensusDic.Add(consensus.Id, consensus);

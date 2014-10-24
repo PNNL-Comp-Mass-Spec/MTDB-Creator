@@ -46,7 +46,7 @@ namespace MTDBFramework.Database
                         return Fluently.Configure()
                             .Database(SQLiteConfiguration.Standard
                                 .UsingFile(DatabaseFile)
-                                //.AdoNetBatchSize(100)
+                                .AdoNetBatchSize(2500)
                                 /*.ShowSql()*/)
 							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<OptionsMap>())
 							.Mappings(m => m.FluentMappings.AddFromAssemblyOf<TargetDatasetMap>())

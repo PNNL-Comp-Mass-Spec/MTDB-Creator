@@ -75,6 +75,7 @@ namespace MTDBFramework.IO
                 result.DeltaCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_DeltaCn2, 0);                
                 result.LogIntensity = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Intensity_LogI, 0);
                 result.LogPeptideEValue = logPepEValue;
+                result.DiscriminantValue = logPepEValue;
                 result.NumberBIons = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserXTandem.DATA_COLUMN_b_ions);
                 result.NumberYIons = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserXTandem.DATA_COLUMN_y_ions);
                 result.PeptideHyperscore = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Hyperscore, 0);

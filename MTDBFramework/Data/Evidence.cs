@@ -47,6 +47,9 @@ namespace MTDBFramework.Data
 
         private IList<ProteinInformation> m_proteins;
 
+	    private double m_discriminantValue; // holder for QValue (msgf+/mzid), Log Peptide E Value (Xtandem),
+                                 // xCorr (sequest) or EValue (MSAlign) depending on dataset type.
+
         // SequenceInfo fields
         private short m_isSeqInfoExist;
         private short m_modificationCount;
@@ -419,11 +422,6 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Spectral Probability
-		/// </summary>
-        public double SpectralProbability { get; set; }
-
         /// <summary>
         /// NET amount evidence was shifted by from LCMS Warp
         /// </summary>
@@ -434,6 +432,21 @@ namespace MTDBFramework.Data
 	        {
 	            m_netShift = value;
 	            OnPropertyChanged("NetShift");
+	        }
+	    }
+
+        /// <summary>
+        /// Discriminant score used in conjunction with spectral probability
+        /// for filtering evidences. QValue for MSGF+ and mzId files, LogPeptide
+        /// EValue for Xtandem, xCorr for Sequest, EValue for MSAlign
+        /// </summary>
+	    public double DiscriminantValue
+	    {
+            get { return m_discriminantValue; }
+	        set
+	        {
+	            m_discriminantValue = value;
+	            OnPropertyChanged("QValue");
 	        }
 	    }
 

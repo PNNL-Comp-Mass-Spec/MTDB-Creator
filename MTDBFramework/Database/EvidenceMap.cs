@@ -18,7 +18,7 @@ namespace MTDBFramework.Database
         public EvidenceMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id).Column("EvidenceId").GeneratedBy.Native();
+            Id(x => x.Id).Column("EvidenceId").GeneratedBy.Assigned();
             Map(x => x.Charge);
             Map(x => x.ObservedNet);
             Map(x => x.NetShift);
@@ -26,6 +26,7 @@ namespace MTDBFramework.Database
             Map(x => x.Scan);
             Map(x => x.DelM);
             Map(x => x.DelMPpm);
+            Map(x => x.DiscriminantValue).Column("QValue");
             Map(x => x.SpecProb);
 
             References(x => x.Parent).Column("TargetId").Cascade.All();

@@ -33,46 +33,65 @@ namespace MTDBFramework.IO
 	        DatabaseFactory.ReadOrAppend = false;
             var sessionFactory = DatabaseFactory.CreateSessionFactory(options.DatabaseType);
 
-            using (var session = sessionFactory.OpenSession())
+            using (var session = sessionFactory.OpenStatelessSession())
             {
                 // populate the database
 	            using (var transaction = session.BeginTransaction())
 	            {
-		            session.Save(options);
+		            //session.Save(options);
+	                session.Insert(options);
 					/* This section breaks up the Target object, pulling out the individual TargetDataSet,  SequenceInfo,
                      * and TargetPeptideInfo. These objects are then "reverse linked", so that each of these objects 
                      * relates to multiple evidences. This is because these objects need to know what they are related to.
                      * Additionally, these objects are saved before the Evidences are, because these objects need to already
                      * exist in order to properly generate the relation. 
                      * */
-                    var current = 0;
+                    var currentTarget   = 0;
+                    var currentEv       = 0;
+                    var datasetCount    = 0;
+	                //var sessCount = 0;
                     var total = database.ConsensusTargets.Count;
 		            foreach (var consensusTarget in database.ConsensusTargets)
 		            {
-			            OnProgressChanged(new MtdbProgressChangedEventArgs(current, total,
+			            OnProgressChanged(new MtdbProgressChangedEventArgs(currentTarget, total,
 				            MtdbCreationProgressType.COMMIT.ToString()));
-			            consensusTarget.Id = 0;
+			            consensusTarget.Id = ++currentTarget;
 			            foreach (var ptm in consensusTarget.Ptms)
 			            {
 				            ptm.Id = 0;
-			            }
-			            foreach (var evidence in consensusTarget.Evidences)
-			            {
-				            if (!m_uniqueDataSets.ContainsKey(evidence.DataSet.Name))
-				            {
-					            evidence.DataSet.Id = 0;
-					            m_uniqueDataSets.Add(evidence.DataSet.Name, evidence.DataSet);
-				            }
-				            evidence.Id = 0;
-				            evidence.DataSet = m_uniqueDataSets[evidence.DataSet.Name];
-				            evidence.Parent = consensusTarget;
 			            }
 
 			            consensusTarget.Dataset = consensusTarget.Evidences[0].DataSet;
 			            consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
 			            consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
 			            consensusTarget.MultiProteinCount = consensusTarget.Evidences[0].MultiProteinCount;
-			            session.SaveOrUpdate(consensusTarget);
+			            //session.SaveOrUpdate(consensusTarget);
+		                session.Insert(consensusTarget);
+                        foreach (var evidence in consensusTarget.Evidences)
+                        {
+                            if (!m_uniqueDataSets.ContainsKey(evidence.DataSet.Name))
+                            {
+                                evidence.DataSet.Id = ++datasetCount;
+                                m_uniqueDataSets.Add(evidence.DataSet.Name, evidence.DataSet);
+                                session.Insert(evidence.DataSet);
+                            }
+                            Evidence writtenEvidence = new Evidence
+                            {
+                                Id = ++currentEv,
+                                Charge = evidence.Charge,
+                                ObservedNet = evidence.ObservedNet,
+                                NetShift = evidence.NetShift,
+                                Mz = evidence.Mz,
+                                Scan = evidence.Scan,
+                                DelM = evidence.DelM,
+                                DelMPpm = evidence.DelMPpm,
+                                DiscriminantValue = evidence.DiscriminantValue,
+                                SpecProb = evidence.SpecProb,
+                                DataSet = m_uniqueDataSets[evidence.DataSet.Name],
+                                Parent = consensusTarget
+                            };
+                            session.Insert(writtenEvidence);
+                        }
 
 			            foreach (var protein in consensusTarget.Proteins)
 			            {
@@ -80,7 +99,8 @@ namespace MTDBFramework.IO
 				            {
 				                protein.Id = 0;
 					            m_uniqueProteins.Add(protein.ProteinName, protein);
-					            session.SaveOrUpdate(protein);
+					            //session.SaveOrUpdate(protein);
+				                session.Insert(protein);
 				            }
 				            var cProt = m_uniqueProteins[protein.ProteinName];
 				            var cPPair = new ConsensusProteinPair
@@ -92,7 +112,9 @@ namespace MTDBFramework.IO
 				                ResidueStart = (short) cProt.ResidueStart,
 				                ResidueEnd = (short) cProt.ResidueEnd
 				            };
-			                session.SaveOrUpdate(cPPair);
+			                session.Insert(cPPair);
+                            
+			                //session.SaveOrUpdate(cPPair);
 				            consensusTarget.ConsensusProtein.Add(cPPair);
 			            }
 
@@ -101,7 +123,8 @@ namespace MTDBFramework.IO
 				            if (!m_uniquePtms.ContainsKey(ptm.Name))
 				            {
 					            m_uniquePtms.Add(ptm.Name, ptm);
-					            session.SaveOrUpdate(ptm);
+				                //session.SaveOrUpdate(ptm);
+                                session.Insert(ptm);
 				            }
 				            var cPtmPair = new ConsensusPtmPair
 				            {
@@ -111,12 +134,13 @@ namespace MTDBFramework.IO
                                 Target = consensusTarget,
 				                ConsensusId = consensusTarget.Id
 				            };
-			                session.SaveOrUpdate(cPtmPair);
+			                //session.SaveOrUpdate(cPtmPair);
+			                session.Insert(cPtmPair);
 			            }
-		                current++;
+		                //currentTarget++;
 		            }
 
-                    OnProgressChanged(new MtdbProgressChangedEventArgs(current, total, MtdbCreationProgressType.COMMIT.ToString()));
+                    OnProgressChanged(new MtdbProgressChangedEventArgs(currentTarget, total, MtdbCreationProgressType.COMMIT.ToString()));
 
                     transaction.Commit();
                     session.Close();

@@ -13,12 +13,12 @@ namespace MTDBCreatorTestSuite.IO
     public class MZIdentMLReaderTests : TestBase
     {
         [Test]
-        [TestCase(@"MSGFPlus\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfdb_syn.txt", 1819)] // Used to cross-verify the results
-        [TestCase(@"MSGFPlus\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfdb_syn.txt", 12414)]    // Used to cross-verify the results
-        [TestCase(@"MSGFPlus\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfdb_syn.txt", 12544)]    // Used to cross-verify the results
-        [TestCase(@"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", 1819)]
-        [TestCase(@"Mzml\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfplus.mzid", 12414)]
-        [TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", 12544)]
+        [TestCase(@"MSGFPlus\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfdb_syn.txt", 2189)] // Used to cross-verify the results
+        [TestCase(@"MSGFPlus\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfdb_syn.txt", 15384)]    // Used to cross-verify the results
+        [TestCase(@"MSGFPlus\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfdb_syn.txt", 15475)]    // Used to cross-verify the results
+        [TestCase(@"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", 2189)]
+        [TestCase(@"Mzml\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfplus.mzid", 15384)]
+        [TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", 15475)]
         public void TestLoadingSingleFile(string jobPath,  int expectedEvidences)
         {
             PeptideCache.Clear();

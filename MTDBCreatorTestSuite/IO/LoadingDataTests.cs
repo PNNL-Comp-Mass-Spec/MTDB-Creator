@@ -38,8 +38,10 @@ namespace MTDBCreatorTestSuite.IO
         }
 
         [Test]
-        [TestCase(@"MSGFPlus\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfdb_syn.txt", 1819)]
-        [TestCase(@"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", 1819)]
+        // Test case updated due to change in default selection of filter for MSGF+ to QValue
+        [TestCase(@"MSGFPlus\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfdb_syn.txt", 2189)]
+        // Test case updated due to change in default selection of filter for MSGF+ to QValue
+        [TestCase(@"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", 2189)]
         [TestCase(@"Xtandem\QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt", 4927)]
         [TestCase(@"Sequest\QC_Shew_10_02a_2Nov10_Cougar_10-09-06_syn.txt", 3733)]
         public void TestLoadingSingleFile(string jobPath,  int expectedEvidences)

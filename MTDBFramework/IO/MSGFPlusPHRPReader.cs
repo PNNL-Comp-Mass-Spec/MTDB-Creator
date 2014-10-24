@@ -92,6 +92,8 @@ namespace MTDBFramework.IO
                 result.EValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_EValue, 0);
 
                 result.QValue = qValue;
+                result.DiscriminantValue = qValue;
+
                 result.PepQValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_PepQValue, -1);
                 if (result.PepQValue < 0)
                     result.PepQValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_PepFDR, 0);
