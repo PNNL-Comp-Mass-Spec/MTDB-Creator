@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
@@ -16,6 +17,8 @@ namespace MTDBFramework.IO
         private readonly Dictionary<string, TargetDataSet> m_uniqueDataSets = new Dictionary<string, TargetDataSet>();
         private readonly Dictionary<string, ProteinInformation> m_uniqueProteins = new Dictionary<string, ProteinInformation>();
         private readonly Dictionary<string, PostTranslationalModification> m_uniquePtms = new Dictionary<string, PostTranslationalModification>();
+
+	    private readonly Dictionary<string, StreamWriter> m_alignmentWriters = new Dictionary<string, StreamWriter>(); 
 
 		/// <summary>
 		/// Write to the SQLite database
@@ -73,6 +76,9 @@ namespace MTDBFramework.IO
                             {
                                 evidence.DataSet.Id = ++datasetCount;
                                 m_uniqueDataSets.Add(evidence.DataSet.Name, evidence.DataSet);
+                                var datasetWriter = new StreamWriter(evidence.DataSet.Name + "Alignment.tsv");
+                                datasetWriter.WriteLine("GANET_Obs\tScan_Number");
+                                m_alignmentWriters.Add(evidence.DataSet.Name, datasetWriter);
                                 session.Insert(evidence.DataSet);
                             }
                             Evidence writtenEvidence = new Evidence
@@ -90,6 +96,11 @@ namespace MTDBFramework.IO
                                 DataSet = m_uniqueDataSets[evidence.DataSet.Name],
                                 Parent = consensusTarget
                             };
+                            m_alignmentWriters[evidence.DataSet.Name].WriteLine(string.Format("{0}\t{1}", writtenEvidence.ObservedNet, writtenEvidence.Scan));
+                            if (writtenEvidence.DiscriminantValue > 0.0)
+                            {
+                                writtenEvidence.DiscriminantValue += 0.0;
+                            }
                             session.Insert(writtenEvidence);
                         }
 
@@ -146,6 +157,10 @@ namespace MTDBFramework.IO
                     session.Close();
                 }
             }
+		    foreach (var writer in m_alignmentWriters)
+		    {
+		        writer.Value.Close();
+		    }
         }
         #region Events
 
