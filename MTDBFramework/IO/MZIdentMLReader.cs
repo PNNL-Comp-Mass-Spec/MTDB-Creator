@@ -695,7 +695,6 @@ namespace MTDBFramework.IO
 
                 result.EValue = item.Value.EValue;
                 result.QValue = qValue;
-                if(qValue > 0 && qValue < 1e-8)
                 result.DiscriminantValue = qValue;
                 result.PepQValue = item.Value.PepQValue;
 

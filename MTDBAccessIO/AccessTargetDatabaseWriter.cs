@@ -85,11 +85,6 @@ namespace MTDBAccessIO
                     numSeq = test[0];
                 }
 
-                if (numSeq.Contains("."))
-                {
-                    Console.WriteLine("Here I am");
-                }
-
 
                 var cleanPeptide = (seqPieces.ToList().Count == 1) ? seqPieces[0] : seqPieces[1];
                 var targetLine = string.Format("{0},{1},{2},{3},{4},{5},\"{6}\"",
