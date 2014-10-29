@@ -152,9 +152,6 @@ namespace MTDBAccessIO
 		    ExportToText(path, database);
 
 		    TextToAccessConvert(path);
-
-		    //var reader = new AccessTargetDatabaseReader();
-		    //reader.Read(path);
         }
 
         private void TextToAccessConvert(string path)
@@ -187,9 +184,9 @@ namespace MTDBAccessIO
                 TableName: "AMT_to_Protein_Map", FileName: directory + "tempAMT_to_Protein_Map.txt", HasFieldNames: true);
             accApplicaiton.CloseCurrentDatabase();
             accApplicaiton.Quit();
-            //File.Delete(directory + "tempAMT.txt");
-            //File.Delete(directory + "tempAMT_Proteins.txt");
-            //File.Delete(directory + "tempAMT_to_Protein_Map.txt");
+            File.Delete(directory + "tempAMT.txt");
+            File.Delete(directory + "tempAMT_Proteins.txt");
+            File.Delete(directory + "tempAMT_to_Protein_Map.txt");
         }
 
 

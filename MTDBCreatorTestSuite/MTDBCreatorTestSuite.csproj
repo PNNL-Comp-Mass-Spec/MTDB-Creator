@@ -121,6 +121,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Data\UnimodTests.cs" />
+    <Compile Include="IO\AccessReaderTests.cs" />
     <Compile Include="IO\AccessWriterTests.cs" />
     <Compile Include="IO\DatabaseReaderTests.cs" />
     <Compile Include="IO\DatabaseWriterTests.cs" />
