@@ -1,10 +1,8 @@
 ﻿#region Namespaces
-
 using System.Collections.Generic;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using PHRPReader;
-
 #endregion
 
 namespace MTDBFramework.IO
@@ -167,6 +165,7 @@ namespace MTDBFramework.IO
                         prot.CleavageState = (clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants)pair.CleavageState;
                         //prot.Id = 0;
                         evidence.AddProtein(prot);
+                        consensusDic[evidence.Parent.Id].AddProtein(prot);
                     }
                     evidence.MonoisotopicMass = consensusDic[evidence.Parent.Id].TheoreticalMonoIsotopicMass;
                     evidence.Ptms = consensusDic[evidence.Parent.Id].Ptms;
