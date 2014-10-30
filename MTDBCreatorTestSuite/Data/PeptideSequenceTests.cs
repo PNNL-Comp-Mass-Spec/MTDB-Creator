@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using MTDBFramework.Data;
@@ -75,10 +76,10 @@ namespace MTDBCreatorTestSuite.Data
             var reader          = new XTandemPhrpReader(options);
             var data            = reader.Read(path);
             var modFound        = false;
-            var target1         = new XTandemResult();
-            var target2         = new List<XTandemResult>();
+            var target1         = new Evidence();
+            var target2         = new List<Evidence>();
 
-            foreach (XTandemResult evidence in data.Evidences)
+            foreach (var evidence in data.Evidences)
             {
                 if (evidence.Sequence == "R.Q&AVTNPNNTFFAIKR.L" && !modFound)
                 {
@@ -92,9 +93,9 @@ namespace MTDBCreatorTestSuite.Data
             }
             foreach (var evidence in target2)
             {
-                Debug.Assert(target1.ObservedNet != evidence.ObservedNet);
-                Debug.Assert(target1.DelM != evidence.DelM);
-                Debug.Assert(target1.Mz != evidence.Mz);
+                Debug.Assert(Math.Abs(target1.ObservedNet - evidence.ObservedNet) > double.Epsilon);
+                Debug.Assert(Math.Abs(target1.DelM - evidence.DelM) > double.Epsilon);
+                Debug.Assert(Math.Abs(target1.Mz - evidence.Mz) > double.Epsilon);
             }
         }
     }

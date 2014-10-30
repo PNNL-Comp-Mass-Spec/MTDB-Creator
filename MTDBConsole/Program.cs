@@ -27,9 +27,9 @@ namespace MTDBConsole
 
 		static List<string> ReadMzidList()
 		{
-			List<string> pathList = new List<string>();
+			var pathList = new List<string>();
 
-			using (StreamReader input = new StreamReader(CommandOptions.MzidListPath))
+			using (var input = new StreamReader(CommandOptions.MzidListPath))
 			{
 				while (input.Peek() > -1)
 				{

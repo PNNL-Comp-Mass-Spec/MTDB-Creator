@@ -5,7 +5,6 @@ using System.IO.Compression;
 using System.Xml;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
-using NHibernate.Criterion;
 using PHRPReader;
 
 namespace MTDBFramework.IO
