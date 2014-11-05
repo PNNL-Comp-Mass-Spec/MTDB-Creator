@@ -19,7 +19,6 @@ using MTDBFramework.IO;
 using Application = System.Windows.Application;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 #endregion
 
@@ -94,7 +93,7 @@ namespace MTDBCreator.Windows
                     var directory = new DirectoryInfo(thing);
                     foreach(var filter in filters)
                     {
-                        if (filter.Contains(" "))
+                        if (!filter.Contains("."))
                             continue;
 
                         filters = filter.Split(';');
@@ -103,12 +102,29 @@ namespace MTDBCreator.Windows
                         {
                             foreach (var file in directory.GetFiles(fileExt, SearchOption.AllDirectories))
                             {
-                                //Check to separate Sequest Files from MSGF+ files due to similar extensions
-                                if ((formatInfo.Format == LcmsIdentificationTool.Sequest) &&
-                                    file.Name.EndsWith("msgfdb_syn.txt"))
+                                if (file.Name.EndsWith("msgfdb_syn.txt"))
                                 {
-                                    continue;
+                                    formatInfo.Format = LcmsIdentificationTool.MsgfPlus;
                                 }
+                                else if (file.Name.EndsWith("_syn.txt"))
+                                {
+                                    formatInfo.Format = LcmsIdentificationTool.Sequest;
+                                }
+                                else if (file.Name.EndsWith("_xt.txt"))
+                                {
+                                    formatInfo.Format = LcmsIdentificationTool.XTandem;
+                                }
+                                else if (file.Name.EndsWith("msalign_syn.txt"))
+                                {
+                                    formatInfo.Format = LcmsIdentificationTool.MSAlign;
+                                }
+                                
+                                //Check to separate Sequest Files from MSGF+ files due to similar extensions
+                                //if ((formatInfo.Format == LcmsIdentificationTool.Sequest) &&
+                                //    file.Name.EndsWith("msgfdb_syn.txt"))
+                                //{
+                                //    continue;
+                                //}
                                 AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file.FullName,
                                     formatInfo.Format));
 
@@ -140,12 +156,32 @@ namespace MTDBCreator.Windows
                     Filter = formatInfo.Filter
                 };
 
-                if (openFileDialog.ShowDialog() == true)
+                openFileDialog.AutoUpgradeEnabled = false;
+                var dialogRes = openFileDialog.ShowDialog();
+
+                if (dialogRes == System.Windows.Forms.DialogResult.OK)
                 {
                     if (formatInfo.Format != LcmsIdentificationTool.Description)
                     {
                         foreach (var fileName in openFileDialog.FileNames)
                         {
+                            if (fileName.EndsWith("msgfdb_syn.txt"))
+                            {
+                                formatInfo.Format = LcmsIdentificationTool.MsgfPlus;
+                            }
+                            else if (fileName.EndsWith("_syn.txt"))
+                            {
+                                formatInfo.Format = LcmsIdentificationTool.Sequest;
+                            }
+                            else if (fileName.EndsWith("_xt.txt"))
+                            {
+                                formatInfo.Format = LcmsIdentificationTool.XTandem;
+                            }
+                            else if (fileName.EndsWith("msalign_syn.txt"))
+                            {
+                                formatInfo.Format = LcmsIdentificationTool.MSAlign;
+                            }
+
                             AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(fileName, formatInfo.Format));
 
                             if (formatInfo.Format == LcmsIdentificationTool.MSAlign)

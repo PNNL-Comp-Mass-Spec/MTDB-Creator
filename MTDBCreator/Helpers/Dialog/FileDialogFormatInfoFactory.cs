@@ -9,17 +9,19 @@ namespace MTDBCreator.Helpers.Dialog
             switch (format)
             {
                 case "Sequest":
-                    return new FileDialogFormatInfo("Open SEQUEST analysis files", "SEQUEST Analysis Files (*_syn.txt)|*_syn.txt", LcmsIdentificationTool.Sequest);
+                    return new FileDialogFormatInfo("Open SEQUEST analysis files", "SEQUEST Analysis Files |*_syn.txt", LcmsIdentificationTool.Sequest);
                 case "XTandem":
-                    return new FileDialogFormatInfo("Open X!Tandem analysis files", "X!Tandem Analysis Files (*_xt.txt)|*_xt.txt", LcmsIdentificationTool.XTandem);
+                    return new FileDialogFormatInfo("Open X!Tandem analysis files", "X!Tandem Analysis Files |*_xt.txt", LcmsIdentificationTool.XTandem);
                 case "MSGFPlus":
-                    return new FileDialogFormatInfo("Open MSGF+ analysis files", "MSGF+ Analysis Files (*msgfdb_syn.txt)|*msgfdb_syn.txt", LcmsIdentificationTool.MsgfPlus);
+                    return new FileDialogFormatInfo("Open MSGF+ analysis files", "MSGF+ Analysis Files |*msgfdb_syn.txt", LcmsIdentificationTool.MsgfPlus);
                 case "MZIdentML":
-                    return new FileDialogFormatInfo("Open MZIdent analysis files", "MZIdentML Analysis Files (*msgfplus.mzid[.gz])|*msgfplus.mzid;*msgfplus.mzid.gz", LcmsIdentificationTool.MZIdentML);
+                    return new FileDialogFormatInfo("Open MZIdent analysis files", "MZIdentML Analysis Files |*msgfplus.mzid;*msgfplus.mzid.gz", LcmsIdentificationTool.MZIdentML);
                 case "MSAlign":
-                    return new FileDialogFormatInfo("Open MSAlign analysis files", "MSAlign Analysis Files (*msalign_syn.txt)|*msalign_syn.txt", LcmsIdentificationTool.MSAlign);
+                    return new FileDialogFormatInfo("Open MSAlign analysis files", "MSAlign Analysis Files |*msalign_syn.txt", LcmsIdentificationTool.MSAlign);
+                case "Analysis Files":
+                    return new FileDialogFormatInfo("Open old analysis file type", "Analysis Files |*_syn.txt;*msalign_syn.txt;*msgfdb_syn.txt;*_xt.txt", LcmsIdentificationTool.Sequest);
                 case "Description":
-                    return new FileDialogFormatInfo("Open a dataset description file", "Dataset description files (*.txt)|*.txt|All Files (*.*)|*.*", LcmsIdentificationTool.Description);
+                    return new FileDialogFormatInfo("Open a dataset description file", "Dataset description files |*.txt |All Files |*.*", LcmsIdentificationTool.Description);
                 default:
                     return null;
             }

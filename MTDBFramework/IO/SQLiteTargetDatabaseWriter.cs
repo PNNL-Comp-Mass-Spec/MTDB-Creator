@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Security.Permissions;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
@@ -29,6 +30,7 @@ namespace MTDBFramework.IO
         public void Write(TargetDatabase database, Options options, string path)
         {
             DatabaseFactory.DatabaseFile = path;
+		    var databaseDirectory = Path.GetDirectoryName(path);
 			/**********************************************************************************************
 			 * TODO: Get the append capability working
 			 * Set to false to avoid problems. Setting it to true will append some items, but not others. 
@@ -76,7 +78,8 @@ namespace MTDBFramework.IO
                             {
                                 evidence.DataSet.Id = ++datasetCount;
                                 m_uniqueDataSets.Add(evidence.DataSet.Name, evidence.DataSet);
-                                var datasetWriter = new StreamWriter(evidence.DataSet.Name + "Alignment.tsv");
+                                var outputPath = databaseDirectory + evidence.DataSet.Name + "Alignment.tsv";
+                                var datasetWriter = new StreamWriter(databaseDirectory + "\\" + evidence.DataSet.Name + "Alignment.tsv");
                                 datasetWriter.WriteLine("GANET_Obs\tScan_Number");
                                 m_alignmentWriters.Add(evidence.DataSet.Name, datasetWriter);
                                 session.Insert(evidence.DataSet);
