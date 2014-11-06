@@ -32,7 +32,7 @@ namespace MTDBCreator.ViewModels
         #endregion
 
         #region Public Properties
-
+        
         public int Id { get; private set; } // For recent analysis job record purpose
 
         public string Title
@@ -201,6 +201,11 @@ namespace MTDBCreator.ViewModels
 
         #region Public Methods
 
+        public bool ShowOpenOldAnalysis
+        {
+            get { return System.Net.Dns.GetHostEntry("").HostName.Contains("pnl.gov"); }
+        }
+
         public object ProcessAnalysisTargets()
         {
             return BackgroundWorkProcessHelper.Process(new AnalysisJobBackgroundWorkHelper(this));
@@ -235,7 +240,6 @@ namespace MTDBCreator.ViewModels
         public AnalysisJobViewModel()
         {
             Id = RecentAnalysisJobHelper.RecentAnalysisJobCount;
-
             AnalysisJobItems = new ObservableCollection<AnalysisJobItem>();
             Options = new Options();
         }

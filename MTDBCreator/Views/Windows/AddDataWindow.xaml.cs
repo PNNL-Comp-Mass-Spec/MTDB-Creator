@@ -49,6 +49,11 @@ namespace MTDBCreator.Windows
 
                 AnalysisJobViewModel.Title = workspaceViewModel.AnalysisJobViewModel.Title;
             }
+            if (!AnalysisJobViewModel.ShowOpenOldAnalysis)
+            {
+                AnalysisFolderItem.Visibility   = Visibility.Collapsed;
+                AnalysisMenuItem.Visibility     = Visibility.Collapsed;
+            }
         }
 
         public AnalysisJobViewModel AnalysisJobViewModel
@@ -275,6 +280,8 @@ namespace MTDBCreator.Windows
                 }
             }
         }
+
+        
 
         private void AddDataWindow_Closed(object sender, EventArgs e)
         {
