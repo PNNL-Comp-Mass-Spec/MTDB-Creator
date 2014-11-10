@@ -146,20 +146,20 @@ namespace MTDBFramework.Algorithms
 		        }
 		        consensusTarget.CalculateStatistics();
 		        tempConsensusTargets.Add(consensusTarget);
-		        targetDatabase.AddConsensusTarget(consensusTarget);
-		        foreach (var protein in consensusTarget.Proteins)
-		        {
-		            if (!proteinDict.ContainsKey(protein.ProteinName))
-		            {
-		                proteinDict.Add(protein.ProteinName, protein);
+		        //targetDatabase.AddConsensusTarget(consensusTarget);
+		        //foreach (var protein in consensusTarget.Proteins)
+		        //{
+		        //    if (!proteinDict.ContainsKey(protein.ProteinName))
+		        //    {
+		        //        proteinDict.Add(protein.ProteinName, protein);
                         // Don't need to manually link the first consensus to the protein
-		                continue;
-		            }
-                    proteinDict[protein.ProteinName].Consensus.Add(consensusTarget);
-		        }
+		        //        continue;
+		        //    }
+                //    proteinDict[protein.ProteinName].Consensus.Add(consensusTarget);
+		        //}
 		    }
 
-		    targetDatabase.Proteins = proteinDict.Values.ToList();
+		    //targetDatabase.Proteins = proteinDict.Values.ToList();
 
 		    var massTagLightTargets = new List<UMCLight>();
             foreach (var evidence in tempConsensusTargets)
@@ -247,11 +247,6 @@ namespace MTDBFramework.Algorithms
                 try
                 {
                     alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
-                    if (umcDataset.Max(x => x.NetAligned) < 0.6)
-                    {
-                        umcDataset = backupDataset;
-                        alignedData = lcmsNetAligner.Align(massTagLightTargets, umcDataset);
-                    }
                 }
                 catch
                 {
@@ -263,11 +258,6 @@ namespace MTDBFramework.Algorithms
                     {
                         alignedData = null;
                     }
-                }
-
-                if (alignedData != null)
-                {
-                    alignmentData.Add(alignedData);
                 }
 
                 umcDataset.Sort((x, y) => x.ScanAligned.CompareTo(y.ScanAligned));
@@ -316,6 +306,7 @@ namespace MTDBFramework.Algorithms
                     dataSet.RegressionResult.Slope = alignedData.NetSlope;
                     dataSet.RegressionResult.Intercept = alignedData.NetIntercept;
                     dataSet.RegressionResult.RSquared = alignedData.NetRsquared;
+                    alignmentData.Add(alignedData);
                 }
                 else
                 {
@@ -332,15 +323,34 @@ namespace MTDBFramework.Algorithms
             }
             if (ProcessorOptions.TargetFilterType != TargetWorkflowType.TOP_DOWN)
             {
+                i = j = 0;
                 foreach (var consensus in tempConsensusTargets)
                 {
                     for (var evNum = 0; evNum < consensus.Evidences.Count; evNum++)
                     {
                         consensus.Evidences[evNum] = evidenceMap[consensus.Evidences[evNum].Id];
                     }
+                    //Recalculate the target's data from the warped values
+                    consensus.Id = ++i;
+                    foreach (var target in consensus.Evidences)
+                    {
+                        target.Id = ++j;
+                    }
+                    consensus.CalculateStatistics();
+                    targetDatabase.AddConsensusTarget(consensus);
+                    foreach (var protein in consensus.Proteins)
+                    {
+                        if (!proteinDict.ContainsKey(protein.ProteinName))
+                        {
+                            proteinDict.Add(protein.ProteinName, protein);
+                            // Don't need to manually link the first consensus to the protein
+                            continue;
+                        }
+                        proteinDict[protein.ProteinName].Consensus.Add(consensus);
+                    }
                 }
+                targetDatabase.Proteins = proteinDict.Values.ToList();
             }
-
             return targetDatabase;
         }
 

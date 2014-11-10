@@ -5,11 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using MTDBAccessIO;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.BackgroundWork;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
+using MTDBFramework.IO;
 using MTDBFramework.UI;
 using Microsoft.Win32;
 using System;
@@ -116,12 +118,93 @@ namespace MTDBCreator.ViewModels
 
         private void ProcessAnalysisJob(object param)
         {
+            // Insert database save location here
+            var saveDatabaseDialog = new SaveFileDialog();
+            
+            if (Options.DatabaseType != DatabaseType.NotSaved)
+            {
+                if (RestoreDirectory == null)
+                {
+                    RestoreDirectory = "C:\\";
+                }
+                saveDatabaseDialog.InitialDirectory = RestoreDirectory;
+                saveDatabaseDialog.RestoreDirectory = true;
+
+                if (Options.DatabaseType == DatabaseType.SQLite)
+                {
+                    saveDatabaseDialog.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
+                    saveDatabaseDialog.Title = "Save to MTDB";
+                }
+                else
+                {
+                    saveDatabaseDialog.Filter = "Access Database (*.mdb)|*.mdb|All Files (*.*)|*.*";
+                    saveDatabaseDialog.Title = "Save to Access Database";
+                }
+                saveDatabaseDialog.ShowDialog();
+                if (saveDatabaseDialog.FileName != "")
+                {
+                    RestoreDirectory = Path.GetDirectoryName(saveDatabaseDialog.FileName);
+                    SavedDatabasePath = saveDatabaseDialog.FileName;
+                }
+            }
+
+            
+
             DateTime start = DateTime.Now;
             var result = ProcessAnalysisTargets();
 
             OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
             DateTime end = DateTime.Now;
             Console.WriteLine("Analysis processed after " + (end-start));
+
+            if (File.Exists(SavedDatabasePath))
+            {
+                ITargetDatabaseReader reader;
+                IEnumerable<LcmsDataSet> databaseDatasets = null;
+                var loaded = false;
+                MessageBoxResult errorResult = MessageBoxResult.OK;
+                if (SavedDatabasePath.EndsWith("mtdb"))
+                    reader = new SqLiteTargetDatabaseReader();
+                else
+                {
+                    reader = new AccessTargetDatabaseReader();
+                }
+                try
+                {
+                    databaseDatasets = reader.Read(SavedDatabasePath);
+                    loaded = true;
+                }
+                catch (Exception)
+                {
+                    errorResult = MessageBox.Show(string.Format("{0} does not contain valid data to be imported into MTDBCreator", SavedDatabasePath),
+                        "Error loading file", MessageBoxButton.OKCancel, MessageBoxImage.Exclamation);
+                }
+
+                if (loaded)
+                {
+                    foreach (var dataset in databaseDatasets)
+                    {
+                        var exists = false;
+                        var priorAnalysis = new AnalysisJobItem(dataset.Name, dataset.Tool);
+                        priorAnalysis.DataSet = dataset;
+                        foreach (var item in AnalysisJobItems)
+                            if (item.Title == priorAnalysis.Title)
+                            {
+                                item.DataSet = dataset;
+                                exists = true;
+                            }
+                        if (!exists)
+                            AnalysisJobItems.Add(priorAnalysis);
+                    }
+                }
+                else if(errorResult == MessageBoxResult.Cancel)
+                {
+                    // User cancelled processing
+                    var squelch = 1;
+                    squelch++;
+                    return;
+                }
+            }
 
             if (result != null && param == null)
             {
@@ -142,44 +225,15 @@ namespace MTDBCreator.ViewModels
                 Console.WriteLine("Alignment processed after " + (end - start) + " total");
                 Console.WriteLine("Alignment took " + (end - procStart));
 
-                if (result != null)
+                if (result != null && saveDatabaseDialog.FileName != "")
                 {
-                    if (Options.DatabaseType != DatabaseType.NotSaved)
-                    {
-                        var saveDatabaseDialog = new SaveFileDialog();
-                        if (RestoreDirectory == null)
-                        {
-                            RestoreDirectory = "C:\\";
-                        }
-                        saveDatabaseDialog.InitialDirectory = RestoreDirectory;
-                        saveDatabaseDialog.RestoreDirectory = true;
+                    
+                    DateTime saveStart = DateTime.Now;
 
-                        if (Options.DatabaseType == DatabaseType.SQLite)
-                        {
-                            saveDatabaseDialog.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
-                            saveDatabaseDialog.Title = "Save to MTDB";
-                        }
-                        else
-                        {
-                            saveDatabaseDialog.Filter = "Access Database (*.mdb)|*.mdb|All Files (*.*)|*.*";
-                            saveDatabaseDialog.Title = "Save to Access Database";
-                        }
-
-                        if (saveDatabaseDialog.ShowDialog() == true)
-                        {
-                            DateTime saveStart = DateTime.Now;
-                            SaveAnalysisDatabase(saveDatabaseDialog.FileName);
-                            end = DateTime.Now;
-                            Console.WriteLine("Database Save took " + (end - saveStart));
-                        }
-                        if (saveDatabaseDialog.FileName != "")
-                        {
-                            RestoreDirectory = Path.GetDirectoryName(saveDatabaseDialog.FileName);
-                            SavedDatabasePath = saveDatabaseDialog.FileName;
-                            IsDatabaseSaved = true;
-                        }
-                    }
-
+                    SaveAnalysisDatabase(saveDatabaseDialog.FileName);
+                    IsDatabaseSaved = true;
+                    end = DateTime.Now;
+                    Console.WriteLine("Database Save took " + (end - saveStart));
                 }
             }
         }

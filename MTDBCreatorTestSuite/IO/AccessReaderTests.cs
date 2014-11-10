@@ -21,7 +21,7 @@ namespace MTDBCreatorTestSuite.IO
             if (!m_ignore)
             {
                 var reader = new AccessTargetDatabaseReader();
-                var dataset = reader.Read(GetTestSuiteDataPath(path));
+                var dataset = reader.ReadDb(GetTestSuiteDataPath(path));
                 var numberOfTargets = dataset.ConsensusTargets.Count;
                 Assert.AreEqual(expectedNumberOfTargets, numberOfTargets);
             }

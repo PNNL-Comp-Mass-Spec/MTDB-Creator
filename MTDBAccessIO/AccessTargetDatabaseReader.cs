@@ -4,14 +4,51 @@ using System.IO;
 using System.Linq;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
+using MTDBFramework.IO;
 using ACCESS = Microsoft.Office.Interop.Access;
 
 namespace MTDBAccessIO
 {
-    public class AccessTargetDatabaseReader
+    public class AccessTargetDatabaseReader: ITargetDatabaseReader
     {
 
-        public TargetDatabase Read(string path)
+        public IEnumerable<LcmsDataSet> Read(string path)
+        {
+            // Read in the data from the access database
+            // put it into a text file (?)
+            // Read the data from the text file into program
+            var accApplication = new ACCESS.Application();
+
+            var pathPieces = path.Split('\\');
+            string directory = "";
+            foreach (var piece in pathPieces)
+            {
+                if (piece.Contains("."))
+                {
+                    continue;
+                }
+                directory += piece;
+                directory += "\\";
+            }
+
+            accApplication.OpenCurrentDatabase(path);
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acExportDelim,
+                TableName: "AMT", FileName: directory + "outTempAMT.txt", HasFieldNames: true);
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acExportDelim,
+                TableName: "AMT_Proteins", FileName: directory + "outTempAMT_Proteins.txt", HasFieldNames: true);
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acExportDelim,
+                TableName: "AMT_to_Protein_Map", FileName: directory + "outTempAMT_to_Protein_Map.txt", HasFieldNames: true);
+            accApplication.CloseCurrentDatabase();
+            accApplication.Quit();
+
+            var priorDatasets = new List<LcmsDataSet>();
+
+
+
+            return priorDatasets;
+        }
+
+        public TargetDatabase ReadDb(string path)
         {
             // Read in the data from the access database
             // put it into a text file (?)

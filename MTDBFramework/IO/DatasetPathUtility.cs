@@ -22,7 +22,7 @@ namespace MTDBFramework.IO
 
             // Remove the appropriate extension ("_syn.txt" checked last to prevent potential overlap)
             // Strips extra information from the path name and returns the dataset name itself
-            string[] toRemove = { "_msgfdb_syn.txt", "msalign_syn.txt", "_xt.txt", "_syn.txt", "msgfplus.mzid", ".mzid" };
+            string[] toRemove = { "_msgfdb_syn.txt", "msalign_syn.txt", "_xt.txt", "_syn.txt", ".mzid" };
             var splitString = fiFile.Name.Split(toRemove, StringSplitOptions.RemoveEmptyEntries);
 
             if (splitString.Length > 0)

@@ -468,7 +468,7 @@ namespace MTDBCreator.ViewModels
             ObservedPredictedPlotModel.Axes.Add(MakeLinerAxis(AxisPosition.Left));
             ObservedPredictedPlotModel.Axes.Add(MakeLinerAxis(AxisPosition.Bottom));
 
-            foreach (var axis in MassScanPlotModel.Axes)
+            foreach (var axis in ObservedPredictedPlotModel.Axes)
             {
                 switch (axis.Position)
                 {
