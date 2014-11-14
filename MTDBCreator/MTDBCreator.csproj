@@ -163,6 +163,11 @@
     <Compile Include="Commands\MTDBResultChangedEvent.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="DmsExporter\Data\AmtInfo.cs" />
+    <Compile Include="DmsExporter\Data\AmtPeptideOptions.cs" />
+    <Compile Include="DmsExporter\IO\DmsLookupUtility.cs" />
+    <Compile Include="DmsExporter\IO\TextToDbConverterFactory.cs" />
+    <Compile Include="DmsExporter\IO\TextToMtdbConverter.cs" />
     <Compile Include="Helpers\BackgroundWorkProcessHelper.cs" />
     <Compile Include="Helpers\BackgroundWork\AnalysisJobBackgroundWorkHelper.cs" />
     <Compile Include="Helpers\BackgroundWork\MTDBProcessorBackgroundWorkHelper.cs" />
@@ -175,6 +180,10 @@
     <Compile Include="Helpers\ErrorHelper.cs" />
     <Compile Include="Helpers\HashHelper.cs" />
     <Compile Include="Helpers\OptionsParameterConverter.cs" />
+    <Compile Include="ViewModelBase.cs" />
+    <Compile Include="ViewModels\AmtListViewModel.cs" />
+    <Compile Include="ViewModels\AmtPeptideOptionsViewModel.cs" />
+    <Compile Include="ViewModels\DmsExporterViewModel.cs" />
     <Compile Include="ViewModels\OxyPlot\StatPlotViewModel.cs" />
     <Compile Include="ViewModels\OxyPlot\DatasetPlotViewModel.cs" />
     <Compile Include="ViewModels\TreeView\ConsensusTargetTreeNodeViewModel.cs" />
@@ -195,6 +204,15 @@
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="Views\Windows\AddDataWindow.xaml.cs">
       <DependentUpon>AddDataWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Windows\AmtListView.xaml.cs">
+      <DependentUpon>AmtListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Windows\AmtPeptideOptionsView.xaml.cs">
+      <DependentUpon>AmtPeptideOptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Windows\DmsExporterWindow.xaml.cs">
+      <DependentUpon>DmsExporterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Windows\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
@@ -223,6 +241,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Windows\AddDataWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\AmtListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\AmtPeptideOptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Windows\DmsExporterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

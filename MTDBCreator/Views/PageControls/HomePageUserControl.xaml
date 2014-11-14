@@ -70,6 +70,9 @@
                 <TextBlock Text="Recent Created Jobs" Style="{StaticResource LeftPanelNormalTextStyle}"/>
                 <StackPanel Name="RecentAnalysisJobStackPanel" Orientation="Vertical"/>
             </StackPanel>
+            <StackPanel>
+                <Button Name="DmsButton" Content="Export Database from DMS" Visibility="{Binding Path=ExportVisable}" Click="NewDmsExportButton_Click"></Button>
+            </StackPanel>
         </StackPanel>
 
         <WebBrowser Grid.Column="1" Source="http://omics.pnl.gov/software" Visibility="Hidden"/>

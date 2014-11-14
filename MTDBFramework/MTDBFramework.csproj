@@ -162,6 +162,7 @@
     <Compile Include="IO\IPHRPReader.cs" />
     <Compile Include="IO\ITargetDatabaseReader.cs" />
     <Compile Include="IO\ITargetDatabaseWriter.cs" />
+    <Compile Include="IO\ITextToDbConverter.cs" />
     <Compile Include="IO\MSAlignPHRPReader.cs" />
     <Compile Include="IO\MSGFPlusPHRPReader.cs" />
     <Compile Include="IO\MZIdentMLReader.cs" />

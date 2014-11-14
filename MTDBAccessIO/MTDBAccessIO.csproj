@@ -70,6 +70,7 @@
     <Compile Include="AccessTargetDatabaseReader.cs" />
     <Compile Include="AccessTargetDatabaseWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextToAccessConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

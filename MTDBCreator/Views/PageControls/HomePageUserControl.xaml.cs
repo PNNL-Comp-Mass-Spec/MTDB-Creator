@@ -8,6 +8,7 @@ using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.BackgroundWork;
 using MTDBCreator.Properties;
 using MTDBCreator.ViewModels;
+using MTDBCreator.Views.Windows;
 using MTDBCreator.Windows;
 
 #endregion
@@ -22,6 +23,11 @@ namespace MTDBCreator.PageControls
         public HomePageUserControl()
         {
             InitializeComponent();
+
+            if (!System.Net.Dns.GetHostEntry("").HostName.Contains("pnl.gov"))
+            {
+                DmsButton.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -113,6 +119,16 @@ namespace MTDBCreator.PageControls
             };
 
             addDataJobWindow.ShowDialog();
+        }
+
+        private void NewDmsExportButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dmsExportWindow = new DmsExporterWindow(null)
+            {
+                Owner = Application.Current.MainWindow
+            };
+
+            dmsExportWindow.ShowDialog();
         }
     }
 }
