@@ -23,6 +23,8 @@ namespace MTDBCreator.DmsExporter.IO
 
         private List<int> m_MTIds = new List<int>();
 
+        private char m_separator = '\t';
+
         #region SqlStrings
 
         private string MassTagAccessDbQuery(AmtPeptideOptions stats)
@@ -39,20 +41,10 @@ namespace MTDBCreator.DmsExporter.IO
 
         private string MassTagChargeDbQuery()
         {
-
-            //var massTags = "";
-            //foreach (var massTagId in massTagIds)
-            //{
-            //    massTags += massTagId.ToString() + ", ";
-            //}
-
-            //massTags = massTags.Substring(0, massTags.Length - 2);
-
             return " SELECT * " +
                    " FROM T_Peptides " +
                    " WHERE Mass_Tag_ID BETWEEN " + m_MTIds.Min() + " AND " + m_MTIds.Max() + " " +
                    " ORDER BY Mass_Tag_ID ";
-
         }
 
         private string ModAccessDbQuery()
@@ -213,6 +205,10 @@ namespace MTDBCreator.DmsExporter.IO
 
         #endregion
 
+        public char Separator {
+            get { return m_separator; }
+            set { m_separator = value; }
+        }
 
         private readonly string m_connectionString;
 
@@ -267,18 +263,15 @@ namespace MTDBCreator.DmsExporter.IO
                             cnDB.Open();
 
                             var massTagSql = MassTagAccessDbQuery(selectedStats);
-
-                            var row = 0;
-
+                            
                             var cmd = new SqlCommand(massTagSql, cnDB);
                             var reader = cmd.ExecuteReader();
 
                             //Write the mass tags to a temporary file
                             var modDescriptions = new List<string>();
-                            var MTList = new List<int>();
                             using (var writer = new StreamWriter(directory + "tempMassTags.txt"))
                             {
-                                var header = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17}",
+                                var header = string.Format("{0}{18}{1}{18}{2}{18}{3}{18}{4}{18}{5}{18}{6}{18}{7}{18}{8}{18}{9}{18}{10}{18}{11}{18}{12}{18}{13}{18}{14}{18}{15}{18}{16}{18}{17}",
                                                             "Mass_Tag_ID",
                                                             "Peptide",
                                                             "Monoisotopic_Mass",
@@ -296,7 +289,8 @@ namespace MTDBCreator.DmsExporter.IO
                                                             "Mod_Description",
                                                             "PMT_Quality_Score",
                                                             "Cleavage_State_Max",
-                                                            "Min_MSGF_SpecProb"
+                                                            "Min_MSGF_SpecProb",
+                                                            m_separator
                                                             );
                                 writer.WriteLine(header);
                                 while (reader.Read())
@@ -313,7 +307,7 @@ namespace MTDBCreator.DmsExporter.IO
                                         if (modPieces[0] != "" && !modDescriptions.Contains(modPieces[0]))
                                             modDescriptions.Add(modPieces[0]);
                                     }
-                                    var line = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},\"{11}\",{12},{13},\"{14}\",{15},{16},{17}",
+                                    var line = string.Format("{0}{18}{1}{18}{2}{18}{3}{18}{4}{18}{5}{18}{6}{18}{7}{18}{8}{18}{9}{18}{10}{18}\"{11}\"{18}{12}{18}{13}{18}\"{14}\"{18}{15}{18}{16}{18}{17}",
                                                                 !Convert.IsDBNull(reader.GetValue(0)) ? reader.GetValue(0) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : 0,
@@ -331,7 +325,8 @@ namespace MTDBCreator.DmsExporter.IO
                                                                 !Convert.IsDBNull(reader.GetValue(14)) ? reader.GetValue(14) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(15)) ? reader.GetValue(15) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(16)) ? reader.GetValue(16) : 0,
-                                                                !Convert.IsDBNull(reader.GetValue(17)) ? reader.GetValue(17) : 0);
+                                                                !Convert.IsDBNull(reader.GetValue(17)) ? reader.GetValue(17) : 0,
+                                                                m_separator);
                                     writer.WriteLine(line);
                                 }
                                 reader.Close();
@@ -343,31 +338,38 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(chargeSql, cnDB);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempCharges.txt"))
+                            using (var writer = new StreamWriter(directory + "tempPeptides.txt"))
                             {
-                                var header = "Mass_Tag_ID,ChargeState";
+                                var header = string.Format("{0}{7}{1}{7}{2}{7}{3}{7}{4}{7}{5}{7}{6}",
+                                                            "Mass_Tag_ID",
+                                                            "Peptide",
+                                                            "ChargeState",
+                                                            "Scan_Number",
+                                                            "DelM_PPM",
+                                                            "GANET_Obs",
+                                                            "MH",
+                                                            m_separator);
                                 writer.WriteLine(header);
                                 while (reader.Read())
                                 {
                                     if (m_MTIds.Contains(Convert.ToInt32(reader.GetValue(8))))
                                     {
-                                        var line = string.Format("{0},{1}",
+                                        var line = string.Format("{0}{7}{1}{7}{2}{7}{3}{7}{4}{7}{5}{7}{6}",
                                             !Convert.IsDBNull(reader.GetValue(8)) ? reader.GetValue(8) : 0,
-                                            !Convert.IsDBNull(reader.GetValue(4)) ? reader.GetValue(4) : 0);
+                                            !Convert.IsDBNull(reader.GetValue(7)) ? reader.GetValue(7) : "",
+                                            !Convert.IsDBNull(reader.GetValue(4)) ? reader.GetValue(4) : 0,
+                                            !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : 0,
+                                            !Convert.IsDBNull(reader.GetValue(16)) ? reader.GetValue(16) : 0,
+                                            !Convert.IsDBNull(reader.GetValue(9)) ? reader.GetValue(9) : 0,
+                                            !Convert.IsDBNull(reader.GetValue(5)) ? reader.GetValue(5) : 0,
+                                            m_separator);
                                         writer.WriteLine(line);
-                                    }
-                                    else
-                                    {
-                                        //Console.Write("Bwahahaha!" + reader.GetValue(8));
                                     }
                                 }
                                 reader.Close();
                             }
 
-                            //Console.WriteLine(modDescriptions);
-                            // TODO: Put the thing here
                             var massTagModsSql = ModAccessDbQuery();
-                            //Console.WriteLine(massTagModsSql)
                             var mainDb = new SqlConnection(MainConnectionString);
                             mainDb.Open();
                             cmd = new SqlCommand(massTagModsSql, mainDb);
@@ -375,15 +377,19 @@ namespace MTDBCreator.DmsExporter.IO
 
                             using (var writer = new StreamWriter(directory + "tempModInfo.txt"))
                             {
-                                var header = string.Format("Mod_tag, Mod_description, Mod_Mass, Mod_formula");
+                                var header = string.Format("{0}{3}{1}{3}{2}",
+                                                            "Mod_tag",
+                                                            "Mod_Mass",
+                                                            "Mod_formula",
+                                                            m_separator);
                                 writer.WriteLine(header);
                                 while (reader.Read())
                                 {
-                                    var line = string.Format("{0},{1},{2},{3}",
-                                        !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : 0, // Tag here (NEEDED)
-                                        !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : 0, // 
-                                        !Convert.IsDBNull(reader.GetValue(3)) ? reader.GetValue(3) : 0, // Mass is this one (NEEDED)
-                                        !Convert.IsDBNull(reader.GetValue(9)) ? reader.GetValue(9) : 0); // Formula is this one (Maybe needed?)
+                                    var line = string.Format("{0}{3}{1}{3}{2}",
+                                        !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : 0, 
+                                        !Convert.IsDBNull(reader.GetValue(3)) ? reader.GetValue(3) : 0, 
+                                        !Convert.IsDBNull(reader.GetValue(9)) ? reader.GetValue(9) : 0,
+                                        m_separator);
                                     writer.WriteLine(line);
                                 }
                                 reader.Close();
@@ -398,7 +404,7 @@ namespace MTDBCreator.DmsExporter.IO
 
                             using (var writer = new StreamWriter(directory + "tempMassTagsNet.txt"))
                             {
-                                var header = string.Format("{0},{1},{2},{3},{4},{5},{6},{7}",
+                                var header = string.Format("{0}{8}{1}{8}{2}{8}{3}{8}{4}{8}{5}{8}{6}{8}{7}",
                                                             "Mass_Tag_ID",
                                                             "Min_GANET",
                                                             "Max_GANET",
@@ -406,12 +412,13 @@ namespace MTDBCreator.DmsExporter.IO
                                                             "Cnt_GANET",
                                                             "StD_GANET",
                                                             "StdError_GANET",
-                                                            "PNET"
+                                                            "PNET",
+                                                            m_separator
                                                             );
                                 writer.WriteLine(header);
                                 while (reader.Read())
                                 {
-                                    var line = string.Format("{0},{1},{2},{3},{4},{5},{6},{7}",
+                                    var line = string.Format("{0}{8}{1}{8}{2}{8}{3}{8}{4}{8}{5}{8}{6}{8}{7}",
                                                                 !Convert.IsDBNull(reader.GetValue(0)) ? reader.GetValue(0) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : 0,
@@ -419,7 +426,8 @@ namespace MTDBCreator.DmsExporter.IO
                                                                 !Convert.IsDBNull(reader.GetValue(4)) ? reader.GetValue(4) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(5)) ? reader.GetValue(5) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(6)) ? reader.GetValue(6) : 0,
-                                                                !Convert.IsDBNull(reader.GetValue(7)) ? reader.GetValue(7) : 0);
+                                                                !Convert.IsDBNull(reader.GetValue(7)) ? reader.GetValue(7) : 0,
+                                                                m_separator);
                                     writer.WriteLine(line);
                                 }
                                 reader.Close();
@@ -434,7 +442,7 @@ namespace MTDBCreator.DmsExporter.IO
 
                             using (var writer = new StreamWriter(directory + "tempProteins.txt"))
                             {
-                                var header = string.Format("{0},\"{1}\",\"{2}\",{3},{4},{5},{6},{7},{8},{9},{10}",
+                                var header = string.Format("{0}{11}\"{1}\"{11}\"{2}\"{11}{3}{11}{4}{11}{5}{11}{6}{11}{7}{11}{8}{11}{9}{11}{10}",
                                                             "Ref_ID",
                                                             "Reference",
                                                             "Description",
@@ -445,12 +453,13 @@ namespace MTDBCreator.DmsExporter.IO
                                                             "Protein_Sequence",
                                                             "Protein_DB_ID",
                                                             "External_Reference_ID",
-                                                            "External_Protein_ID"
+                                                            "External_Protein_ID",
+                                                            m_separator
                                                             );
                                 writer.WriteLine(header);
                                 while (reader.Read())
                                 {
-                                    var line = string.Format("{0},\"{1}\",\"{2}\",{3},{4},{5},{6},{7},{8},{9},{10}",
+                                    var line = string.Format("{0}{11}\"{1}\"{11}\"{2}\"{11}{3}{11}{4}{11}{5}{11}{6}{11}{7}{11}{8}{11}{9}{11}{10}",
                                                                 !Convert.IsDBNull(reader.GetValue(0)) ? reader.GetValue(0) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : "",
@@ -461,7 +470,8 @@ namespace MTDBCreator.DmsExporter.IO
                                                                 !Convert.IsDBNull(reader.GetValue(7)) ? reader.GetValue(7) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(8)) ? reader.GetValue(8) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(9)) ? reader.GetValue(9) : 0,
-                                                                !Convert.IsDBNull(reader.GetValue(10)) ? reader.GetValue(10) : 0);
+                                                                !Convert.IsDBNull(reader.GetValue(10)) ? reader.GetValue(10) : 0,
+                                                                m_separator);
                                     writer.WriteLine(line);
 
                                 }
@@ -474,7 +484,7 @@ namespace MTDBCreator.DmsExporter.IO
                             {
                                 while (reader.Read())
                                 {
-                                    var line = string.Format("{0},\"{1}\",\"{2}\",{3},{4},{5},{6},{7},{8},{9},{10}",
+                                    var line = string.Format("{0}{11}\"{1}\"{11}\"{2}\"{11}{3}{11}{4}{11}{5}{11}{6}{11}{7}{11}{8}{11}{9}{11}{10}",
                                                                 !Convert.IsDBNull(reader.GetValue(0)) ? reader.GetValue(0) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : "",
@@ -485,7 +495,8 @@ namespace MTDBCreator.DmsExporter.IO
                                                                 !Convert.IsDBNull(reader.GetValue(7)) ? reader.GetValue(7) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(8)) ? reader.GetValue(8) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(9)) ? reader.GetValue(9) : 0,
-                                                                !Convert.IsDBNull(reader.GetValue(10)) ? reader.GetValue(10) : 0);
+                                                                !Convert.IsDBNull(reader.GetValue(10)) ? reader.GetValue(10) : 0,
+                                                                m_separator);
                                     writer.WriteLine(line);
 
                                 }
@@ -501,7 +512,7 @@ namespace MTDBCreator.DmsExporter.IO
 
                             using (var writer = new StreamWriter(directory + "tempMassTagToProteins.txt"))
                             {
-                                var header = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}",
+                                var header = string.Format("{0}{11}{1}{11}{2}{11}{3}{11}{4}{11}{5}{11}{6}{11}{7}{11}{8}{11}{9}{11}{10}",
                                                             "Mass_Tag_ID",
                                                             "Mass_Tag_Name",
                                                             "Ref_ID",
@@ -512,13 +523,14 @@ namespace MTDBCreator.DmsExporter.IO
                                                             "Residue_End",
                                                             "Repeat_Count",
                                                             "Terminus_State",
-                                                            "Missed_Cleavage_Count"
+                                                            "Missed_Cleavage_Count",
+                                                            m_separator
                                                             );
                                 writer.WriteLine(header);
                                 var i = 0;
                                 while (reader.Read())
                                 {
-                                    var line = string.Format("{0},\"{1}\",{2},{3},{4},{5},{6},{7},{8},{9},{10}",
+                                    var line = string.Format("{0}{11}\"{1}\"{11}{2}{11}{3}{11}{4}{11}{5}{11}{6}{11}{7}{11}{8}{11}{9}{11}{10}",
                                                                 !Convert.IsDBNull(reader.GetValue(0)) ? reader.GetValue(0) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : 0,
@@ -529,7 +541,8 @@ namespace MTDBCreator.DmsExporter.IO
                                                                 !Convert.IsDBNull(reader.GetValue(7)) ? reader.GetValue(7) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(8)) ? reader.GetValue(8) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(9)) ? reader.GetValue(9) : 0,
-                                                                !Convert.IsDBNull(reader.GetValue(10)) ? reader.GetInt16(10) : 0);
+                                                                !Convert.IsDBNull(reader.GetValue(10)) ? reader.GetInt16(10) : 0,
+                                                                m_separator);
                                     writer.WriteLine(line);
                                     i++;
                                 }
@@ -543,7 +556,7 @@ namespace MTDBCreator.DmsExporter.IO
                             {
                                 while (reader.Read())
                                 {
-                                    var line = string.Format("{0},\"{1}\",{2},{3},{4},{5},{6},{7},{8},{9},{10}",
+                                    var line = string.Format("{0}{11}\"{1}\"{11}{2}{11}{3}{11}{4}{11}{5}{11}{6}{11}{7}{11}{8}{11}{9}{11}{10}",
                                                                 !Convert.IsDBNull(reader.GetValue(0)) ? reader.GetValue(0) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : "",
                                                                 !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : 0,
@@ -554,7 +567,8 @@ namespace MTDBCreator.DmsExporter.IO
                                                                 !Convert.IsDBNull(reader.GetValue(7)) ? reader.GetValue(7) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(8)) ? reader.GetValue(8) : 0,
                                                                 !Convert.IsDBNull(reader.GetValue(9)) ? reader.GetValue(9) : 0,
-                                                                !Convert.IsDBNull(reader.GetValue(10)) ? reader.GetInt16(10) : 0);
+                                                                !Convert.IsDBNull(reader.GetValue(10)) ? reader.GetInt16(10) : 0,
+                                                                m_separator);
                                     writer.WriteLine(line);
                                 }
                                 reader.Close();
@@ -568,7 +582,7 @@ namespace MTDBCreator.DmsExporter.IO
 
                             using (var writer = new StreamWriter(directory + "tempAnalysisDescription.txt"))
                             {
-                                var fieldNames = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},{29}",
+                                var fieldNames = string.Format("{0}{30}{1}{30}{2}{30}{3}{30}{4}{30}{5}{30}{6}{30}{7}{30}{8}{30}{9}{30}{10}{30}{11}{30}{12}{30}{13}{30}{14}{30}{15}{30}{16}{30}{17}{30}{18}{30}{19}{30}{20}{30}{21}{30}{22}{30}{23}{30}{24}{30}{25}{30}{26}{30}{27}{30}{28}{30}{29}",
                                                             "Job",
                                                             "Dataset",
                                                             "Dataset_ID",
@@ -598,19 +612,14 @@ namespace MTDBCreator.DmsExporter.IO
                                                             "ScanTime_Net_Fit",
                                                             "Regression_Order",
                                                             "Regression_Filtered_Data_Count",
-                                                            "Regression_Equation");
+                                                            "Regression_Equation",
+                                                            m_separator);
                                 writer.WriteLine(fieldNames);
-                                row = 0;
                                 while (reader.Read())
                                 {
-                                    if (row == 429)
-                                    {
-                                        Console.WriteLine("Breaks");
-                                    }
-                                    row++;
                                     var line =
                                         string.Format(
-                                            "{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},\"{17}\",\"{18}\",{19},{20},{21},{22},{23},{24},{25},{26},{27},{28},\"{29}\"",
+                                            "{0}{30}{1}{30}{2}{30}{3}{30}{4}{30}{5}{30}{6}{30}{7}{30}{8}{30}{9}{30}{10}{30}{11}{30}{12}{30}{13}{30}{14}{30}{15}{30}{16}{30}\"{17}\"{30}\"{18}\"{30}{19}{30}{20}{30}{21}{30}{22}{30}{23}{30}{24}{30}{25}{30}{26}{30}{27}{30}{28}{30}\"{29}\"",
                                             !Convert.IsDBNull(reader.GetValue(0)) ? reader.GetValue(0) : 0,
                                             !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : "",
                                             !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : 0,
@@ -640,7 +649,8 @@ namespace MTDBCreator.DmsExporter.IO
                                             !Convert.IsDBNull(reader.GetValue(26)) ? reader.GetValue(26) : 0,
                                             !Convert.IsDBNull(reader.GetValue(27)) ? reader.GetValue(27) : 0,
                                             !Convert.IsDBNull(reader.GetValue(28)) ? reader.GetValue(28) : 0,
-                                            !Convert.IsDBNull(reader.GetValue(29)) ? reader.GetValue(29) : ""
+                                            !Convert.IsDBNull(reader.GetValue(29)) ? reader.GetValue(29) : "",
+                                            m_separator
                                             );
                                     writer.WriteLine(line);
                                 }
@@ -654,23 +664,25 @@ namespace MTDBCreator.DmsExporter.IO
 
                             using (var writer = new StreamWriter(directory + "tempFilterSet.txt"))
                             {
-                                var header = string.Format("{0},{1},{2},{3},{4}",
+                                var header = string.Format("{0}{5}{1}{5}{2}{5}{3}{5}{4}",
                                                             "Filter_Type",
                                                             "Filter_Set_ID",
                                                             "Extra_Info",
                                                             "Filter_Set_Name",
-                                                            "Filter_Set_Description"
+                                                            "Filter_Set_Description",
+                                                            m_separator
                                                             );
                                 writer.WriteLine(header);
 
                                 while (reader.Read())
                                 {
-                                    var line = string.Format("{0},{1},{2},\"{3}\",\"{4}\"",
+                                    var line = string.Format("{0}{5}{1}{5}{2}{5}\"{3}\"{5}\"{4}\"",
                                                             !Convert.IsDBNull(reader.GetValue(0)) ? reader.GetValue(0) : 0,
                                                             !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : 0,
                                                             !Convert.IsDBNull(reader.GetValue(2)) ? reader.GetValue(2) : "",
                                                             !Convert.IsDBNull(reader.GetValue(3)) ? reader.GetValue(3) : "",
-                                                            !Convert.IsDBNull(reader.GetValue(4)) ? reader.GetValue(4) : "");
+                                                            !Convert.IsDBNull(reader.GetValue(4)) ? reader.GetValue(4) : "",
+                                                            m_separator);
                                     writer.WriteLine(line);
                                 }
                                 reader.Close();
@@ -810,8 +822,7 @@ namespace MTDBCreator.DmsExporter.IO
                                 peptideOptions.FilterSetId = (!Convert.IsDBNull(reader.GetValue(2)) ? reader.GetInt32(2) : 0);//GetDBString(reader, 2); //reader.GetInt32(2);
                                 peptideOptions.FilterSetName = GetDBString(reader, 3);
                                 peptideOptions.FilterSetDescription = GetDBString(reader, 4);
-
-
+                                
                                 statsDictionary.Add(Convert.ToDouble(peptideOptions.PmtQualityScore), peptideOptions);
 
                             }

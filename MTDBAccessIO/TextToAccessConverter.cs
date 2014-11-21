@@ -6,7 +6,7 @@ namespace MTDBAccessIO
 {
     public class TextToAccessConverter : ITextToDbConverter
     {
-        public void Convert(string path)
+        public void ConvertToDbFormat(string path)
         {
 
             ACCESS.Application accApplicaiton = new ACCESS.Application();

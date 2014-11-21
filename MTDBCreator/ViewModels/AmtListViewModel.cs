@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Data;
 using Microsoft.Win32;
 using MTDBCreator.DmsExporter.Data;
 using MTDBCreator.DmsExporter.IO;
@@ -108,10 +109,15 @@ namespace MTDBCreator.ViewModels
                 {
                     var path = dialog.FileName;
 
+                    if (path.EndsWith(".mdb"))
+                    {
+                        Lookup.Separator = ',';
+                    }
+
                     Lookup.ExportToText(path, SelectedDb, SelectedStats);
 
                     var exporter = TextToDbConverterFactory.Create(path);
-                    exporter.Convert(path);
+                    exporter.ConvertToDbFormat(path);
                 }
             }    
         }

@@ -158,8 +158,8 @@ namespace MTDBFramework.IO
             var results = new List<MsgfPlusResult>();
 			// Set a large buffer size. Doesn't affect gzip reading speed, but speeds up non-gzipped
 	        Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 65536);
-            
-            if (path.EndsWith(".mzid.gz"))
+
+            if (path.EndsWith(".mzid.gz") || path.EndsWith(".zip"))
             {
                 file = new GZipStream(file, CompressionMode.Decompress);
             }

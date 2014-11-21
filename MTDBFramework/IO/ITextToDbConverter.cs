@@ -1,10 +1,12 @@
-﻿namespace MTDBFramework.IO
+﻿using FluentNHibernate.Automapping;
+
+namespace MTDBFramework.IO
 {
     /// <summary>
     /// Interface for converting text file to a database file
     /// </summary>
     public interface ITextToDbConverter
     {
-        void Convert(string path);
+        void ConvertToDbFormat(string path);
     }
 }
