@@ -7,6 +7,11 @@ namespace MTDBFramework.IO
     /// </summary>
     public interface ITextToDbConverter
     {
+        /// <summary>
+        /// Interface for converting temporarily saved .txt files to database
+        /// at designated path
+        /// </summary>
+        /// <param name="path">Location of saved database</param>
         void ConvertToDbFormat(string path);
     }
 }
