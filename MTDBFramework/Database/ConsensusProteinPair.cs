@@ -48,12 +48,12 @@ namespace MTDBFramework.Database
 		/// <summary>
 		/// Residue Start Position
 		/// </summary>
-        public short ResidueStart { get; set; }
+        public int ResidueStart { get; set; }
 
 		/// <summary>
 		/// Residue End Position
 		/// </summary>
-        public short ResidueEnd { get; set; }
+        public int ResidueEnd { get; set; }
 
 		/// <summary>
 		/// Overloaded equality comparison

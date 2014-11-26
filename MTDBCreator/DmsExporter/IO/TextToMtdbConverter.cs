@@ -99,7 +99,6 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd.CommandText = ctInsertText + ctValue;
                             cmd.ExecuteNonQuery();
                         }
-                        //trans.Commit();
 
                         var protInsertText = "Insert into ProteinInformation (ProteinId, ProteinName) " +
                                        " VALUES (";
@@ -113,7 +112,6 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd.CommandText = protInsertText + protValue;
                             cmd.ExecuteNonQuery();
                         }
-                        //trans.Commit();
 
                         Console.WriteLine("Proteins in");
 
@@ -132,7 +130,6 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd.CommandText = ptmInsertText + ptmValue;
                             cmd.ExecuteNonQuery();
                         }
-                        //trans.Commit();
 
                         var evInsertText = "Insert into Evidence (EvidenceId, Charge, ObservedNet, " +
                                        " NetShift, Mz, Scan, DelM, DelMPpm, QValue, SpecProb, " +
@@ -336,8 +333,8 @@ namespace MTDBCreator.DmsExporter.IO
                     var prot_id = Convert.ToInt32(rowPieces[2]);
                     var ctToProt = new ConsensusProteinPair();
                     ctToProt.CleavageState = Convert.ToInt16(rowPieces[3]);
-                    ctToProt.ResidueStart = Convert.ToInt16(rowPieces[6]);
-                    ctToProt.ResidueEnd = Convert.ToInt16(rowPieces[7]);
+                    ctToProt.ResidueStart = Convert.ToInt32(rowPieces[6]);
+                    ctToProt.ResidueEnd = Convert.ToInt32(rowPieces[7]);
                     ctToProt.TerminusState = Convert.ToInt16(rowPieces[9]);
                     ctToProt.ConsensusId = m_idToConensusTargetDict[mt_id].Id;
                     ctToProt.ProteinId = m_idToProteinDict[prot_id].Id;

@@ -110,7 +110,7 @@ namespace MTDBAccessIO
 
                 var target = new ConsensusTarget
                 {
-                    Id = Convert.ToInt16(pieces[0]),
+                    Id = Convert.ToInt32(pieces[0]),
                     TheoreticalMonoIsotopicMass = Convert.ToDouble(pieces[1]),
                     AverageNet = Convert.ToDouble(pieces[2]),
                     PredictedNet = Convert.ToDouble(pieces[3]),
