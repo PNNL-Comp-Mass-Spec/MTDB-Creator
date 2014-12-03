@@ -64,6 +64,15 @@ namespace MTDBCreator.DmsExporter.IO
             CreateDataTables(path);
 
             PutDataIntoDatabase(path);
+
+            File.Delete(directory + "tempMassTags.txt");
+            File.Delete(directory + "tempPeptides.txt");
+            File.Delete(directory + "tempModInfo.txt");
+            File.Delete(directory + "tempMassTagsNet.txt");
+            File.Delete(directory + "tempProteins.txt");
+            File.Delete(directory + "tempMassTagToProteins.txt");
+            File.Delete(directory + "tempAnalysisDescription.txt");
+            File.Delete(directory + "tempFilterSet.txt");
         }
 
         private void PutDataIntoDatabase(string path)

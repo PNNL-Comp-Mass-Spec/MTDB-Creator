@@ -43,7 +43,10 @@ namespace MTDBAccessIO
                 TableName: "V_Filter_Set_Overview_Ex", FileName: directory + "tempFilterSet.txt", HasFieldNames: true);
             accApplicaiton.CloseCurrentDatabase();
             accApplicaiton.Quit();
+
             File.Delete(directory + "tempMassTags.txt");
+            File.Delete(directory + "tempPeptides.txt");
+            File.Delete(directory + "tempModInfo.txt");
             File.Delete(directory + "tempMassTagsNet.txt");
             File.Delete(directory + "tempProteins.txt");
             File.Delete(directory + "tempMassTagToProteins.txt");
