@@ -43,7 +43,6 @@ namespace MTDBFramework.IO
                 // populate the database
 	            using (var transaction = session.BeginTransaction())
 	            {
-		            //session.Save(options);
 	                session.Insert(options);
 					/* This section breaks up the Target object, pulling out the individual TargetDataSet,  SequenceInfo,
                      * and TargetPeptideInfo. These objects are then "reverse linked", so that each of these objects 
@@ -54,7 +53,6 @@ namespace MTDBFramework.IO
                     var currentTarget   = 0;
                     var currentEv       = 0;
                     var datasetCount    = 0;
-	                //var sessCount = 0;
                     var total = database.ConsensusTargets.Count;
 		            foreach (var consensusTarget in database.ConsensusTargets)
 		            {
@@ -70,7 +68,6 @@ namespace MTDBFramework.IO
 			            consensusTarget.ModificationCount = consensusTarget.Evidences[0].ModificationCount;
 			            consensusTarget.ModificationDescription = consensusTarget.Evidences[0].ModificationDescription;
 			            consensusTarget.MultiProteinCount = consensusTarget.Evidences[0].MultiProteinCount;
-			            //session.SaveOrUpdate(consensusTarget);
 		                session.Insert(consensusTarget);
                         foreach (var evidence in consensusTarget.Evidences)
                         {
@@ -113,7 +110,6 @@ namespace MTDBFramework.IO
 				            {
 				                protein.Id = 0;
 					            m_uniqueProteins.Add(protein.ProteinName, protein);
-					            //session.SaveOrUpdate(protein);
 				                session.Insert(protein);
 				            }
 				            var cProt = m_uniqueProteins[protein.ProteinName];
@@ -128,7 +124,6 @@ namespace MTDBFramework.IO
 				            };
 			                session.Insert(cPPair);
                             
-			                //session.SaveOrUpdate(cPPair);
 				            consensusTarget.ConsensusProtein.Add(cPPair);
 			            }
 
@@ -137,7 +132,6 @@ namespace MTDBFramework.IO
 				            if (!m_uniquePtms.ContainsKey(ptm.Name))
 				            {
 					            m_uniquePtms.Add(ptm.Name, ptm);
-				                //session.SaveOrUpdate(ptm);
                                 session.Insert(ptm);
 				            }
 				            var cPtmPair = new ConsensusPtmPair
@@ -148,10 +142,8 @@ namespace MTDBFramework.IO
                                 Target = consensusTarget,
 				                ConsensusId = consensusTarget.Id
 				            };
-			                //session.SaveOrUpdate(cPtmPair);
 			                session.Insert(cPtmPair);
 			            }
-		                //currentTarget++;
 		            }
 
                     OnProgressChanged(new MtdbProgressChangedEventArgs(currentTarget, total, MtdbCreationProgressType.COMMIT.ToString()));

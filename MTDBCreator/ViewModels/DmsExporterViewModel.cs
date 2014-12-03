@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MTDBCreator.DmsExporter.IO;
+﻿using MTDBCreator.DmsExporter.IO;
+using MTDBFramework.UI;
 
 namespace MTDBCreator.ViewModels
 {
-    public class DmsExporterViewModel: ViewModelBase
+    public class DmsExporterViewModel: ObservableObject
     {
         private DmsLookupUtility m_lookup;
 

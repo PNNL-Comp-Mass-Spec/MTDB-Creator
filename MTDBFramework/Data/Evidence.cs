@@ -48,7 +48,7 @@ namespace MTDBFramework.Data
         private IList<ProteinInformation> m_proteins;
 
 	    private double m_discriminantValue; // holder for QValue (msgf+/mzid), Log Peptide E Value (Xtandem),
-                                 // xCorr (sequest) or EValue (MSAlign) depending on dataset type.
+                                            // xCorr (sequest) or EValue (MSAlign) depending on dataset type.
 
         // SequenceInfo fields
         private short m_isSeqInfoExist;

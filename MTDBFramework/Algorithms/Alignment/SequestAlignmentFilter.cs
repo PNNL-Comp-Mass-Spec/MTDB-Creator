@@ -32,7 +32,6 @@ namespace MTDBFramework.Algorithms.Alignment
         /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
         public bool ShouldFilter(Evidence evidence)
         {
-            // In the alignment we will only use the unmodified peptides
             if (evidence.ModificationCount > FilterOptions.MaxModsForAlignment)
             {
                 return true;

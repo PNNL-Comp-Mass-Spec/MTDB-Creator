@@ -9,7 +9,7 @@ namespace MTDBAccessIO
         public void ConvertToDbFormat(string path)
         {
 
-            ACCESS.Application accApplicaiton = new ACCESS.Application();
+            var accApplicaiton = new ACCESS.Application();
 
             var pieces = path.Split('\\');
             string directory = "";

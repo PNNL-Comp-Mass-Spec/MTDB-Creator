@@ -3,10 +3,8 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
-using Microsoft.VisualBasic;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.Dialog;
@@ -124,12 +122,6 @@ namespace MTDBCreator.Windows
                                     formatInfo.Format = LcmsIdentificationTool.MSAlign;
                                 }
                                 
-                                //Check to separate Sequest Files from MSGF+ files due to similar extensions
-                                //if ((formatInfo.Format == LcmsIdentificationTool.Sequest) &&
-                                //    file.Name.EndsWith("msgfdb_syn.txt"))
-                                //{
-                                //    continue;
-                                //}
                                 AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file.FullName,
                                     formatInfo.Format));
 

@@ -38,14 +38,6 @@ namespace MTDBCreator.PageControls
     /// </summary>
     public class MTDBCreatorTabPage : TabItem
     {
-        // Default static constructor - DO NOT USE!
-        // Otherwise, the display of the new tab page will be abnormal
-
-        //static MTDBCreatorTabPage()
-        //{
-        //    DefaultStyleKeyProperty.OverrideMetadata(typeof(MTDBCreatorTabPage), new FrameworkPropertyMetadata(typeof(MTDBCreatorTabPage)));
-        //}
-
         public MTDBCreatorTabPage(string pageTitle, Image pageImage, UserControl contentControl, RoutedEventHandler closeHandler)
         {
             ContentUserControl = contentControl;

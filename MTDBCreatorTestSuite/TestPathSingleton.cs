@@ -21,19 +21,14 @@ namespace MTDBCreatorTestSuite
 			// Find the bin folder...
 	        while (!string.IsNullOrWhiteSpace(dirFinder) && !dirFinder.EndsWith("bin"))
 	        {
-				//Console.WriteLine("Project: " + dirFinder);
 		        dirFinder = System.IO.Path.GetDirectoryName(dirFinder);
 	        }
-			//Console.WriteLine("Project: " + dirFinder);
 			// The Directory for MTDBCreatorTestSuite
 			TestSuiteDirectory = System.IO.Path.GetDirectoryName(dirFinder);
 			// The TestSuite\TestData Directory
 			TestSuiteTestDataDirectory = System.IO.Path.Combine(TestSuiteDirectory, "TestData");
 			// The Project/Solution Directory
 			ProjectDirectory = System.IO.Path.GetDirectoryName(TestSuiteDirectory);
-			//Console.WriteLine("TestSuite: " + TestSuiteDirectory);
-			//Console.WriteLine("TestSuiteTestData: " + TestSuiteTestDataDirectory);
-			//Console.WriteLine("ProjectDir: " + ProjectDirectory);
         }
 
         public static string TestDirectory

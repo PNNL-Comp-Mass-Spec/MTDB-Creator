@@ -21,9 +21,6 @@ namespace MTDBCreator.ViewModels.TreeView
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Charge: ", m_evidence.Charge.ToString())));
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Mass: ", m_evidence.MonoisotopicMass.ToString())));
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Observed Net: ", m_evidence.ObservedNet.ToString())));
-            //m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Predicted Net: ", m_evidence.PredictedNet.ToString())));
-            //m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Sequence: ", m_evidence.Sequence)));
-            //m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Clean Peptide: ", m_evidence.CleanPeptide)));
             m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Originating Dataset: ", m_evidence.DataSet.Name)));
         }
     }

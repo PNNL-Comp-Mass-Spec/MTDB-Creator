@@ -146,21 +146,8 @@ namespace MTDBFramework.Algorithms
 		        }
 		        consensusTarget.CalculateStatistics();
 		        tempConsensusTargets.Add(consensusTarget);
-		        //targetDatabase.AddConsensusTarget(consensusTarget);
-		        //foreach (var protein in consensusTarget.Proteins)
-		        //{
-		        //    if (!proteinDict.ContainsKey(protein.ProteinName))
-		        //    {
-		        //        proteinDict.Add(protein.ProteinName, protein);
-                        // Don't need to manually link the first consensus to the protein
-		        //        continue;
-		        //    }
-                //    proteinDict[protein.ProteinName].Consensus.Add(consensusTarget);
-		        //}
 		    }
-
-		    //targetDatabase.Proteins = proteinDict.Values.ToList();
-
+            
 		    var massTagLightTargets = new List<UMCLight>();
             foreach (var evidence in tempConsensusTargets)
             {
@@ -198,9 +185,6 @@ namespace MTDBFramework.Algorithms
             //For performing net warping without mass correction
             options.AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP;
             var lcmsNetAligner = new LcmsWarpAdapter(options);
-
-            //var allShift = File.CreateText(@"D:\testResults\AllNetShifts.txt");
-            //var medShift = File.CreateText(@"D:\testResults\MedNetShifts.txt");
 
             //Foreach dataset
             foreach (var dataSet in dataSets)

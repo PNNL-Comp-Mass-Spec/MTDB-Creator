@@ -59,14 +59,14 @@ namespace MTDBFramework.IO
 		/// <summary>
 		/// ReaderOption
 		/// </summary>
-        public Data.Options ReaderOptions { get; set; }
+        public Options ReaderOptions { get; set; }
 
 		/// <summary>
 		/// File Reader
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
-        public abstract Data.LcmsDataSet Read(string path);
+        public abstract LcmsDataSet Read(string path);
 
 		/// <summary>
 		/// Allow thread cancellation
@@ -300,13 +300,6 @@ namespace MTDBFramework.IO
 
             OnProgressChanged(new PercentCompleteEventArgs(percentCompleteEffective, currentTask));
         }
-
-        //void mNETPredictor_ProgressChanged(object sender, PercentCompleteEventArgs e)
-        //{
-        //    float percentCompleteEffective = PROGRESS_PCT_PEPTIDES_LOADED + e.PercentComplete * (PROGRESS_PCT_COMPLETE - PROGRESS_PCT_PEPTIDES_LOADED) / 100;
-
-        //    OnProgressChanged(new PercentCompleteEventArgs(percentCompleteEffective, "Computing NETs"));
-        //}
 
         #endregion
 

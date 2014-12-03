@@ -228,6 +228,14 @@ namespace MTDBCreator.DmsExporter.IO
             m_connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Writes the information from the database to a set of temporary
+        /// files which are deleted when the database is fully written. This
+        /// workflow is necesary for the batch writing to sql or access file
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="selectedDb"></param>
+        /// <param name="selectedStats"></param>
         public void ExportToText(string path, AmtInfo selectedDb, AmtPeptideOptions selectedStats)
         {
             var pieces = path.Split('\\');
@@ -265,7 +273,6 @@ namespace MTDBCreator.DmsExporter.IO
                             var cmd = new SqlCommand(massTagSql, connection);
                             var reader = cmd.ExecuteReader();
 
-                            //Write the mass tags to a temporary file
                             var modDescriptions = new List<string>();
                             using (var writer = new StreamWriter(directory + "tempMassTags.txt"))
                             {
@@ -394,9 +401,7 @@ namespace MTDBCreator.DmsExporter.IO
                             var massTagNetSql = MassTagNetAccessDbQuery(selectedStats);
                             cmd = new SqlCommand(massTagNetSql, connection);
                             reader = cmd.ExecuteReader();
-
-                            //Write the MassTagsNet to a temporary file
-
+                            
                             using (var writer = new StreamWriter(directory + "tempMassTagsNet.txt"))
                             {
                                 var header = string.Format("{0}{8}{1}{8}{2}{8}{3}{8}{4}{8}{5}{8}{6}{8}{7}",
@@ -690,7 +695,6 @@ namespace MTDBCreator.DmsExporter.IO
 
                         Console.WriteLine(msg);
 
-                        //Delay for 3 second before trying again
                         System.Threading.Thread.Sleep(3000);
                     }
                 }
@@ -808,9 +812,9 @@ namespace MTDBCreator.DmsExporter.IO
                             {
                                 var peptideOptions = new AmtPeptideOptions();
 
-                                peptideOptions.PmtQualityScore = reader.GetDecimal(0); //reader.GetDouble(0);
-                                peptideOptions.MtCountPassing = reader.GetInt32(1); //reader.GetInt32(1);
-                                peptideOptions.FilterSetId = (!Convert.IsDBNull(reader.GetValue(2)) ? reader.GetInt32(2) : 0);//GetDBString(reader, 2); //reader.GetInt32(2);
+                                peptideOptions.PmtQualityScore = reader.GetDecimal(0);
+                                peptideOptions.MtCountPassing = reader.GetInt32(1);
+                                peptideOptions.FilterSetId = (!Convert.IsDBNull(reader.GetValue(2)) ? reader.GetInt32(2) : 0);
                                 peptideOptions.FilterSetName = GetDBString(reader, 3);
                                 peptideOptions.FilterSetDescription = GetDBString(reader, 4);
                                 

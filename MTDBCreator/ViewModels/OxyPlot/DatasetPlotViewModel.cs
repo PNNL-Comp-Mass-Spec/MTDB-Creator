@@ -174,7 +174,6 @@ namespace MTDBCreator.ViewModels
             };
         }
 
-        //public ScatterSeries MakeAnalysisScatterSeries(AnalysisJobItem analysisJobItem, Options options)
         public ScatterSeries MakeNetAnalysisScatterSeries(AnalysisJobItem analysisJobItem, Options options)
         {
             var color = m_SeriesColorDictionary[analysisJobItem.FilePath];
@@ -271,7 +270,6 @@ namespace MTDBCreator.ViewModels
             return scatterSeries;
         }
 
-        // DEGAN TESTING END
 
         public LineAnnotation MakeRegressionLineAnnotation(AnalysisJobItem analysisJobItem)
         {
@@ -321,7 +319,6 @@ namespace MTDBCreator.ViewModels
                     }
                     else
                     {
-                        // Degan test stuff
                         switch (i)
                         {
                             case 0:

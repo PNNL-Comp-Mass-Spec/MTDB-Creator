@@ -180,7 +180,7 @@
     <Compile Include="Helpers\ErrorHelper.cs" />
     <Compile Include="Helpers\HashHelper.cs" />
     <Compile Include="Helpers\OptionsParameterConverter.cs" />
-    <Compile Include="ViewModelBase.cs" />
+    <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="ViewModels\AmtListViewModel.cs" />
     <Compile Include="ViewModels\AmtPeptideOptionsViewModel.cs" />
     <Compile Include="ViewModels\DmsExporterViewModel.cs" />
@@ -199,7 +199,6 @@
     <Compile Include="Views\PageControls\MTDBCreatorTabPage.cs" />
     <Compile Include="Helpers\GraphHelper.cs" />
     <Compile Include="Helpers\RecentAnalysisJobHelper.cs" />
-    <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="ViewModels\AnalysisJobViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="Views\Windows\AddDataWindow.xaml.cs">

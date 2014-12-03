@@ -198,7 +198,6 @@ namespace MTDBCreator.DmsExporter.IO
         {
             using (var reader = new StreamReader(directory + "tempModInfo.txt"))
             {
-                // Read the header
                 reader.ReadLine();
                 var row = reader.ReadLine();
                 while (!string.IsNullOrEmpty(row))
@@ -216,8 +215,7 @@ namespace MTDBCreator.DmsExporter.IO
 
             using (var reader = new StreamReader(directory + "tempMassTags.txt"))
             {
-                // Read the header
-                var header = reader.ReadLine();
+                reader.ReadLine();
                 var row = reader.ReadLine();
                 while (!string.IsNullOrEmpty(row))
                 {
@@ -287,7 +285,7 @@ namespace MTDBCreator.DmsExporter.IO
 
             using (var reader = new StreamReader(directory + "tempMassTagsNet.txt"))
             {
-                var header = reader.ReadLine();
+                reader.ReadLine();
                 var row = reader.ReadLine();
                 while (!string.IsNullOrEmpty(row))
                 {
@@ -305,7 +303,7 @@ namespace MTDBCreator.DmsExporter.IO
             var proteinId = 1;
             using (var reader = new StreamReader(directory + "tempProteins.txt"))
             {
-                var header = reader.ReadLine();
+                reader.ReadLine();
                 var row = reader.ReadLine();
                 while (!string.IsNullOrEmpty(row))
                 {
@@ -322,7 +320,7 @@ namespace MTDBCreator.DmsExporter.IO
             var cppId = 1;
             using (var reader = new StreamReader(directory + "tempMassTagToProteins.txt"))
             {
-                var header = reader.ReadLine();
+                reader.ReadLine();
                 var row = reader.ReadLine();
                 while (!string.IsNullOrEmpty(row))
                 {
@@ -347,7 +345,7 @@ namespace MTDBCreator.DmsExporter.IO
             var evId = 1;
             using (var reader = new StreamReader(directory + "tempPeptides.txt"))
             {
-                var header = reader.ReadLine();
+                reader.ReadLine();
                 var row = reader.ReadLine();
                 while (!string.IsNullOrEmpty(row))
                 {
