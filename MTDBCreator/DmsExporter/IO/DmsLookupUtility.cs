@@ -15,8 +15,6 @@ namespace MTDBCreator.DmsExporter.IO
 
         private const string MainConnectionString = "Data Source=pogo;Initial Catalog=MT_Main;Integrated Security=SSPI";
 
-        private const string TemplateConnectionString = "Data Source=pogo;Initial Catalog=MT_Template;Integrated Security=SSPI";
-
         private const int MaxRetries = 3;
 
         #endregion
@@ -258,13 +256,13 @@ namespace MTDBCreator.DmsExporter.IO
                 {
                     try
                     {
-                        using (var cnDB = new SqlConnection(connectionString))
+                        using (var connection = new SqlConnection(connectionString))
                         {
-                            cnDB.Open();
+                            connection.Open();
 
                             var massTagSql = MassTagAccessDbQuery(selectedStats);
                             
-                            var cmd = new SqlCommand(massTagSql, cnDB);
+                            var cmd = new SqlCommand(massTagSql, connection);
                             var reader = cmd.ExecuteReader();
 
                             //Write the mass tags to a temporary file
@@ -331,11 +329,8 @@ namespace MTDBCreator.DmsExporter.IO
                                 }
                                 reader.Close();
                             }
-
                             var chargeSql = MassTagChargeDbQuery();
-                            //var templateDB = new SqlConnection(TemplateConnectionString);
-                            //templateDB.Open();
-                            cmd = new SqlCommand(chargeSql, cnDB);
+                            cmd = new SqlCommand(chargeSql, connection);
                             reader = cmd.ExecuteReader();
 
                             using (var writer = new StreamWriter(directory + "tempPeptides.txt"))
@@ -368,7 +363,7 @@ namespace MTDBCreator.DmsExporter.IO
                                 }
                                 reader.Close();
                             }
-
+                            
                             var massTagModsSql = ModAccessDbQuery();
                             var mainDb = new SqlConnection(MainConnectionString);
                             mainDb.Open();
@@ -395,9 +390,9 @@ namespace MTDBCreator.DmsExporter.IO
                                 reader.Close();
                             }
                             mainDb.Close();
-
+                            
                             var massTagNetSql = MassTagNetAccessDbQuery(selectedStats);
-                            cmd = new SqlCommand(massTagNetSql, cnDB);
+                            cmd = new SqlCommand(massTagNetSql, connection);
                             reader = cmd.ExecuteReader();
 
                             //Write the MassTagsNet to a temporary file
@@ -433,11 +428,10 @@ namespace MTDBCreator.DmsExporter.IO
                                 reader.Close();
                             }
 
-
                             var proteinsSql = ProteinsAccessDbQuery(selectedStats);
                             var proteinsNullCollectionSql = ProteinsNullCollectionAccessDbQuery(selectedStats);
 
-                            cmd = new SqlCommand(proteinsSql, cnDB);
+                            cmd = new SqlCommand(proteinsSql, connection);
                             reader = cmd.ExecuteReader();
 
                             using (var writer = new StreamWriter(directory + "tempProteins.txt"))
@@ -477,7 +471,8 @@ namespace MTDBCreator.DmsExporter.IO
                                 }
                                 reader.Close();
                             }
-                            cmd = new SqlCommand(proteinsNullCollectionSql, cnDB);
+
+                            cmd = new SqlCommand(proteinsNullCollectionSql, connection);
                             reader = cmd.ExecuteReader();
 
                             using (var writer = new StreamWriter(directory + "tempProteins.txt", true))
@@ -503,11 +498,10 @@ namespace MTDBCreator.DmsExporter.IO
                                 reader.Close();
                             }
 
-
                             var massTagToProt = MassTagToProteinMapAccessDbQuery(selectedStats);
                             var massTagNullToProt = MassTagNullToProteinMapAccessDbQuery(selectedStats);
 
-                            cmd = new SqlCommand(massTagToProt, cnDB);
+                            cmd = new SqlCommand(massTagToProt, connection);
                             reader = cmd.ExecuteReader();
 
                             using (var writer = new StreamWriter(directory + "tempMassTagToProteins.txt"))
@@ -527,7 +521,6 @@ namespace MTDBCreator.DmsExporter.IO
                                                             m_separator
                                                             );
                                 writer.WriteLine(header);
-                                var i = 0;
                                 while (reader.Read())
                                 {
                                     var line = string.Format("{0}{11}\"{1}\"{11}{2}{11}{3}{11}{4}{11}{5}{11}{6}{11}{7}{11}{8}{11}{9}{11}{10}",
@@ -544,12 +537,11 @@ namespace MTDBCreator.DmsExporter.IO
                                                                 !Convert.IsDBNull(reader.GetValue(10)) ? reader.GetInt16(10) : 0,
                                                                 m_separator);
                                     writer.WriteLine(line);
-                                    i++;
                                 }
                                 reader.Close();
                             }
 
-                            cmd = new SqlCommand(massTagNullToProt, cnDB);
+                            cmd = new SqlCommand(massTagNullToProt, connection);
                             reader = cmd.ExecuteReader();
 
                             using (var writer = new StreamWriter(directory + "tempMassTagToProteins.txt", true))
@@ -574,10 +566,9 @@ namespace MTDBCreator.DmsExporter.IO
                                 reader.Close();
                             }
 
-
                             var analysisDescription = AnalysisDescriptionAccessDbQuery();
 
-                            cmd = new SqlCommand(analysisDescription, cnDB);
+                            cmd = new SqlCommand(analysisDescription, connection);
                             reader = cmd.ExecuteReader();
 
                             using (var writer = new StreamWriter(directory + "tempAnalysisDescription.txt"))
@@ -656,10 +647,10 @@ namespace MTDBCreator.DmsExporter.IO
                                 }
                                 reader.Close();
                             }
-
+                            
                             var filterSet = FilterSetOverviewAccessDbQuery();
 
-                            cmd = new SqlCommand(filterSet, cnDB);
+                            cmd = new SqlCommand(filterSet, connection);
                             reader = cmd.ExecuteReader();
 
                             using (var writer = new StreamWriter(directory + "tempFilterSet.txt"))
@@ -735,11 +726,11 @@ namespace MTDBCreator.DmsExporter.IO
                 {
                     try
                     {
-                        using (var cnDB = new SqlConnection(m_connectionString))
+                        using (var connection = new SqlConnection(m_connectionString))
                         {
-                            cnDB.Open();
+                            connection.Open();
 
-                            var cmd = new SqlCommand(sql, cnDB);
+                            var cmd = new SqlCommand(sql, connection);
                             var reader = cmd.ExecuteReader();
 
                             while (reader.Read())
@@ -806,11 +797,11 @@ namespace MTDBCreator.DmsExporter.IO
                 {
                     try
                     {
-                        using (var cnDB = new SqlConnection(connectionString))
+                        using (var connection = new SqlConnection(connectionString))
                         {
-                            cnDB.Open();
+                            connection.Open();
 
-                            var cmd = new SqlCommand(sql, cnDB);
+                            var cmd = new SqlCommand(sql, connection);
                             var reader = cmd.ExecuteReader();
 
                             while (reader.Read())

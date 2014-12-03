@@ -11,13 +11,11 @@ namespace MTDBCreator.ViewModels
         private DmsLookupUtility m_lookup;
 
         public AmtListViewModel AmtListViewModel { get; set; }
-        public AmtPeptideOptionsViewModel AmtPeptideOptionsViewModel { get; set; }
 
         public DmsExporterViewModel()
         {
             m_lookup = new DmsLookupUtility();
             AmtListViewModel = new AmtListViewModel();
-            AmtPeptideOptionsViewModel = new AmtPeptideOptionsViewModel();
         }
     }
 }

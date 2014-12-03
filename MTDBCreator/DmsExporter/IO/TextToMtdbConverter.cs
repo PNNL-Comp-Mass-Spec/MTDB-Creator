@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
-using System.Runtime.InteropServices;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.IO;
@@ -27,6 +24,10 @@ namespace MTDBCreator.DmsExporter.IO
         private Dictionary<int, List<int>> m_ctToEvidenceMap;
         private Dictionary<int, Evidence> m_evidenceDict;
 
+        /// <summary>
+        /// Writes as the data from DMS to the MTDB format
+        /// </summary>
+        /// <param name="path">Location of the written database</param>
         public void ConvertToDbFormat(string path)
         {
             m_idToMassTagDict = new Dictionary<int, string>();
@@ -112,9 +113,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd.CommandText = protInsertText + protValue;
                             cmd.ExecuteNonQuery();
                         }
-
-                        Console.WriteLine("Proteins in");
-
+                        
                         var ptmInsertText = "Insert into PostTranslationalModification (PostTranslationModId, " +
                                        " Formula, Mass, Name) " +
                                        " VALUES (";
@@ -262,17 +261,16 @@ namespace MTDBCreator.DmsExporter.IO
                     }
                     var fullSequence = sequence;
                     var backPtms = target.Ptms.OrderByDescending(x => x.Location);
-                    if (backPtms.Count() > 1)
-                    {
-                        Console.WriteLine("Multiple ptms");
-                    }
                     foreach (var ptm in backPtms)
                     {
-                        if (ptm.Mass < 0)
+                        if (ptm.Location == rowPieces[1].Length)
                         {
-                            Console.WriteLine("See what writes here");
+                            rowPieces[1] += ptm.Mass.ToString();
                         }
-                        rowPieces[1] = fullSequence.Insert(ptm.Location, ptm.Mass.ToString());
+                        else
+                        {
+                            rowPieces[1] = fullSequence.Insert(ptm.Location, ptm.Mass.ToString());
+                        }
                     }
                     target.EncodedNumericSequence = rowPieces[1];
                     target.Sequence = fullSequence;

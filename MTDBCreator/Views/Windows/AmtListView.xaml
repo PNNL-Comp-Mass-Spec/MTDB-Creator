@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
+             DataContext="{Binding AmtListViewModel}"
              d:DesignHeight="800" d:DesignWidth="1280">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
@@ -52,5 +57,11 @@
             <Button Grid.Column="3" Command="{Binding Path=GetStatsCommand}">Load Statistics</Button>
             <Button Grid.Column="5" Command="{Binding Path=ExportCommand}">Export</Button>
         </Grid>
+
+        <Border Opacity=".8" Grid.Row="0" Grid.RowSpan="3" BorderBrush="Black" BorderThickness="1" Background="DimGray" VerticalAlignment="Stretch" Visibility="{Binding IsSaving, Converter={StaticResource BoolToVis}}">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="AntiqueWhite" FontSize="36" FontWeight="Bold"
+                       Text="{Binding Path=SavingString, UpdateSourceTrigger=PropertyChanged}">
+            </TextBlock>
+        </Border>
     </Grid>
 </UserControl>

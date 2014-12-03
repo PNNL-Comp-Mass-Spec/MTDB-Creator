@@ -4,13 +4,13 @@
         xmlns:windows="clr-namespace:MTDBCreator.Views.Windows"
         Title="MTDB Exporter" Height="800" Width="1280"
         DataContext="{Binding DmsExporterViewModel}">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Grid.Column="0">
             <windows:AmtListView x:Name="AmtListView"  DataContext="{Binding AmtListViewModel}"/>
-
         </Grid>
     </Grid>
 

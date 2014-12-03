@@ -71,7 +71,7 @@
                 <StackPanel Name="RecentAnalysisJobStackPanel" Orientation="Vertical"/>
             </StackPanel>
             <StackPanel>
-                <Button Name="DmsButton" Content="Export Database from DMS" Visibility="{Binding Path=ExportVisable}" Click="NewDmsExportButton_Click"></Button>
+                <Button Name="DmsButton" MaxWidth="160" MinWidth="160" Content="Export Database from DMS" Visibility="{Binding Path=ExportVisable}" Click="NewDmsExportButton_Click"></Button>
             </StackPanel>
         </StackPanel>
 

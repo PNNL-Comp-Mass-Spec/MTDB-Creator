@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using Microsoft.Win32;
 using MTDBCreator.DmsExporter.Data;
 using MTDBCreator.DmsExporter.IO;
+using MTDBFramework.UI;
 
 namespace MTDBCreator.ViewModels
 {
-    public class AmtListViewModel : ViewModelBase
+    public class AmtListViewModel : ObservableObject
     {
         public DmsLookupUtility Lookup { get; set; }
 
@@ -23,10 +25,34 @@ namespace MTDBCreator.ViewModels
         public DelegateCommand GetStatsCommand { get; set; }
         public DelegateCommand ExportCommand { get; set; }
 
+        public bool IsSaving
+        {
+            get { return m_isSaving; }
+            private set
+            {
+                m_isSaving = value;
+                OnPropertyChanged("IsSaving");
+            }
+        }
+
+        public string SavingString
+        {
+            get { return m_savingString; }
+            private set
+            {
+                m_savingString = value;
+                OnPropertyChanged("SavingString");
+            }
+        }
+
+        private bool m_isSaving;
+        private string m_savingString;
+
         public AmtListViewModel()
         {
             MtdbList = new ObservableCollection<AmtInfo>();
             QualityStats = new ObservableCollection<AmtPeptideOptions>();
+            IsSaving = false;
 
             Lookup = new DmsLookupUtility();
 
@@ -39,7 +65,7 @@ namespace MTDBCreator.ViewModels
             ExportCommand       = new DelegateCommand(exportAction);
             ExportCommand.Executable = false;
         }
-
+        
         private void RefreshMtdbs()
         {
             var list = Lookup.GetDatabases().Values.ToList();
@@ -96,29 +122,53 @@ namespace MTDBCreator.ViewModels
             // Run the sql commands to get the database.
             else
             {
-                var dialog = new SaveFileDialog
-                {
-                    AddExtension = true,
-                    RestoreDirectory = true,
-                    Title = "Save Mass Tag Data Base",
-                    Filter = "Access file (*.mdb)|*.mdb|Sql file (*.mtdb)|*.mtdb",
-                    FilterIndex = 2
-                };
+                IsSaving = true;
 
-                if (dialog.ShowDialog() == true)
+                string[] loadingStrings =
+			{
+				"Saving\nPlease Wait",
+				"Saving.\nPlease Wait",
+				"Saving..\nPlease Wait",
+				"Saving...\nPlease Wait"
+			};
+                Task.Factory.StartNew(() =>
                 {
-                    var path = dialog.FileName;
-
-                    if (path.EndsWith(".mdb"))
+                    Task.Factory.StartNew(() =>
                     {
-                        Lookup.Separator = ',';
+                        int index = 0;
+                        while (IsSaving)
+                        {
+                            Thread.Sleep(750);
+                            SavingString = loadingStrings[index%4];
+                            index++;
+                        }
+                    });
+
+                    var dialog = new SaveFileDialog
+                    {
+                        AddExtension = true,
+                        RestoreDirectory = true,
+                        Title = "Save Mass Tag Data Base",
+                        Filter = "Access file (*.mdb)|*.mdb|Sql file (*.mtdb)|*.mtdb",
+                        FilterIndex = 2
+                    };
+
+                    if (dialog.ShowDialog() == true)
+                    {
+                        var path = dialog.FileName;
+
+                        if (path.EndsWith(".mdb"))
+                        {
+                            Lookup.Separator = ',';
+                        }
+                        Lookup.ExportToText(path, SelectedDb, SelectedStats);
+
+                        var exporter = TextToDbConverterFactory.Create(path);
+                        exporter.ConvertToDbFormat(path);
                     }
 
-                    Lookup.ExportToText(path, SelectedDb, SelectedStats);
-
-                    var exporter = TextToDbConverterFactory.Create(path);
-                    exporter.ConvertToDbFormat(path);
-                }
+                    IsSaving = false;
+                });
             }    
         }
     }
