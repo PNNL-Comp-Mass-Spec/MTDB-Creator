@@ -6,6 +6,7 @@
       xmlns:oxy="http://oxyplot.codeplex.com"
       xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
       xmlns:treeView="clr-namespace:MTDBCreator.ViewModels.TreeView"
+      xmlns:wpf="http://oxyplot.org/wpf"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="900">
 
@@ -153,31 +154,31 @@
                 <TabItem.Header>
                     <TextBlock Text="Observed Net Vs. Scan" />
                 </TabItem.Header>
-                <oxy:Plot x:Name="NetScanOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding NETScanPlotModel}">
-                    <oxy:Plot.InputBindings>
+                <wpf:PlotView x:Name="NetScanOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding NETScanPlotModel}">
+                    <wpf:PlotView.InputBindings>
                         <KeyBinding Key="Z" Command="{Binding ZoomExtentsCommand}"/>
-                    </oxy:Plot.InputBindings>
-                </oxy:Plot>
+                    </wpf:PlotView.InputBindings>
+                </wpf:PlotView>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <TextBlock Text ="Mass Vs. Scan"/>
                 </TabItem.Header>
-                <oxy:Plot x:Name="MassScanOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding MassScanPlotModel}">
-                    <oxy:Plot.InputBindings>
+                <wpf:PlotView x:Name="MassScanOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding MassScanPlotModel}">
+                    <wpf:PlotView.InputBindings>
                         <KeyBinding Key="Z" Command="{Binding ZoomExtentsCommand}"/>
-                    </oxy:Plot.InputBindings>
-                </oxy:Plot>
+                    </wpf:PlotView.InputBindings>
+                </wpf:PlotView>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <TextBlock Text ="Predicted Net Vs. Observed Net"/>
                 </TabItem.Header>
-                <oxy:Plot x:Name="ObservedPredictedOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding ObservedPredictedPlotModel}">
-                    <oxy:Plot.InputBindings>
+                <wpf:PlotView x:Name="ObservedPredictedOxyPlot" DataContext="{Binding DatasetPlotViewModel}" Model="{Binding ObservedPredictedPlotModel}">
+                    <wpf:PlotView.InputBindings>
                         <KeyBinding Key="Z" Command="{Binding ZoomExtentsCommand}"/>
-                    </oxy:Plot.InputBindings>
-                </oxy:Plot>
+                    </wpf:PlotView.InputBindings>
+                </wpf:PlotView>
             </TabItem>
             <TabItem Visibility="Hidden">
                 <TabItem.Header>
@@ -195,8 +196,8 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <oxy:Plot x:Name="StdevMassPlot" DataContext="{Binding StatPlotViewModel}" Model="{Binding StdevMassPlotModel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
-                    <oxy:Plot x:Name="StdevNetPlot" DataContext="{Binding StatPlotViewModel}" Model="{Binding StdevNETPlotModel}" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2"/>
+                    <wpf:PlotView x:Name="StdevMassPlot" DataContext="{Binding StatPlotViewModel}" Model="{Binding StdevMassPlotModel}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+                    <wpf:PlotView x:Name="StdevNetPlot" DataContext="{Binding StatPlotViewModel}" Model="{Binding StdevNETPlotModel}" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2"/>
                 </Grid>
             </TabItem>
         </TabControl>

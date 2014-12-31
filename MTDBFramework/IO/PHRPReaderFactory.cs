@@ -25,7 +25,7 @@ namespace MTDBFramework.IO
             PHRPReaderBase reader = null;
             var resultType = clsPHRPReader.AutoDetermineResultType(path);
 
-            if (path.EndsWith("msgfplus.mzid") || path.EndsWith("mzid.gz"))
+            if (path.EndsWith("mzid") || path.EndsWith("mzid.gz"))
 			{
 			    reader = new MzIdentMlReader(options);
 				return reader;
