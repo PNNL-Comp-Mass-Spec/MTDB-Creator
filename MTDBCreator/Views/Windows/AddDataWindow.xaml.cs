@@ -4,7 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
-using System.Windows.Forms;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.Dialog;
@@ -82,12 +82,13 @@ namespace MTDBCreator.Windows
             {
                 var formatInfo = FileDialogFormatInfoFactory.Create(addFolderFileMenuItem.Tag.ToString());
 
-                var folderBrowser = new FolderBrowserDialog();
+				var folderBrowser = new CommonOpenFileDialog();
+	            folderBrowser.IsFolderPicker = true;
                 var result = folderBrowser.ShowDialog();
                 var thing = "";
-                if (result == System.Windows.Forms.DialogResult.OK)
+				if (result == CommonFileDialogResult.Ok)
                 {
-                    thing = folderBrowser.SelectedPath;
+					thing = folderBrowser.FileName;
                 }
 
                 var filters = formatInfo.Filter.Split('|');
@@ -144,7 +145,7 @@ namespace MTDBCreator.Windows
             {
                 var formatInfo = FileDialogFormatInfoFactory.Create(addFileMenuItem.Tag.ToString());
 
-                var openFileDialog = new OpenFileDialog
+                var openFileDialog = new Microsoft.Win32.OpenFileDialog
                 {
                     RestoreDirectory = true,
 
@@ -153,10 +154,9 @@ namespace MTDBCreator.Windows
                     Filter = formatInfo.Filter
                 };
 
-                openFileDialog.AutoUpgradeEnabled = false;
                 var dialogRes = openFileDialog.ShowDialog();
 
-                if (dialogRes == System.Windows.Forms.DialogResult.OK)
+				if (dialogRes.HasValue && dialogRes.Value == true)
                 {
                     if (formatInfo.Format != LcmsIdentificationTool.Description)
                     {
