@@ -79,7 +79,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\PHRPReader.dll</HintPath>
     </Reference>
-    <Reference Include="PNNLOmics, Version=1.0.5196.41680, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="PNNLOmics">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libs\PNNLOmics.dll</HintPath>
     </Reference>

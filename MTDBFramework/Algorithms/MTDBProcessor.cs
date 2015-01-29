@@ -183,7 +183,7 @@ namespace MTDBFramework.Algorithms
             var lcmsAligner = new LcmsWarpAdapter(options);
 
             //For performing net warping without mass correction
-            options.AlignType = LcmsWarpAlignmentOptions.AlignmentType.NET_WARP;
+            options.AlignType = PNNLOmics.Algorithms.Alignment.LcmsWarp.AlignmentType.NET_WARP;
             var lcmsNetAligner = new LcmsWarpAdapter(options);
 
             //Foreach dataset
