@@ -6,21 +6,28 @@ echo.
 
 if [%1]==[] goto usage
 
+set Configuration=%1
+
 setLocal EnableDelayedExpansion
 
+rem Variable PercentSign2 will typically be "Any CPU" (with the double quotes)
+rem We want to change it to be AnyCpu (no double quotes)
+rem The tilde sign in the following command removes the double quotes
 set PlatformWithSpace=%~2
 
+rem This for loop removes the space
 for /f "tokens=1-2 delims= " %%a in ("!PlatformWithSpace!") do (
 set Platform=%%a%%b
 )
 
 setLocal DisableDelayedExpansion
 
+rem Remove the double quotes from the 3rd and 4th variables (folder paths)
 set TargetDir=%~3
 set SolutionDir=%~4
 
 :make
-echo Making MTDB Creator Distribution Package - %1 (%Platform%)...
+echo Making MTDB Creator Distribution Package - %Configuration% (%Platform%)...
 echo.
 
 IF NOT EXIST "%TargetDir%MTDBCreator.exe" goto noreleasebuild
@@ -40,9 +47,9 @@ echo.
 
 IF NOT EXIST ..\..\builds mkdir ..\..\builds
 
-IF EXIST "..\..\builds\MTDBCreator_Binary_%1_%Platform%.zip" del "..\..\builds\MTDBCreator_Binary_%1_%Platform%.zip"
+IF EXIST "..\..\builds\MTDBCreator_Binary_%Configuration%_%Platform%.zip" del "..\..\builds\MTDBCreator_Binary_%Configuration%_%Platform%.zip"
 
-7za a -tzip "..\..\builds\MTDBCreator_Binary_%1_%Platform%.zip" .\bin\* -r
+7za.exe a -tzip "..\..\builds\MTDBCreator_Binary_%Configuration%_%Platform%.zip" .\bin\* -r
 
 rmdir bin /s /q
 
@@ -52,12 +59,12 @@ echo Build Completed - MTDB Creator Distribution Package
 goto quit
 
 :noreleasebuild
-echo MTDB Creator %1 (%Platform%) build does not exist.
-echo Please build the MTDB Creator in %1 (%Platform%) configuration first!
+echo MTDB Creator %Configuration% (%Platform%) build does not exist.
+echo Please build the MTDB Creator in %Configuration% (%Platform%) configuration first!
 goto quit
 
 :usage
-echo Usage: MakeDistPackage ^<Configuration: Debug^|Release^> ^<Platform: Any CPU^|x86^|x64^> ^<Build Dir ^(TargetDir^)^>
+echo Usage: MakeDistPackage ^<Configuration: Debug^|Release^> ^<Platform: Any CPU^|x86^|x64^> ^<Build Dir^> ^<TargetDir^>
 echo.
 
 :quit
