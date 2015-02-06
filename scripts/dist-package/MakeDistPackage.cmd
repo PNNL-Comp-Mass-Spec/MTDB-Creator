@@ -6,35 +6,45 @@ echo.
 
 if [%1]==[] goto usage
 
+setLocal EnableDelayedExpansion
+
+set PlatformWithSpace=%~2
+
+for /f "tokens=1-2 delims= " %%a in ("!PlatformWithSpace!") do (
+set Platform=%%a%%b
+)
+
+setLocal DisableDelayedExpansion
+
+set TargetDir=%~3
+set SolutionDir=%~4
+
 :make
-echo Making MTDB Creator Distribution Package - %1 (%2)...
+echo Making MTDB Creator Distribution Package - %1 (%Platform%)...
 echo.
 
-rem IF NOT EXIST "..\..\MTDBCreator\bin\%2\%1\MTDBCreator.exe" goto noreleasebuild
-IF NOT EXIST "%3\MTDBCreator.exe" goto noreleasebuild
+IF NOT EXIST "%TargetDir%MTDBCreator.exe" goto noreleasebuild
 
-md bin
+IF NOT EXIST .\bin mkdir bin
 
-echo %3
+echo %TargetDir%
 
 echo Copying Binary Files...
 echo.
 
-rem xcopy "..\..\MTDBCreator\bin\%2\%1\MTDBCreator.exe" .\bin > nul
-rem xcopy ..\..\MTDBCreator\bin\%2\%1\*.dll /s .\bin > nul
-xcopy "%3MTDBCreator.exe" .\bin > nul
-xcopy %3*.dll /s .\bin > nul
+xcopy "%TargetDir%MTDBCreator.exe" .\bin /Y /D
+xcopy "%TargetDir%*.dll" .\bin /S /Y /D
 
 echo Building Distribution Package in Zip Format...
 echo.
 
-IF NOT EXIST "..\..\builds\" md ..\..\builds > nul
+IF NOT EXIST ..\..\builds mkdir ..\..\builds
 
-IF EXIST "..\..\builds\MTDBCreator_Binary_%1_%2.zip" del ..\..\builds\MTDBCreator_Binary_%1_%2.zip
+IF EXIST "..\..\builds\MTDBCreator_Binary_%1_%Platform%.zip" del "..\..\builds\MTDBCreator_Binary_%1_%Platform%.zip"
 
-7za a -tzip ..\..\builds\MTDBCreator_Binary_%1_%2.zip .\bin\* -r
+7za a -tzip "..\..\builds\MTDBCreator_Binary_%1_%Platform%.zip" .\bin\* -r
 
-rd bin /s /q
+rmdir bin /s /q
 
 echo.
 echo Build Completed - MTDB Creator Distribution Package
@@ -42,8 +52,8 @@ echo Build Completed - MTDB Creator Distribution Package
 goto quit
 
 :noreleasebuild
-echo MTDB Creator %1 (%2) build does not exist.
-echo Please build the MTDB Creator in %1 (%2) configuration first!
+echo MTDB Creator %1 (%Platform%) build does not exist.
+echo Please build the MTDB Creator in %1 (%Platform%) configuration first!
 goto quit
 
 :usage
