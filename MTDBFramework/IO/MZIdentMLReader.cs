@@ -204,6 +204,13 @@ namespace MTDBFramework.IO
 
             public int IsoError { get; set; }
 
+            public bool IsDtaSpectrum { get; set; }
+
+            public int ScanNumCVParam
+            {
+                get { return _scanNum; }
+            }
+
             private int _scanNum = -1;
 
             public int ScanNum
@@ -211,7 +218,8 @@ namespace MTDBFramework.IO
                 get
                 {
                     int num;
-                    if (!string.IsNullOrWhiteSpace(NativeId) && NativeIdConversion.TryGetScanNumberInt(NativeId, out num))
+                    // Do not parse the SpectrumID for DTA file search results - the index is the DTA file index, not the spectrum index
+                    if (!IsDtaSpectrum && !string.IsNullOrWhiteSpace(NativeId) && NativeIdConversion.TryGetScanNumberInt(NativeId, out num))
                     {
                         return num;
                     }
@@ -224,6 +232,8 @@ namespace MTDBFramework.IO
             #endregion
 
         }
+
+        private bool _isFromDTA = false;
 
         private class DatabaseSequence
         {
@@ -552,7 +562,6 @@ namespace MTDBFramework.IO
         /// <summary>
         /// Handle the child nodes of the DataCollection element
         /// Called by ReadMzIdentML (xml hierarchy)
-        /// Currently we are only working with the AnalysisData child element
         /// </summary>
         /// <param name="reader">XmlReader that is only valid for the scope of the single DataCollection element</param>
         private void ReadDataCollection(XmlReader reader)
@@ -567,12 +576,56 @@ namespace MTDBFramework.IO
                     reader.Read();
                     continue;
                 }
-                if (reader.Name == "AnalysisData")
+                switch (reader.Name)
                 {
-                    // Schema requirements: one and only one instance of this element
-                    // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
-                    ReadAnalysisData(reader.ReadSubtree());
-                    reader.ReadEndElement(); // "AnalysisData" must have child nodes
+                    case "Inputs":
+                        ReadInputs(reader.ReadSubtree());
+                        reader.ReadEndElement(); // "Inputs" must have child nodes
+                        break;
+                    case "AnalysisData":
+                        // Schema requirements: one and only one instance of this element
+                        // Use reader.ReadSubtree() to provide an XmlReader that is only valid for the element and child nodes
+                        ReadAnalysisData(reader.ReadSubtree());
+                        reader.ReadEndElement(); // "AnalysisData" must have child nodes
+                        break;
+                    default:
+                        reader.Skip();
+                        break;
+                }
+            }
+            reader.Close();
+        }
+
+        /// <summary>
+        /// Handle child nodes of Inputs element
+        /// Called by ReadDataCollection (xml hierarchy)
+        /// Currently we are only working with the SpectraData child elements
+        /// </summary>
+        /// <param name="reader">XmlReader that is only valid for the scope of the single AnalysisData element</param>
+        private void ReadInputs(XmlReader reader)
+        {
+            reader.MoveToContent();
+            reader.ReadStartElement("Inputs"); // Throws exception if we are not at the "AnalysisData" tag.
+            while (reader.ReadState == ReadState.Interactive)
+            {
+                // Handle exiting out properly at EndElement tags
+                if (reader.NodeType != XmlNodeType.Element)
+                {
+                    reader.Read();
+                    continue;
+                }
+                if (reader.Name == "SpectraData")
+                {
+                    // Schema requirements: one to many instances of this element
+                    // location attribute: required
+                    // id attribute: required
+                    // SpectrumIDFormat child element: required
+                    var location = reader.GetAttribute("location");
+                    if (location != null && location.ToLower().EndsWith("_dta.txt"))
+                    {
+                        _isFromDTA = true;
+                    }
+                    reader.Skip(); // "SpectrumIdentificationList" must have child nodes
                 }
                 else
                 {
@@ -673,7 +726,7 @@ namespace MTDBFramework.IO
                 {
                     case "SpectrumIdentificationItem":
                         // Schema requirements: one to many instances of this element
-                        ReadSpectrumIdentificationItem(reader.ReadSubtree(), specRes);
+                        specRes.Add(ReadSpectrumIdentificationItem(reader.ReadSubtree()));
                         reader.ReadEndElement(); // "SpectrumIdentificationItem" must have child nodes
                         break;
                     case "cvParam":
@@ -707,12 +760,12 @@ namespace MTDBFramework.IO
         /// Called by ReadSpectrumIdentificationResult (xml hierarchy)
         /// </summary>
         /// <param name="reader">XmlReader that is only valid for the scope of the single SpectrumIdentificationItem element</param>
-        /// <param name="specRes">List of SpectrumIdItems that the read data is stored in</param>
-        private void ReadSpectrumIdentificationItem(XmlReader reader, List<SpectrumIdItem> specRes)
+        private SpectrumIdItem ReadSpectrumIdentificationItem(XmlReader reader)
         {
             reader.MoveToContent(); // Move to the "SpectrumIdentificationItem" element
             var specItem = new SpectrumIdItem
             {
+                IsDtaSpectrum = _isFromDTA,
                 PepEvCount = 0,
                 SpecItemId = reader.GetAttribute("id"),
                 PassThreshold = Convert.ToBoolean(reader.GetAttribute("passThreshold")),
@@ -766,9 +819,10 @@ namespace MTDBFramework.IO
                 reader.Read();
             }
             specItem.PepEvCount = specItem.PepEvidence.Count;
-            specRes.Add(specItem);
 
             reader.Close();
+
+            return specItem;
         }
 
         /// <summary>
