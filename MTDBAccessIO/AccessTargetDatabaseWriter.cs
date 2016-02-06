@@ -155,7 +155,7 @@ namespace MTDBAccessIO
 
         private void TextToAccessConvert(string path)
         {
-            var accApplicaiton = new ACCESS.Application();
+            var accApplication = new ACCESS.Application();
 
             var pieces = path.Split('\\');
             string directory = "";
@@ -174,15 +174,15 @@ namespace MTDBAccessIO
                 File.Delete(path);
             }
 
-            accApplicaiton.NewCurrentDatabase(path);
-            accApplicaiton.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
+            accApplication.NewCurrentDatabase(path);
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
                 TableName: "AMT", FileName: directory + "tempAMT.txt", HasFieldNames: true);
-            accApplicaiton.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
                 TableName: "AMT_Proteins", FileName: directory + "tempAMT_Proteins.txt", HasFieldNames: true);
-            accApplicaiton.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
                 TableName: "AMT_to_Protein_Map", FileName: directory + "tempAMT_to_Protein_Map.txt", HasFieldNames: true);
-            accApplicaiton.CloseCurrentDatabase();
-            accApplicaiton.Quit();
+            accApplication.CloseCurrentDatabase();
+            accApplication.Quit();
             File.Delete(directory + "tempAMT.txt");
             File.Delete(directory + "tempAMT_Proteins.txt");
             File.Delete(directory + "tempAMT_to_Protein_Map.txt");

@@ -9,7 +9,7 @@ namespace MTDBAccessIO
         public void ConvertToDbFormat(string path)
         {
 
-            var accApplicaiton = new ACCESS.Application();
+            var accApplication = new ACCESS.Application();
 
             var pieces = path.Split('\\');
             string directory = "";
@@ -28,21 +28,21 @@ namespace MTDBAccessIO
                 File.Delete(path);
             }
 
-            accApplicaiton.NewCurrentDatabase(path);
-            accApplicaiton.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
+            accApplication.NewCurrentDatabase(path);
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
                 TableName: "T_Mass_Tags", FileName: directory + "tempMassTags.txt", HasFieldNames: true);
-            accApplicaiton.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
                 TableName: "T_Mass_Tags_NET", FileName: directory + "tempMassTagsNet.txt", HasFieldNames: true);
-            accApplicaiton.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
                 TableName: "T_Proteins", FileName: directory + "tempProteins.txt", HasFieldNames: true);
-            accApplicaiton.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
                 TableName: "T_Mass_Tags_to_Protein_Map", FileName: directory + "tempMassTagToProteins.txt", HasFieldNames: true);
-            accApplicaiton.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
                 TableName: "T_Analysis_Description", FileName: directory + "tempAnalysisDescription.txt", HasFieldNames: true);
-            accApplicaiton.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
+            accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
                 TableName: "V_Filter_Set_Overview_Ex", FileName: directory + "tempFilterSet.txt", HasFieldNames: true);
-            accApplicaiton.CloseCurrentDatabase();
-            accApplicaiton.Quit();
+            accApplication.CloseCurrentDatabase();
+            accApplication.Quit();
 
             File.Delete(directory + "tempMassTags.txt");
             File.Delete(directory + "tempPeptides.txt");
