@@ -67,7 +67,7 @@ namespace MTDBFramework.Properties {
         ///&lt;!--accompanying Design Science License for more details--&gt;
         ///&lt;umod:unimod xmlns:umod=&quot;http://www.unimod.org/xmlns/schema/unimod_2&quot;
         ///             xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-        ///             xsi:schemaLocation=&quot;http://www.unimod.org/xmlns/schema/unimod_2 http://www.unimod. [rest of string was truncated]&quot;;.
+        ///             xsi:schemaLocation=&quot;http://www.unimod.org/xmlns/schema/unimod_2 http://www.unimod.org/xm [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string unimod {
             get {
