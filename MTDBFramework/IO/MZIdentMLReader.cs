@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Xml;
@@ -523,6 +524,12 @@ namespace MTDBFramework.IO
                     reader.ReadToDescendant("cvParam"); // The cvParam child node is required
 
                     mod.Tag = reader.GetAttribute("name");
+                    var accession = reader.GetAttribute("accession");
+                    if (!string.IsNullOrWhiteSpace(accession) && accession.Contains("MS:1001460"))
+                    {
+                        // If the mod is "unknown modification", then use the value instead (and make sure we don't store null)
+                        mod.Tag = reader.GetAttribute("value") ?? "";
+                    }
                     pepRef.ModsAdd(mods.Key, mods.Value);
 
                     // There could theoretically exist more than one cvParam element. Clear them out.
@@ -919,10 +926,27 @@ namespace MTDBFramework.IO
                         var ptm = new PostTranslationalModification
                         {
                             Location = mod.Key,
-                            Mass = mod.Value.Mass,
-                            Formula = UniModData.ModList[mod.Value.Tag].Formula.ToString(),
-                            Name = UniModData.ModList[mod.Value.Tag].Title
+                            Mass = mod.Value.Mass
                         };
+                        UniModData.Modification unimod;
+                        if (UniModData.ModList.TryGetValue(mod.Value.Tag, out unimod))
+                        {
+                            ptm.Formula = unimod.Formula.ToString();
+                            ptm.Name = unimod.Title;
+                        }
+                        else
+                        {
+                            // Unknown modification (to unimod) - store the name if we have it, otherwise use the mass as the name
+                            if (mod.Value.Tag.Length > 0)
+                            {
+                                ptm.Name = mod.Value.Tag;
+                            }
+                            else
+                            {
+                                var plusSign = mod.Value.Mass >= 0 ? "+" : "";
+                                ptm.Name = plusSign + mod.Value.Mass.ToString(CultureInfo.InvariantCulture);
+                            }
+                        }
                         result.Ptms.Add(ptm);
 
                         for (; j < ptm.Location; j++)
