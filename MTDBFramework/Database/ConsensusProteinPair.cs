@@ -78,7 +78,16 @@ namespace MTDBFramework.Database
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return 9999;
+            unchecked
+            {
+                var hashCode = (Consensus != null ? Consensus.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Protein != null ? Protein.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ CleavageState.GetHashCode();
+                hashCode = (hashCode * 397) ^ TerminusState.GetHashCode();
+                hashCode = (hashCode * 397) ^ ResidueStart;
+                hashCode = (hashCode * 397) ^ ResidueEnd;
+                return hashCode;
+            }
         }
     }
 }

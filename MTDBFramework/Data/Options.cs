@@ -40,7 +40,7 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Id
         /// </summary>
-        public int Id;
+        public int Id { get; set; }
 
         /// <summary>
         /// Format of saved Database

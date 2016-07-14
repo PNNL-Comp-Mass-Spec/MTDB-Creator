@@ -207,21 +207,18 @@ namespace MTDBFramework.Algorithms
                 {
                     if (evidence.ObservedNet >= ProcessorOptions.MinimumObservedNet)
                     {
-                        UMCLight umc;
+                        UMCLight umc = new UMCLight
                         {
-                            umc = new UMCLight
-                            {
-                                Net = evidence.ObservedNet,
-                                ChargeState = evidence.Charge,
-                                Mz = evidence.Mz,
-                                Scan = evidence.Scan,
-                                MassMonoisotopic = evidence.MonoisotopicMass,
-                                MassMonoisotopicAligned = evidence.MonoisotopicMass,
-                                Id = evidence.Id,
-                                ScanStart = evidence.Scan,
-                                ScanEnd = evidence.Scan,
-                            };
-                        }
+                            Net = evidence.ObservedNet,
+                            ChargeState = evidence.Charge,
+                            Mz = evidence.Mz,
+                            Scan = evidence.Scan,
+                            MassMonoisotopic = evidence.MonoisotopicMass,
+                            MassMonoisotopicAligned = evidence.MonoisotopicMass,
+                            Id = evidence.Id,
+                            ScanStart = evidence.Scan,
+                            ScanEnd = evidence.Scan,
+                        };
                         umcDataset.Add(umc);
                         backupDataset.Add(umc);
                     }

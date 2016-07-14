@@ -65,6 +65,5 @@
             get { return m_ptm; }
             set { m_ptm = value; }
         }
-
     }
 }
