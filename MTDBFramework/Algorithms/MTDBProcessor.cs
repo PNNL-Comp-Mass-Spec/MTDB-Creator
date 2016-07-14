@@ -59,6 +59,32 @@ namespace MTDBFramework.Algorithms
         }
 
         /// <summary>
+        /// Container to keep Evidence and UMCLight associated correctly TODO: Can use a Tuple or KeyValuePair instead?
+        /// </summary>
+        protected class EvidenceUMCAssociation
+        {
+            /// <summary>
+            /// Evidence
+            /// </summary>
+            public Evidence Evidence { get; private set; }
+            /// <summary>
+            /// UMCLight
+            /// </summary>
+            public UMCLight UMC { get; private set; }
+
+            /// <summary>
+            /// Constructor - set the association
+            /// </summary>
+            /// <param name="ev"></param>
+            /// <param name="umc"></param>
+            public EvidenceUMCAssociation(Evidence ev, UMCLight umc)
+            {
+                Evidence = ev;
+                UMC = umc;
+            }
+        }
+
+        /// <summary>
         /// Main work function - Transform LCMS Datasets into MTDB datasets
         /// </summary>
         /// <param name="dataSets"></param>
@@ -164,7 +190,7 @@ namespace MTDBFramework.Algorithms
                 {
                     Net = evidence.PredictedNet,
                     ChargeState = charge,
-                    Mz = (evidence.TheoreticalMonoIsotopicMass / charge),
+                    Mz = (evidence.TheoreticalMonoIsotopicMass + (charge * 1.00727649)) / charge,
                     MassMonoisotopic = evidence.TheoreticalMonoIsotopicMass,
                     Id = evidence.Id,
                     MassMonoisotopicAligned = evidence.TheoreticalMonoIsotopicMass,
@@ -202,6 +228,7 @@ namespace MTDBFramework.Algorithms
 
                 dataSet.Evidences.Sort((x, y) => x.Scan.CompareTo(y.Scan));
 
+                var evidenceAndUmc = new List<EvidenceUMCAssociation>(); // Only put evidences that pass the minimum observed net in this list.
                 var backupDataset = new List<UMCLight>();
                 foreach (var evidence in dataSet.Evidences)
                 {
@@ -221,6 +248,7 @@ namespace MTDBFramework.Algorithms
                         };
                         umcDataset.Add(umc);
                         backupDataset.Add(umc);
+                        evidenceAndUmc.Add(new EvidenceUMCAssociation(evidence, umc));
                     }
                 }
                 umcDataset.Sort((x, y) => x.MassMonoisotopic.CompareTo(y.MassMonoisotopic));
@@ -241,34 +269,26 @@ namespace MTDBFramework.Algorithms
                     }
                 }
 
-                umcDataset.Sort((x, y) => x.ScanAligned.CompareTo(y.ScanAligned));
-
                 var netDiffList = new List<double>();
                 var numBins     = Math.Min(50, dataSet.Evidences.Count);
                 var medNetDiff  = new double[numBins];
                 var numPerBin   = (int)Math.Ceiling((double)dataSet.Evidences.Count / numBins);
                 var binNum      = 0;
 
-
                 //Copy the residual data back into the evidences
-                for (int a = 0, b = 0; a < dataSet.Evidences.Count; a++)
+                foreach (var group in evidenceAndUmc)
                 {
-                    if (dataSet.Evidences[a].ObservedNet >= ProcessorOptions.MinimumObservedNet)
+                    group.Evidence.MonoisotopicMass = group.UMC.MassMonoisotopicAligned;
+                    var netShift = group.UMC.NetAligned - group.UMC.Net;
+                    netDiffList.Add(netShift);
+                    group.Evidence.NetShift = netShift;
+                    group.Evidence.ObservedNet += netShift;
+
+                    if (netDiffList.Count % numPerBin == 0)
                     {
-                        dataSet.Evidences[a].MonoisotopicMass = umcDataset[b].MassMonoisotopicAligned;
-                        var netShift = umcDataset[b].NetAligned - umcDataset[b].Net;
-                        netDiffList.Add(netShift);
-                        dataSet.Evidences[a].NetShift = netShift;
-                        dataSet.Evidences[a].ObservedNet += netShift;
-
-                        if (netDiffList.Count % numPerBin == 0)
-                        {
-                            medNetDiff[binNum] = netDiffList.Median();
-                            netDiffList.Clear();
-                            binNum++;
-                        }
-
-                        b++;
+                        medNetDiff[binNum] = netDiffList.Median();
+                        netDiffList.Clear();
+                        binNum++;
                     }
                 }
                 if (netDiffList.Count != 0)
