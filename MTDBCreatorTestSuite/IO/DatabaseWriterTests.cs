@@ -24,11 +24,11 @@ namespace MTDBCreatorTestSuite.IO
         [TestCase(@"testDatabase-1-1.mtdb", 1, 1, Ignore = false)]
         [TestCase(@"testDatabase-1-2.mtdb", 1, 2, Ignore = false)]
         [TestCase(@"testDatabase-2-1.mtdb", 2, 1, Ignore = false)]
-		[TestCase(@"testDatabase-100-3.mtdb", 100, 3, Ignore = false)]
+        [TestCase(@"testDatabase-100-3.mtdb", 100, 3, Ignore = false)]
         public void TestWriteDatabase(string path, int numberOfTargets, int numberOfEvidences)
         {
             var reader       = new SqLiteTargetDatabaseWriter();
-            var options      = new Options();            
+            var options      = new Options();
             var database     = new TargetDatabase();
             var proteinCount  = 1;
             var evidenceCount = 1;
@@ -39,7 +39,7 @@ namespace MTDBCreatorTestSuite.IO
 
                 var protein = new ProteinInformation
                 {
-                    ProteinName = "SO_Test" + proteinCount++, 
+                    ProteinName = "SO_Test" + proteinCount++,
                     CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full,
                     TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNTerminus,
                 };
@@ -57,7 +57,7 @@ namespace MTDBCreatorTestSuite.IO
                         Mz              = 405,
                         Scan            = evidenceCount++,
                         PeptideInfo =  new TargetPeptideInfo()
-                        
+
                     };
 
                     evidence.AddProtein(protein);
@@ -67,7 +67,7 @@ namespace MTDBCreatorTestSuite.IO
                 target.CalculateStatistics();
                 database.ConsensusTargets.Add(target);
             }
-            reader.Write(database, options, GetTestSuiteDataPath(path));            
+            reader.Write(database, options, GetTestSuiteDataPath(path));
         }
 
         [Test]

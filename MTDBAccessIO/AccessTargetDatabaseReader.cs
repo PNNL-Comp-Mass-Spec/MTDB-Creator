@@ -86,7 +86,7 @@ namespace MTDBAccessIO
             // Prot name only thing important for MTDB, ID (can be crushed later)
             // AMT map
             // Link Consensus and Protein (ct[ct_id].protein.add(protein[prot_id]))
-            
+
             var consensusTargets    = new Dictionary<int, ConsensusTarget>();
             var proteins            = new Dictionary<int, ProteinInformation>();
 

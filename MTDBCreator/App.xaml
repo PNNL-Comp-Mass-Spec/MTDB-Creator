@@ -148,43 +148,43 @@
                                         <VisualStateGroup Name="CommonStates">
                                             <VisualState Name="MouseOver">
                                                 <Storyboard>
-                                                    <DoubleAnimation 
-                                                        Storyboard.TargetName="hoverShape" 
-                                                        Storyboard.TargetProperty="Opacity" 
-                                                        To="1" 
+                                                    <DoubleAnimation
+                                                        Storyboard.TargetName="hoverShape"
+                                                        Storyboard.TargetProperty="Opacity"
+                                                        To="1"
                                                         Duration="0:0:.1"/>
                                                 </Storyboard>
                                             </VisualState>
                                             <VisualState Name="Normal">
                                                 <Storyboard>
-                                                    <DoubleAnimation 
-                                                        Storyboard.TargetName="hoverShape" 
-                                                        Storyboard.TargetProperty="Opacity" 
+                                                    <DoubleAnimation
+                                                        Storyboard.TargetName="hoverShape"
+                                                        Storyboard.TargetProperty="Opacity"
                                                         To="0"
                                                         Duration="0:0:.1"/>
                                                 </Storyboard>
                                             </VisualState>
                                         </VisualStateGroup>
                                     </VisualStateManager.VisualStateGroups>
-                                    <ContentPresenter 
+                                    <ContentPresenter
                                 Name="buttonText"
-                                Margin="15,0,5,0" 
-                                TextBlock.FontFamily="Calibri" 
-                                TextBlock.FontSize="12pt" 
-                                TextBlock.Foreground="Black" 
+                                Margin="15,0,5,0"
+                                TextBlock.FontFamily="Calibri"
+                                TextBlock.FontSize="12pt"
+                                TextBlock.Foreground="Black"
                                 Content="{TemplateBinding Header}"
                                 VerticalAlignment="Center"/>
 
                                     <Border Name="hoverShape"
                                         Height="40"
-                                        Margin="0,0,1,0" 
-                                        SnapsToDevicePixels="True" 
-                                        BorderThickness="0,0,1,0" 
+                                        Margin="0,0,1,0"
+                                        SnapsToDevicePixels="True"
+                                        BorderThickness="0,0,1,0"
                                         BorderBrush="LightGray">
                                         <Border BorderBrush="#FFA1B7EA"
-                                            BorderThickness="0,1" 
-                                            Background="#FFE5EEF9" 
-                                            Height="40" 
+                                            BorderThickness="0,1"
+                                            Background="#FFE5EEF9"
+                                            Height="40"
                                             SnapsToDevicePixels="True" />
                                     </Border>
                                 </Grid>
@@ -200,18 +200,18 @@
                 </Grid.ColumnDefinitions>
 
 
-                <Border Background="#FFE9ECEF" 
-                    Grid.Column="0" 
-                    BorderBrush="LightGray" 
-                    BorderThickness="1" 
+                <Border Background="#FFE9ECEF"
+                    Grid.Column="0"
+                    BorderBrush="LightGray"
+                    BorderThickness="1"
                     SnapsToDevicePixels="True" />
                 <StackPanel IsItemsHost="True"
                         Grid.Column="0"
-                        Margin="0,0,-1,0" 
+                        Margin="0,0,-1,0"
                         SnapsToDevicePixels="True" />
-                <ContentPresenter 
-                Content="{TemplateBinding SelectedContent}" 
-                Grid.Column="1" 
+                <ContentPresenter
+                Content="{TemplateBinding SelectedContent}"
+                Grid.Column="1"
                 Margin="15,0,0,0" />
             </Grid>
         </ControlTemplate>

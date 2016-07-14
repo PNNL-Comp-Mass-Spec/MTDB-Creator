@@ -1,12 +1,12 @@
 ﻿namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// MSGF+ input storage for evidence
-	/// </summary>
+    /// <summary>
+    /// MSGF+ input storage for evidence
+    /// </summary>
     public class MsgfPlusResult : Evidence
     {
         private string m_reference;
-        private short m_numTrypticEnds;        
+        private short m_numTrypticEnds;
         private int m_deNovoScore;
         private int m_msgfScore;
         private double m_specEValue;
@@ -15,10 +15,10 @@
         private double m_qValue;        // holds FDR if old MSGF-DB results
         private double m_pepQValue;
         private int m_isotopeError;
-        
-		/// <summary>
-		/// Reference
-		/// </summary>
+
+        /// <summary>
+        /// Reference
+        /// </summary>
         public string Reference
         {
             get
@@ -32,10 +32,10 @@
             }
         }
 
-		/// <summary>
-		/// Number of Tryptic Ends
-		/// </summary>
-        public short NumTrypticEnds 
+        /// <summary>
+        /// Number of Tryptic Ends
+        /// </summary>
+        public short NumTrypticEnds
         {
             get
             {
@@ -48,9 +48,9 @@
             }
         }
 
-		/// <summary>
-		/// DeNovo Score
-		/// </summary>
+        /// <summary>
+        /// DeNovo Score
+        /// </summary>
         public int DeNovoScore
         {
             get
@@ -64,9 +64,9 @@
             }
         }
 
-		/// <summary>
-		/// MSGF Score
-		/// </summary>
+        /// <summary>
+        /// MSGF Score
+        /// </summary>
         public int MsgfScore
         {
             get
@@ -101,9 +101,9 @@
             }
         }
 
-		/// <summary>
-		/// Spec E Value
-		/// </summary>
+        /// <summary>
+        /// Spec E Value
+        /// </summary>
         public double SpecEValue
         {
             get
@@ -117,9 +117,9 @@
             }
         }
 
-		/// <summary>
-		/// Rank Spec E Value
-		/// </summary>
+        /// <summary>
+        /// Rank Spec E Value
+        /// </summary>
         public int RankSpecEValue
         {
             get
@@ -133,9 +133,9 @@
             }
         }
 
-		/// <summary>
-		/// E Value
-		/// </summary>
+        /// <summary>
+        /// E Value
+        /// </summary>
         public double EValue
         {
             get
@@ -149,10 +149,10 @@
             }
         }
 
-		/// <summary>
-		/// Q Value
-		/// </summary>
-        public double QValue 
+        /// <summary>
+        /// Q Value
+        /// </summary>
+        public double QValue
         {
             get
             {
@@ -165,9 +165,9 @@
             }
         }
 
-		/// <summary>
-		/// Peptide Q Value
-		/// </summary>
+        /// <summary>
+        /// Peptide Q Value
+        /// </summary>
         public double PepQValue
         {
             get
@@ -181,9 +181,9 @@
             }
         }
 
-		/// <summary>
-		/// Isotope Error
-		/// </summary>
+        /// <summary>
+        /// Isotope Error
+        /// </summary>
         public int IsotopeError
         {
             get
@@ -196,6 +196,6 @@
                 OnPropertyChanged("IsotopeError");
             }
         }
-       
-    }	
+
+    }
 }

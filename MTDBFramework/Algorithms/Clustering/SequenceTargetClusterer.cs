@@ -7,16 +7,16 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Algorithms.Clustering
 {
-	/// <summary>
-	/// Target clustering using sequences
-	/// </summary>
+    /// <summary>
+    /// Target clustering using sequences
+    /// </summary>
     public class SequenceTargetClusterer : ITargetClusterer
     {
-		/// <summary>
-		/// Perform target clustering
-		/// </summary>
-		/// <param name="evidences"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Perform target clustering
+        /// </summary>
+        /// <param name="evidences"></param>
+        /// <returns></returns>
         public IEnumerable<ConsensusTarget> Cluster(IEnumerable<Evidence> evidences)
         {
             var consensusTargetList = new List<ConsensusTarget>();
@@ -25,7 +25,7 @@ namespace MTDBFramework.Algorithms.Clustering
             foreach (var t in evidences)
             {
                 var sequence = t.EncodedNonNumericSequence;
-                 
+
                 if (!targetMap.ContainsKey(sequence))
                 {
                     targetMap.Add(sequence, new ConsensusTarget());

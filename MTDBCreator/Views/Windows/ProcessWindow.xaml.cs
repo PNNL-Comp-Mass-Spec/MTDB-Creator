@@ -98,6 +98,6 @@ namespace MTDBCreator.Windows
 
         public BackgroundWorker MainBackgroundWorker { get; private set; }
         public IBackgroundWorkHelper MainBackgroundWorkHelper { get; set; }
-     
+
     }
 }

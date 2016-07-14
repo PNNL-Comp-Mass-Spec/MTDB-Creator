@@ -13,7 +13,7 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             m_consensusTarget = ct;
         }
-        
+
         public override void LoadChildNodes()
         {
             base.LoadChildNodes();
@@ -22,7 +22,7 @@ namespace MTDBCreator.ViewModels.TreeView
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Average Net: ", m_consensusTarget.AverageNet.ToString()), this));
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Stdev Net: ", m_consensusTarget.StdevNet.ToString()), this));
             m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Predicted NET: ", m_consensusTarget.PredictedNet.ToString()), this));
-            
+
             m_ChildNodes.Add(new TargetCollectionTreeNodeViewModel(m_consensusTarget.Evidences, this));
         }
     }

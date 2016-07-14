@@ -11,20 +11,20 @@ namespace MTDBFramework.IO
     /// </summary>
     public class XTandemPhrpReader : PHRPReaderBase
     {
-		/// <summary>
-		/// Configure the options for XTandemPhrpReader
-		/// </summary>
-		/// <param name="options"></param>
+        /// <summary>
+        /// Configure the options for XTandemPhrpReader
+        /// </summary>
+        /// <param name="options"></param>
         public XTandemPhrpReader(Options options)
         {
             ReaderOptions = options;
         }
 
-		/// <summary>
-		/// Read and process a XTandem PHRP file
-		/// </summary>
-		/// <param name="path">XTandem file to read</param>
-		/// <returns></returns>
+        /// <summary>
+        /// Read and process a XTandem PHRP file
+        /// </summary>
+        /// <param name="path">XTandem file to read</param>
+        /// <returns></returns>
         public override LcmsDataSet Read(string path)
         {
             var results = new List<XTandemResult>();
@@ -45,7 +45,7 @@ namespace MTDBFramework.IO
 
                 // Skip this PSM if it doesn't pass the import filters
                 double logPepEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Expectation_Value_LogE, 0);
-                
+
                 double specProb = 0;
                 if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
                     specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
@@ -60,7 +60,7 @@ namespace MTDBFramework.IO
 
                 var result = new XTandemResult
                 {
-                    AnalysisId = reader.CurrentPSM.ResultID                    
+                    AnalysisId = reader.CurrentPSM.ResultID
                 };
 
                 StorePsmData(result, reader, specProb);
@@ -68,11 +68,11 @@ namespace MTDBFramework.IO
                 StoreDatasetInfo(result, reader, path);
                 result.DataSet.Tool = LcmsIdentificationTool.XTandem;
 
-                // Populate items specific to X!Tandem                
+                // Populate items specific to X!Tandem
                 result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
 
                 result.BScore = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_b_score, 0);
-                result.DeltaCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_DeltaCn2, 0);                
+                result.DeltaCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_DeltaCn2, 0);
                 result.LogIntensity = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Intensity_LogI, 0);
                 result.LogPeptideEValue = logPepEValue;
                 result.DiscriminantValue = logPepEValue;
@@ -85,9 +85,9 @@ namespace MTDBFramework.IO
             }
 
             ComputeNets(results);
-            
+
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.XTandem, results);
         }
-    }  
-    
+    }
+
 }

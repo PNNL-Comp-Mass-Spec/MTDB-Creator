@@ -205,7 +205,7 @@ namespace MTDBCreator.ViewModels
 
             return scatterSeries;
         }
-        
+
         public ScatterSeries MakeMassAnalysisScatterSeries(AnalysisJobItem analysisJobItem, Options options)
         {
             var color = m_SeriesColorDictionary[analysisJobItem.FilePath];
@@ -324,7 +324,7 @@ namespace MTDBCreator.ViewModels
                             case 0:
                                 plotModel.Series.Add(MakeNetAnalysisScatterSeries(analysisJobItem, options));
                                 break;
-                                
+
                             case 1:
                                 plotModel.Series.Add(MakeMassAnalysisScatterSeries(analysisJobItem, options));
                                 break;

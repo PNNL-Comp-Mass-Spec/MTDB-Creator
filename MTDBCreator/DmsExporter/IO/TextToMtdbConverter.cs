@@ -12,7 +12,7 @@ namespace MTDBCreator.DmsExporter.IO
     internal class TextToMtdbConverter : ITextToDbConverter
     {
         private char m_separator = '\t';
-        
+
         private Dictionary<int, string> m_idToMassTagDict;
         private Dictionary<int, ConsensusTarget> m_idToConensusTargetDict;
         private Dictionary<int, Tuple<string, List<short>>> m_idToChargeAndPeptide;
@@ -93,7 +93,7 @@ namespace MTDBCreator.DmsExporter.IO
 
                         foreach (var target in m_idToConensusTargetDict.Values)
                         {
-                            var ctValue = string.Format("{0}, {1}, {2}, {3}, {4}, '{5}', '{6}', '{7}', {8}, '{9}', {10});", 
+                            var ctValue = string.Format("{0}, {1}, {2}, {3}, {4}, '{5}', '{6}', '{7}', {8}, '{9}', {10});",
                                                         target.Id,
                                                         target.AverageNet,
                                                         target.StdevNet,
@@ -122,7 +122,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd.CommandText = protInsertText + protValue;
                             cmd.ExecuteNonQuery();
                         }
-                        
+
                         var ptmInsertText = "Insert into PostTranslationalModification (PostTranslationModId, " +
                                        " Formula, Mass, Name) " +
                                        " VALUES (";
@@ -178,7 +178,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd.ExecuteNonQuery();
                         }
 
-                        var ctProtPairInsertText = "Insert into ConsensusProteinPair (PairId, CleavageState, TerminusState, " + 
+                        var ctProtPairInsertText = "Insert into ConsensusProteinPair (PairId, CleavageState, TerminusState, " +
                                                    " ResidueStart, ResidueEnd, TargetId, ProteinId) " +
                                                    " VALUES (";
 

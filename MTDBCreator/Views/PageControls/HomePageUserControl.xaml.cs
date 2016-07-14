@@ -91,9 +91,9 @@ namespace MTDBCreator.PageControls
 
                         if (analysisJobViewModel.Database != null)
                         {
-                            
+
                             mainWindow.NewWorkspacePage(analysisJobViewModel);
-                            
+
                         }
                     }
                 }

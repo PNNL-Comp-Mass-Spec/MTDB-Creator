@@ -131,9 +131,9 @@ namespace MTDBCreator.Helpers.BackgroundWork
                     statusMessage = e.CurrentTask;
 
                 statusMessage += ": " + Path.GetFileName(analysisJobItem.FilePath);
-                
+
                 HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current,
-                                                                      new object[] 
+                                                                      new object[]
                                                                       {e.Total.ToString(), statusMessage});
             }
         }

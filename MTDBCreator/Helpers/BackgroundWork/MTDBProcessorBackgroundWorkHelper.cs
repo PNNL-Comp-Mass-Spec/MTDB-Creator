@@ -47,9 +47,9 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
                     if (HostProcessWindow.MainBackgroundWorker.CancellationPending || mAbortRequested)
                     {
-                        e.Cancel = true;                       
+                        e.Cancel = true;
                     }
-                
+
             }
             catch (Exception ex)
             {
@@ -58,7 +58,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
         }
 
         private void mtdbProcessor_AlignmentComplete(object sender, AlignmentCompleteArgs e)
-        {            
+        {
         }
 
         private void mtdbProcessor_ProgressChanged(object sender, PercentCompleteEventArgs e)
@@ -129,6 +129,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
             get { return m_analysisJobViewModel.Database; }
         }
 
-        public ProcessWindow HostProcessWindow { get; set; }        
+        public ProcessWindow HostProcessWindow { get; set; }
     }
 }

@@ -7,9 +7,9 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Database
 {
-	/// <summary>
-	/// NHibernate mapping for the Evidence class. Note the "Not.LazyLoad"
-	/// </summary>
+    /// <summary>
+    /// NHibernate mapping for the Evidence class. Note the "Not.LazyLoad"
+    /// </summary>
     public class EvidenceMap : ClassMap<Evidence>
     {
         /// <summary>

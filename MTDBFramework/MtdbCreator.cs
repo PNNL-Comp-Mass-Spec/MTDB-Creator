@@ -10,17 +10,17 @@ using System.Linq;
 
 namespace MTDBFramework
 {
-	/// <summary>
-	/// API for using MTDBCreator in other applications
-	/// </summary>
+    /// <summary>
+    /// API for using MTDBCreator in other applications
+    /// </summary>
     public static class MtdbCreator
     {
-		/// <summary>
-		/// Create a MTDB with the given files
-		/// </summary>
-		/// <param name="paths">Paths to the files to process</param>
-		/// <param name="dbFileName">Name of MTDB to create</param>
-		/// <returns></returns>
+        /// <summary>
+        /// Create a MTDB with the given files
+        /// </summary>
+        /// <param name="paths">Paths to the files to process</param>
+        /// <param name="dbFileName">Name of MTDB to create</param>
+        /// <returns></returns>
         public static TargetDatabase CreateDB(List<string> paths, string dbFileName)
         {
             var options = new Options();
@@ -82,24 +82,24 @@ namespace MTDBFramework
 
                 return database;
             }
-                
+
             return existingDatabase;
         }
 
-		/// <summary>
-		/// Load an existing MTDB database into a TargetDatabase
-		/// </summary>
-		/// <param name="path">Path to MTDB file</param>
-		/// <returns></returns>
-		public static TargetDatabase LoadDB(string path)
-		{
-			if (File.Exists(path) && Path.GetExtension(path) == ".mtdb")
-			{
-				var mtdbReader = new SqLiteTargetDatabaseReader();
-				return mtdbReader.ReadDb(path);
-			}
-			return new TargetDatabase();
-		}
+        /// <summary>
+        /// Load an existing MTDB database into a TargetDatabase
+        /// </summary>
+        /// <param name="path">Path to MTDB file</param>
+        /// <returns></returns>
+        public static TargetDatabase LoadDB(string path)
+        {
+            if (File.Exists(path) && Path.GetExtension(path) == ".mtdb")
+            {
+                var mtdbReader = new SqLiteTargetDatabaseReader();
+                return mtdbReader.ReadDb(path);
+            }
+            return new TargetDatabase();
+        }
 
         private static LcmsIdentificationTool DetermineTool(string path)
         {

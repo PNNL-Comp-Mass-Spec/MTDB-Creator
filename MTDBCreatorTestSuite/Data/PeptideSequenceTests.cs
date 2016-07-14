@@ -51,7 +51,7 @@ namespace MTDBCreatorTestSuite.Data
                                 Debug.Assert(evidence.NumTrypticEnds < 3);
                             }
                             break;
-                            
+
                         case clsPHRPReader.ePeptideHitResultType.MSGFDB:
                             foreach (MsgfPlusResult evidence in data.Evidences)
                             {
@@ -66,7 +66,7 @@ namespace MTDBCreatorTestSuite.Data
             }
         }
 
-        // Peptides with PTMs should have different values for observed NET, delta Mass, and MZ 
+        // Peptides with PTMs should have different values for observed NET, delta Mass, and MZ
         [Test]
         [TestCase(@"XTandemData\QC_Shew_12_02_pt5_2b_20Dec12_Leopard_12-11-10_xt.txt")]
         public void PTMCheck(string relativePath)

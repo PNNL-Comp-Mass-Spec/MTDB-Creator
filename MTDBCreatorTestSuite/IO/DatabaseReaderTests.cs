@@ -12,9 +12,9 @@ namespace MTDBCreatorTestSuite.IO
         /// <param name="path"></param>
         /// <param name="expectedNumberOfTargets"></param>
         [Test]
-		[TestCase(@"testDatabase-100-3.mtdb", 100, Ignore = false)]
+        [TestCase(@"testDatabase-100-3.mtdb", 100, Ignore = false)]
         // Updated due to default setting for MSGF Filter being changed to QValue
-		[TestCase(@"Output.mtdb", 8520, Ignore = false)]
+        [TestCase(@"Output.mtdb", 8520, Ignore = false)]
         public void TestLoadDatabase(string path, int expectedNumberOfTargets)
         {
             var reader          = new SqLiteTargetDatabaseReader();

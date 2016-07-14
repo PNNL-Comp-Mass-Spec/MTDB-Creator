@@ -2,64 +2,64 @@
 
 namespace MTDBFramework.Database
 {
-	/// <summary>
-	/// Relation between a ConsensusTarget object and a ProteinInformation object for database use
-	/// </summary>
+    /// <summary>
+    /// Relation between a ConsensusTarget object and a ProteinInformation object for database use
+    /// </summary>
     public class ConsensusProteinPair
     {
-		/// <summary>
-		/// ConsensusTarget object
-		/// </summary>
+        /// <summary>
+        /// ConsensusTarget object
+        /// </summary>
         public ConsensusTarget Consensus { get; set; }
 
-		/// <summary>
-		/// ProteinInformation object
-		/// </summary>
+        /// <summary>
+        /// ProteinInformation object
+        /// </summary>
         public ProteinInformation Protein { get; set; }
 
-		/// <summary>
-		/// Id
-		/// </summary>
+        /// <summary>
+        /// Id
+        /// </summary>
         public int Id { get; set; }
 
         private int m_consensus;
         private int m_prot;
 
-		/// <summary>
-		/// ConsensusTarget Id
-		/// </summary>
+        /// <summary>
+        /// ConsensusTarget Id
+        /// </summary>
         public int ConsensusId { get { return (Consensus != null) ? Consensus.Id : m_consensus; } set { m_consensus = value; } }
 
-		/// <summary>
-		/// ProteinInformation Id
-		/// </summary>
+        /// <summary>
+        /// ProteinInformation Id
+        /// </summary>
         public int ProteinId { get { return (Protein != null) ? Protein.Id : m_prot; } set { m_prot = value; } }
 
-		/// <summary>
-		/// Cleavage State
-		/// </summary>
+        /// <summary>
+        /// Cleavage State
+        /// </summary>
         public short CleavageState { get; set; }
 
-		/// <summary>
-		/// Terminus State
-		/// </summary>
+        /// <summary>
+        /// Terminus State
+        /// </summary>
         public short TerminusState { get; set; }
 
-		/// <summary>
-		/// Residue Start Position
-		/// </summary>
+        /// <summary>
+        /// Residue Start Position
+        /// </summary>
         public int ResidueStart { get; set; }
 
-		/// <summary>
-		/// Residue End Position
-		/// </summary>
+        /// <summary>
+        /// Residue End Position
+        /// </summary>
         public int ResidueEnd { get; set; }
 
-		/// <summary>
-		/// Overloaded equality comparison
-		/// </summary>
-		/// <param name="obj"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Overloaded equality comparison
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object obj)
         {
             if (obj == null || GetType() != obj.GetType())
@@ -72,10 +72,10 @@ namespace MTDBFramework.Database
                  && (cp.Protein.Id == this.Protein.Id));
         }
 
-		/// <summary>
-		/// Overloaded Hash
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Overloaded Hash
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return 9999;

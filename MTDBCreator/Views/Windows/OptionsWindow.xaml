@@ -1,7 +1,7 @@
 ﻿<Window x:Class="MTDBCreator.Views.OptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:helpers="clr-namespace:MTDBCreator.Helpers"        
+        xmlns:helpers="clr-namespace:MTDBCreator.Helpers"
         xmlns:retentionTimePrediction="clr-namespace:MTDBFramework.Algorithms.RetentionTimePrediction;assembly=MTDBFramework"
         xmlns:msgfFilterType="clr-namespace:MTDBFramework.Data;assembly=MTDBFramework"
         Title="Options" Height="670" Width="420" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
@@ -19,8 +19,8 @@
         <TabControl Grid.Row="0">
             <TabItem Name="AlignmentOptionsTabItem" Header="Alignment Options">
                 <StackPanel Orientation="Vertical">
-                    
-                    
+
+
                     <GroupBox Header="MSGF+ Filters" >
                         <Grid>
                             <Grid.RowDefinitions>
@@ -41,7 +41,7 @@
                                 Max MSFG Spectral Probability For Alignment
                             </Label>
                             <TextBox x:Name="MaxMsgfSpecProbBox"
-                                     Grid.Row="1" Grid.Column="3" 
+                                     Grid.Row="1" Grid.Column="3"
                                      PreviewTextInput="Control_PreviewTextInput"
                                      Text="{Binding Path=Options.MaxMsgfSpecProb, UpdateSourceTrigger=Explicit}">
                                 <TextBox.ToolTip>
@@ -52,7 +52,7 @@
                                 Max Q Value For Alignment
                             </Label>
                             <TextBox x:Name="MaxMsgfQvalueBox"
-                                     Grid.Row="3" Grid.Column="3" 
+                                     Grid.Row="3" Grid.Column="3"
                                      PreviewTextInput="Control_PreviewTextInput"
                                      Text="{Binding Path=Options.MsgfQValue, UpdateSourceTrigger=Explicit}">
                                 <TextBox.ToolTip>
@@ -77,14 +77,14 @@
                             </Grid.ColumnDefinitions>
 
                             <RadioButton x:Name="SpectralValueRadioButton"
-                                         Grid.Row="1" Grid.Column="1" 
-                                         IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter}, 
+                                         Grid.Row="1" Grid.Column="1"
+                                         IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter},
                                          ConverterParameter={x:Static msgfFilterType:MsgfFilterType.SPECTRAL_PROBABILITY}, UpdateSourceTrigger=Explicit}" >
                                 Spectral E Value
                             </RadioButton>
                             <RadioButton x:Name="QValueRadioButton"
                                          Grid.Row="3" Grid.Column="1"
-                                         IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter}, 
+                                         IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter},
                                          ConverterParameter={x:Static msgfFilterType:MsgfFilterType.Q_VALUE}, UpdateSourceTrigger=Explicit}">
                                 Q Value
                             </RadioButton>
@@ -109,16 +109,16 @@
                                 <ColumnDefinition Width="8"/>
                             </Grid.ColumnDefinitions>
                             <ComboBox x:Name="AlignmentComboBox"
-                                Grid.Row="1"          
+                                Grid.Row="1"
                                 Grid.ColumnSpan="4"
                                 Margin="5"
                                 ItemsSource="{Binding RegressionTypes}"
-                                SelectedItem ="{Binding SelectedRegressionType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>                            
+                                SelectedItem ="{Binding SelectedRegressionType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             <Label Grid.Row="5" Grid.Column="1">Regression Order</Label>
                             <TextBox x:Name="OrderTextBox"
-                                     Grid.Row="5" Grid.Column="3" 
+                                     Grid.Row="5" Grid.Column="3"
                                      PreviewTextInput="Control_PreviewTextInput"
-                                     IsEnabled="{Binding Path=OrderEnabled, UpdateSourceTrigger=PropertyChanged}" 
+                                     IsEnabled="{Binding Path=OrderEnabled, UpdateSourceTrigger=PropertyChanged}"
                                      Text="{Binding Path=Options.RegressionOrder}">
                                 <TextBox.ToolTip>
                                     Specify order of Mixture Model Regression Fit between Scan and NET
@@ -145,22 +145,22 @@
                                 <ColumnDefinition Width="8"/>
                             </Grid.ColumnDefinitions>
                             <RadioButton x:Name="KangasRadioButton"
-                                         Grid.Row="1" Grid.Column="1" 
+                                         Grid.Row="1" Grid.Column="1"
                                          Command="{Binding Path=UpdatePredictionCommand}"
-                                         IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, 
+                                         IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter},
                                          ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.KANGAS}, UpdateSourceTrigger=Explicit}" >
                                 Kangas ANN
                             </RadioButton>
                             <RadioButton x:Name="KrokhinRadioButton"
                                          Grid.Row="3" Grid.Column="1"
                                          Command="{Binding Path=UpdatePredictionCommand}"
-                                         IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, 
+                                         IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter},
                                          ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.KROKHIN}, UpdateSourceTrigger=Explicit}">
                                 Krokhin
                             </RadioButton>
-                            <TextBox x:Name="PredictionAlgorithmDescriptionTextBox" 
+                            <TextBox x:Name="PredictionAlgorithmDescriptionTextBox"
                                      IsReadOnly="True"
-                                     Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" 
+                                     Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"
                                      Text="{Binding Path=PredictionText}"
                                      TextWrapping="Wrap" />
                         </Grid>
@@ -181,7 +181,7 @@
                                 Database Format
                             </Label>
                             <ComboBox x:Name="SaveFormatComboBox"
-                                Grid.Row="1"      
+                                Grid.Row="1"
                                 Grid.Column="2"
                                 Grid.ColumnSpan="2"
                                 Margin="5"
@@ -191,7 +191,7 @@
                     </GroupBox>
                 </StackPanel>
             </TabItem>
-            
+
         </TabControl>
 
         <!-- Bottom Buttons -->

@@ -101,7 +101,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
                     HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, String.Concat("Writing to MTDB: ", DatabaseFileName));
 
                 return;
-            }               
+            }
 
             var type = (MtdbCreationProgressType)Enum.Parse(typeof(MtdbCreationProgressType), e.UserObject.ToString());
 

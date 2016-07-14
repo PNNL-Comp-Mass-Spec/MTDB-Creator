@@ -6,20 +6,20 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Algorithms.Alignment
 {
-	/// <summary>
-	/// Alignment Filtering for MSGF+ Workflows
-	/// </summary>
+    /// <summary>
+    /// Alignment Filtering for MSGF+ Workflows
+    /// </summary>
     public class MsgfPlusAlignmentFilter : ITargetFilter
     {
-		/// <summary>
-		/// Options
-		/// </summary>
+        /// <summary>
+        /// Options
+        /// </summary>
         public Options FilterOptions { get; set; }
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="options"></param>
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="options"></param>
         public MsgfPlusAlignmentFilter(Options options)
         {
             FilterOptions = options;

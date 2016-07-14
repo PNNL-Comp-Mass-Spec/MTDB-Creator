@@ -12,62 +12,62 @@ namespace MTDBFramework.IO
     /// </summary>
     public sealed class SqLiteTargetDatabaseReader : ITargetDatabaseReader
     {
-		private readonly TargetDatabase m_targetDb = new TargetDatabase();
-		private readonly Dictionary<string, LcmsDataSet> m_lcmsDataDic = new Dictionary<string, LcmsDataSet>();
-	    private string m_lastReadFile;
-		
-		/// <summary>
-		/// Reads a target database from the path provided.
-		/// </summary>
-		/// <param name="path">Path to SQLite database file.</param>
-		/// <returns>Target Database</returns>
-		public TargetDatabase ReadDb(string path)
-		{
-			ReadSqLite(path);
-			return m_targetDb;
-		}
+        private readonly TargetDatabase m_targetDb = new TargetDatabase();
+        private readonly Dictionary<string, LcmsDataSet> m_lcmsDataDic = new Dictionary<string, LcmsDataSet>();
+        private string m_lastReadFile;
 
-		/// <summary>
-		/// Reads a LCMS Dataset from the path provided.
-		/// </summary>
-		/// <param name="path">Path to SQLite database file.</param>
-		/// <returns>Target Database</returns>
-		public IEnumerable<LcmsDataSet> Read(string path)
-		{
-			ReadSqLite(path);
-			var datasets = new List<LcmsDataSet>();
+        /// <summary>
+        /// Reads a target database from the path provided.
+        /// </summary>
+        /// <param name="path">Path to SQLite database file.</param>
+        /// <returns>Target Database</returns>
+        public TargetDatabase ReadDb(string path)
+        {
+            ReadSqLite(path);
+            return m_targetDb;
+        }
 
-			foreach (var member in m_lcmsDataDic)
-			{
-				datasets.Add(member.Value);
-			}
+        /// <summary>
+        /// Reads a LCMS Dataset from the path provided.
+        /// </summary>
+        /// <param name="path">Path to SQLite database file.</param>
+        /// <returns>Target Database</returns>
+        public IEnumerable<LcmsDataSet> Read(string path)
+        {
+            ReadSqLite(path);
+            var datasets = new List<LcmsDataSet>();
 
-			return datasets;
-		}
+            foreach (var member in m_lcmsDataDic)
+            {
+                datasets.Add(member.Value);
+            }
 
-		private void ReadSqLite(string path)
-		{
-			// Don't read again if we just read the file
-			if (path == m_lastReadFile)
-			{
-				return;
-			}
-			// Reset the data
-			m_targetDb.ClearTargets();
-			m_lcmsDataDic.Clear();
+            return datasets;
+        }
 
-			//var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
-			DatabaseFactory.DatabaseFile = path;
+        private void ReadSqLite(string path)
+        {
+            // Don't read again if we just read the file
+            if (path == m_lastReadFile)
+            {
+                return;
+            }
+            // Reset the data
+            m_targetDb.ClearTargets();
+            m_lcmsDataDic.Clear();
+
+            //var sessionFactory = DatabaseReaderFactory.CreateSessionFactory(path);
+            DatabaseFactory.DatabaseFile = path;
             DatabaseFactory.ReadOrAppend = true;
-			var sessionFactory = DatabaseFactory.CreateSessionFactory(DatabaseType.SQLite);
-            
+            var sessionFactory = DatabaseFactory.CreateSessionFactory(DatabaseType.SQLite);
+
             var readConsensus = new List<ConsensusTarget>();
             var readPair = new List<ConsensusProteinPair>();
             var readProt = new List<ProteinInformation>();
             var readEvidence = new List<Evidence>();
             var readPtms = new List<PostTranslationalModification>();
             var readPtmPairs = new List<ConsensusPtmPair>();
-			var readOptions = new List<Options>();
+            var readOptions = new List<Options>();
 
             var consensusDic = new Dictionary<int, ConsensusTarget>();
             var consensusProtDic = new Dictionary<int, List<ConsensusProteinPair>>();
@@ -82,7 +82,7 @@ namespace MTDBFramework.IO
                     session.CreateCriteria<ProteinInformation>().List(readProt);
                     session.CreateCriteria<ConsensusTarget>().List(readConsensus);
                     session.CreateCriteria<PostTranslationalModification>().List(readPtms);
-	                session.CreateCriteria<Options>().List(readOptions);
+                    session.CreateCriteria<Options>().List(readOptions);
                     session.CreateCriteria<ConsensusProteinPair>().List(readPair);
                     session.CreateCriteria<ConsensusPtmPair>().List(readPtmPairs);
                     session.CreateCriteria<Evidence>().List(readEvidence);
@@ -92,8 +92,8 @@ namespace MTDBFramework.IO
                 /*
                 using (var transact = session.BeginTransaction())
                 {
-					session.CreateCriteria<ConsensusProteinPair>().List(readPair);
-					session.CreateCriteria<ConsensusPtmPair>().List(readPtmPairs);
+                    session.CreateCriteria<ConsensusProteinPair>().List(readPair);
+                    session.CreateCriteria<ConsensusPtmPair>().List(readPtmPairs);
                     session.CreateCriteria<Evidence>().List(readEvidence);
                     transact.Commit();
                 }
@@ -117,7 +117,7 @@ namespace MTDBFramework.IO
                     }
                     consensusProtDic[pair.Consensus.Id].Add(pair);
                 }
-                
+
                 foreach (var pair in readPtmPairs)
                 {
                     if (!consensusPtmDic.ContainsKey(pair.Target.Id))
@@ -181,8 +181,8 @@ namespace MTDBFramework.IO
                     consensusDic[evidence.Parent.Id].AddEvidence(evidence);
                 }
             }
-			// Set the member variable to avoid double reads.
-			m_lastReadFile = path;
-		}
+            // Set the member variable to avoid double reads.
+            m_lastReadFile = path;
+        }
     }
 }

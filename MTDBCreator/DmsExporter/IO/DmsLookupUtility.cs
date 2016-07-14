@@ -269,7 +269,7 @@ namespace MTDBCreator.DmsExporter.IO
                             connection.Open();
 
                             var massTagSql = MassTagAccessDbQuery(selectedStats);
-                            
+
                             var cmd = new SqlCommand(massTagSql, connection);
                             var reader = cmd.ExecuteReader();
 
@@ -370,7 +370,7 @@ namespace MTDBCreator.DmsExporter.IO
                                 }
                                 reader.Close();
                             }
-                            
+
                             var massTagModsSql = ModAccessDbQuery();
                             var mainDb = new SqlConnection(MainConnectionString);
                             mainDb.Open();
@@ -388,8 +388,8 @@ namespace MTDBCreator.DmsExporter.IO
                                 while (reader.Read())
                                 {
                                     var line = string.Format("{0}{3}{1}{3}{2}",
-                                        !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : 0, 
-                                        !Convert.IsDBNull(reader.GetValue(3)) ? reader.GetValue(3) : 0, 
+                                        !Convert.IsDBNull(reader.GetValue(1)) ? reader.GetValue(1) : 0,
+                                        !Convert.IsDBNull(reader.GetValue(3)) ? reader.GetValue(3) : 0,
                                         !Convert.IsDBNull(reader.GetValue(9)) ? reader.GetValue(9) : 0,
                                         m_separator);
                                     writer.WriteLine(line);
@@ -397,11 +397,11 @@ namespace MTDBCreator.DmsExporter.IO
                                 reader.Close();
                             }
                             mainDb.Close();
-                            
+
                             var massTagNetSql = MassTagNetAccessDbQuery(selectedStats);
                             cmd = new SqlCommand(massTagNetSql, connection);
                             reader = cmd.ExecuteReader();
-                            
+
                             using (var writer = new StreamWriter(directory + "tempMassTagsNet.txt"))
                             {
                                 var header = string.Format("{0}{8}{1}{8}{2}{8}{3}{8}{4}{8}{5}{8}{6}{8}{7}",
@@ -652,7 +652,7 @@ namespace MTDBCreator.DmsExporter.IO
                                 }
                                 reader.Close();
                             }
-                            
+
                             var filterSet = FilterSetOverviewAccessDbQuery();
 
                             cmd = new SqlCommand(filterSet, connection);
@@ -817,7 +817,7 @@ namespace MTDBCreator.DmsExporter.IO
                                 peptideOptions.FilterSetId = (!Convert.IsDBNull(reader.GetValue(2)) ? reader.GetInt32(2) : 0);
                                 peptideOptions.FilterSetName = GetDBString(reader, 3);
                                 peptideOptions.FilterSetDescription = GetDBString(reader, 4);
-                                
+
                                 statsDictionary.Add(Convert.ToDouble(peptideOptions.PmtQualityScore), peptideOptions);
 
                             }

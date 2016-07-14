@@ -1,33 +1,33 @@
 ﻿namespace MTDBFramework.UI
 {
-	/// <summary>
-	/// Controlled vocabulary for progress types
-	/// </summary>
+    /// <summary>
+    /// Controlled vocabulary for progress types
+    /// </summary>
     public enum MtdbCreationProgressType
     {
-		/// <summary>
-		/// Consensus Target
-		/// </summary>
+        /// <summary>
+        /// Consensus Target
+        /// </summary>
         CONSENSUS_TARGET,
 
-		/// <summary>
-		/// Sequence
-		/// </summary>
+        /// <summary>
+        /// Sequence
+        /// </summary>
         SEQUENCE,
 
-		/// <summary>
-		/// Peptide
-		/// </summary>
+        /// <summary>
+        /// Peptide
+        /// </summary>
         PEPTIDE,
 
-		/// <summary>
-		/// Analysis Sourder
-		/// </summary>
+        /// <summary>
+        /// Analysis Sourder
+        /// </summary>
         ANALYSIS_SOURCE,
 
-		/// <summary>
-		/// Commit
-		/// </summary>
+        /// <summary>
+        /// Commit
+        /// </summary>
         COMMIT
     }
 }

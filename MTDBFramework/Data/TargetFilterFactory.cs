@@ -1,16 +1,16 @@
 ﻿namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// Target filter determination and configuration
-	/// </summary>
+    /// <summary>
+    /// Target filter determination and configuration
+    /// </summary>
     public static class TargetFilterFactory
     {
-		/// <summary>
-		/// Configure and return the appropriate target filter
-		/// </summary>
-		/// <param name="tool"></param>
-		/// <param name="options"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Configure and return the appropriate target filter
+        /// </summary>
+        /// <param name="tool"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static ITargetFilter Create(LcmsIdentificationTool tool, Options options)
         {
             ITargetFilter targetFilter = null;

@@ -3,14 +3,14 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Database
 {
-	/// <summary>
-	/// NHibernate mapping for the Options class
-	/// </summary>
+    /// <summary>
+    /// NHibernate mapping for the Options class
+    /// </summary>
     public class OptionsMap : ClassMap<Options>
     {
-		/// <summary>
-		/// Constructor
-		/// </summary>
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OptionsMap()
         {
             Not.LazyLoad();
@@ -19,14 +19,14 @@ namespace MTDBFramework.Database
             // Regression
             Map(x => x.RegressionType);
             Map(x => x.RegressionOrder);
-            
+
             // NET Prediction
             Map(x => x.PredictorType).Column("NetPredictionType");
 
             // Peptides
-		    Map(x => x.MsgfFilter).Column("MsgfFilterParameter");
-		    Map(x => x.MaxMsgfSpecProb);
-		    Map(x => x.MsgfQValue).Column("MaxMsgfQValue");
+            Map(x => x.MsgfFilter).Column("MsgfFilterParameter");
+            Map(x => x.MaxMsgfSpecProb);
+            Map(x => x.MsgfQValue).Column("MaxMsgfQValue");
         }
     }
 }

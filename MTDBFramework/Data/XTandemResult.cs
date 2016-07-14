@@ -1,8 +1,8 @@
 ﻿namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// XTandem input storage for evidence
-	/// </summary>
+    /// <summary>
+    /// XTandem input storage for evidence
+    /// </summary>
     public class XTandemResult : Evidence
     {
         #region Private Fields
@@ -17,14 +17,14 @@
         private double m_peptideHyperscore;
         private double m_yScore;
         private short m_numTrypticEnds;
-        
+
         #endregion
 
         #region Public Properties
 
-		/// <summary>
-		/// Group Id
-		/// </summary>
+        /// <summary>
+        /// Group Id
+        /// </summary>
         public int GroupId
         {
             get
@@ -38,9 +38,9 @@
             }
         }
 
-		/// <summary>
-		/// B Score
-		/// </summary>
+        /// <summary>
+        /// B Score
+        /// </summary>
         public double BScore
         {
             get
@@ -54,9 +54,9 @@
             }
         }
 
-		/// <summary>
-		/// Delta CN2
-		/// </summary>
+        /// <summary>
+        /// Delta CN2
+        /// </summary>
         public double DeltaCn2
         {
             get
@@ -70,9 +70,9 @@
             }
         }
 
-		/// <summary>
-		/// Log Intensity
-		/// </summary>
+        /// <summary>
+        /// Log Intensity
+        /// </summary>
         public double LogIntensity
         {
             get
@@ -86,9 +86,9 @@
             }
         }
 
-		/// <summary>
-		/// Log Peptide E Value
-		/// </summary>
+        /// <summary>
+        /// Log Peptide E Value
+        /// </summary>
         public double LogPeptideEValue
         {
             get
@@ -102,9 +102,9 @@
             }
         }
 
-		/// <summary>
-		/// Number of Y Ions
-		/// </summary>
+        /// <summary>
+        /// Number of Y Ions
+        /// </summary>
         public short NumberYIons
         {
             get
@@ -118,9 +118,9 @@
             }
         }
 
-		/// <summary>
-		/// Number of B Ions
-		/// </summary>
+        /// <summary>
+        /// Number of B Ions
+        /// </summary>
         public short NumberBIons
         {
             get
@@ -134,9 +134,9 @@
             }
         }
 
-		/// <summary>
-		/// Peptide Hyperscore
-		/// </summary>
+        /// <summary>
+        /// Peptide Hyperscore
+        /// </summary>
         public double PeptideHyperscore
         {
             get
@@ -161,15 +161,15 @@
                         NormalizedScore = 0.0874*value;
                         break;
                 }
-                
+
 
                 OnPropertyChanged("PeptideHyperscore");
             }
         }
 
-		/// <summary>
-		/// Y Score
-		/// </summary>
+        /// <summary>
+        /// Y Score
+        /// </summary>
         public double YScore
         {
             get
@@ -183,9 +183,9 @@
             }
         }
 
-		/// <summary>
-		/// Number of Tryptic Ends
-		/// </summary>
+        /// <summary>
+        /// Number of Tryptic Ends
+        /// </summary>
         public short NumTrypticEnds
         {
             get
@@ -199,6 +199,6 @@
             }
         }
 
-        #endregion        
+        #endregion
     }
 }

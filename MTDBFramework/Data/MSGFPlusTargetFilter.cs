@@ -1,19 +1,19 @@
 ﻿namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// Target Filtering for MSGF+ Workflows
-	/// </summary>
+    /// <summary>
+    /// Target Filtering for MSGF+ Workflows
+    /// </summary>
     public class MsgfPlusTargetFilter : ITargetFilter
     {
-		/// <summary>
-		/// Options
-		/// </summary>
+        /// <summary>
+        /// Options
+        /// </summary>
         public Options FilterOptions { get; set; }
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="options"></param>
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="options"></param>
         public MsgfPlusTargetFilter(Options options)
         {
             FilterOptions = options;
@@ -59,7 +59,7 @@
                     {
                         passFilter = true;
                     }
-                    break;        
+                    break;
             }
 
             return passFilter;

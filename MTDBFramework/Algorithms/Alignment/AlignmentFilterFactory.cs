@@ -6,17 +6,17 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Algorithms.Alignment
 {
-	/// <summary>
-	/// Tools for establishing alignment filters
-	/// </summary>
+    /// <summary>
+    /// Tools for establishing alignment filters
+    /// </summary>
     public class AlignmentFilterFactory
     {
-		/// <summary>
-		/// Create an alignment filter
-		/// </summary>
-		/// <param name="tool">Format of input data</param>
-		/// <param name="options">Options</param>
-		/// <returns>Alignment filter</returns>
+        /// <summary>
+        /// Create an alignment filter
+        /// </summary>
+        /// <param name="tool">Format of input data</param>
+        /// <param name="options">Options</param>
+        /// <returns>Alignment filter</returns>
         public static ITargetFilter Create(LcmsIdentificationTool tool, Options options)
         {
             ITargetFilter alignmentFilter = null;

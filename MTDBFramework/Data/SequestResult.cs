@@ -6,9 +6,9 @@ using System;
 
 namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// Sequest input storage for evidence
-	/// </summary>
+    /// <summary>
+    /// Sequest input storage for evidence
+    /// </summary>
     public class SequestResult : Evidence
     {
         #region Private Fields
@@ -31,9 +31,9 @@ namespace MTDBFramework.Data
 
         #region Public Properties
 
-		/// <summary>
-		/// Scan Count
-		/// </summary>
+        /// <summary>
+        /// Scan Count
+        /// </summary>
         public short ScanCount
         {
             get { return m_scanCount; }
@@ -44,9 +44,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// XCorr
-		/// </summary>
+        /// <summary>
+        /// XCorr
+        /// </summary>
         public double XCorr
         {
             get { return m_xCorr; }
@@ -58,9 +58,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Delta CN
-		/// </summary>
+        /// <summary>
+        /// Delta CN
+        /// </summary>
         public double DelCn
         {
             get { return m_delCn; }
@@ -71,9 +71,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// SP
-		/// </summary>
+        /// <summary>
+        /// SP
+        /// </summary>
         public double Sp
         {
             get { return m_sp; }
@@ -84,9 +84,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Reference
-		/// </summary>
+        /// <summary>
+        /// Reference
+        /// </summary>
         public string Reference
         {
             get { return m_reference; }
@@ -97,9 +97,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Delta CN2
-		/// </summary>
+        /// <summary>
+        /// Delta CN2
+        /// </summary>
         public double DelCn2
         {
             get { return m_delCn2; }
@@ -110,9 +110,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Rank SP
-		/// </summary>
+        /// <summary>
+        /// Rank SP
+        /// </summary>
         public short RankSp
         {
             get { return m_rankSp; }
@@ -123,9 +123,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Rank XCorr
-		/// </summary>
+        /// <summary>
+        /// Rank XCorr
+        /// </summary>
         public short RankXc
         {
             get { return m_rankXc; }
@@ -136,22 +136,22 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// XCorr Ratio
-		/// </summary>
+        /// <summary>
+        /// XCorr Ratio
+        /// </summary>
         public double XcRatio
         {
             get { return m_xcRatio; }
             set
             {
-                m_xcRatio = value; 
+                m_xcRatio = value;
                 OnPropertyChanged("XcRatio");
             }
         }
 
-		/// <summary>
-		/// Passed Filter
-		/// </summary>
+        /// <summary>
+        /// Passed Filter
+        /// </summary>
         public bool PassFilt
         {
             get { return m_passFilt; }
@@ -162,9 +162,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// F Score
-		/// </summary>
+        /// <summary>
+        /// F Score
+        /// </summary>
         public double FScore
         {
             get { return m_fScore; }
@@ -175,9 +175,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// M Score
-		/// </summary>
+        /// <summary>
+        /// M Score
+        /// </summary>
         public double MScore
         {
             get { return m_mScore; }
@@ -188,9 +188,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Number of Tryptic Ends
-		/// </summary>
+        /// <summary>
+        /// Number of Tryptic Ends
+        /// </summary>
         public short NumTrypticEnds
         {
             get { return m_numTrypticEnds; }
@@ -213,11 +213,11 @@ namespace MTDBFramework.Data
         private static readonly int[] MaxPeptideLens = { 100, 15, 25, 50, 50 };
         private static readonly int[] NumFrags = { 2, 2, 4, 6, 6 };
 
-		/// <summary>
-		/// Calculate the PeptideProphet Discriminant Score
-		/// </summary>
-		/// <param name="result"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Calculate the PeptideProphet Discriminant Score
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
         public static double CalculatePeptideProphetDiscriminantScore(SequestResult result)
         {
             var charge = result.Charge;

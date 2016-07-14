@@ -1,21 +1,21 @@
 ﻿namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// Controlled vocabulary for database output
-	/// </summary>
+    /// <summary>
+    /// Controlled vocabulary for database output
+    /// </summary>
     public enum DatabaseType
     {
-		/// <summary>
-		/// Microsoft Access DB
-		/// </summary>
+        /// <summary>
+        /// Microsoft Access DB
+        /// </summary>
         Access,
-		/// <summary>
-		/// SQLite DB
-		/// </summary>
+        /// <summary>
+        /// SQLite DB
+        /// </summary>
         SQLite,
-		/// <summary>
-		/// No database output
-		/// </summary>
+        /// <summary>
+        /// No database output
+        /// </summary>
         NotSaved
     }
 }

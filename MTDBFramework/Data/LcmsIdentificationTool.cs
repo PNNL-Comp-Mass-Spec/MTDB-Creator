@@ -1,41 +1,41 @@
 ﻿namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// Controlled vocabulary for LCMS formats
-	/// </summary>
+    /// <summary>
+    /// Controlled vocabulary for LCMS formats
+    /// </summary>
     public enum LcmsIdentificationTool
     {
-		/// <summary>
-		/// Sequest
-		/// </summary>
+        /// <summary>
+        /// Sequest
+        /// </summary>
         Sequest,
-		/// <summary>
-		/// XTandem
-		/// </summary>
+        /// <summary>
+        /// XTandem
+        /// </summary>
         XTandem,
-		/// <summary>
-		/// MSAlign
-		/// </summary>
+        /// <summary>
+        /// MSAlign
+        /// </summary>
         MSAlign,
-		/// <summary>
-		/// MSGF+
-		/// </summary>
+        /// <summary>
+        /// MSGF+
+        /// </summary>
         MsgfPlus,
-		/// <summary>
-		/// MZIdentML
-		/// </summary>
+        /// <summary>
+        /// MZIdentML
+        /// </summary>
         MZIdentML,
-		/// <summary>
-		/// RAW
-		/// </summary>
+        /// <summary>
+        /// RAW
+        /// </summary>
         Raw,
-		/// <summary>
-		/// Description
-		/// </summary>
+        /// <summary>
+        /// Description
+        /// </summary>
         Description,
-		/// <summary>
-		/// Other, Unsupported type
-		/// </summary>
+        /// <summary>
+        /// Other, Unsupported type
+        /// </summary>
         NOT_SUPPORTED
     }
 }

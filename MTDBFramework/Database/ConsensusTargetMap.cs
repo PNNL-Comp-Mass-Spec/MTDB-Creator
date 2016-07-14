@@ -8,16 +8,16 @@ using MTDBFramework.Data;
 namespace MTDBFramework.Database
 {
     /// <summary>
-	/// This is our map for the ConsensusTarget class. Note the "Not.LazyLoad"
+    /// This is our map for the ConsensusTarget class. Note the "Not.LazyLoad"
     /// </summary>
     public class ConsensusTargetMap : ClassMap<ConsensusTarget>
     {
-		/// <summary>
-		/// Constructor
-		/// </summary>
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ConsensusTargetMap()
-		{
-		    Table("Target");
+        {
+            Table("Target");
             Not.LazyLoad();
             Id(x => x.Id)
                 .Column("TargetId").GeneratedBy.Assigned();

@@ -65,7 +65,7 @@ namespace MTDBCreator.ViewModels
             ExportCommand       = new DelegateCommand(exportAction);
             ExportCommand.Executable = false;
         }
-        
+
         private void RefreshMtdbs()
         {
             var list = Lookup.GetDatabases().Values.ToList();
@@ -125,12 +125,12 @@ namespace MTDBCreator.ViewModels
                 IsSaving = true;
 
                 string[] loadingStrings =
-			{
-				"Saving\nPlease Wait",
-				"Saving.\nPlease Wait",
-				"Saving..\nPlease Wait",
-				"Saving...\nPlease Wait"
-			};
+            {
+                "Saving\nPlease Wait",
+                "Saving.\nPlease Wait",
+                "Saving..\nPlease Wait",
+                "Saving...\nPlease Wait"
+            };
                 Task.Factory.StartNew(() =>
                 {
                     Task.Factory.StartNew(() =>
@@ -169,7 +169,7 @@ namespace MTDBCreator.ViewModels
 
                     IsSaving = false;
                 });
-            }    
+            }
         }
     }
 }

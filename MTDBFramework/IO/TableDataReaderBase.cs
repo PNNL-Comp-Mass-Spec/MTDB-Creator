@@ -1,14 +1,14 @@
 ﻿namespace MTDBFramework.IO
 {
-	/// <summary>
-	/// Essential functions for reading tables
-	/// </summary>
-	/// <typeparam name="T"></typeparam>
+    /// <summary>
+    /// Essential functions for reading tables
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class TableDataReaderBase<T>
     {
-		/// <summary>
-		/// Delimiters present in the table
-		/// </summary>
+        /// <summary>
+        /// Delimiters present in the table
+        /// </summary>
         protected readonly string[] Delimiters = { "\t" };
 
         /// <summary>

@@ -9,9 +9,9 @@ using PNNLOmics.Algorithms.Regression;
 
 namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// MTDBFramework configuration options
-	/// </summary>
+    /// <summary>
+    /// MTDBFramework configuration options
+    /// </summary>
     public class Options : ObservableObject
     {
         #region Private Fields
@@ -37,9 +37,9 @@ namespace MTDBFramework.Data
 
         #region Public Properties
 
-		/// <summary>
-		/// Id
-		/// </summary>
+        /// <summary>
+        /// Id
+        /// </summary>
         public int Id;
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace MTDBFramework.Data
         }
 
         /// <summary>
-		/// Regression
+        /// Regression
         /// </summary>
         public RegressionType RegressionType
         {
@@ -71,14 +71,14 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Options Changed
-		/// </summary>
+        /// <summary>
+        /// Options Changed
+        /// </summary>
         public bool OptionsChanged { get; set; }
 
-		/// <summary>
-		/// Regression Order
-		/// </summary>
+        /// <summary>
+        /// Regression Order
+        /// </summary>
         public short RegressionOrder
         {
             get
@@ -91,11 +91,11 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("RegressionOrder");
             }
         }
-        
+
         // General
-		/// <summary>
-		/// Target Filter Type
-		/// </summary>
+        /// <summary>
+        /// Target Filter Type
+        /// </summary>
         public TargetWorkflowType TargetFilterType
         {
             get
@@ -109,9 +109,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Retention Time Predictor Type
-		/// </summary>
+        /// <summary>
+        /// Retention Time Predictor Type
+        /// </summary>
         public RetentionTimePredictionType PredictorType
         {
             get
@@ -122,7 +122,7 @@ namespace MTDBFramework.Data
             {
                 m_predictorType = value;
                 OnPropertyChanged("PredictorType");
-            } 
+            }
         }
 
         // Peptides
@@ -174,11 +174,11 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("MinXCorrForAlignment");
             }
         }
-        
+
         // Xtandem
-		/// <summary>
-		/// Maximum LogEVal for XTandem Alignment
-		/// </summary>
+        /// <summary>
+        /// Maximum LogEVal for XTandem Alignment
+        /// </summary>
         public double MaxLogEValForXTandemAlignment
         {
             get
@@ -192,10 +192,10 @@ namespace MTDBFramework.Data
             }
         }
 
-		// MSAlign
-		/// <summary>
-		/// Maximum LogEVal for MSAlign Alignment
-		/// </summary>
+        // MSAlign
+        /// <summary>
+        /// Maximum LogEVal for MSAlign Alignment
+        /// </summary>
         public double MaxLogEValForMsAlignAlignment
         {
             get
@@ -209,9 +209,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// MSGF FDR
-		/// </summary>
+        /// <summary>
+        /// MSGF FDR
+        /// </summary>
         public double MsgfQValue
         {
             get
@@ -225,9 +225,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Maximum MSGF SpecProb
-		/// </summary>
+        /// <summary>
+        /// Maximum MSGF SpecProb
+        /// </summary>
         public double MaxMsgfSpecProb
         {
             get
@@ -242,9 +242,9 @@ namespace MTDBFramework.Data
         }
 
         // Other
-		/// <summary>
-		/// Maximum Rank for export
-		/// </summary>
+        /// <summary>
+        /// Maximum Rank for export
+        /// </summary>
         public short MaxRankForExport
         {
             get
@@ -293,7 +293,7 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Filter type for MSGF+ analysis
         /// </summary>
-        public MsgfFilterType MsgfFilter 
+        public MsgfFilterType MsgfFilter
         {
             get
             {
@@ -303,14 +303,14 @@ namespace MTDBFramework.Data
             {
                 m_msfgFilterType = value;
                 OnPropertyChanged("MsgfFilter");
-            } 
+            }
         }
 
         #endregion
 
-		/// <summary>
-		/// Constructor to default values
-		/// </summary>
+        /// <summary>
+        /// Constructor to default values
+        /// </summary>
         public Options()
         {
             DatabaseType = DatabaseType.SQLite;
@@ -335,7 +335,7 @@ namespace MTDBFramework.Data
 
             MsgfQValue = .01;
             MaxMsgfSpecProb = 1E-10;
-		    MsgfFilter = MsgfFilterType.Q_VALUE;
+            MsgfFilter = MsgfFilterType.Q_VALUE;
 
             MinimumObservedNet = 0.0;
             MaximumObservedNet = 1.0;

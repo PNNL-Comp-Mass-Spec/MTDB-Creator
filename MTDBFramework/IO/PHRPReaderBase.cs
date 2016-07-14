@@ -9,39 +9,39 @@ using PHRPReader;
 
 namespace MTDBFramework.IO
 {
-	/// <summary>
-	/// Base class for file readers that are part of PHRP
-	/// </summary>
+    /// <summary>
+    /// Base class for file readers that are part of PHRP
+    /// </summary>
     public abstract class PHRPReaderBase : IPhrpReader
     {
-		/// <summary>
-		/// Progress status constant
-		/// </summary>
+        /// <summary>
+        /// Progress status constant
+        /// </summary>
         protected const int PROGRESS_PCT_START = 0;
 
-		/// <summary>
-		/// Progress status constant
-		/// </summary>
+        /// <summary>
+        /// Progress status constant
+        /// </summary>
         protected const int PROGRESS_PCT_PEPTIDES_LOADED = 98;
 
-		/// <summary>
-		/// Progress status constant
-		/// </summary>
+        /// <summary>
+        /// Progress status constant
+        /// </summary>
         protected const int PROGRESS_PCT_COMPLETE = 100;
 
-		/// <summary>
-		/// Data storage
-		/// </summary>
+        /// <summary>
+        /// Data storage
+        /// </summary>
         protected readonly Dictionary<string, TargetDataSet> DatasetCache;
 
-		/// <summary>
-		/// Elution time prediction
-		/// </summary>
+        /// <summary>
+        /// Elution time prediction
+        /// </summary>
         protected readonly AnalysisReaderHelper NETPredictor;
 
-		/// <summary>
-		/// Allow thread cancellation
-		/// </summary>
+        /// <summary>
+        /// Allow thread cancellation
+        /// </summary>
         protected bool AbortRequested;
 
         /// <summary>
@@ -52,34 +52,34 @@ namespace MTDBFramework.IO
             DatasetCache = new Dictionary<string, TargetDataSet>(StringComparer.CurrentCultureIgnoreCase);
 
             NETPredictor = new AnalysisReaderHelper();
-            
-            AbortRequested = false;
-        }       
 
-		/// <summary>
-		/// ReaderOption
-		/// </summary>
+            AbortRequested = false;
+        }
+
+        /// <summary>
+        /// ReaderOption
+        /// </summary>
         public Options ReaderOptions { get; set; }
 
-		/// <summary>
-		/// File Reader
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// File Reader
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public abstract LcmsDataSet Read(string path);
 
-		/// <summary>
-		/// Allow thread cancellation
-		/// </summary>
+        /// <summary>
+        /// Allow thread cancellation
+        /// </summary>
         public void AbortProcessing()
         {
             AbortRequested = true;
         }
 
-		/// <summary>
-		/// Calculate the Normal Elution Time
-		/// </summary>
-		/// <param name="results"></param>
+        /// <summary>
+        /// Calculate the Normal Elution Time
+        /// </summary>
+        /// <param name="results"></param>
         protected void ComputeNets(IEnumerable<Evidence> results)
         {
             if (!AbortRequested)
@@ -96,11 +96,11 @@ namespace MTDBFramework.IO
             }
         }
 
-		/// <summary>
-		/// PHRPReader configuration
-		/// </summary>
-		/// <param name="path"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// PHRPReader configuration
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         protected clsPHRPReader InitializeReader(string path)
         {
             AbortRequested = false;
@@ -114,7 +114,7 @@ namespace MTDBFramework.IO
             };
 
             UpdateProgress(0, "Initializing reader");
-            
+
             var reader = new clsPHRPReader(path, oStartupOptions)
             {
                 SkipDuplicatePSMs = true,
@@ -124,34 +124,34 @@ namespace MTDBFramework.IO
             return reader;
         }
 
-		/// <summary>
-		/// Store Dataset Info
-		/// </summary>
-		/// <param name="result"></param>
-		/// <param name="dataFilePath"></param>
+        /// <summary>
+        /// Store Dataset Info
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="dataFilePath"></param>
         protected void StoreDatasetInfo(Evidence result, string dataFilePath)
         {
             string datasetName = DatasetPathUtility.CleanPath(dataFilePath);
             StoreDatasetInfo(result, datasetName, dataFilePath);
         }
 
-		/// <summary>
-		/// Store Dataset Info
-		/// </summary>
-		/// <param name="result"></param>
-		/// <param name="reader"></param>
-		/// <param name="dataFilePath"></param>
+        /// <summary>
+        /// Store Dataset Info
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="reader"></param>
+        /// <param name="dataFilePath"></param>
         protected void StoreDatasetInfo(Evidence result, clsPHRPReader reader, string dataFilePath)
         {
             StoreDatasetInfo(result, reader.DatasetName, dataFilePath);
         }
 
-		/// <summary>
-		/// Store Dataset Info
-		/// </summary>
-		/// <param name="result"></param>
-		/// <param name="datasetName"></param>
-		/// <param name="dataFilePath"></param>
+        /// <summary>
+        /// Store Dataset Info
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="datasetName"></param>
+        /// <param name="dataFilePath"></param>
         protected void StoreDatasetInfo(Evidence result, string datasetName, string dataFilePath)
         {
             // Lookup this dataset in the dataset info cache
@@ -174,14 +174,14 @@ namespace MTDBFramework.IO
             }
 
             result.DataSet = dataset;
-          
+
         }
 
-		/// <summary>
-		/// Store Protein Info
-		/// </summary>
-		/// <param name="reader"></param>
-		/// <param name="result"></param>
+        /// <summary>
+        /// Store Protein Info
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="result"></param>
         protected static void StoreProteinInfo(clsPHRPReader reader, Evidence result)
         {
             foreach (var p in reader.CurrentPSM.ProteinDetails)
@@ -194,17 +194,17 @@ namespace MTDBFramework.IO
                     ResidueStart = p.Value.ResidueStart,
                     ResidueEnd = p.Value.ResidueEnd
                 };
-               
+
                 result.Proteins.Add(protein);
             }
         }
 
-		/// <summary>
-		/// Store PSM Data
-		/// </summary>
-		/// <param name="result"></param>
-		/// <param name="reader"></param>
-		/// <param name="specProb"></param>
+        /// <summary>
+        /// Store PSM Data
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="reader"></param>
+        /// <param name="specProb"></param>
         protected void StorePsmData(Evidence result, clsPHRPReader reader, double specProb)
         {
             result.Charge = reader.CurrentPSM.Charge;
@@ -269,7 +269,7 @@ namespace MTDBFramework.IO
                     encodedSeq += result.CleanPeptide[j];
                 }
                 encodedSeq += "." + result.Sequence.Last();
-                result.EncodedNonNumericSequence = encodedSeq;              
+                result.EncodedNonNumericSequence = encodedSeq;
             }
             else
             {
@@ -280,20 +280,20 @@ namespace MTDBFramework.IO
 
         #region ProgressHandlers
 
-		/// <summary>
-		/// Progress Handler
-		/// </summary>
-		/// <param name="percentComplete"></param>
+        /// <summary>
+        /// Progress Handler
+        /// </summary>
+        /// <param name="percentComplete"></param>
         protected void UpdateProgress(float percentComplete)
         {
             UpdateProgress(percentComplete, string.Empty);
         }
 
-		/// <summary>
-		/// Progress Handler
-		/// </summary>
-		/// <param name="percentComplete"></param>
-		/// <param name="currentTask"></param>
+        /// <summary>
+        /// Progress Handler
+        /// </summary>
+        /// <param name="percentComplete"></param>
+        /// <param name="currentTask"></param>
         protected void UpdateProgress(float percentComplete, string currentTask)
         {
             float percentCompleteEffective = PROGRESS_PCT_START + percentComplete * (PROGRESS_PCT_PEPTIDES_LOADED - PROGRESS_PCT_START) / 100;
@@ -305,15 +305,15 @@ namespace MTDBFramework.IO
 
         #region Events
 
-		/// <summary>
-		/// Progress event
-		/// </summary>
+        /// <summary>
+        /// Progress event
+        /// </summary>
         public event PercentCompleteEventHandler ProgressChanged;
 
-		/// <summary>
-		/// Progress event handler
-		/// </summary>
-		/// <param name="e"></param>
+        /// <summary>
+        /// Progress event handler
+        /// </summary>
+        /// <param name="e"></param>
         protected void OnProgressChanged(PercentCompleteEventArgs e)
         {
             if (ProgressChanged != null)
@@ -323,6 +323,6 @@ namespace MTDBFramework.IO
         }
 
         #endregion
-       
+
     }
 }

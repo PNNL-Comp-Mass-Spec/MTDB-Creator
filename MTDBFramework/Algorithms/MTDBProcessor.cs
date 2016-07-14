@@ -18,9 +18,9 @@ using PNNLOmics.Data.Features;
 
 namespace MTDBFramework.Algorithms
 {
-	/// <summary>
-	/// Perform the data transform from an LCMS dataset to MTDB
-	/// </summary>
+    /// <summary>
+    /// Perform the data transform from an LCMS dataset to MTDB
+    /// </summary>
     public class MtdbProcessor : IProcessor
     {
         private const int ProgressPercentStart = 0;
@@ -31,39 +31,39 @@ namespace MTDBFramework.Algorithms
 
         private bool m_abortRequested;
 
-		/// <summary>
-		/// Event handler
-		/// </summary>
+        /// <summary>
+        /// Event handler
+        /// </summary>
         public event EventHandler<AlignmentCompleteArgs> AlignmentComplete;
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="options"></param>
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="options"></param>
         public MtdbProcessor(Options options)
         {
             ProcessorOptions = options;
         }
 
-		/// <summary>
-		/// Options accessor
-		/// </summary>
+        /// <summary>
+        /// Options accessor
+        /// </summary>
         public Options ProcessorOptions { get; set; }
 
-		/// <summary>
-		/// Allow for thread cancellation
-		/// </summary>
+        /// <summary>
+        /// Allow for thread cancellation
+        /// </summary>
         public void AbortProcessing()
         {
             m_abortRequested = true;
         }
 
-		/// <summary>
-		/// Main work function - Transform LCMS Datasets into MTDB datasets
-		/// </summary>
-		/// <param name="dataSets"></param>
-		/// <param name="bWorker"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Main work function - Transform LCMS Datasets into MTDB datasets
+        /// </summary>
+        /// <param name="dataSets"></param>
+        /// <param name="bWorker"></param>
+        /// <returns></returns>
         [UsedImplicitly]
         public TargetDatabase Process(IEnumerable<LcmsDataSet> dataSets, BackgroundWorker bWorker)
         {
@@ -98,15 +98,15 @@ namespace MTDBFramework.Algorithms
                 {
                     // Exclude carryover peptides.
                     // Would be evidenced by a sizable difference between observed net and predicted net
-                    
-                    if (t.ObservedNet >= ProcessorOptions.MinimumObservedNet && 
+
+                    if (t.ObservedNet >= ProcessorOptions.MinimumObservedNet &&
                         t.ObservedNet <= ProcessorOptions.MaximumObservedNet)
                     {
-                        
-                        // To prevent filtration of evidences which have previously passed alignment, 
+
+                        // To prevent filtration of evidences which have previously passed alignment,
                         if (dataSet.PreviouslyAnalyzed || !targetFilter.ShouldFilter(t))
                         {
-                            
+
                             filteredTargets.Add(t);
 
                             if (!alignmentFilter.ShouldFilter(t))
@@ -128,27 +128,27 @@ namespace MTDBFramework.Algorithms
                 m_currentItem++;
             }
 
-            //Create the database (the list of consensus targets)            
+            //Create the database (the list of consensus targets)
             //Convert the list of targets into a list of MassTagLights for LCMS to use as baseline
 
             // Cluster initially to provide a baseline for LCMSWarp
             var newTargets = clusterer.Cluster(epicTargets);
             int i = 0, j = 0;
             var tempConsensusTargets = new List<ConsensusTarget>();
-		    var proteinDict = new Dictionary<string, ProteinInformation>();
-		    foreach (var consensusTarget in newTargets)
-		    {
-		        consensusTarget.Id = ++i;
+            var proteinDict = new Dictionary<string, ProteinInformation>();
+            foreach (var consensusTarget in newTargets)
+            {
+                consensusTarget.Id = ++i;
 
-		        foreach (var target in consensusTarget.Evidences)
-		        {
-		            target.Id = ++j;
-		        }
-		        consensusTarget.CalculateStatistics();
-		        tempConsensusTargets.Add(consensusTarget);
-		    }
-            
-		    var massTagLightTargets = new List<UMCLight>();
+                foreach (var target in consensusTarget.Evidences)
+                {
+                    target.Id = ++j;
+                }
+                consensusTarget.CalculateStatistics();
+                tempConsensusTargets.Add(consensusTarget);
+            }
+
+            var massTagLightTargets = new List<UMCLight>();
             foreach (var evidence in tempConsensusTargets)
             {
                 var driftStart = double.MaxValue;
@@ -252,7 +252,7 @@ namespace MTDBFramework.Algorithms
                 var numPerBin   = (int)Math.Ceiling((double)dataSet.Evidences.Count / numBins);
                 var binNum      = 0;
 
-                
+
                 //Copy the residual data back into the evidences
                 for (int a = 0, b = 0; a < dataSet.Evidences.Count; a++)
                 {
@@ -263,7 +263,7 @@ namespace MTDBFramework.Algorithms
                         netDiffList.Add(netShift);
                         dataSet.Evidences[a].NetShift = netShift;
                         dataSet.Evidences[a].ObservedNet += netShift;
-                        
+
                         if (netDiffList.Count % numPerBin == 0)
                         {
                             medNetDiff[binNum] = netDiffList.Median();
@@ -280,7 +280,7 @@ namespace MTDBFramework.Algorithms
                     netDiffList.Clear();
                 }
 
-                
+
                 foreach (var data in dataSet.Evidences.Where(data => !evidenceMap.ContainsKey(data.Id)))
                 {
                     evidenceMap.Add(data.Id, data);
@@ -300,7 +300,7 @@ namespace MTDBFramework.Algorithms
                 }
                 m_currentItem++;
             }
-            
+
             if (AlignmentComplete != null)
             {
                 AlignmentComplete(this, new AlignmentCompleteArgs(alignmentData));
@@ -338,13 +338,13 @@ namespace MTDBFramework.Algorithms
             return targetDatabase;
         }
 
-		/// <summary>
-		/// Progress handler
-		/// </summary>
-		/// <param name="current"></param>
-		/// <param name="total"></param>
-		/// <param name="percentComplete"></param>
-		/// <param name="currentTask"></param>
+        /// <summary>
+        /// Progress handler
+        /// </summary>
+        /// <param name="current"></param>
+        /// <param name="total"></param>
+        /// <param name="percentComplete"></param>
+        /// <param name="currentTask"></param>
         protected void UpdateProgress(int current, int total, float percentComplete, string currentTask)
         {
             float percentCompleteEffective = ProgressPercentStart +
@@ -352,15 +352,15 @@ namespace MTDBFramework.Algorithms
             OnPercentProgressChanged(new PercentCompleteEventArgs(current, total, percentCompleteEffective, currentTask));
         }
 
-		/// <summary>
-		/// Progress event
-		/// </summary>
+        /// <summary>
+        /// Progress event
+        /// </summary>
         public PercentCompleteEventHandler ProgressChanged;
 
-		/// <summary>
-		/// Progress event handler
-		/// </summary>
-		/// <param name="e"></param>
+        /// <summary>
+        /// Progress event handler
+        /// </summary>
+        /// <param name="e"></param>
         protected void OnPercentProgressChanged(PercentCompleteEventArgs e)
         {
             if (ProgressChanged != null)

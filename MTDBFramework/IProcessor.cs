@@ -2,19 +2,19 @@
 
 namespace MTDBFramework
 {
-	/// <summary>
-	/// Interface for processing management
-	/// </summary>
+    /// <summary>
+    /// Interface for processing management
+    /// </summary>
     public interface IProcessor
     {
-		/// <summary>
-		/// Options
-		/// </summary>
+        /// <summary>
+        /// Options
+        /// </summary>
         Options ProcessorOptions { get; set; }
 
-		/// <summary>
-		/// Support thread cancellation
-		/// </summary>
+        /// <summary>
+        /// Support thread cancellation
+        /// </summary>
         void AbortProcessing();
     }
 }

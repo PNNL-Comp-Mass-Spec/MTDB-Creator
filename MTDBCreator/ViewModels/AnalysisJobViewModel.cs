@@ -34,7 +34,7 @@ namespace MTDBCreator.ViewModels
         #endregion
 
         #region Public Properties
-        
+
         public int Id { get; private set; } // For recent analysis job record purpose
 
         public string Title
@@ -120,7 +120,7 @@ namespace MTDBCreator.ViewModels
         {
             // Insert database save location here
             var saveDatabaseDialog = new SaveFileDialog();
-            
+
             if (Options.DatabaseType != DatabaseType.NotSaved)
             {
                 if (RestoreDirectory == null)
@@ -148,7 +148,7 @@ namespace MTDBCreator.ViewModels
                 }
             }
 
-            
+
 
             DateTime start = DateTime.Now;
             var result = ProcessAnalysisTargets();
@@ -219,7 +219,7 @@ namespace MTDBCreator.ViewModels
                     if (Database == null && result is TargetDatabase)
                         Database = (TargetDatabase)result;
                 }
-                
+
                 OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
                 end = DateTime.Now;
                 Console.WriteLine("Alignment processed after " + (end - start) + " total");
@@ -227,7 +227,7 @@ namespace MTDBCreator.ViewModels
 
                 if (result != null && saveDatabaseDialog.FileName != "")
                 {
-                    
+
                     DateTime saveStart = DateTime.Now;
 
                     SaveAnalysisDatabase(saveDatabaseDialog.FileName);

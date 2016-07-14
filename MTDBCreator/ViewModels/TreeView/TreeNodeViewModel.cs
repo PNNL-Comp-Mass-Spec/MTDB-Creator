@@ -33,7 +33,7 @@ namespace MTDBCreator.ViewModels.TreeView
         public virtual string Text {
             get
             {
-                return m_text; 
+                return m_text;
             }
             protected set
             {

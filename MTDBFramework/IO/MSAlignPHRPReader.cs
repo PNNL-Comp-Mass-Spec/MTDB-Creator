@@ -36,7 +36,7 @@ namespace MTDBFramework.IO
 
                 // Skip this PSM if it doesn't pass the import filters
                 double eValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSAlign.DATA_COLUMN_EValue, 0);
-              
+
                 double specProb = 0;
                 if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
                     specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
@@ -62,8 +62,8 @@ namespace MTDBFramework.IO
                 // Populate items specific to MSAlign
                 result.EValue = eValue;
                 result.DiscriminantValue = eValue;
-				              
-                results.Add(result);              
+
+                results.Add(result);
             }
 
             ComputeNets(results);

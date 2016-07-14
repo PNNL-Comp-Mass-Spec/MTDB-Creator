@@ -300,13 +300,13 @@ namespace MTDBFramework.IO
         /// <remarks>
         /// XML Reader parses an MZIdentML file, storing data as follows:
         ///   PeptideRef holds Peptide data, such as sequence, number, and type of modifications
-        ///   Database Information holds the length of the peptide and the protein description 
+        ///   Database Information holds the length of the peptide and the protein description
         ///   Peptide Evidence holds the pre, post, start and end for the peptide for Tryptic End calculations.
         /// The element that holds the most information is the Spectrum ID Item, which has the calculated mz,
-        /// experimental mz, charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue, 
-        /// MSGF QValue, MSGR PepQValue, Scan number as well as which peptide it is and which evidences 
+        /// experimental mz, charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue,
+        /// MSGF QValue, MSGR PepQValue, Scan number as well as which peptide it is and which evidences
         /// it has from the analysis run.
-        /// 
+        ///
         /// After the XML Reader, it then goes through each Spectrum ID item and maps the appropriate values
         /// to the appropriate variables as a MSGF+ result. If the result passes the filter for MSGF+, it
         /// then adds the data for if there are modifications and adds the result to a running list of results.
@@ -316,8 +316,8 @@ namespace MTDBFramework.IO
         public override LcmsDataSet Read(string path)
         {
             var results = new List<MsgfPlusResult>();
-			// Set a large buffer size. Doesn't affect gzip reading speed, but speeds up non-gzipped
-	        Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 65536);
+            // Set a large buffer size. Doesn't affect gzip reading speed, but speeds up non-gzipped
+            Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read, 65536);
 
             if (path.EndsWith(".mzid.gz"))
             {
@@ -888,7 +888,7 @@ namespace MTDBFramework.IO
                 result.DelM = result.ObservedMonoisotopicMass - result.MonoisotopicMass;
                 result.DelMPpm = clsPeptideMassCalculator.MassToPPM(result.DelM, result.ObservedMonoisotopicMass);
                 // We could compute m/z:
-                //     Mz = clsPeptideMassCalculator.ConvoluteMass(result.ObservedMonoisotopicMass, 0, result.Charge);                
+                //     Mz = clsPeptideMassCalculator.ConvoluteMass(result.ObservedMonoisotopicMass, 0, result.Charge);
                 // But it's stored in the mzid file, so we'll use that
                 result.Mz = item.Value.ExperimentalMz;
 
@@ -918,7 +918,7 @@ namespace MTDBFramework.IO
                 if (result.ModificationCount > 0)
                 {
                     var j = 0;
-                    
+
                     var numModSeq = evidence.Pre + ".";
                     var encodedSeq = numModSeq;
                     foreach (var mod in item.Value.Peptide.Mods)
@@ -968,7 +968,7 @@ namespace MTDBFramework.IO
                     numModSeq = numModSeq + "." + evidence.Post;
                     encodedSeq += "." + evidence.Post;
                     result.SeqWithNumericMods = numModSeq;
-                    result.EncodedNonNumericSequence = encodedSeq;                    
+                    result.EncodedNonNumericSequence = encodedSeq;
                 }
                 else
                 {

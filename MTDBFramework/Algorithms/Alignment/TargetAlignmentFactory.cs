@@ -2,16 +2,16 @@
 
 namespace MTDBFramework.Algorithms.Alignment
 {
-	/// <summary>
-	/// Target alignment configuration
-	/// </summary>
+    /// <summary>
+    /// Target alignment configuration
+    /// </summary>
     public static class TargetAlignmentFactory
     {
-		/// <summary>
-		/// Configure and return the appropriate target aligner
-		/// </summary>
-		/// <param name="options"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Configure and return the appropriate target aligner
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public static ITargetAligner Create(Options options)
         {
             ITargetAligner aligner = null;

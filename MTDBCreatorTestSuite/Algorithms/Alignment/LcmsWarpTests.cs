@@ -38,7 +38,7 @@ namespace MTDBCreatorTestSuite.Algorithms.Alignment
             var analysisProcessor   = new AnalysisJobProcessor(options);
             var individualJobs      = fullPaths.Select(path => new AnalysisJobItem(path, LcmsIdentificationTool.MsgfPlus)).ToList();
             var bWorker = new BackgroundWorker();
-            
+
             var jobs = analysisProcessor.Process(individualJobs, bWorker);
 
             var databaseProcess = new MtdbProcessor(options);

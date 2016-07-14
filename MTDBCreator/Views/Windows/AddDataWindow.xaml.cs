@@ -82,13 +82,13 @@ namespace MTDBCreator.Windows
             {
                 var formatInfo = FileDialogFormatInfoFactory.Create(addFolderFileMenuItem.Tag.ToString());
 
-				var folderBrowser = new CommonOpenFileDialog();
-	            folderBrowser.IsFolderPicker = true;
+                var folderBrowser = new CommonOpenFileDialog();
+                folderBrowser.IsFolderPicker = true;
                 var result = folderBrowser.ShowDialog();
                 var thing = "";
-				if (result == CommonFileDialogResult.Ok)
+                if (result == CommonFileDialogResult.Ok)
                 {
-					thing = folderBrowser.FileName;
+                    thing = folderBrowser.FileName;
                 }
 
                 var filters = formatInfo.Filter.Split('|');
@@ -122,7 +122,7 @@ namespace MTDBCreator.Windows
                                 {
                                     formatInfo.Format = LcmsIdentificationTool.MSAlign;
                                 }
-                                
+
                                 AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file.FullName,
                                     formatInfo.Format));
 
@@ -156,7 +156,7 @@ namespace MTDBCreator.Windows
 
                 var dialogRes = openFileDialog.ShowDialog();
 
-				if (dialogRes.HasValue && dialogRes.Value == true)
+                if (dialogRes.HasValue && dialogRes.Value == true)
                 {
                     if (formatInfo.Format != LcmsIdentificationTool.Description)
                     {
@@ -273,7 +273,7 @@ namespace MTDBCreator.Windows
             }
         }
 
-        
+
 
         private void AddDataWindow_Closed(object sender, EventArgs e)
         {

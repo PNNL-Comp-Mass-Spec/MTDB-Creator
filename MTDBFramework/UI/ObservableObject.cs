@@ -2,9 +2,9 @@
 
 namespace MTDBFramework.UI
 {
-	/// <summary>
-	/// Super class for progress monitoring and notification
-	/// </summary>
+    /// <summary>
+    /// Super class for progress monitoring and notification
+    /// </summary>
     public abstract class ObservableObject : INotifyPropertyChanged
     {
         #region INotifyPropertyChanged Members

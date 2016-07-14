@@ -2,20 +2,20 @@
 
 namespace MTDBFramework.Algorithms.Alignment
 {
-	/// <summary>
-	/// Filter information for MSAlign format
-	/// </summary>
+    /// <summary>
+    /// Filter information for MSAlign format
+    /// </summary>
     public class MsAlignAlignmentFilter : ITargetFilter
     {
-		/// <summary>
-		/// Options
-		/// </summary>
+        /// <summary>
+        /// Options
+        /// </summary>
         public Options FilterOptions { get; set; }
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="options"></param>
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="options"></param>
         public MsAlignAlignmentFilter(Options options)
         {
             FilterOptions = options;

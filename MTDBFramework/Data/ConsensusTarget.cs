@@ -7,14 +7,14 @@ using MTDBFramework.UI;
 
 namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// Store all information pertaining to a single consensus target
-	/// </summary>
+    /// <summary>
+    /// Store all information pertaining to a single consensus target
+    /// </summary>
     public class ConsensusTarget : ObservableObject, IComparable
     {
-		/// <summary>
-		/// Constructor
-		/// </summary>
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ConsensusTarget()
         {
             Evidences = new List<Evidence>();
@@ -40,29 +40,29 @@ namespace MTDBFramework.Data
         private IList<int> m_charges;
         private IList<PostTranslationalModification> m_ptms;
 
-	    private const int PreCharCount = 2;
+        private const int PreCharCount = 2;
         #endregion
 
         #region Public Properties
 
-		/// <summary>
-		/// The Prefix Residue
-		/// </summary>
+        /// <summary>
+        /// The Prefix Residue
+        /// </summary>
         public char PrefixResidue { get { return (string.IsNullOrWhiteSpace(m_sequence)) ? '\0' : m_sequence.First(); } private set { char temp = value; } }
 
-		/// <summary>
-		/// The Suffix Residue
-		/// </summary>
+        /// <summary>
+        /// The Suffix Residue
+        /// </summary>
         public char SuffixResidue { get { return (string.IsNullOrWhiteSpace(m_sequence)) ? '\0' : m_sequence.Last(); } private set { char temp = value; } }
 
-		/// <summary>
-		/// The ConsensusTarget/ProteinInformation relations
-		/// </summary>
+        /// <summary>
+        /// The ConsensusTarget/ProteinInformation relations
+        /// </summary>
         public IList<ConsensusProteinPair> ConsensusProtein { get; set; }
 
-		/// <summary>
-		/// Id
-		/// </summary>
+        /// <summary>
+        /// Id
+        /// </summary>
         public int Id
         {
             get { return m_id; }
@@ -73,9 +73,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Average Elution Time
-		/// </summary>
+        /// <summary>
+        /// Average Elution Time
+        /// </summary>
         public double AverageNet
         {
             get { return m_averageNet; }
@@ -86,9 +86,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Elution Time Standard Deviation
-		/// </summary>
+        /// <summary>
+        /// Elution Time Standard Deviation
+        /// </summary>
         public double StdevNet
         {
             get { return m_stdevNet; }
@@ -99,9 +99,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Predicted Elution Time
-		/// </summary>
+        /// <summary>
+        /// Predicted Elution Time
+        /// </summary>
         public double PredictedNet
         {
             get { return m_predictedNet; }
@@ -112,9 +112,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Monoisotopic Mass - Theoretical
-		/// </summary>
+        /// <summary>
+        /// Monoisotopic Mass - Theoretical
+        /// </summary>
         public double TheoreticalMonoIsotopicMass
         {
             get { return m_theoreticalMonoIsotopicMass; }
@@ -125,9 +125,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Peptide Sequence
-		/// </summary>
+        /// <summary>
+        /// Peptide Sequence
+        /// </summary>
         public string Sequence
         {
             get { return m_sequence; }
@@ -138,22 +138,22 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Peptide Sequence with numeric modifications
-		/// </summary>
+        /// <summary>
+        /// Peptide Sequence with numeric modifications
+        /// </summary>
         public string EncodedNumericSequence
         {
             get { return m_encodedNumericSequence; }
-            set 
-            { 
+            set
+            {
                 m_encodedNumericSequence = value;
                 OnPropertyChanged("EncodedNumericSequence");
             }
         }
 
-		/// <summary>
-		/// Peptide Sequence with non-numeric modifications
-		/// </summary>
+        /// <summary>
+        /// Peptide Sequence with non-numeric modifications
+        /// </summary>
         public string EncodedNonNumericSequence
         {
             get { return m_encodedNonNumericSequence; }
@@ -165,7 +165,7 @@ namespace MTDBFramework.Data
         }
 
         /// <summary>
-		/// Sequence for the peptide with all PTMs excluded.
+        /// Sequence for the peptide with all PTMs excluded.
         /// </summary>
         public string CleanSequence
         {
@@ -180,11 +180,11 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Sequence for the peptide with all PTMs excluded and without pre and post residues
         /// </summary>
-	    public string StrippedSequence { get; set; }
+        public string StrippedSequence { get; set; }
 
-		/// <summary>
-		/// Dataset the Consensus target occurs in
-		/// </summary>
+        /// <summary>
+        /// Dataset the Consensus target occurs in
+        /// </summary>
         public TargetDataSet Dataset
         {
             get { return m_dataset; }
@@ -195,9 +195,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Evidences of the ConsensusTarget
-		/// </summary>
+        /// <summary>
+        /// Evidences of the ConsensusTarget
+        /// </summary>
         public IList<Evidence> Evidences
         {
             get { return m_evidences; }
@@ -208,9 +208,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// The Proteins the Consensus target occurs in
-		/// </summary>
+        /// <summary>
+        /// The Proteins the Consensus target occurs in
+        /// </summary>
         public IList<ProteinInformation> Proteins
         {
             get { return m_proteins; }
@@ -221,9 +221,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// The charges
-		/// </summary>
+        /// <summary>
+        /// The charges
+        /// </summary>
         public IList<int> Charges
         {
             get { return m_charges; }
@@ -234,9 +234,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// List of all Post-Translational Modifications observed in the ConsensusTarget
-		/// </summary>
+        /// <summary>
+        /// List of all Post-Translational Modifications observed in the ConsensusTarget
+        /// </summary>
         public IList<PostTranslationalModification> Ptms
         {
             get { return m_ptms; }
@@ -248,10 +248,10 @@ namespace MTDBFramework.Data
         }
         #endregion
 
-		/// <summary>
-		/// Add another evidence of the ConsensusTarget
-		/// </summary>
-		/// <param name="evidence"></param>
+        /// <summary>
+        /// Add another evidence of the ConsensusTarget
+        /// </summary>
+        /// <param name="evidence"></param>
         public void AddEvidence(Evidence evidence)
         {
             Evidences.Add(evidence);
@@ -279,7 +279,7 @@ namespace MTDBFramework.Data
                 ModificationDescription = evidence.ModificationDescription;
             }
             evidence.ModificationDescription = ModificationDescription;
-            
+
             if(ModificationCount == 0)
             {
                 ModificationCount = evidence.ModificationCount;
@@ -292,7 +292,7 @@ namespace MTDBFramework.Data
                 {
                     Ptms.Add(ptm);
                     ptm.Parent = this;
-                } 
+                }
             }
             var tempList = Ptms.ToList();
             tempList.Sort((x, y) => x.Location.CompareTo(y.Location));
@@ -308,7 +308,7 @@ namespace MTDBFramework.Data
             var symbolsRemoved = 0;
 
             string partialSeq;
-            
+
             foreach (var ptm in tempList)
             {
                 partialSeq = Sequence.Substring(sequencePos, (ptm.Location + PreCharCount + symbolsRemoved) - sequencePos);
@@ -321,7 +321,7 @@ namespace MTDBFramework.Data
                 // which are standard characters in peptide sequences to separate peptide from
                 // pre/post residues and to denote the lack of a pre/post residue respectively
                 int indexCheck = sequencePos + symbolsRemoved;
-                if ((Sequence[indexCheck] != 46 && Sequence[indexCheck] != 45) && 
+                if ((Sequence[indexCheck] != 46 && Sequence[indexCheck] != 45) &&
                         (Sequence[indexCheck] < 65 || Sequence[indexCheck] > 90))
                 {
                     sequencePos += ++symbolsRemoved;
@@ -331,14 +331,14 @@ namespace MTDBFramework.Data
             cleanSeq += partialSeq;
             numeric += partialSeq;
             nonNumeric += partialSeq;
-		    StrippedSequence = cleanSeq;
-		    var pieces = cleanSeq.Split('.');
-		    if (pieces.Count() != 1)
-		    {
-		        PrefixResidue = pieces[0].First();
-		        StrippedSequence = pieces[1];
-		        SuffixResidue = pieces[2].First();
-		    }
+            StrippedSequence = cleanSeq;
+            var pieces = cleanSeq.Split('.');
+            if (pieces.Count() != 1)
+            {
+                PrefixResidue = pieces[0].First();
+                StrippedSequence = pieces[1];
+                SuffixResidue = pieces[2].First();
+            }
 
             if(string.IsNullOrWhiteSpace(evidence.CleanPeptide))
             {
@@ -353,11 +353,11 @@ namespace MTDBFramework.Data
             }
             EncodedNonNumericSequence = nonNumeric;
 
-		    if (string.IsNullOrWhiteSpace((evidence.SeqWithNumericMods)))
-		    {
-		        evidence.SeqWithNumericMods = numeric;
-		    }
-		    EncodedNumericSequence = numeric;
+            if (string.IsNullOrWhiteSpace((evidence.SeqWithNumericMods)))
+            {
+                evidence.SeqWithNumericMods = numeric;
+            }
+            EncodedNumericSequence = numeric;
 
             if (!Charges.Contains(evidence.Charge))
             {
@@ -367,10 +367,10 @@ namespace MTDBFramework.Data
             evidence.Parent = this;
         }
 
-		/// <summary>
-		/// Add another protein the ConsensusTarget occurs in
-		/// </summary>
-		/// <param name="protein"></param>
+        /// <summary>
+        /// Add another protein the ConsensusTarget occurs in
+        /// </summary>
+        /// <param name="protein"></param>
         public void AddProtein(ProteinInformation protein)
         {
             Proteins.Add(protein);
@@ -378,27 +378,27 @@ namespace MTDBFramework.Data
             protein.Consensus.Add(this);
         }
 
-		/// <summary>
-		/// Number of modifications that were observed
-		/// </summary>
+        /// <summary>
+        /// Number of modifications that were observed
+        /// </summary>
         public short ModificationCount
         {
             get;
             set;
         }
 
-		/// <summary>
-		/// Descriptions for all observed modifications
-		/// </summary>
+        /// <summary>
+        /// Descriptions for all observed modifications
+        /// </summary>
         public string ModificationDescription
         {
             get;
             set;
         }
 
-		/// <summary>
-		/// The number of proteins the ConsensusTarget occurs in
-		/// </summary>
+        /// <summary>
+        /// The number of proteins the ConsensusTarget occurs in
+        /// </summary>
         public short MultiProteinCount
         {
             get;

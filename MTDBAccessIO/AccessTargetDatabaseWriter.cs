@@ -9,29 +9,29 @@ using ACCESS = Microsoft.Office.Interop.Access;
 
 namespace MTDBAccessIO
 {
-	/// <summary>
-	/// Create and output to a Microsoft Access format database
-	/// </summary>
+    /// <summary>
+    /// Create and output to a Microsoft Access format database
+    /// </summary>
     public class AccessTargetDatabaseWriter : ITargetDatabaseWriter
     {
 
-	    private void ExportToText(string path, TargetDatabase inputData)
-	    {
-	        var pieces = path.Split('\\');
-	        string directory = "";
-	        foreach (var piece in pieces)
-	        {
-	            if (piece.Contains("."))
-	            {
-	                continue;
-	            }
-	            directory += piece;
-	            directory += "\\";
-	        }
+        private void ExportToText(string path, TargetDatabase inputData)
+        {
+            var pieces = path.Split('\\');
+            string directory = "";
+            foreach (var piece in pieces)
+            {
+                if (piece.Contains("."))
+                {
+                    continue;
+                }
+                directory += piece;
+                directory += "\\";
+            }
 
-	        var currentProt = 0;
+            var currentProt = 0;
 
-	        var targetWriter    = new StreamWriter(directory + "tempAMT.txt");
+            var targetWriter    = new StreamWriter(directory + "tempAMT.txt");
             var proteinWriter   = new StreamWriter(directory + "tempAMT_Proteins.txt");
             var mapWriter       = new StreamWriter(directory + "tempAMT_to_Protein_Map.txt");
 
@@ -133,14 +133,14 @@ namespace MTDBAccessIO
         private readonly Dictionary<string, ProteinInformation> m_uniqueProteins = new Dictionary<string, ProteinInformation>();
 
         //Might not need this
-        private readonly Dictionary<int, List<int>> m_amtToProteinMap = new Dictionary<int, List<int>>(); 
+        private readonly Dictionary<int, List<int>> m_amtToProteinMap = new Dictionary<int, List<int>>();
 
-		/// <summary>
-		/// Write the data to the database
-		/// </summary>
-		/// <param name="database"></param>
-		/// <param name="options"></param>
-		/// <param name="path"></param>
+        /// <summary>
+        /// Write the data to the database
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="options"></param>
+        /// <param name="path"></param>
         public void Write(TargetDatabase database, Options options, string path)
         {
             if (File.Exists(path))
@@ -148,9 +148,9 @@ namespace MTDBAccessIO
                 File.Delete(path);
             }
 
-		    ExportToText(path, database);
+            ExportToText(path, database);
 
-		    TextToAccessConvert(path);
+            TextToAccessConvert(path);
         }
 
         private void TextToAccessConvert(string path)
@@ -192,15 +192,15 @@ namespace MTDBAccessIO
 
         #region Events
 
-		/// <summary>
-		/// Progress update reporting
-		/// </summary>
+        /// <summary>
+        /// Progress update reporting
+        /// </summary>
         public event MtdbProgressChangedEventHandler ProgressChanged;
 
-		/// <summary>
-		/// Event handler
-		/// </summary>
-		/// <param name="e"></param>
+        /// <summary>
+        /// Event handler
+        /// </summary>
+        /// <param name="e"></param>
         protected void OnProgressChanged(MtdbProgressChangedEventArgs e)
         {
             if (ProgressChanged != null)

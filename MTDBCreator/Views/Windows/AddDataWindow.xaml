@@ -28,7 +28,7 @@
             </Grid.ColumnDefinitions>
 
             <Label Content="Name:" Margin="3,0,0,0" Grid.Row="0" Grid.Column="0"/>
-            <TextBox x:Name="AnalysisJobTitleTextBox"  
+            <TextBox x:Name="AnalysisJobTitleTextBox"
                  Grid.Row="0" Grid.Column="1"
                  Margin="3,3,5,3"
                  Text="{Binding Path=Title}"/>
@@ -47,7 +47,7 @@
         </ListView>
 
         <Grid Grid.Row="2">
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80"/>
                 <ColumnDefinition Width="100"/>
@@ -76,7 +76,7 @@
                                 <Image Source="/Images/Menus/AnalysisFile.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        
+
                         <MenuItem Name ="DatasetDescriptionMenuItem" Header="_Dataset Description File..." Tag="Description" Click="AddFileMenuItem_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Images/Menus/DescriptionFile.png"/>
@@ -100,7 +100,7 @@
                                 <Image Source="/Images/Menus/AnalysisFile.png"/>
                             </MenuItem.Icon>
                         </MenuItem>
-                        
+
                         <MenuItem Name="AnalysisFolderItem" Header="_Old Analysis Files..." Tag="Analysis Files" Click="AddFolderFileMenuItem_Click">
                             <MenuItem.Icon>
                                 <Image Source="/Images/Menus/AnalysisFile.png"/>

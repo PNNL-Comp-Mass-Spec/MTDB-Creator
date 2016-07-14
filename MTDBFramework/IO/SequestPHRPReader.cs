@@ -11,20 +11,20 @@ namespace MTDBFramework.IO
     /// </summary>
     public class SequestPhrpReader : PHRPReaderBase
     {
-		/// <summary>
-		/// Configure the options for SequestReader
-		/// </summary>
-		/// <param name="options"></param>
+        /// <summary>
+        /// Configure the options for SequestReader
+        /// </summary>
+        /// <param name="options"></param>
         public SequestPhrpReader(Options options)
         {
             ReaderOptions = options;
         }
 
-		/// <summary>
-		/// Read and process a Sequest PHRP file
-		/// </summary>
-		/// <param name="path">Sequest file to read</param>
-		/// <returns></returns>
+        /// <summary>
+        /// Read and process a Sequest PHRP file
+        /// </summary>
+        /// <param name="path">Sequest file to read</param>
+        /// <returns></returns>
         public override LcmsDataSet Read(string path)
         {
             var results = new List<SequestResult>();
@@ -33,7 +33,7 @@ namespace MTDBFramework.IO
             // Get the Evidences using PHRPReader which looks at the path that was passed in to determine the data type
             int resultsProcessed = 0;
             var reader = InitializeReader(path);
-            
+
             while (reader.MoveNext())
             {
                 resultsProcessed++;
@@ -60,7 +60,7 @@ namespace MTDBFramework.IO
 
                 var result = new SequestResult
                 {
-                    AnalysisId = reader.CurrentPSM.ResultID                   
+                    AnalysisId = reader.CurrentPSM.ResultID
                 };
 
                 StorePsmData(result, reader, specProb);
@@ -73,7 +73,7 @@ namespace MTDBFramework.IO
 
                 result.DelCn = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_DelCn, 0);
                 result.DelCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_DelCn2, 0);
-             
+
                 result.RankSp = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserSequest.DATA_COLUMN_RankSp, 0);
                 result.RankXc = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserSequest.DATA_COLUMN_RankXc, 0);
                 result.Sp = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_Sp, 0);
@@ -82,14 +82,14 @@ namespace MTDBFramework.IO
                 result.XcRatio = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XcRatio, 0);
 
                 result.FScore = SequestResult.CalculatePeptideProphetDiscriminantScore(result);
-		
-                results.Add(result);             
+
+                results.Add(result);
             }
 
             ComputeNets(results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.Sequest, results);
         }
-       
+
     }
 }

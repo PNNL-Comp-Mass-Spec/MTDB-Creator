@@ -10,9 +10,9 @@ using MTDBFramework.UI;
 
 namespace MTDBFramework.IO
 {
-	/// <summary>
-	/// Processing for analysis jobs
-	/// </summary>
+    /// <summary>
+    /// Processing for analysis jobs
+    /// </summary>
     public class AnalysisJobProcessor : IProcessor
     {
         private int m_currentItem;
@@ -22,35 +22,35 @@ namespace MTDBFramework.IO
 
         private PHRPReaderBase m_analysisReader;
 
-		/// <summary>
-		/// Options
-		/// </summary>
+        /// <summary>
+        /// Options
+        /// </summary>
         public Options ProcessorOptions { get; set; }
 
-		/// <summary>
-		/// Support thread cancellation
-		/// </summary>
+        /// <summary>
+        /// Support thread cancellation
+        /// </summary>
         public void AbortProcessing()
         {
             m_abortRequested = true;
             m_analysisReader.AbortProcessing();
         }
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="options"></param>
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="options"></param>
         public AnalysisJobProcessor(Options options)
         {
             ProcessorOptions = options;
         }
 
-		/// <summary>
-		/// Process Analysis Job Items according to their individual file types
-		/// </summary>
-		/// <param name="analysisJobItems">Analysis Job Items</param>
-		/// <param name="bWorker"></param>
-		/// <returns>Processed Analysis Job Items</returns>
+        /// <summary>
+        /// Process Analysis Job Items according to their individual file types
+        /// </summary>
+        /// <param name="analysisJobItems">Analysis Job Items</param>
+        /// <param name="bWorker"></param>
+        /// <returns>Processed Analysis Job Items</returns>
         public IEnumerable<AnalysisJobItem> Process(IEnumerable<AnalysisJobItem> analysisJobItems, BackgroundWorker bWorker)
         {
             // analysisJobItems should have LcmsDataSet field be null
@@ -63,7 +63,7 @@ namespace MTDBFramework.IO
             {
                 if (bWorker.CancellationPending || m_abortRequested)
                     break;
-                
+
                 OnProgressChanged(new MtdbProgressChangedEventArgs(m_currentItem, m_totalItems, jobItem));
                 m_currentJob = jobItem;
 
@@ -75,9 +75,9 @@ namespace MTDBFramework.IO
                 jobItem.DataSet = m_analysisReader.Read(jobItem.FilePath);
 
                 m_currentItem++;
-                
+
             }
-            
+
             return analysisJobItems;
         }
 
@@ -92,15 +92,15 @@ namespace MTDBFramework.IO
 
         #region Events
 
-		/// <summary>
-		/// Progress changed Event handler
-		/// </summary>
+        /// <summary>
+        /// Progress changed Event handler
+        /// </summary>
         public event MtdbProgressChangedEventHandler ProgressChanged;
 
-		/// <summary>
-		/// Event handler
-		/// </summary>
-		/// <param name="e"></param>
+        /// <summary>
+        /// Event handler
+        /// </summary>
+        /// <param name="e"></param>
         protected void OnProgressChanged(MtdbProgressChangedEventArgs e)
         {
             if (ProgressChanged != null)

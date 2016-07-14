@@ -1,19 +1,19 @@
 ﻿namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// Target filtering for MSAlign Workflows
-	/// </summary>
+    /// <summary>
+    /// Target filtering for MSAlign Workflows
+    /// </summary>
     public class MsAlignTargetFilter : ITargetFilter
     {
-		/// <summary>
-		/// Options
-		/// </summary>
+        /// <summary>
+        /// Options
+        /// </summary>
         public Options FilterOptions { get; set; }
-       
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="options"></param>
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="options"></param>
         public MsAlignTargetFilter(Options options)
         {
             FilterOptions = options;

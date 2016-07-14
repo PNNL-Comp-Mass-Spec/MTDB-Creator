@@ -6,20 +6,20 @@ using MTDBFramework.Data;
 
 namespace MTDBFramework.Algorithms.Alignment
 {
-	/// <summary>
-	/// Alignment Filtering for Sequest Workflows
-	/// </summary>
+    /// <summary>
+    /// Alignment Filtering for Sequest Workflows
+    /// </summary>
     public class SequestAlignmentFilter : ITargetFilter
     {
-		/// <summary>
-		/// Options
-		/// </summary>
+        /// <summary>
+        /// Options
+        /// </summary>
         public Options FilterOptions { get; set; }
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="options"></param>
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="options"></param>
         public SequestAlignmentFilter(Options options)
         {
             FilterOptions = options;

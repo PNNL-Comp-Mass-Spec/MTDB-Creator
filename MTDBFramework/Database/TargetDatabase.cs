@@ -13,10 +13,10 @@ namespace MTDBFramework.Database
     public sealed class TargetDatabase
     {
         private readonly Dictionary<int, ProteinInformation> m_uniqueProteins;
- 
-		/// <summary>
-		/// Constructor
-		/// </summary>
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public TargetDatabase()
         {
             ConsensusTargets    = new List<ConsensusTarget>();
@@ -40,15 +40,15 @@ namespace MTDBFramework.Database
             ConsensusTargets.Clear();
             Proteins.Clear();
         }
-        
-		/// <summary>
-		/// All consensus targets
-		/// </summary>
+
+        /// <summary>
+        /// All consensus targets
+        /// </summary>
         public IList<ConsensusTarget>    ConsensusTargets { get; private set; }
 
-		/// <summary>
-		/// All proteins
-		/// </summary>
+        /// <summary>
+        /// All proteins
+        /// </summary>
         public IList<ProteinInformation> Proteins { get; set; }
     }
 }

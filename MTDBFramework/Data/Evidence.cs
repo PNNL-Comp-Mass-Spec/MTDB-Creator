@@ -10,9 +10,9 @@ using PNNLOmics.Data;
 
 namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// Collection of data pertaining to a single peptide evidence
-	/// </summary>
+    /// <summary>
+    /// Collection of data pertaining to a single peptide evidence
+    /// </summary>
     public class Evidence : ObservableObject, IComparable<Evidence>
     {
         #region Private Fields
@@ -48,7 +48,7 @@ namespace MTDBFramework.Data
 
         private IList<ProteinInformation> m_proteins;
 
-	    private double m_discriminantValue; // holder for QValue (msgf+/mzid), Log Peptide E Value (Xtandem),
+        private double m_discriminantValue; // holder for QValue (msgf+/mzid), Log Peptide E Value (Xtandem),
                                             // xCorr (sequest) or EValue (MSAlign) depending on dataset type.
 
         // SequenceInfo fields
@@ -59,15 +59,15 @@ namespace MTDBFramework.Data
         private string m_seqWithNumericMods;
         private string m_encodedNonNumericSequence;
 
-	    private double m_netShift;
+        private double m_netShift;
 
-	    private double m_normalizedScore;
+        private double m_normalizedScore;
 
         #endregion
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Evidence()
         {
             m_proteins = new List<ProteinInformation>();
@@ -82,9 +82,9 @@ namespace MTDBFramework.Data
         #region Public Properties
 
         // Not used - Put off
-		/// <summary>
-		/// Spectra data
-		/// </summary>
+        /// <summary>
+        /// Spectra data
+        /// </summary>
         public MSSpectra Spectrum
         {
             get
@@ -99,9 +99,9 @@ namespace MTDBFramework.Data
         }
 
         //For 3NF:
-		/// <summary>
-		/// Dataset the evidence occurs in
-		/// </summary>
+        /// <summary>
+        /// Dataset the evidence occurs in
+        /// </summary>
         public TargetDataSet DataSet
         {
             get { return m_dataSet; }
@@ -113,9 +113,9 @@ namespace MTDBFramework.Data
         }
 
         // Metadata
-		/// <summary>
-		/// Peptide that is evidenced
-		/// </summary>
+        /// <summary>
+        /// Peptide that is evidenced
+        /// </summary>
         public TargetPeptideInfo PeptideInfo
         {
             get { return m_peptideInfo; }
@@ -126,54 +126,54 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Id
-		/// </summary>
+        /// <summary>
+        /// Id
+        /// </summary>
         public int Id
         {
             get { return m_id; }
             set
             {
-                m_id = value; 
+                m_id = value;
                 OnPropertyChanged("Id");
             }
         }
 
-		/// <summary>
-		/// Scan id number
-		/// </summary>
+        /// <summary>
+        /// Scan id number
+        /// </summary>
         public int Scan
         {
             get { return m_scan; }
             set
             {
-                m_scan = value; 
+                m_scan = value;
                 OnPropertyChanged("Scan");
             }
         }
 
-		/// <summary>
-		/// Analysis Id
-		/// </summary>
+        /// <summary>
+        /// Analysis Id
+        /// </summary>
         public int AnalysisId
         {
             get { return m_analysisId; }
             set
             {
-                m_analysisId = value; 
+                m_analysisId = value;
                 OnPropertyChanged("AnalysisId");
             }
         }
 
-		/// <summary>
-		/// Number of proteins the evidenced peptide occurs in
-		/// </summary>
+        /// <summary>
+        /// Number of proteins the evidenced peptide occurs in
+        /// </summary>
         public short MultiProteinCount
         {
             get { return m_multiProteinCount; }
             set
             {
-                m_multiProteinCount = value; 
+                m_multiProteinCount = value;
                 OnPropertyChanged("MultiProteinCount");
             }
         }
@@ -204,22 +204,22 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// The evidenced protein
-		/// </summary>
+        /// <summary>
+        /// The evidenced protein
+        /// </summary>
         public ConsensusTarget Parent
         {
             get { return m_parent; }
             set
             {
-                m_parent = value; 
+                m_parent = value;
                 OnPropertyChanged("Parent");
             }
         }
 
-		/// <summary>
-		/// Charge
-		/// </summary>
+        /// <summary>
+        /// Charge
+        /// </summary>
         public short Charge
         {
             get { return m_charge; }
@@ -230,9 +230,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Observed Elution time
-		/// </summary>
+        /// <summary>
+        /// Observed Elution time
+        /// </summary>
         public double ObservedNet
         {
             get { return m_observedNet; }
@@ -243,9 +243,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Predicted Elution time
-		/// </summary>
+        /// <summary>
+        /// Predicted Elution time
+        /// </summary>
         public double PredictedNet
         {
             get { return m_predictedNet; }
@@ -270,9 +270,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// SpecProb
-		/// </summary>
+        /// <summary>
+        /// SpecProb
+        /// </summary>
         public double SpecProb
         {
             get { return m_specProb; }
@@ -285,9 +285,9 @@ namespace MTDBFramework.Data
 
         // PeptideInfo
 
-		/// <summary>
-		/// Sequence that is evidenced
-		/// </summary>
+        /// <summary>
+        /// Sequence that is evidenced
+        /// </summary>
         public string Sequence
         {
             get { return m_sequence; }
@@ -298,9 +298,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Clean peptide sequence - letters only
-		/// </summary>
+        /// <summary>
+        /// Clean peptide sequence - letters only
+        /// </summary>
         public string CleanPeptide
         {
             get { return m_cleanPeptide; }
@@ -315,9 +315,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// DelM
-		/// </summary>
+        /// <summary>
+        /// DelM
+        /// </summary>
         public double DelM
         {
             get
@@ -331,9 +331,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// DelMPpm
-		/// </summary>
+        /// <summary>
+        /// DelMPpm
+        /// </summary>
         public double DelMPpm
         {
             get
@@ -349,9 +349,9 @@ namespace MTDBFramework.Data
 
         // SequenceInfo
 
-		/// <summary>
-		/// Is Sequence Information Existing?
-		/// </summary>
+        /// <summary>
+        /// Is Sequence Information Existing?
+        /// </summary>
         public short IsSeqInfoExist
         {
             get { return m_isSeqInfoExist; }
@@ -362,9 +362,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Modifications occurring in sequence
-		/// </summary>
+        /// <summary>
+        /// Modifications occurring in sequence
+        /// </summary>
         public short ModificationCount
         {
             get { return m_modificationCount; }
@@ -375,9 +375,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Description of modifications occurring in sequence
-		/// </summary>
+        /// <summary>
+        /// Description of modifications occurring in sequence
+        /// </summary>
         public string ModificationDescription
         {
             get { return m_modificationDescription; }
@@ -401,9 +401,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Sequence containing numeric modifications
-		/// </summary>
+        /// <summary>
+        /// Sequence containing numeric modifications
+        /// </summary>
         public string SeqWithNumericMods
         {
             get { return m_seqWithNumericMods; }
@@ -414,9 +414,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Encoded sequence with modification data
-		/// </summary>
+        /// <summary>
+        /// Encoded sequence with modification data
+        /// </summary>
         public string EncodedNonNumericSequence
         {
             get { return m_encodedNonNumericSequence; }
@@ -430,34 +430,34 @@ namespace MTDBFramework.Data
         /// <summary>
         /// NET amount evidence was shifted by from LCMS Warp
         /// </summary>
-	    public double NetShift
-	    {
-	        get { return m_netShift; }
-	        set
-	        {
-	            m_netShift = value;
-	            OnPropertyChanged("NetShift");
-	        }
-	    }
+        public double NetShift
+        {
+            get { return m_netShift; }
+            set
+            {
+                m_netShift = value;
+                OnPropertyChanged("NetShift");
+            }
+        }
 
         /// <summary>
         /// Discriminant score used in conjunction with spectral probability
         /// for filtering evidences. QValue for MSGF+ and mzId files, LogPeptide
         /// EValue for Xtandem, xCorr for Sequest, EValue for MSAlign
         /// </summary>
-	    public double DiscriminantValue
-	    {
+        public double DiscriminantValue
+        {
             get { return m_discriminantValue; }
-	        set
-	        {
-	            m_discriminantValue = value;
-	            OnPropertyChanged("QValue");
-	        }
-	    }
+            set
+            {
+                m_discriminantValue = value;
+                OnPropertyChanged("QValue");
+            }
+        }
 
-		/// <summary>
-		/// Proteins evidenced
-		/// </summary>
+        /// <summary>
+        /// Proteins evidenced
+        /// </summary>
         public IList<ProteinInformation> Proteins
         {
             get { return m_proteins; }
@@ -468,9 +468,9 @@ namespace MTDBFramework.Data
             }
         }
 
-		/// <summary>
-		/// Post Translational Modifications in sequence
-		/// </summary>
+        /// <summary>
+        /// Post Translational Modifications in sequence
+        /// </summary>
         public IList<PostTranslationalModification> Ptms
         {
             get { return m_ptms; }
@@ -484,32 +484,32 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Normalized score for the evidence
         /// </summary>
-	    public double NormalizedScore
-	    {
-	        get { return m_normalizedScore; }
-	        set
-	        {
-	            m_normalizedScore = value;
-	            OnPropertyChanged("NormalizedScore");
-	        }
-	    }
+        public double NormalizedScore
+        {
+            get { return m_normalizedScore; }
+            set
+            {
+                m_normalizedScore = value;
+                OnPropertyChanged("NormalizedScore");
+            }
+        }
 
         #endregion
 
-		/// <summary>
-		/// Add a protein to the list of proteins evidenced
-		/// </summary>
-		/// <param name="protein"></param>
+        /// <summary>
+        /// Add a protein to the list of proteins evidenced
+        /// </summary>
+        /// <param name="protein"></param>
         public void AddProtein(ProteinInformation protein)
         {
             Proteins.Add(protein);
         }
 
-		/// <summary>
-		/// Extract the clean sequence
-		/// </summary>
-		/// <param name="sequence"></param>
-		/// <returns></returns>
+        /// <summary>
+        /// Extract the clean sequence
+        /// </summary>
+        /// <param name="sequence"></param>
+        /// <returns></returns>
         public static string CleanSequence(string sequence)
         {
             var peptideChar = sequence.ToCharArray();
@@ -549,10 +549,10 @@ namespace MTDBFramework.Data
             return cleanPeptide;
         }
 
-		/// <summary>
-		/// Overloaded string return
-		/// </summary>
-		/// <returns></returns>
+        /// <summary>
+        /// Overloaded string return
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return Sequence;

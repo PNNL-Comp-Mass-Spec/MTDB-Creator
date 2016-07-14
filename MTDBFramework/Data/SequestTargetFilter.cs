@@ -1,19 +1,19 @@
 ﻿namespace MTDBFramework.Data
 {
-	/// <summary>
-	/// Target filtering for Sequest workflows
-	/// </summary>
+    /// <summary>
+    /// Target filtering for Sequest workflows
+    /// </summary>
     public class SequestTargetFilter : ITargetFilter
     {
-		/// <summary>
-		/// Options
-		/// </summary>
+        /// <summary>
+        /// Options
+        /// </summary>
         public Options FilterOptions { get; set; }
 
-		/// <summary>
-		/// Constructor
-		/// </summary>
-		/// <param name="options"></param>
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="options"></param>
         public SequestTargetFilter(Options options)
         {
             FilterOptions = options;
