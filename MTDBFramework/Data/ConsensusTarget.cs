@@ -342,7 +342,8 @@ namespace MTDBFramework.Data
 
             if(string.IsNullOrWhiteSpace(evidence.CleanPeptide))
             {
-                evidence.CleanPeptide = cleanSeq;
+                //evidence.CleanPeptide = cleanSeq;
+                evidence.CleanPeptide = StrippedSequence;
             }
             CleanSequence = cleanSeq;
 

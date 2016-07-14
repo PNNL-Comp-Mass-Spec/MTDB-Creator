@@ -69,6 +69,7 @@ namespace MTDBFramework.Algorithms
         {
             m_abortRequested = false;
             m_currentItem = 0;
+            dataSets = dataSets.ToList();
             m_totalItems = 2 * dataSets.Count();
 
             OnPercentProgressChanged(new PercentCompleteEventArgs(0));
@@ -80,7 +81,6 @@ namespace MTDBFramework.Algorithms
             var clusterer = TargetClustererFactory.Create(ProcessorOptions.TargetFilterType);
             var epicTargets = new List<Evidence>();
 
-            dataSets = dataSets.ToList();
             foreach (var dataSet in dataSets)
             {
                 float percentComplete = (float)m_currentItem / m_totalItems;

@@ -1,5 +1,6 @@
 ﻿#region Namespaces
 
+using System;
 using System.Collections.Generic;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
@@ -12,7 +13,7 @@ namespace MTDBFramework.Data
 	/// <summary>
 	/// Collection of data pertaining to a single peptide evidence
 	/// </summary>
-    public class Evidence : ObservableObject
+    public class Evidence : ObservableObject, IComparable<Evidence>
     {
         #region Private Fields
 
@@ -306,6 +307,10 @@ namespace MTDBFramework.Data
             set
             {
                 m_cleanPeptide = value;
+                if (m_cleanPeptide.Contains("."))
+                {
+                    m_cleanPeptide = CleanSequence(value);
+                }
                 OnPropertyChanged("CleanPeptide");
             }
         }
@@ -551,6 +556,25 @@ namespace MTDBFramework.Data
         public override string ToString()
         {
             return Sequence;
+        }
+
+        /// <summary>
+        /// Comparison function for sorting by <see cref="Sequence"/>, then by <see cref="Scan"/>, then by <see cref="MonoisotopicMass"/>
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public int CompareTo(Evidence other)
+        {
+            var result = this.Sequence.CompareTo(other.Sequence);
+            if (result == 0)
+            {
+                result = this.Scan.CompareTo(other.Scan);
+                if (result == 0)
+                {
+                    result = this.MonoisotopicMass.CompareTo(other.MonoisotopicMass);
+                }
+            }
+            return result;
         }
     }
 }
