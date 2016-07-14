@@ -56,21 +56,24 @@ namespace MTDBCreatorTestSuite.IO
 	        var path3 = GetPath(file3);
 	        var outputPath = GetTestSuiteDataPath(@"Output4.mtdb");
             Console.WriteLine("Adding file \"{0}\" to the database...", file1);
-	        var db = MTDBFramework.MtdbCreator.CreateDB(new List<string>() {path1}, outputPath);
+	        var db = MTDBFramework.MtdbCreator.CreateDB(new List<string>() { path1 }, outputPath);
             Console.WriteLine("Consensus Targets Count for file should be: 579");
             Console.WriteLine("Consensus Targets Count (total) should be: 579");
+            Console.WriteLine("Consensus Targets Count (total) is: " + db.ConsensusTargets.Count);
             Assert.AreEqual(579, db.ConsensusTargets.Count);
 
             Console.WriteLine("Adding file \"{0}\" to the database...", file2);
             db = MTDBFramework.MtdbCreator.CreateDB(new List<string>() { path2 }, outputPath);
             Console.WriteLine("Consensus Targets Count for file should be: 10360");
 	        Console.WriteLine("Consensus Targets Count (total) should be: 10937");
+            Console.WriteLine("Consensus Targets Count (total) is: " + db.ConsensusTargets.Count);
             Assert.AreEqual(10937, db.ConsensusTargets.Count);
 
             Console.WriteLine("Adding file \"{0}\" to the database...", file3);
             db = MTDBFramework.MtdbCreator.CreateDB(new List<string>() { path3 }, outputPath);
             Console.WriteLine("Consensus Targets Count for file should be: 10410");
 	        Console.WriteLine("Consensus Targets Count (total) should be: 13653");
+            Console.WriteLine("Consensus Targets Count (total) is: " + db.ConsensusTargets.Count);
             Assert.AreEqual(13653, db.ConsensusTargets.Count);
 	    }
 
