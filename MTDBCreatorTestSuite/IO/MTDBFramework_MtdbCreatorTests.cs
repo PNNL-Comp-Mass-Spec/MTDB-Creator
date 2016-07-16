@@ -6,24 +6,13 @@ using NUnit.Framework;
 namespace MTDBCreatorTestSuite.IO
 {
     [TestFixture]
-    class MTDBFramework_MtdbCreatorTests : TestBase
+    public class MTDBFramework_MtdbCreatorTests : TestBase
     {
-        [TestFixtureSetUp]
-        public void DeleteOutputFiles()
+        private void DeleteFile(string path)
         {
-            var paths = new List<string>();
-            paths.Add(@"Output2.mtdb");
-            paths.Add(@"Output3.mtdb");
-            paths.Add(@"Output4.mtdb");
-            paths.Add(@"Output5.mtdb");
-            paths.Add(@"Output6.mtdb");
-            paths.Add(@"Output7.mtdb");
-            foreach (var path in paths)
+            if (File.Exists(GetTestSuiteDataPath(path)))
             {
-                if (File.Exists(GetTestSuiteDataPath(path)))
-                {
-                    File.Delete(GetTestSuiteDataPath(path));
-                }
+                File.Delete(GetTestSuiteDataPath(path));
             }
         }
 
@@ -32,6 +21,7 @@ namespace MTDBCreatorTestSuite.IO
         [TestCase(@"Output3.mtdb", 13076, @"Mzml\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfplus.mzid", @"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", Ignore = false)]
         public void TestWriteMZID(string outputPath, int expectedConsensusTargets, params string[] paths)
         {
+            DeleteFile(outputPath);
             //var mtdbCreator = new MTDBFramework.MtdbCreator();
             var testPaths = new List<string>();
             foreach (var path in paths)
@@ -54,6 +44,7 @@ namespace MTDBCreatorTestSuite.IO
             var path1 = GetPath(file1);
             var path2 = GetPath(file2);
             var path3 = GetPath(file3);
+            DeleteFile(@"Output4.mtdb");
             var outputPath = GetTestSuiteDataPath(@"Output4.mtdb");
             Console.WriteLine("Adding file \"{0}\" to the database...", file1);
             var db = MTDBFramework.MtdbCreator.CreateDB(new List<string>() { path1 }, outputPath);
@@ -84,6 +75,8 @@ namespace MTDBCreatorTestSuite.IO
             var inPath2 = @"Mzml\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfplus.mzid";
             var outPath1 = @"Output5.mtdb";
             var outPath2 = @"Output6.mtdb";
+            DeleteFile(outPath1);
+            DeleteFile(outPath2);
             var paths1 = new List<string>();
             var paths2 = new List<string>();
             paths1.Add(GetPath(inPath1));
@@ -104,6 +97,7 @@ namespace MTDBCreatorTestSuite.IO
         [TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", @"Output7.mtdb", Ignore = false)]
         public void TestAppendDuplicateMZID(string path, string outputPath)
         {
+            DeleteFile(outputPath);
             var testPaths = new List<string>();
             testPaths.Add(GetPath(path));
             Console.WriteLine("Running dataset: First time");
