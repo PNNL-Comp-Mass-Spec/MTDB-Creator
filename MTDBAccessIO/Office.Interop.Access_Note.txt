@@ -1,0 +1,13 @@
+If the reference to Microsoft.Office.Interop.Access is missing, try manually adding it.
+
+1) Select the MTDBAccessIO project in Solution Explore, right click References, and choose "Add Reference"
+
+2) Choose Assemblies then Extensions and look for Microsoft.Office.Interop.Access
+
+3) If not found, choose Browse, then go to folder 
+   C:\Windows\assembly\GAC_MSIL\Microsoft.Office.Interop.Access
+
+4) Open the subfolder, for example 14.0.0.0__71e9bce111e9429c
+
+5) Select file Microsoft.Office.Interop.Access.dll
+
