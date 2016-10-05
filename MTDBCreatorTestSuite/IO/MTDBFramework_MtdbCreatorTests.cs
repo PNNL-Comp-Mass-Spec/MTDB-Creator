@@ -17,8 +17,8 @@ namespace MTDBCreatorTestSuite.IO
         }
 
         [Test]
-        [TestCase(@"Output2.mtdb", 579, @"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", "", Ignore = false)]
-        [TestCase(@"Output3.mtdb", 13076, @"Mzml\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfplus.mzid", @"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", Ignore = false)]
+        [TestCase(@"Output2.mtdb", 579, @"Mzml\61928_SCU_WS_UPool_24_17Sep13_Cheetah_13-07-22_msgfplus.mzid", "", Ignore = "false")]
+        [TestCase(@"Output3.mtdb", 13076, @"Mzml\QC_Shew_13_05-1_03_8Jun14_Samwise_14-02-16_msgfplus.mzid", @"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", Ignore = "false")]
         public void TestWriteMZID(string outputPath, int expectedConsensusTargets, params string[] paths)
         {
             DeleteFile(outputPath);
@@ -94,7 +94,7 @@ namespace MTDBCreatorTestSuite.IO
             Assert.AreEqual(atomic.ConsensusTargets.Count, appended.ConsensusTargets.Count);
         }
 
-        [TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", @"Output7.mtdb", Ignore = false)]
+        [TestCase(@"Mzml\QC_Shew_13_05-2_03_8Jun14_Samwise_14-02-17_msgfplus.mzid", @"Output7.mtdb", Ignore = "false")]
         public void TestAppendDuplicateMZID(string path, string outputPath)
         {
             DeleteFile(outputPath);
