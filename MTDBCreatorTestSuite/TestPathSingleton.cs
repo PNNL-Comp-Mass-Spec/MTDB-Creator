@@ -1,4 +1,5 @@
 ﻿using System;
+using NUnit.Framework;
 
 namespace MTDBCreatorTestSuite
 {
@@ -17,7 +18,7 @@ namespace MTDBCreatorTestSuite
                                                 now.Second);
 
             // The Execution directory
-            var dirFinder = Environment.CurrentDirectory;
+            var dirFinder = TestContext.CurrentContext.TestDirectory;
             // Find the bin folder...
             while (!string.IsNullOrWhiteSpace(dirFinder) && !dirFinder.EndsWith("bin"))
             {
