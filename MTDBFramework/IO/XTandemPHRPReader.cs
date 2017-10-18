@@ -47,8 +47,8 @@ namespace MTDBFramework.IO
                 double logPepEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Expectation_Value_LogE, 0);
 
                 double specProb = 0;
-                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
-                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
+                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
+                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecEValue);
 
                 if (filter.ShouldFilter(logPepEValue, specProb))
                     continue;

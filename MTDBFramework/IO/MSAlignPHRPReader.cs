@@ -16,6 +16,7 @@ namespace MTDBFramework.IO
             ReaderOptions = options;
         }
 
+
         public override LcmsDataSet Read(string path)
         {
             var results = new List<MsAlignResult>();
@@ -38,8 +39,8 @@ namespace MTDBFramework.IO
                 double eValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSAlign.DATA_COLUMN_EValue, 0);
 
                 double specProb = 0;
-                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
-                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
+                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
+                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecEValue);
 
                 if (filter.ShouldFilter(eValue, specProb))
                     continue;

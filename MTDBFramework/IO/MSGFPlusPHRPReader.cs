@@ -50,8 +50,8 @@ namespace MTDBFramework.IO
                     qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_FDR, 0);
 
                 double specProb = 0;
-                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
-                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
+                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
+                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecEValue);
 
                 if (filter.ShouldFilter(qValue, specProb))
                     continue;
@@ -78,7 +78,7 @@ namespace MTDBFramework.IO
                 result.DeNovoScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_DeNovoScore, 0);
                 result.MsgfScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFScore, 0);
 
-                result.SpecEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFDB_SpecEValue, -1);
+                result.SpecEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFPlus_SpecEValue, -1);
                 if (result.SpecEValue < 0)
                 {
                     result.SpecEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFDB_SpecProb, 0);
@@ -86,7 +86,7 @@ namespace MTDBFramework.IO
                 }
                 else
                 {
-                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_Rank_MSGFDB_SpecEValue, 0);
+                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFPlus_SpecEValue, 0);
                 }
 
                 result.EValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_EValue, 0);

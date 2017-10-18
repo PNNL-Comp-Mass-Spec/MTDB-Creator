@@ -47,8 +47,8 @@ namespace MTDBFramework.IO
                 double xcorr = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XCorr, 0);
 
                 double specProb = 0;
-                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecProb))
-                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecProb);
+                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
+                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecEValue);
 
                 if (filter.ShouldFilter(xcorr, specProb))
                     continue;
