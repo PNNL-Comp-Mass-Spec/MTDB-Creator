@@ -9,7 +9,7 @@ namespace MTDBCreatorTestSuite.Data
         /// <summary>
         /// Configuration: read the file only once for all tests.
         /// </summary>
-        [TestFixtureSetUp]
+        [SetUp]
         public void Init()
         {
             var temp = UniModData.Elements.Count;
