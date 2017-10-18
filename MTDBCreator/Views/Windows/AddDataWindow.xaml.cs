@@ -4,7 +4,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
-using Microsoft.WindowsAPICodePack.Dialogs;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.Dialog;
@@ -14,6 +13,7 @@ using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.IO;
+using Ookii.Dialogs.Wpf;
 using Application = System.Windows.Application;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
@@ -82,57 +82,58 @@ namespace MTDBCreator.Windows
             {
                 var formatInfo = FileDialogFormatInfoFactory.Create(addFolderFileMenuItem.Tag.ToString());
 
-                var folderBrowser = new CommonOpenFileDialog();
-                folderBrowser.IsFolderPicker = true;
+                var folderBrowser = new VistaFolderBrowserDialog { ShowNewFolderButton = true };
+                // folderBrowser.SelectedPath = "last path";
+
                 var result = folderBrowser.ShowDialog();
-                var thing = "";
-                if (result == CommonFileDialogResult.Ok)
-                {
-                    thing = folderBrowser.FileName;
-                }
+                if (result == null || !result.Value)
+                    return;
+
+                var selectedFolder = folderBrowser.SelectedPath;
+                if (string.IsNullOrEmpty(selectedFolder))
+                    return;
 
                 var filters = formatInfo.Filter.Split('|');
-                if (thing != "")
+
+                var directory = new DirectoryInfo(selectedFolder);
+                foreach(var filter in filters)
                 {
-                    var directory = new DirectoryInfo(thing);
-                    foreach(var filter in filters)
+                    if (!filter.Contains("."))
+                        continue;
+
+                    filters = filter.Split(';');
+
+                    foreach (var fileExt in filters)
                     {
-                        if (!filter.Contains("."))
-                            continue;
-
-                        filters = filter.Split(';');
-
-                        foreach (var fileExt in filters)
+                        foreach (var file in directory.GetFiles(fileExt, SearchOption.AllDirectories))
                         {
-                            foreach (var file in directory.GetFiles(fileExt, SearchOption.AllDirectories))
+                            if (file.Name.EndsWith("msgfdb_syn.txt"))
                             {
-                                if (file.Name.EndsWith("msgfdb_syn.txt"))
-                                {
-                                    formatInfo.Format = LcmsIdentificationTool.MsgfPlus;
-                                }
-                                else if (file.Name.EndsWith("_syn.txt"))
-                                {
-                                    formatInfo.Format = LcmsIdentificationTool.Sequest;
-                                }
-                                else if (file.Name.EndsWith("_xt.txt"))
-                                {
-                                    formatInfo.Format = LcmsIdentificationTool.XTandem;
-                                }
-                                else if (file.Name.EndsWith("msalign_syn.txt"))
-                                {
-                                    formatInfo.Format = LcmsIdentificationTool.MSAlign;
-                                }
+                                formatInfo.Format = LcmsIdentificationTool.MsgfPlus;
+                            }
+                            else if (file.Name.EndsWith("_syn.txt"))
+                            {
+                                formatInfo.Format = LcmsIdentificationTool.Sequest;
+                            }
+                            else if (file.Name.EndsWith("_xt.txt"))
+                            {
+                                formatInfo.Format = LcmsIdentificationTool.XTandem;
+                            }
+                            else if (file.Name.EndsWith("msalign_syn.txt"))
+                            {
+                                formatInfo.Format = LcmsIdentificationTool.MSAlign;
+                            }
 
-                                AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file.FullName,
-                                    formatInfo.Format));
+                            AnalysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(file.FullName,
+                                formatInfo.Format));
 
-                                if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
-                                {
-                                    AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
-                                }
+                            if (formatInfo.Format == LcmsIdentificationTool.MSAlign)
+                            {
+                                AnalysisJobViewModel.Options.TargetFilterType = TargetWorkflowType.TOP_DOWN;
                             }
                         }
                     }
+
                 }
             }
         }
