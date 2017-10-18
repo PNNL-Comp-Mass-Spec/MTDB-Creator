@@ -44,6 +44,8 @@ namespace MTDBFramework.IO
         /// </summary>
         protected bool AbortRequested;
 
+        protected clsPeptideMassCalculator mPeptideMassCalculator;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -54,6 +56,8 @@ namespace MTDBFramework.IO
             NETPredictor = new AnalysisReaderHelper();
 
             AbortRequested = false;
+
+            mPeptideMassCalculator = new clsPeptideMassCalculator();
         }
 
         /// <summary>
@@ -215,9 +219,8 @@ namespace MTDBFramework.IO
             result.MultiProteinCount = (short)reader.CurrentPSM.Proteins.Count;
             result.Scan = reader.CurrentPSM.ScanNumber;
             result.Sequence = reader.CurrentPSM.Peptide;
-            result.Mz =
-                clsPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0,
-                                                       reader.CurrentPSM.Charge);
+            result.Mz = mPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0,
+                                                             reader.CurrentPSM.Charge);
             result.SpecProb = specProb;
             result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
             result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;

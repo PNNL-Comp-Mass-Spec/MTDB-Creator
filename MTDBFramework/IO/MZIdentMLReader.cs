@@ -849,6 +849,7 @@ namespace MTDBFramework.IO
         {
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
 
+            var peptideMassCalculator = new clsPeptideMassCalculator();
             var cleavageStateCalculator = new clsPeptideCleavageStateCalculator();
 
             var i = 0;
@@ -881,8 +882,8 @@ namespace MTDBFramework.IO
                     Charge = Convert.ToInt16(item.Value.Charge),
                     CleanPeptide = item.Value.Peptide.Sequence,
                     SeqWithNumericMods = null,
-                    MonoisotopicMass = clsPeptideMassCalculator.ConvoluteMass(item.Value.CalMz, item.Value.Charge, 0),
-                    ObservedMonoisotopicMass = clsPeptideMassCalculator.ConvoluteMass(item.Value.ExperimentalMz, item.Value.Charge, 0),
+                    MonoisotopicMass = peptideMassCalculator.ConvoluteMass(item.Value.CalMz, item.Value.Charge, 0),
+                    ObservedMonoisotopicMass = peptideMassCalculator.ConvoluteMass(item.Value.ExperimentalMz, item.Value.Charge, 0),
                     MultiProteinCount = Convert.ToInt16(item.Value.PepEvCount),
                     Scan = item.Value.ScanNum,
                     Sequence = evidence.Pre + "." + item.Value.Peptide.Sequence + "." + evidence.Post,
