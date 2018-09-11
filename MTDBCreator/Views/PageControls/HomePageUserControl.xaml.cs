@@ -1,14 +1,11 @@
 ﻿#region Namespaces
 
 using System;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.Win32;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.BackgroundWork;
 using MTDBCreator.Properties;
-using MTDBCreator.ViewModels;
 using MTDBCreator.Views.Windows;
 using MTDBCreator.Windows;
 
@@ -21,6 +18,9 @@ namespace MTDBCreator.PageControls
     /// </summary>
     public partial class HomePageUserControl : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public HomePageUserControl()
         {
             InitializeComponent();

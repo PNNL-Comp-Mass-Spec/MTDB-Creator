@@ -310,8 +310,14 @@ namespace MTDBCreator.ViewModels
             Options = new Options();
         }
 
+        /// <summary>
+        /// Directory with the output database file
+        /// </summary>
         private string RestoreDirectory { get; set; }
 
+        /// <summary>
+        /// Path to the output database file
+        /// </summary>
         public string SavedDatabasePath { get; set; }
 
         public bool IsDatabaseSaved { get; set; }
