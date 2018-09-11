@@ -11,10 +11,6 @@ namespace MTDBFramework.UI
     /// </summary>
     public class PercentCompleteEventArgs : EventArgs
     {
-        /// <summary>
-        /// Currently running task
-        /// </summary>
-        private readonly string m_currentTask = string.Empty;
 
         /// <summary>
         /// Constructor
@@ -33,7 +29,7 @@ namespace MTDBFramework.UI
         public PercentCompleteEventArgs(float percentComplete, string currentTask)
         {
             PercentComplete = percentComplete;
-            m_currentTask = currentTask;
+            CurrentTask = currentTask;
         }
 
         /// <summary>
@@ -48,7 +44,7 @@ namespace MTDBFramework.UI
             Current = current;
             Total = total;
             PercentComplete = percentComplete;
-            m_currentTask = currentTask;
+            CurrentTask = currentTask;
         }
 
         /// <summary>
@@ -64,15 +60,12 @@ namespace MTDBFramework.UI
         /// <summary>
         /// Percent completion
         /// </summary>
-        public float PercentComplete { get; private set; }
+        public float PercentComplete { get; }
 
         /// <summary>
         /// Name of currently running task
         /// </summary>
-        public string CurrentTask
-        {
-            get { return m_currentTask; }
-        }
+        public string CurrentTask { get; }
     }
 
     /// <summary>

@@ -58,15 +58,9 @@
             return System.IO.Path.Combine(m_testSuiteDataDir, path);
         }
 
-        protected string ProjectDir
-        {
-            get { return m_projectDir; }
-        }
+        protected string ProjectDir => m_projectDir;
 
-        protected string TestSuiteDir
-        {
-            get { return m_testSuiteDir; }
-        }
+        protected string TestSuiteDir => m_testSuiteDir;
 
         protected string TextDelimiter
         {

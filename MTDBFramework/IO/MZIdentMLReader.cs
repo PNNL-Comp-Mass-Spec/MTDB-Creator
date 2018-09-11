@@ -207,10 +207,7 @@ namespace MTDBFramework.IO
 
             public bool IsDtaSpectrum { get; set; }
 
-            public int ScanNumCVParam
-            {
-                get { return _scanNum; }
-            }
+            public int ScanNumCVParam => _scanNum;
 
             private int _scanNum = -1;
 
@@ -218,15 +215,14 @@ namespace MTDBFramework.IO
             {
                 get
                 {
-                    int num;
                     // Do not parse the SpectrumID for DTA file search results - the index is the DTA file index, not the spectrum index
-                    if (!IsDtaSpectrum && !string.IsNullOrWhiteSpace(NativeId) && NativeIdConversion.TryGetScanNumberInt(NativeId, out num))
+                    if (!IsDtaSpectrum && !string.IsNullOrWhiteSpace(NativeId) && NativeIdConversion.TryGetScanNumberInt(NativeId, out var num))
                     {
                         return num;
                     }
                     return _scanNum;
                 }
-                set { _scanNum = value; }
+                set => _scanNum = value;
             }
 
             public string NativeId { get; set; }
@@ -268,10 +264,7 @@ namespace MTDBFramework.IO
                 m_mods.Add(location, mod);
             }
 
-            public Dictionary<int, Modification> Mods
-            {
-                get { return m_mods; }
-            }
+            public Dictionary<int, Modification> Mods => m_mods;
         }
 
         private class PeptideEvidence

@@ -31,10 +31,7 @@ namespace MTDBCreator.ViewModels.TreeView
         #region Properties
 
         public virtual string Text {
-            get
-            {
-                return m_text;
-            }
+            get => m_text;
             protected set
             {
                 m_text = value;
@@ -42,17 +39,11 @@ namespace MTDBCreator.ViewModels.TreeView
             }
         }
 
-        public ObservableCollection<TreeNodeViewModel> ChildNodes
-        {
-            get
-            {
-                return m_ChildNodes;
-            }
-        }
+        public ObservableCollection<TreeNodeViewModel> ChildNodes => m_ChildNodes;
 
         public virtual bool IsSelected
         {
-            get { return m_isSelected; }
+            get => m_isSelected;
             set
             {
                 if (value != m_isSelected)
@@ -73,7 +64,7 @@ namespace MTDBCreator.ViewModels.TreeView
 
         public virtual bool IsExpanded
         {
-            get { return m_isExpanded; }
+            get => m_isExpanded;
             set
             {
                 if (value != m_isExpanded)
@@ -101,10 +92,7 @@ namespace MTDBCreator.ViewModels.TreeView
             }
         }
 
-        public virtual bool IsLoaded
-        {
-            get { return m_isLoaded; }
-        }
+        public virtual bool IsLoaded => m_isLoaded;
 
         #endregion
 
@@ -145,10 +133,7 @@ namespace MTDBCreator.ViewModels.TreeView
 
         public string SearchFilter
         {
-            get
-            {
-                return m_searchFilter;
-            }
+            get => m_searchFilter;
             set
             {
                 m_searchFilter = value;

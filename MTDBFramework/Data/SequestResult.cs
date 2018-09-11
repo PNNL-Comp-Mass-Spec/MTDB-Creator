@@ -36,7 +36,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short ScanCount
         {
-            get { return m_scanCount; }
+            get => m_scanCount;
             set
             {
                 m_scanCount = value;
@@ -49,7 +49,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double XCorr
         {
-            get { return m_xCorr; }
+            get => m_xCorr;
             set
             {
                 m_xCorr = value;
@@ -63,7 +63,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double DelCn
         {
-            get { return m_delCn; }
+            get => m_delCn;
             set
             {
                 m_delCn = value;
@@ -76,7 +76,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double Sp
         {
-            get { return m_sp; }
+            get => m_sp;
             set
             {
                 m_sp = value;
@@ -89,7 +89,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string Reference
         {
-            get { return m_reference; }
+            get => m_reference;
             set
             {
                 m_reference = value;
@@ -102,7 +102,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double DelCn2
         {
-            get { return m_delCn2; }
+            get => m_delCn2;
             set
             {
                 m_delCn2 = value;
@@ -115,7 +115,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short RankSp
         {
-            get { return m_rankSp; }
+            get => m_rankSp;
             set
             {
                 m_rankSp = value;
@@ -128,7 +128,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short RankXc
         {
-            get { return m_rankXc; }
+            get => m_rankXc;
             set
             {
                 m_rankXc = value;
@@ -141,7 +141,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double XcRatio
         {
-            get { return m_xcRatio; }
+            get => m_xcRatio;
             set
             {
                 m_xcRatio = value;
@@ -154,7 +154,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public bool PassFilt
         {
-            get { return m_passFilt; }
+            get => m_passFilt;
             set
             {
                 m_passFilt = value;
@@ -167,7 +167,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double FScore
         {
-            get { return m_fScore; }
+            get => m_fScore;
             set
             {
                 m_fScore = value;
@@ -180,7 +180,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double MScore
         {
-            get { return m_mScore; }
+            get => m_mScore;
             set
             {
                 m_mScore = value;
@@ -193,7 +193,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short NumTrypticEnds
         {
-            get { return m_numTrypticEnds; }
+            get => m_numTrypticEnds;
             set
             {
                 m_numTrypticEnds = value;

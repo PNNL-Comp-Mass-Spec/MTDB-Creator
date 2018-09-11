@@ -21,6 +21,6 @@ namespace MTDBFramework.Algorithms
         /// <summary>
         /// Alignment data
         /// </summary>
-        public IEnumerable<LcmsWarpAlignmentData> AlignmentData { get; private set; }
+        public IEnumerable<LcmsWarpAlignmentData> AlignmentData { get; }
     }
 }

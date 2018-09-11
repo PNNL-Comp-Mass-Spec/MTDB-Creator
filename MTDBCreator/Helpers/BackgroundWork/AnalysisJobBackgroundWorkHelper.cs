@@ -97,14 +97,9 @@ namespace MTDBCreator.Helpers.BackgroundWork
             HostProcessWindow.Close();
         }
 
-        public object Argument
-        {
-            get { return AnalysisJobViewModel; }
-        }
-        public object Result
-        {
-            get { return AnalysisJobViewModel.AnalysisJobItems; }
-        }
+        public object Argument => AnalysisJobViewModel;
+
+        public object Result => AnalysisJobViewModel.AnalysisJobItems;
 
         public ProcessWindow HostProcessWindow { get; set; }
 

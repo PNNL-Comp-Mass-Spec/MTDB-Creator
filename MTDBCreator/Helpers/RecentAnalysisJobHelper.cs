@@ -15,13 +15,7 @@ namespace MTDBCreator.Helpers
 {
     internal static class RecentAnalysisJobHelper
     {
-        internal static int RecentAnalysisJobCount
-        {
-            get
-            {
-                return Settings.Default.RecentAnalysisJobs.Count;
-            }
-        }
+        internal static int RecentAnalysisJobCount => Settings.Default.RecentAnalysisJobs.Count;
 
         internal static void AddRecentAnalysisJob(AnalysisJobViewModel analysisJobViewModel)
         {

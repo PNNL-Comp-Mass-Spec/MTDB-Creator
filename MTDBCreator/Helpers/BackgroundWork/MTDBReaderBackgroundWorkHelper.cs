@@ -48,15 +48,9 @@ namespace MTDBCreator.Helpers.BackgroundWork
             throw new NotImplementedException();
         }
 
-        public object Argument
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public object Argument => throw new NotImplementedException();
 
-        public object Result
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public object Result => throw new NotImplementedException();
 
         public ProcessWindow HostProcessWindow
         { get; set; }

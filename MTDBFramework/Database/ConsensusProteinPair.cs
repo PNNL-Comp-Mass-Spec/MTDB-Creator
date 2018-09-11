@@ -23,17 +23,21 @@ namespace MTDBFramework.Database
         public int Id { get; set; }
 
         private int m_consensus;
-        private int m_prot;
+        private int m_proteinId;
 
         /// <summary>
         /// ConsensusTarget Id
         /// </summary>
-        public int ConsensusId { get { return (Consensus != null) ? Consensus.Id : m_consensus; } set { m_consensus = value; } }
+        public int ConsensusId { get => Consensus?.Id ?? m_consensus;
+            set => m_consensus = value;
+        }
 
         /// <summary>
         /// ProteinInformation Id
         /// </summary>
-        public int ProteinId { get { return (Protein != null) ? Protein.Id : m_prot; } set { m_prot = value; } }
+        public int ProteinId { get => Protein?.Id ?? m_proteinId;
+            set => m_proteinId = value;
+        }
 
         /// <summary>
         /// Cleavage State
@@ -66,10 +70,12 @@ namespace MTDBFramework.Database
             {
                 return false;
             }
-            var cp = obj as ConsensusProteinPair;
 
-            return ((cp.Consensus.Id == this.Consensus.Id)
-                 && (cp.Protein.Id == this.Protein.Id));
+            if (!(obj is ConsensusProteinPair cp))
+                return false;
+
+            return cp.Consensus.Id == Consensus.Id &&
+                   cp.Protein.Id == Protein.Id;
         }
 
         /// <summary>

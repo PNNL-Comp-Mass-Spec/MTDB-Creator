@@ -204,8 +204,8 @@ namespace MTDBCreator.DmsExporter.IO
         #endregion
 
         public char Separator {
-            get { return m_separator; }
-            set { m_separator = value; }
+            get => m_separator;
+            set => m_separator = value;
         }
 
         private readonly string m_connectionString;

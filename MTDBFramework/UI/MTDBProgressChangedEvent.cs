@@ -11,10 +11,6 @@ namespace MTDBFramework.UI
     /// </summary>
     public class MtdbProgressChangedEventArgs : EventArgs
     {
-        /// <summary>
-        /// Name of currently running task
-        /// </summary>
-        private readonly string m_currentTask = string.Empty;
 
         /// <summary>
         /// Constructor
@@ -37,7 +33,7 @@ namespace MTDBFramework.UI
         {
             Current = current;
             Total = total;
-            m_currentTask = currentTask;
+            CurrentTask = currentTask;
         }
 
         /// <summary>
@@ -68,25 +64,22 @@ namespace MTDBFramework.UI
         /// <summary>
         /// Current tasks completed
         /// </summary>
-        public int Current { get; private set; }
+        public int Current { get; }
 
         /// <summary>
         /// Total tasks to complete
         /// </summary>
-        public int Total { get; private set; }
+        public int Total { get; }
 
         /// <summary>
         /// Name of currently running task
         /// </summary>
-        public string CurrentTask
-        {
-            get { return m_currentTask; }
-        }
+        public string CurrentTask { get; }
 
         /// <summary>
         /// Object that is currently running
         /// </summary>
-        public object UserObject { get; private set; }
+        public object UserObject { get; }
     }
 
     /// <summary>

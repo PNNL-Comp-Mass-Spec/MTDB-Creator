@@ -66,16 +66,12 @@ namespace MTDBFramework.Data
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            var objAsProteinInfo = obj as ProteinInformation;
+            if (objAsProteinInfo == null)
             {
                 return false;
             }
-            var objAsProt = obj as ProteinInformation;
-            if (objAsProt == null)
-            {
-                return false;
-            }
-            return (ProteinName.Equals(objAsProt.ProteinName));
+            return (ProteinName.Equals(objAsProteinInfo.ProteinName));
         }
 
         /// <summary>
@@ -110,10 +106,9 @@ namespace MTDBFramework.Data
         {
             if (obj == null) return 1;
 
-            var otherTarget = obj as ProteinInformation;
-            if (otherTarget != null)
+            if (obj is ProteinInformation otherTarget)
             {
-                return this.ProteinName.CompareTo(otherTarget.ProteinName);
+                return string.Compare(ProteinName, otherTarget.ProteinName, StringComparison.Ordinal);
             }
             else
             {

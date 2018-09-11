@@ -78,10 +78,7 @@ namespace MTDBCreator.ViewModels
 
         public AnalysisJobViewModel AnalysisJobViewModel
         {
-            get
-            {
-                return m_analysisJobViewModel;
-            }
+            get => m_analysisJobViewModel;
             set
             {
                 m_analysisJobViewModel = value;
@@ -91,10 +88,7 @@ namespace MTDBCreator.ViewModels
 
         public DatasetPlotViewModel DatasetPlotViewModel
         {
-            get
-            {
-                return m_datasetPlotViewModel;
-            }
+            get => m_datasetPlotViewModel;
             private set
             {
                 m_datasetPlotViewModel = value;
@@ -104,10 +98,7 @@ namespace MTDBCreator.ViewModels
 
         public StatPlotViewModel StatPlotViewModel
         {
-            get
-            {
-                return m_statPlotViewModel;
-            }
+            get => m_statPlotViewModel;
             private set
             {
                 m_statPlotViewModel = value;
@@ -117,10 +108,7 @@ namespace MTDBCreator.ViewModels
 
         public TargetTreeViewModel TargetTreeViewModel
         {
-            get
-            {
-                return m_targetTreeViewModel;
-            }
+            get => m_targetTreeViewModel;
             private set
             {
                 m_targetTreeViewModel = value;
@@ -130,10 +118,7 @@ namespace MTDBCreator.ViewModels
 
         public int SelectedTabIndex
         {
-            get
-            {
-                return m_selectedTabIndex;
-            }
+            get => m_selectedTabIndex;
             set
             {
                 m_selectedTabIndex = value;
@@ -154,10 +139,11 @@ namespace MTDBCreator.ViewModels
         {
             if (AnalysisJobViewModel.Options.OptionsChanged)
             {
-                MessageBoxResult refreshResult = MessageBox.Show(RefreshBoxText,
-                                                                 RefreshBoxCaption,
-                                                                 RefreshBoxButton,
-                                                                 RefreshBoxImage);
+                var refreshResult = MessageBox.Show(RefreshBoxText,
+                                                    RefreshBoxCaption,
+                                                    RefreshBoxButton,
+                                                    RefreshBoxImage);
+
                 if (refreshResult == MessageBoxResult.Yes)
                 {
                     AnalysisJobViewModel.ProcessAnalysisTargets();

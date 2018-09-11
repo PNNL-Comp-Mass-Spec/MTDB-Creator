@@ -21,10 +21,7 @@ namespace MTDBCreator.ViewModels
 
         public IEnumerable<TargetDatabaseTreeNodeViewModel> TargetDatabaseTreeNodeViewModels
         {
-            get
-            {
-                return m_targetDatabaseTreeNodeViewModels;
-            }
+            get => m_targetDatabaseTreeNodeViewModels;
             set
             {
                 m_targetDatabaseTreeNodeViewModels = value;
@@ -34,10 +31,7 @@ namespace MTDBCreator.ViewModels
 
         public IEnumerable<ProteinDatabaseTreeNodeViewModel> ProteinDatabaseTreeNodeViewModels
         {
-            get
-            {
-                return m_proteinDatabaseTreeNodeViewModels;
-            }
+            get => m_proteinDatabaseTreeNodeViewModels;
             set
             {
                 m_proteinDatabaseTreeNodeViewModels = value;
@@ -60,10 +54,7 @@ namespace MTDBCreator.ViewModels
 
         public string SearchFilter
         {
-            get
-            {
-                return m_searchFilter;
-            }
+            get => m_searchFilter;
             set
             {
                 m_searchFilter = value;
@@ -81,10 +72,7 @@ namespace MTDBCreator.ViewModels
 
         public int SelectedTabIndex
         {
-            get
-            {
-                return m_selectedTabIndex;
-            }
+            get => m_selectedTabIndex;
             set
             {
                 m_selectedTabIndex = value;

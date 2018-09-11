@@ -31,7 +31,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string Title
         {
-            get { return m_title; }
+            get => m_title;
             set
             {
                 m_title = value;
@@ -44,7 +44,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string FileName
         {
-            get { return m_fileName; }
+            get => m_fileName;
             set
             {
                 m_fileName = value;
@@ -57,7 +57,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string BaseFolder
         {
-            get { return m_baseFolder; }
+            get => m_baseFolder;
             set
             {
                 m_baseFolder = value;
@@ -70,7 +70,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string FilePath
         {
-            get { return m_filePath; }
+            get => m_filePath;
             set
             {
                 m_filePath = value;
@@ -83,7 +83,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public LcmsIdentificationTool Format
         {
-            get { return m_format; }
+            get => m_format;
             set
             {
                 m_format = value;
@@ -96,7 +96,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public LcmsDataSet DataSet
         {
-            get { return m_dataSet; }
+            get => m_dataSet;
             set
             {
                 m_dataSet = value;
@@ -118,18 +118,15 @@ namespace MTDBFramework.Data
             FilePath = path;
             Format = format;
 
-            Title = FileName.Replace(FileName.Substring(FileName.LastIndexOf('_')), String.Empty);
+            if (FileName == null)
+                Title = string.Empty;
+            else
+                Title = FileName.Replace(FileName.Substring(FileName.LastIndexOf('_')), string.Empty);
         }
 
         /// <summary>
         /// Accessor for count of targets
         /// </summary>
-        public int TargetCount
-        {
-            get
-            {
-                return DataSet == null ? 0 : DataSet.Evidences.Count;
-            }
-        }
+        public int TargetCount => DataSet?.Evidences.Count ?? 0;
     }
 }

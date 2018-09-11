@@ -18,7 +18,7 @@
         /// </summary>
         public double EValue
         {
-            get { return m_eValue; }
+            get => m_eValue;
             set
             {
                 m_eValue = value;

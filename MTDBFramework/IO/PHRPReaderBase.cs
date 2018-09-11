@@ -319,10 +319,7 @@ namespace MTDBFramework.IO
         /// <param name="e"></param>
         protected void OnProgressChanged(PercentCompleteEventArgs e)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged(this, e);
-            }
+            ProgressChanged?.Invoke(this, e);
         }
 
         #endregion

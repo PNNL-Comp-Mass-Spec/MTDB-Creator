@@ -27,10 +27,7 @@
         /// </summary>
         public int GroupId
         {
-            get
-            {
-                return m_groupId;
-            }
+            get => m_groupId;
             set
             {
                 m_groupId = value;
@@ -43,10 +40,7 @@
         /// </summary>
         public double BScore
         {
-            get
-            {
-                return m_bScore;
-            }
+            get => m_bScore;
             set
             {
                 m_bScore = value;
@@ -59,10 +53,7 @@
         /// </summary>
         public double DeltaCn2
         {
-            get
-            {
-                return m_deltaCn2;
-            }
+            get => m_deltaCn2;
             set
             {
                 m_deltaCn2 = value;
@@ -75,10 +66,7 @@
         /// </summary>
         public double LogIntensity
         {
-            get
-            {
-                return m_logIntensity;
-            }
+            get => m_logIntensity;
             set
             {
                 m_logIntensity = value;
@@ -91,10 +79,7 @@
         /// </summary>
         public double LogPeptideEValue
         {
-            get
-            {
-                return m_logPeptideEValue;
-            }
+            get => m_logPeptideEValue;
             set
             {
                 m_logPeptideEValue = value;
@@ -107,10 +92,7 @@
         /// </summary>
         public short NumberYIons
         {
-            get
-            {
-                return m_numberYIons;
-            }
+            get => m_numberYIons;
             set
             {
                 m_numberYIons = value;
@@ -123,10 +105,7 @@
         /// </summary>
         public short NumberBIons
         {
-            get
-            {
-                return m_numberBIons;
-            }
+            get => m_numberBIons;
             set
             {
                 m_numberBIons = value;
@@ -139,10 +118,7 @@
         /// </summary>
         public double PeptideHyperscore
         {
-            get
-            {
-                return m_peptideHyperscore;
-            }
+            get => m_peptideHyperscore;
             set
             {
                 m_peptideHyperscore = value;
@@ -172,10 +148,7 @@
         /// </summary>
         public double YScore
         {
-            get
-            {
-                return m_yScore;
-            }
+            get => m_yScore;
             set
             {
                 m_yScore = value;
@@ -188,10 +161,7 @@
         /// </summary>
         public short NumTrypticEnds
         {
-            get
-            {
-                return m_numTrypticEnds;
-            }
+            get => m_numTrypticEnds;
             set
             {
                 m_numTrypticEnds = value;

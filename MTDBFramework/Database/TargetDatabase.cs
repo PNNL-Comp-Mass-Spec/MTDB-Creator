@@ -44,7 +44,7 @@ namespace MTDBFramework.Database
         /// <summary>
         /// All consensus targets
         /// </summary>
-        public IList<ConsensusTarget>    ConsensusTargets { get; private set; }
+        public IList<ConsensusTarget>    ConsensusTargets { get; }
 
         /// <summary>
         /// All proteins

@@ -25,12 +25,12 @@ namespace MTDBFramework.UI
         /// <summary>
         /// Current tasks completed
         /// </summary>
-        public int Current { get; private set; }
+        public int Current { get; }
 
         /// <summary>
         /// Total tasks to complete
         /// </summary>
-        public int Total { get; private set; }
+        public int Total { get; }
     }
 
     /// <summary>

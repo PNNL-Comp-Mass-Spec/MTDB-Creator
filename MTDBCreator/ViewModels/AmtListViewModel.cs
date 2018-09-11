@@ -27,7 +27,7 @@ namespace MTDBCreator.ViewModels
 
         public bool IsSaving
         {
-            get { return m_isSaving; }
+            get => m_isSaving;
             private set
             {
                 m_isSaving = value;
@@ -37,7 +37,7 @@ namespace MTDBCreator.ViewModels
 
         public string SavingString
         {
-            get { return m_savingString; }
+            get => m_savingString;
             private set
             {
                 m_savingString = value;

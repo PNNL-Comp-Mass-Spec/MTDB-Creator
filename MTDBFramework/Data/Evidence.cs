@@ -48,7 +48,7 @@ namespace MTDBFramework.Data
 
         private IList<ProteinInformation> m_proteins;
 
-        private double m_discriminantValue; // holder for QValue (msgf+/mzid), Log Peptide E Value (Xtandem),
+        private double m_discriminantValue; // holder for QValue (msgf+/mzid), Log Peptide E Value (X!Tandem),
                                             // xCorr (sequest) or EValue (MSAlign) depending on dataset type.
 
         // SequenceInfo fields
@@ -87,10 +87,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public MSSpectra Spectrum
         {
-            get
-            {
-                return m_spectrum;
-            }
+            get => m_spectrum;
             set
             {
                 m_spectrum = value;
@@ -104,7 +101,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public TargetDataSet DataSet
         {
-            get { return m_dataSet; }
+            get => m_dataSet;
             set
             {
                 m_dataSet = value;
@@ -118,7 +115,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public TargetPeptideInfo PeptideInfo
         {
-            get { return m_peptideInfo; }
+            get => m_peptideInfo;
             set
             {
                 m_peptideInfo = value;
@@ -131,7 +128,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public int Id
         {
-            get { return m_id; }
+            get => m_id;
             set
             {
                 m_id = value;
@@ -144,7 +141,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public int Scan
         {
-            get { return m_scan; }
+            get => m_scan;
             set
             {
                 m_scan = value;
@@ -157,7 +154,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public int AnalysisId
         {
-            get { return m_analysisId; }
+            get => m_analysisId;
             set
             {
                 m_analysisId = value;
@@ -170,7 +167,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short MultiProteinCount
         {
-            get { return m_multiProteinCount; }
+            get => m_multiProteinCount;
             set
             {
                 m_multiProteinCount = value;
@@ -183,7 +180,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double MonoisotopicMass
         {
-            get { return m_monoisotopicMass; }
+            get => m_monoisotopicMass;
             set
             {
                 m_monoisotopicMass = value;
@@ -196,7 +193,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double ObservedMonoisotopicMass
         {
-            get { return m_observedMonoMass; }
+            get => m_observedMonoMass;
             set
             {
                 m_observedMonoMass = value;
@@ -209,7 +206,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public ConsensusTarget Parent
         {
-            get { return m_parent; }
+            get => m_parent;
             set
             {
                 m_parent = value;
@@ -222,7 +219,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short Charge
         {
-            get { return m_charge; }
+            get => m_charge;
             set
             {
                 m_charge = value;
@@ -235,7 +232,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double ObservedNet
         {
-            get { return m_observedNet; }
+            get => m_observedNet;
             set
             {
                 m_observedNet = value;
@@ -248,7 +245,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double PredictedNet
         {
-            get { return m_predictedNet; }
+            get => m_predictedNet;
             set
             {
                 m_predictedNet = value;
@@ -262,7 +259,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double Mz
         {
-            get { return m_mz; }
+            get => m_mz;
             set
             {
                 m_mz = value;
@@ -275,7 +272,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double SpecProb
         {
-            get { return m_specProb; }
+            get => m_specProb;
             set
             {
                 m_specProb = value;
@@ -290,7 +287,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string Sequence
         {
-            get { return m_sequence; }
+            get => m_sequence;
             set
             {
                 m_sequence = value;
@@ -303,7 +300,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string CleanPeptide
         {
-            get { return m_cleanPeptide; }
+            get => m_cleanPeptide;
             set
             {
                 m_cleanPeptide = value;
@@ -320,10 +317,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double DelM
         {
-            get
-            {
-                return m_delM;
-            }
+            get => m_delM;
             set
             {
                 m_delM = value;
@@ -336,10 +330,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double DelMPpm
         {
-            get
-            {
-                return m_delMPpm;
-            }
+            get => m_delMPpm;
             set
             {
                 m_delMPpm = value;
@@ -354,7 +345,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short IsSeqInfoExist
         {
-            get { return m_isSeqInfoExist; }
+            get => m_isSeqInfoExist;
             set
             {
                 m_isSeqInfoExist = value;
@@ -367,7 +358,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short ModificationCount
         {
-            get { return m_modificationCount; }
+            get => m_modificationCount;
             set
             {
                 m_modificationCount = value;
@@ -380,7 +371,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string ModificationDescription
         {
-            get { return m_modificationDescription; }
+            get => m_modificationDescription;
             set
             {
                 m_modificationDescription = value;
@@ -393,7 +384,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double SeqInfoMonoisotopicMass
         {
-            get { return m_seqInfoMonoisotopicMass; }
+            get => m_seqInfoMonoisotopicMass;
             set
             {
                 m_seqInfoMonoisotopicMass = value;
@@ -406,7 +397,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string SeqWithNumericMods
         {
-            get { return m_seqWithNumericMods; }
+            get => m_seqWithNumericMods;
             set
             {
                 m_seqWithNumericMods = value;
@@ -419,7 +410,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string EncodedNonNumericSequence
         {
-            get { return m_encodedNonNumericSequence; }
+            get => m_encodedNonNumericSequence;
             set
             {
                 m_encodedNonNumericSequence = value;
@@ -432,7 +423,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double NetShift
         {
-            get { return m_netShift; }
+            get => m_netShift;
             set
             {
                 m_netShift = value;
@@ -443,11 +434,11 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Discriminant score used in conjunction with spectral probability
         /// for filtering evidences. QValue for MSGF+ and mzId files, LogPeptide
-        /// EValue for Xtandem, xCorr for Sequest, EValue for MSAlign
+        /// EValue for X!Tandem, xCorr for SEQUEST, EValue for MSAlign
         /// </summary>
         public double DiscriminantValue
         {
-            get { return m_discriminantValue; }
+            get => m_discriminantValue;
             set
             {
                 m_discriminantValue = value;
@@ -460,7 +451,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public IList<ProteinInformation> Proteins
         {
-            get { return m_proteins; }
+            get => m_proteins;
             set
             {
                 m_proteins = value;
@@ -473,7 +464,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public IList<PostTranslationalModification> Ptms
         {
-            get { return m_ptms; }
+            get => m_ptms;
             set
             {
                 m_ptms = value;
@@ -486,7 +477,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double NormalizedScore
         {
-            get { return m_normalizedScore; }
+            get => m_normalizedScore;
             set
             {
                 m_normalizedScore = value;
@@ -565,13 +556,13 @@ namespace MTDBFramework.Data
         /// <returns></returns>
         public int CompareTo(Evidence other)
         {
-            var result = this.Sequence.CompareTo(other.Sequence);
+            var result = string.Compare(Sequence, other.Sequence, StringComparison.Ordinal);
             if (result == 0)
             {
-                result = this.Scan.CompareTo(other.Scan);
+                result = Scan.CompareTo(other.Scan);
                 if (result == 0)
                 {
-                    result = this.MonoisotopicMass.CompareTo(other.MonoisotopicMass);
+                    result = MonoisotopicMass.CompareTo(other.MonoisotopicMass);
                 }
             }
             return result;

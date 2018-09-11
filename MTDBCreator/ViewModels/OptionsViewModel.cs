@@ -50,10 +50,7 @@ namespace MTDBCreator.ViewModels
 
         public string PredictionText
         {
-            get
-            {
-                return m_predictionText;
-            }
+            get => m_predictionText;
             set
             {
                 m_predictionText = value;
@@ -65,10 +62,7 @@ namespace MTDBCreator.ViewModels
 
         public Options Options
         {
-            get
-            {
-                return m_options;
-            }
+            get => m_options;
             set
             {
                 m_options = value;
@@ -80,7 +74,7 @@ namespace MTDBCreator.ViewModels
         public RegressionType SelectedRegressionType
         {
 
-            get { return m_options.RegressionType; }
+            get => m_options.RegressionType;
 
             set
             {
@@ -93,7 +87,7 @@ namespace MTDBCreator.ViewModels
 
         public bool OrderEnabled
         {
-            get { return m_enabled; }
+            get => m_enabled;
             private set
             {
                 m_enabled = value;
@@ -104,7 +98,7 @@ namespace MTDBCreator.ViewModels
         public DatabaseType SelectedDatabaseType
         {
 
-            get { return m_options.DatabaseType; }
+            get => m_options.DatabaseType;
 
             set
             {
@@ -116,10 +110,7 @@ namespace MTDBCreator.ViewModels
 
         public ObservableCollection<RegressionType> RegressionTypes { get; private set; }
         public ObservableCollection<DatabaseType> DatabaseTypes { get; private set; }
-        public ICommand SaveCommand
-        {
-            get { return m_saveCommand ?? (m_saveCommand = new RelayCommand(Save)); }
-        }
+        public ICommand SaveCommand => m_saveCommand ?? (m_saveCommand = new RelayCommand(Save));
 
         public void Save(object param)
         {

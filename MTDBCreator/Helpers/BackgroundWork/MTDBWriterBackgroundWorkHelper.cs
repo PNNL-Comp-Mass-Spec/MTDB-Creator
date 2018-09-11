@@ -106,17 +106,9 @@ namespace MTDBCreator.Helpers.BackgroundWork
             }
         }
 
-        public object Argument
-        {
-            get
-            {
-                return new object[] { Database, DatabaseFileName };
-            }
-        }
-        public object Result
-        {
-            get { throw new NotSupportedException("No Result in the current BackgroundWorkHelper"); }
-        }
+        public object Argument => new object[] { Database, DatabaseFileName };
+
+        public object Result => throw new NotSupportedException("No Result in the current BackgroundWorkHelper");
 
         public ProcessWindow HostProcessWindow { get; set; }
 

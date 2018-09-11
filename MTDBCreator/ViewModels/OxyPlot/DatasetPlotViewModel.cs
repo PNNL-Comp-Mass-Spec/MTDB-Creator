@@ -39,10 +39,7 @@ namespace MTDBCreator.ViewModels
 
         public AnalysisJobViewModel AnalysisJobViewModel
         {
-            get
-            {
-                return m_AnalysisJobViewModel;
-            }
+            get => m_AnalysisJobViewModel;
             private set
             {
                 m_AnalysisJobViewModel = value;
@@ -54,10 +51,7 @@ namespace MTDBCreator.ViewModels
 
         public PlotModel NETScanPlotModel
         {
-            get
-            {
-                return m_NETScanPlotModel;
-            }
+            get => m_NETScanPlotModel;
             set
             {
                 m_NETScanPlotModel = value;
@@ -67,10 +61,7 @@ namespace MTDBCreator.ViewModels
 
         public PlotModel MassScanPlotModel
         {
-            get
-            {
-                return m_massScanPlotModel;
-            }
+            get => m_massScanPlotModel;
             set
             {
                 m_massScanPlotModel = value;
@@ -80,10 +71,7 @@ namespace MTDBCreator.ViewModels
 
         public PlotModel ObservedPredictedPlotModel
         {
-            get
-            {
-                return m_observedPredictedPlotModel;
-            }
+            get => m_observedPredictedPlotModel;
             set
             {
                 m_observedPredictedPlotModel = value;
@@ -119,10 +107,7 @@ namespace MTDBCreator.ViewModels
 
         public IEnumerable<AnalysisJobItem> CurrentAnalysisJobItems
         {
-            get
-            {
-                return m_CurrentAnalysisJobItems;
-            }
+            get => m_CurrentAnalysisJobItems;
             set
             {
                 m_CurrentAnalysisJobItems = value;
@@ -138,10 +123,7 @@ namespace MTDBCreator.ViewModels
 
         public bool IsRegressionLineVisible
         {
-            get
-            {
-                return m_IsRegressionLineVisible;
-            }
+            get => m_IsRegressionLineVisible;
             set
             {
                 m_IsRegressionLineVisible = value;

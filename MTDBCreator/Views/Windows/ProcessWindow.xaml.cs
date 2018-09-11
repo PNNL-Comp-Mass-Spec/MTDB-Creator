@@ -58,10 +58,7 @@ namespace MTDBCreator.Windows
 
         public string Status
         {
-            get
-            {
-                return StatusTextBlock.Text;
-            }
+            get => StatusTextBlock.Text;
             set
             {
                 if (!MainBackgroundWorker.CancellationPending)
@@ -71,13 +68,7 @@ namespace MTDBCreator.Windows
             }
         }
 
-        public ProgressBar MainProgressBar
-        {
-            get
-            {
-                return StatusProgressBar;
-            }
-        }
+        public ProgressBar MainProgressBar => StatusProgressBar;
 
         public void StartProcessingNonThreaded(IBackgroundWorkHelper backgroundWorkHelper)
         {

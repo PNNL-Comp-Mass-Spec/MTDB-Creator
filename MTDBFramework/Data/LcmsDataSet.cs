@@ -31,7 +31,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string Name
         {
-            get { return m_name; }
+            get => m_name;
             set
             {
                 m_name = value;
@@ -44,7 +44,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public LcmsIdentificationTool Tool
         {
-            get { return m_tool; }
+            get => m_tool;
             set
             {
                 m_tool = value;
@@ -57,7 +57,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public List<Evidence> Evidences
         {
-            get { return m_evidences; }
+            get => m_evidences;
             set
             {
                 m_evidences = value;
@@ -70,7 +70,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public LinearRegressionResult RegressionResult
         {
-            get { return m_regressionResult; }
+            get => m_regressionResult;
             set
             {
                 m_regressionResult = value;
@@ -83,7 +83,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public bool PreviouslyAnalyzed
         {
-            get { return m_previouslyAnalyzed; }
+            get => m_previouslyAnalyzed;
             private set
             {
                 m_previouslyAnalyzed = value;

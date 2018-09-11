@@ -66,11 +66,11 @@ namespace MTDBFramework.Algorithms
             /// <summary>
             /// Evidence
             /// </summary>
-            public Evidence Evidence { get; private set; }
+            public Evidence Evidence { get; }
             /// <summary>
             /// UMCLight
             /// </summary>
-            public UMCLight UMC { get; private set; }
+            public UMCLight UMC { get; set; }
 
             /// <summary>
             /// Constructor - set the association
@@ -109,7 +109,7 @@ namespace MTDBFramework.Algorithms
 
             foreach (var dataSet in dataSets)
             {
-                float percentComplete = (float)m_currentItem / m_totalItems;
+                var percentComplete = (float)m_currentItem / m_totalItems;
                 UpdateProgress(m_currentItem, m_totalItems, percentComplete, "Determining Consensus Targets");
                 if (bWorker.CancellationPending || m_abortRequested)
                     return targetDatabase;
@@ -215,7 +215,7 @@ namespace MTDBFramework.Algorithms
             //Foreach dataset
             foreach (var dataSet in dataSets)
             {
-                float percentComplete = (float)m_currentItem / m_totalItems;
+                var percentComplete = (float)m_currentItem / m_totalItems;
                 UpdateProgress(m_currentItem, m_totalItems, percentComplete, "Performing LCMSWarp Alignment");
                 if (bWorker.CancellationPending || m_abortRequested)
                     return targetDatabase;
@@ -234,7 +234,7 @@ namespace MTDBFramework.Algorithms
                 {
                     if (evidence.ObservedNet >= ProcessorOptions.MinimumObservedNet)
                     {
-                        UMCLight umc = new UMCLight
+                        var umc = new UMCLight
                         {
                             Net = evidence.ObservedNet,
                             ChargeState = evidence.Charge,
@@ -318,10 +318,7 @@ namespace MTDBFramework.Algorithms
                 m_currentItem++;
             }
 
-            if (AlignmentComplete != null)
-            {
-                AlignmentComplete(this, new AlignmentCompleteArgs(alignmentData));
-            }
+            AlignmentComplete?.Invoke(this, new AlignmentCompleteArgs(alignmentData));
             if (ProcessorOptions.TargetFilterType != TargetWorkflowType.TOP_DOWN)
             {
                 i = j = 0;
@@ -364,7 +361,7 @@ namespace MTDBFramework.Algorithms
         /// <param name="currentTask"></param>
         protected void UpdateProgress(int current, int total, float percentComplete, string currentTask)
         {
-            float percentCompleteEffective = ProgressPercentStart +
+            var percentCompleteEffective = ProgressPercentStart +
                                              percentComplete * (ProgressPercentComplete - ProgressPercentStart);
             OnPercentProgressChanged(new PercentCompleteEventArgs(current, total, percentCompleteEffective, currentTask));
         }
@@ -380,10 +377,7 @@ namespace MTDBFramework.Algorithms
         /// <param name="e"></param>
         protected void OnPercentProgressChanged(PercentCompleteEventArgs e)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged(this, e);
-            }
+            ProgressChanged?.Invoke(this, e);
         }
     }
 }

@@ -36,14 +36,11 @@ namespace MTDBCreator.ViewModels
 
         #region Public Properties
 
-        public int Id { get; private set; } // For recent analysis job record purpose
+        public int Id { get; } // For recent analysis job record purpose
 
         public string Title
         {
-            get
-            {
-                return m_title;
-            }
+            get => m_title;
             set
             {
                 m_title = value;
@@ -53,10 +50,7 @@ namespace MTDBCreator.ViewModels
 
         public Options Options
         {
-            get
-            {
-                return m_options;
-            }
+            get => m_options;
             private set
             {
                 m_options = value;
@@ -66,7 +60,7 @@ namespace MTDBCreator.ViewModels
 
         public TargetDatabase Database
         {
-            get { return m_database; }
+            get => m_database;
             set
             {
                 m_database = value;
@@ -102,10 +96,7 @@ namespace MTDBCreator.ViewModels
 
         public ObservableCollection<AnalysisJobItem> AnalysisJobItems
         {
-            get
-            {
-                return m_analysisJobItems;
-            }
+            get => m_analysisJobItems;
             set
             {
                 m_analysisJobItems = value;
@@ -276,10 +267,7 @@ namespace MTDBCreator.ViewModels
 
         #region Public Methods
 
-        public bool ShowOpenOldAnalysis
-        {
-            get { return System.Net.Dns.GetHostEntry("").HostName.Contains("pnl.gov"); }
-        }
+        public bool ShowOpenOldAnalysis => System.Net.Dns.GetHostEntry("").HostName.Contains("pnl.gov");
 
         public object ProcessAnalysisTargets()
         {
@@ -304,10 +292,7 @@ namespace MTDBCreator.ViewModels
 
         private void OnAnalysisJobProcessed(MtdbResultChangedEventArgs e)
         {
-            if (AnalysisJobProcessed != null)
-            {
-                AnalysisJobProcessed(this, e);
-            }
+            AnalysisJobProcessed?.Invoke(this, e);
         }
 
         #endregion

@@ -54,13 +54,7 @@ namespace MTDBCreator.Windows
             }
         }
 
-        public AnalysisJobViewModel AnalysisJobViewModel
-        {
-            get
-            {
-                return DataContext as AnalysisJobViewModel;
-            }
-        }
+        public AnalysisJobViewModel AnalysisJobViewModel => DataContext as AnalysisJobViewModel;
 
         public WorkspaceViewModel WorkspaceViewModel { get; private set; }
 

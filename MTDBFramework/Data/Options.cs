@@ -47,7 +47,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public DatabaseType DatabaseType
         {
-            get { return m_databaseType; }
+            get => m_databaseType;
             set
             {
                 m_databaseType = value;
@@ -60,10 +60,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public RegressionType RegressionType
         {
-            get
-            {
-                return m_regressionType;
-            }
+            get => m_regressionType;
             set
             {
                 m_regressionType = value;
@@ -81,10 +78,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short RegressionOrder
         {
-            get
-            {
-                return m_regressionOrder;
-            }
+            get => m_regressionOrder;
             set
             {
                 m_regressionOrder = value;
@@ -98,10 +92,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public TargetWorkflowType TargetFilterType
         {
-            get
-            {
-                return m_targetFilterType;
-            }
+            get => m_targetFilterType;
             set
             {
                 m_targetFilterType = value;
@@ -114,10 +105,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public RetentionTimePredictionType PredictorType
         {
-            get
-            {
-                return m_predictorType;
-            }
+            get => m_predictorType;
             set
             {
                 m_predictorType = value;
@@ -131,10 +119,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public int MaxModsForAlignment
         {
-            get
-            {
-                return m_maxModsForAlignment;
-            }
+            get => m_maxModsForAlignment;
             set
             {
                 m_maxModsForAlignment = value;
@@ -147,10 +132,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short MinObservationsForExport
         {
-            get
-            {
-                return m_minObservationsForExport;
-            }
+            get => m_minObservationsForExport;
             set
             {
                 m_minObservationsForExport = value;
@@ -164,10 +146,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double MinXCorrForAlignment
         {
-            get
-            {
-                return m_minXCorrForAlignment;
-            }
+            get => m_minXCorrForAlignment;
             set
             {
                 m_minXCorrForAlignment = value;
@@ -181,10 +160,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double MaxLogEValForXTandemAlignment
         {
-            get
-            {
-                return m_maxLogEValForXTandemAlignment;
-            }
+            get => m_maxLogEValForXTandemAlignment;
             set
             {
                 m_maxLogEValForXTandemAlignment = value;
@@ -198,10 +174,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double MaxLogEValForMsAlignAlignment
         {
-            get
-            {
-                return m_maxLogEValForMsAlignAlignment;
-            }
+            get => m_maxLogEValForMsAlignAlignment;
             set
             {
                 m_maxLogEValForMsAlignAlignment = value;
@@ -214,10 +187,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double MsgfQValue
         {
-            get
-            {
-                return m_msgfQValue;
-            }
+            get => m_msgfQValue;
             set
             {
                 m_msgfQValue = value;
@@ -230,10 +200,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double MaxMsgfSpecProb
         {
-            get
-            {
-                return m_maxMsgfSpecProb;
-            }
+            get => m_maxMsgfSpecProb;
             set
             {
                 m_maxMsgfSpecProb = value;
@@ -247,10 +214,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public short MaxRankForExport
         {
-            get
-            {
-                return m_maxRankForExport;
-            }
+            get => m_maxRankForExport;
             set
             {
                 m_maxRankForExport = value;
@@ -263,10 +227,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double MinimumObservedNet
         {
-            get
-            {
-                return m_minimumObservedNet;
-            }
+            get => m_minimumObservedNet;
             set
             {
                 m_minimumObservedNet = value;
@@ -279,10 +240,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double MaximumObservedNet
         {
-            get
-            {
-                return m_maximumObservedNet;
-            }
+            get => m_maximumObservedNet;
             set
             {
                 m_maximumObservedNet = value;
@@ -295,10 +253,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public MsgfFilterType MsgfFilter
         {
-            get
-            {
-                return m_msfgFilterType;
-            }
+            get => m_msfgFilterType;
             set
             {
                 m_msfgFilterType = value;

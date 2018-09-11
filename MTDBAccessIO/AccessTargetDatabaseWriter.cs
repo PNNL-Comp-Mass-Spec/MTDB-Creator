@@ -203,10 +203,7 @@ namespace MTDBAccessIO
         /// <param name="e"></param>
         protected void OnProgressChanged(MtdbProgressChangedEventArgs e)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged(this, e);
-            }
+            ProgressChanged?.Invoke(this, e);
         }
 
         #endregion

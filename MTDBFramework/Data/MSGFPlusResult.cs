@@ -21,10 +21,7 @@
         /// </summary>
         public string Reference
         {
-            get
-            {
-                return m_reference;
-            }
+            get => m_reference;
             set
             {
                 m_reference = value;
@@ -37,10 +34,7 @@
         /// </summary>
         public short NumTrypticEnds
         {
-            get
-            {
-                return m_numTrypticEnds;
-            }
+            get => m_numTrypticEnds;
             set
             {
                 m_numTrypticEnds = value;
@@ -53,10 +47,7 @@
         /// </summary>
         public int DeNovoScore
         {
-            get
-            {
-                return m_deNovoScore;
-            }
+            get => m_deNovoScore;
             set
             {
                 m_deNovoScore = value;
@@ -69,11 +60,7 @@
         /// </summary>
         public int MsgfScore
         {
-            get
-            {
-                return m_msgfScore;
-
-            }
+            get => m_msgfScore;
             set
             {
                 m_msgfScore = value;
@@ -106,10 +93,7 @@
         /// </summary>
         public double SpecEValue
         {
-            get
-            {
-                return m_specEValue;
-            }
+            get => m_specEValue;
             set
             {
                 m_specEValue = value;
@@ -122,10 +106,7 @@
         /// </summary>
         public int RankSpecEValue
         {
-            get
-            {
-                return m_rankSpecEValue;
-            }
+            get => m_rankSpecEValue;
             set
             {
                 m_rankSpecEValue = value;
@@ -138,10 +119,7 @@
         /// </summary>
         public double EValue
         {
-            get
-            {
-                return m_eValue;
-            }
+            get => m_eValue;
             set
             {
                 m_eValue = value;
@@ -154,10 +132,7 @@
         /// </summary>
         public double QValue
         {
-            get
-            {
-                return m_qValue;
-            }
+            get => m_qValue;
             set
             {
                 m_qValue = value;
@@ -170,10 +145,7 @@
         /// </summary>
         public double PepQValue
         {
-            get
-            {
-                return m_pepQValue;
-            }
+            get => m_pepQValue;
             set
             {
                 m_pepQValue = value;
@@ -186,10 +158,7 @@
         /// </summary>
         public int IsotopeError
         {
-            get
-            {
-                return m_isotopeError;
-            }
+            get => m_isotopeError;
             set
             {
                 m_isotopeError = value;

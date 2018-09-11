@@ -48,12 +48,14 @@ namespace MTDBFramework.Data
         /// <summary>
         /// The Prefix Residue
         /// </summary>
-        public char PrefixResidue { get { return (string.IsNullOrWhiteSpace(m_sequence)) ? '\0' : m_sequence.First(); } private set { char temp = value; } }
+        public char PrefixResidue { get => string.IsNullOrWhiteSpace(m_sequence) ? '\0' : m_sequence.First();
+            private set { var temp = value; } }
 
         /// <summary>
         /// The Suffix Residue
         /// </summary>
-        public char SuffixResidue { get { return (string.IsNullOrWhiteSpace(m_sequence)) ? '\0' : m_sequence.Last(); } private set { char temp = value; } }
+        public char SuffixResidue { get => string.IsNullOrWhiteSpace(m_sequence) ? '\0' : m_sequence.Last();
+            private set { var temp = value; } }
 
         /// <summary>
         /// The ConsensusTarget/ProteinInformation relations
@@ -65,7 +67,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public int Id
         {
-            get { return m_id; }
+            get => m_id;
             set
             {
                 m_id = value;
@@ -78,7 +80,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double AverageNet
         {
-            get { return m_averageNet; }
+            get => m_averageNet;
             set
             {
                 m_averageNet = value;
@@ -91,7 +93,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double StdevNet
         {
-            get { return m_stdevNet; }
+            get => m_stdevNet;
             set
             {
                 m_stdevNet = value;
@@ -104,7 +106,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double PredictedNet
         {
-            get { return m_predictedNet; }
+            get => m_predictedNet;
             set
             {
                 m_predictedNet = value;
@@ -117,7 +119,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public double TheoreticalMonoIsotopicMass
         {
-            get { return m_theoreticalMonoIsotopicMass; }
+            get => m_theoreticalMonoIsotopicMass;
             set
             {
                 m_theoreticalMonoIsotopicMass = value;
@@ -130,7 +132,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string Sequence
         {
-            get { return m_sequence; }
+            get => m_sequence;
             set
             {
                 m_sequence = value;
@@ -143,7 +145,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string EncodedNumericSequence
         {
-            get { return m_encodedNumericSequence; }
+            get => m_encodedNumericSequence;
             set
             {
                 m_encodedNumericSequence = value;
@@ -156,7 +158,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string EncodedNonNumericSequence
         {
-            get { return m_encodedNonNumericSequence; }
+            get => m_encodedNonNumericSequence;
             set
             {
                 m_encodedNonNumericSequence = value;
@@ -169,7 +171,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public string CleanSequence
         {
-            get { return m_cleanSequence; }
+            get => m_cleanSequence;
             set
             {
                 m_cleanSequence = value;
@@ -187,7 +189,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public TargetDataSet Dataset
         {
-            get { return m_dataset; }
+            get => m_dataset;
             set
             {
                 m_dataset = value;
@@ -200,7 +202,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public IList<Evidence> Evidences
         {
-            get { return m_evidences; }
+            get => m_evidences;
             set
             {
                 m_evidences = value;
@@ -213,7 +215,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public IList<ProteinInformation> Proteins
         {
-            get { return m_proteins; }
+            get => m_proteins;
             set
             {
                 m_proteins = value;
@@ -226,7 +228,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public IList<int> Charges
         {
-            get { return m_charges; }
+            get => m_charges;
             set
             {
                 m_charges = value;
@@ -239,7 +241,7 @@ namespace MTDBFramework.Data
         /// </summary>
         public IList<PostTranslationalModification> Ptms
         {
-            get { return m_ptms; }
+            get => m_ptms;
             set
             {
                 m_ptms = value;
@@ -320,7 +322,7 @@ namespace MTDBFramework.Data
                 // which can be used to denote ptms in .txt files, but not skip over "." or "-"
                 // which are standard characters in peptide sequences to separate peptide from
                 // pre/post residues and to denote the lack of a pre/post residue respectively
-                int indexCheck = sequencePos + symbolsRemoved;
+                var indexCheck = sequencePos + symbolsRemoved;
                 if ((Sequence[indexCheck] != 46 && Sequence[indexCheck] != 45) &&
                         (Sequence[indexCheck] < 65 || Sequence[indexCheck] > 90))
                 {
@@ -333,7 +335,7 @@ namespace MTDBFramework.Data
             nonNumeric += partialSeq;
             StrippedSequence = cleanSeq;
             var pieces = cleanSeq.Split('.');
-            if (pieces.Count() != 1)
+            if (pieces.Length != 1)
             {
                 PrefixResidue = pieces[0].First();
                 StrippedSequence = pieces[1];
@@ -428,15 +430,12 @@ namespace MTDBFramework.Data
         {
             if(obj == null) return 1;
 
-            var otherTarget = obj as ConsensusTarget;
-            if (otherTarget != null)
+            if (obj is ConsensusTarget otherTarget)
             {
-                return this.EncodedNumericSequence.CompareTo(otherTarget.EncodedNumericSequence);
+                return string.Compare(EncodedNumericSequence, otherTarget.EncodedNumericSequence, StringComparison.Ordinal);
             }
-            else
-            {
-                throw new ArgumentException("Object is not a Consensus Target");
-            }
+
+            throw new ArgumentException("Object is not a Consensus Target");
         }
     }
 }

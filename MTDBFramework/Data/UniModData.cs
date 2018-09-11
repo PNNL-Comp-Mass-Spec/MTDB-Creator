@@ -132,76 +132,40 @@ namespace MTDBFramework.Data
         /// </summary>
         public class Modification
         {
-            private string _title;
-            private string _fullName;
-            private double _monoMass;
-            private double _avgMass;
-            private string _composition;
-            private int _recordId;
-            private ChemFormula _formula;
-
             /// <summary>
             /// UNIMOD title - short name of modification
             /// </summary>
-            public string Title
-            {
-                get { return _title; }
-                private set { _title = value; }
-            }
+            public string Title { get; }
 
             /// <summary>
             /// Full name of modification
             /// </summary>
-            public string FullName
-            {
-                get { return _fullName; }
-                private set { _fullName = value; }
-            }
+            public string FullName { get; }
 
             /// <summary>
             /// MonoIsotopic Mass
             /// </summary>
-            public double MonoIsotopicMass
-            {
-                get { return _monoMass; }
-                private set { _monoMass = value; }
-            }
+            public double MonoIsotopicMass { get; }
 
             /// <summary>
             /// Average Mass
             /// </summary>
-            public double AverageMass
-            {
-                get { return _avgMass; }
-                private set { _avgMass = value; }
-            }
+            public double AverageMass { get; }
 
             /// <summary>
             /// UNIMOD Composition - Includes Bricks
             /// </summary>
-            public string Composition
-            {
-                get { return _composition; }
-                private set { _composition = value; }
-            }
+            public string Composition { get; }
 
             /// <summary>
             /// UNIMOD record Id
             /// </summary>
-            public int Id
-            {
-                get { return _recordId; }
-                private set { _recordId = value; }
-            }
+            public int Id { get; }
 
             /// <summary>
             /// Chemical Formula
             /// </summary>
-            public ChemFormula Formula
-            {
-                get { return _formula; }
-                private set { _formula = value; }
-            }
+            public ChemFormula Formula { get; }
 
             /// <summary>
             /// Populate a modification object with the appropriate data
@@ -215,13 +179,13 @@ namespace MTDBFramework.Data
             /// <param name="formula">Chemical formula of modification</param>
             public Modification(string title, string fullName, double monoMass, double avgMass, string comp, int id, ChemFormula formula)
             {
-                _title = title;
-                _fullName = fullName;
-                _monoMass = monoMass;
-                _avgMass = avgMass;
-                _composition = comp;
-                _recordId = id;
-                _formula = formula;
+                Title = title;
+                FullName = fullName;
+                MonoIsotopicMass = monoMass;
+                AverageMass = avgMass;
+                Composition = comp;
+                Id = id;
+                Formula = formula;
             }
         }
 
@@ -230,46 +194,25 @@ namespace MTDBFramework.Data
         /// </summary>
         public class Element
         {
-            private string _title;
-            private string _fullName;
-            private double _avgMass;
-            private double _monoMass;
-
             /// <summary>
             /// UNIMOD title - chemical symbol, may have isotope prefix
             /// </summary>
-            public string Title
-            {
-                get { return _title; }
-                private set { _title = value; }
-            }
+            public string Title { get; }
 
             /// <summary>
             /// Full name of element
             /// </summary>
-            public string FullName
-            {
-                get { return _fullName; }
-                private set { _fullName = value; }
-            }
+            public string FullName { get; }
 
             /// <summary>
             /// MonoIsotopic Mass
             /// </summary>
-            public double MonoIsotopicMass
-            {
-                get { return _monoMass; }
-                private set { _monoMass = value; }
-            }
+            public double MonoIsotopicMass { get; }
 
             /// <summary>
             /// Average Mass
             /// </summary>
-            public double AverageMass
-            {
-                get { return _avgMass; }
-                private set { _avgMass = value; }
-            }
+            public double AverageMass { get; }
 
             /// <summary>
             /// Populate an element object with the appropriate data
@@ -280,10 +223,10 @@ namespace MTDBFramework.Data
             /// <param name="monoMass">monoisotopic mass</param>
             public Element(string title, string name, double avgMass, double monoMass)
             {
-                _title = title;
-                _fullName = name;
-                _avgMass = avgMass;
-                _monoMass = monoMass;
+                Title = title;
+                FullName = name;
+                AverageMass = avgMass;
+                MonoIsotopicMass = monoMass;
             }
         }
 
@@ -292,66 +235,35 @@ namespace MTDBFramework.Data
         /// </summary>
         public class AminoAcid
         {
-            private string _title;
-            private string _shortName;
-            private string _fullName;
-            private double _monoMass;
-            private double _avgMass;
-            private ChemFormula _formula;
-
             /// <summary>
             /// 1-letter abbreviation
             /// </summary>
-            public string Title
-            {
-                get { return _title; }
-                private set { _title = value; }
-            }
+            public string Title { get; }
 
             /// <summary>
             /// 3-letter Abbreviation
             /// </summary>
-            public string ShortName
-            {
-                get { return _shortName; }
-                private set { _shortName = value; }
-            }
+            public string ShortName { get; }
 
             /// <summary>
             /// Full name of Amino Acid
             /// </summary>
-            public string FullName
-            {
-                get { return _fullName; }
-                private set { _fullName = value; }
-            }
+            public string FullName { get; }
 
             /// <summary>
             /// MonoIsotopic Mass
             /// </summary>
-            public double MonoIsotopicMass
-            {
-                get { return _monoMass; }
-                private set { _monoMass = value; }
-            }
+            public double MonoIsotopicMass { get; }
 
             /// <summary>
             /// Average Mass
             /// </summary>
-            public double AverageMass
-            {
-                get { return _avgMass; }
-                private set { _avgMass = value; }
-            }
+            public double AverageMass { get; }
 
             /// <summary>
             /// Chemical Formula
             /// </summary>
-            public ChemFormula Formula
-            {
-                get { return _formula; }
-                private set { _formula = value; }
-            }
+            public ChemFormula Formula { get; }
 
             /// <summary>
             /// Populate an AminoAcid object with the appropriate date
@@ -364,12 +276,12 @@ namespace MTDBFramework.Data
             /// <param name="formula">Chemical formula</param>
             public AminoAcid(string title, string shortName, string fullName, double monoMass, double avgMass, ChemFormula formula)
             {
-                _title = title;
-                _shortName = shortName;
-                _fullName = fullName;
-                _monoMass = monoMass;
-                _avgMass = avgMass;
-                _formula = formula;
+                Title = title;
+                ShortName = shortName;
+                FullName = fullName;
+                MonoIsotopicMass = monoMass;
+                AverageMass = avgMass;
+                Formula = formula;
             }
         }
 
@@ -378,56 +290,30 @@ namespace MTDBFramework.Data
         /// </summary>
         public class ModBrick
         {
-            private string _title;
-            private string _fullName;
-            private double _monoMass;
-            private double _avgMass;
-            private ChemFormula _formula;
-
             /// <summary>
             /// UNIMOD title - Brick name
             /// </summary>
-            public string Title
-            {
-                get { return _title; }
-                private set { _title = value; }
-            }
+            public string Title { get; }
 
             /// <summary>
             /// Full name of modification brick
             /// </summary>
-            public string FullName
-            {
-                get { return _fullName; }
-                private set { _fullName = value; }
-            }
+            public string FullName { get; }
 
             /// <summary>
             /// MonoIsotopic Mass
             /// </summary>
-            public double MonoIsotopicMass
-            {
-                get { return _monoMass; }
-                private set { _monoMass = value; }
-            }
+            public double MonoIsotopicMass { get; }
 
             /// <summary>
             /// Average Mass
             /// </summary>
-            public double AverageMass
-            {
-                get { return _avgMass; }
-                private set { _avgMass = value; }
-            }
+            public double AverageMass { get; }
 
             /// <summary>
             /// Chemical Formula
             /// </summary>
-            public ChemFormula Formula
-            {
-                get { return _formula; }
-                private set { _formula = value; }
-            }
+            public ChemFormula Formula { get; }
 
             /// <summary>
             /// Populate a mod brick object with the appropriate date
@@ -439,11 +325,11 @@ namespace MTDBFramework.Data
             /// <param name="formula">Chemical formula</param>
             public ModBrick(string title, string fullName, double monoMass, double avgMass, ChemFormula formula)
             {
-                _title = title;
-                _fullName = fullName;
-                _monoMass = monoMass;
-                _avgMass = avgMass;
-                _formula = formula;
+                Title = title;
+                FullName = fullName;
+                MonoIsotopicMass = monoMass;
+                AverageMass = avgMass;
+                Formula = formula;
             }
         }
 
