@@ -306,6 +306,12 @@ namespace MTDBFramework.Data
             }
         }
 
+        /// <summary>
+        /// When true, show exceptions at the console
+        /// When false, use a MessageBox to inform the user of an exception
+        /// </summary>
+        public bool ConsoleMode { get; set; }
+
         #endregion
 
         /// <summary>
@@ -339,6 +345,8 @@ namespace MTDBFramework.Data
 
             MinimumObservedNet = 0.0;
             MaximumObservedNet = 1.0;
+
+            ConsoleMode = false;
 
             OptionsChanged = false;
         }

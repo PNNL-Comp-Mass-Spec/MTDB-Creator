@@ -1,5 +1,6 @@
 ﻿#region Namespaces
 
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -34,40 +35,51 @@ namespace MTDBCreator.PageControls
         {
             // Refresh recent opened items from user settings
 
-            RecentAnalysisJobStackPanel.Children.Clear();
-
-            if (Settings.Default.RecentAnalysisJobs.Count > 0)
+            try
             {
-                foreach (var s in Settings.Default.RecentAnalysisJobs)
+
+                RecentAnalysisJobStackPanel.Children.Clear();
+
+                if (Settings.Default.RecentAnalysisJobs.Count > 0)
+                {
+                    foreach (var s in Settings.Default.RecentAnalysisJobs)
+                    {
+                        var itemTextBlock = new TextBlock
+                        {
+                            Text = RecentAnalysisJobHelper.GetRecentAnalysisJobTitle(s),
+                            TextTrimming = TextTrimming.CharacterEllipsis
+                        };
+
+                        var newRecentItemButton = new Button
+                        {
+                            Style = (Style)FindResource("LeftPanelHyperLinkButtonStyle"),
+                            Content = itemTextBlock,
+                            Tag = s
+                        };
+
+                        newRecentItemButton.Click += newRecentItemButton_Click;
+
+                        RecentAnalysisJobStackPanel.Children.Add(newRecentItemButton);
+                    }
+                }
+                else
                 {
                     var itemTextBlock = new TextBlock
                     {
-                        Text = RecentAnalysisJobHelper.GetRecentAnalysisJobTitle(s),
-                        TextTrimming = TextTrimming.CharacterEllipsis
+                        Text = "(No jobs opened recently)",
+                        Style = (Style)FindResource("LeftPanelDescriptionStyle")
                     };
 
-                    var newRecentItemButton = new Button
-                    {
-                        Style = (Style)FindResource("LeftPanelHyperLinkButtonStyle"),
-                        Content = itemTextBlock,
-                        Tag = s
-                    };
-
-                    newRecentItemButton.Click += newRecentItemButton_Click;
-
-                    RecentAnalysisJobStackPanel.Children.Add(newRecentItemButton);
+                    RecentAnalysisJobStackPanel.Children.Add(itemTextBlock);
                 }
             }
-            else
+            catch (Exception ex)
             {
-                var itemTextBlock = new TextBlock
-                {
-                    Text = "(No jobs opened recently)",
-                    Style = (Style)FindResource("LeftPanelDescriptionStyle")
-                };
-
-                RecentAnalysisJobStackPanel.Children.Add(itemTextBlock);
+                MessageBox.Show("Exception in Page_Loaded: " + ex.Message +
+                                PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
+
         }
 
 
@@ -113,12 +125,21 @@ namespace MTDBCreator.PageControls
 
         private void NewAnalysisJobButton_Click(object sender, RoutedEventArgs e)
         {
-            var addDataJobWindow = new AddDataWindow(null)
+            try
             {
-                Owner = Application.Current.MainWindow
-            };
+                var addDataJobWindow = new AddDataWindow(null)
+                {
+                    Owner = Application.Current.MainWindow
+                };
 
-            addDataJobWindow.ShowDialog();
+                addDataJobWindow.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Exception calling AddDataWindow: " + ex.Message +
+                                PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
         }
 
         private void NewDmsExportButton_Click(object sender, RoutedEventArgs e)

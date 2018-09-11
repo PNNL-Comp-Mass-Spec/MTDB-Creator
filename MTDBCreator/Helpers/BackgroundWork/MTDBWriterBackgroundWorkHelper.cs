@@ -8,6 +8,7 @@ using MTDBFramework.Database;
 using MTDBFramework.IO;
 using MTDBFramework.UI;
 using MTDBAccessIO;
+using PRISM;
 
 namespace MTDBCreator.Helpers.BackgroundWork
 {
@@ -30,17 +31,36 @@ namespace MTDBCreator.Helpers.BackgroundWork
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             mAbortRequested = false;
-            ITargetDatabaseWriter targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
-            if (DatabaseOptions.DatabaseType != DatabaseType.Access)
+            try
             {
-                targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
+                ITargetDatabaseWriter targetDatabaseWriter;
+                if (DatabaseOptions.DatabaseType != DatabaseType.Access)
+                {
+                    targetDatabaseWriter = new SqLiteTargetDatabaseWriter();
+                }
+                else
+                {
+                    targetDatabaseWriter = new AccessTargetDatabaseWriter();
+                }
+                targetDatabaseWriter.ProgressChanged += targetDatabaseWriter_ProgressChanged;
+                targetDatabaseWriter.Write(Database, DatabaseOptions, DatabaseFileName);
             }
-            else
+            catch (Exception ex)
             {
-                targetDatabaseWriter = new AccessTargetDatabaseWriter();
+                var errMsg = "Exception in MtdbWriterBackgroundWorkHelper_DoWork";
+                if (DatabaseOptions.ConsoleMode)
+                {
+                    ConsoleMsgUtils.ShowError(errMsg, ex);
+                }
+                else
+                {
+
+                    MessageBox.Show(errMsg + ": " + ex.Message +
+                                    clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
+                                    "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                }
             }
-            targetDatabaseWriter.ProgressChanged += targetDatabaseWriter_ProgressChanged;
-            targetDatabaseWriter.Write(Database, DatabaseOptions, DatabaseFileName);
+
         }
 
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -73,7 +93,16 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
             if (e.Result == null)
             {
-                MessageBox.Show(String.Format("The MTDB has been created successfully.{0}{0}Path:{0}{0}{1}", Environment.NewLine, DatabaseFileName), Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
+                var msg = string.Format("The MTDB has been created successfully.{0}{0}Path:{0}{0}{1}", Environment.NewLine, DatabaseFileName);
+                if (DatabaseOptions.ConsoleMode)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(msg);
+                }
+                else
+                {
+                    MessageBox.Show(msg, Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
 
