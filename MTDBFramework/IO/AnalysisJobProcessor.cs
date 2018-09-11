@@ -57,6 +57,7 @@ namespace MTDBFramework.IO
             m_abortRequested = false;
 
             m_currentItem = 0;
+            // ReSharper disable PossibleMultipleEnumeration
             m_totalItems = analysisJobItems.Count();
 
             foreach (var jobItem in analysisJobItems)
@@ -79,11 +80,12 @@ namespace MTDBFramework.IO
             }
 
             return analysisJobItems;
+            // ReSharper restore PossibleMultipleEnumeration
         }
 
         private void analysisReader_ProgressChanged(object sender, PercentCompleteEventArgs e)
         {
-            float percentComplete = (m_currentItem * 100 + e.PercentComplete) / (m_totalItems * 100);
+            var percentComplete = (m_currentItem * 100 + e.PercentComplete) / (m_totalItems * 100);
 
             var effectiveItemCount = (int)(m_currentItem * 100 + e.PercentComplete);
 

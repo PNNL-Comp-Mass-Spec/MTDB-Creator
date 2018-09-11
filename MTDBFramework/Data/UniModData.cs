@@ -15,11 +15,11 @@ namespace MTDBFramework.Data
         /// </summary>
         public class ChemFormula
         {
-            private List<string> symbolOrder;
-            private Dictionary<string, int> symbols;
+            private readonly List<string> symbolOrder;
+            private readonly Dictionary<string, int> symbols;
 
             private const string SymbolOrdering = "C,13C,H,2H,O,18O,N,15N,S";
-            private string[] _symbolOrder;
+            private readonly string[] _symbolOrder;
 
             /// <summary>
             /// Overloaded string output
@@ -27,7 +27,7 @@ namespace MTDBFramework.Data
             /// <returns>Formatted chemical formula</returns>
             public override string ToString()
             {
-                string formula = "";
+                var formula = "";
                 // Handle the special ordering first.
                 foreach (var symbol in _symbolOrder)
                 {
@@ -54,7 +54,7 @@ namespace MTDBFramework.Data
             /// <returns></returns>
             private string SymbolOutput(string symbol)
             {
-                string output = "";
+                var output = "";
                 if (symbols[symbol] != 0)
                 {
                     if (Char.IsDigit(symbol[0]))
@@ -94,7 +94,7 @@ namespace MTDBFramework.Data
             /// <returns></returns>
             public int GetElementCountWithIsotopes(string element)
             {
-                int count = 0;
+                var count = 0;
                 foreach (var symbol in symbols)
                 {
                     if (symbol.Key.EndsWith(element))
@@ -457,10 +457,10 @@ namespace MTDBFramework.Data
         {
             reader.MoveToContent();
 
-            string title = reader.GetAttribute("title");
-            string fullName = reader.GetAttribute("full_name");
-            double monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-            double avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
+            var title = reader.GetAttribute("title");
+            var fullName = reader.GetAttribute("full_name");
+            var monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+            var avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
 
             var elem = new Element(title, fullName, monoMass, avgMass);
             Elements.Add(title, elem);
@@ -497,16 +497,16 @@ namespace MTDBFramework.Data
         {
             reader.MoveToContent();
 
-            string title = reader.GetAttribute("title");
-            string fullName = reader.GetAttribute("full_name");
-            int recordId = Convert.ToInt32(reader.GetAttribute("record_id"));
+            var title = reader.GetAttribute("title");
+            var fullName = reader.GetAttribute("full_name");
+            var recordId = Convert.ToInt32(reader.GetAttribute("record_id"));
 
             reader.ReadToDescendant("umod:delta");
-            double monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-            double avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
-            string composition = reader.GetAttribute("composition");
+            var monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+            var avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
+            var composition = reader.GetAttribute("composition");
 
-            ChemFormula formula = ReadFormula(reader.ReadSubtree());
+            var formula = ReadFormula(reader.ReadSubtree());
 
             var mod = new Modification(title, fullName, monoMass, avgMass, composition, recordId, formula);
 
@@ -543,13 +543,13 @@ namespace MTDBFramework.Data
         {
             reader.MoveToContent(); // Move to the "aa" element
 
-            string title = reader.GetAttribute("title");
-            string shortName = reader.GetAttribute("three_letter");
-            string fullName = reader.GetAttribute("full_name");
-            double monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-            double avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
+            var title = reader.GetAttribute("title");
+            var shortName = reader.GetAttribute("three_letter");
+            var fullName = reader.GetAttribute("full_name");
+            var monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+            var avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
 
-            ChemFormula formula = ReadFormula(reader.ReadSubtree());
+            var formula = ReadFormula(reader.ReadSubtree());
 
             var amAcid = new AminoAcid(title, shortName, fullName, monoMass, avgMass, formula);
             AminoAcids.Add(title, amAcid);
@@ -585,12 +585,12 @@ namespace MTDBFramework.Data
         {
             reader.MoveToContent(); // Move to the "aa" element
 
-            string title = reader.GetAttribute("title");
-            string fullName = reader.GetAttribute("full_name");
-            double monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
-            double avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
+            var title = reader.GetAttribute("title");
+            var fullName = reader.GetAttribute("full_name");
+            var monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
+            var avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
 
-            ChemFormula formula = ReadFormula(reader.ReadSubtree());
+            var formula = ReadFormula(reader.ReadSubtree());
 
             var brick = new ModBrick(title, fullName, monoMass, avgMass, formula);
             ModBricks.Add(title, brick);

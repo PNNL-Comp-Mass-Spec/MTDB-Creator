@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Security.Permissions;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
@@ -81,7 +80,7 @@ namespace MTDBFramework.IO
                                 m_alignmentWriters.Add(evidence.DataSet.Name, datasetWriter);
                                 session.Insert(evidence.DataSet);
                             }
-                            Evidence writtenEvidence = new Evidence
+                            var writtenEvidence = new Evidence
                             {
                                 Id = ++currentEv,
                                 Charge = evidence.Charge,

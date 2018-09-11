@@ -31,7 +31,7 @@ namespace MTDBFramework.IO
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in to determine the data type
-            int resultsProcessed = 0;
+            var resultsProcessed = 0;
             var reader = InitializeReader(path);
 
             while (reader.MoveNext())
@@ -45,7 +45,7 @@ namespace MTDBFramework.IO
 
                 // Skip this PSM if it doesn't pass the import filters
                 // Note that qValue is basically FDR
-                double qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_QValue, -1);
+                var qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_QValue, -1);
                 if (qValue < 0)
                     qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_FDR, 0);
 

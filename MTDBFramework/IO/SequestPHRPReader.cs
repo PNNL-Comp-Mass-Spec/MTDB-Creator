@@ -31,7 +31,7 @@ namespace MTDBFramework.IO
             var filter = new SequestTargetFilter(ReaderOptions);
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in to determine the data type
-            int resultsProcessed = 0;
+            var resultsProcessed = 0;
             var reader = InitializeReader(path);
 
             while (reader.MoveNext())
@@ -44,7 +44,7 @@ namespace MTDBFramework.IO
                     break;
 
                 // Skip this PSM if it doesn't pass the import filters
-                double xcorr = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XCorr, 0);
+                var xcorr = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XCorr, 0);
 
                 double specProb = 0;
                 if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))

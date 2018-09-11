@@ -22,8 +22,8 @@ namespace MTDBFramework.IO
 
         static PeptideCache()
         {
-            int numProcs = Environment.ProcessorCount;
-            int concurrencyLevel = numProcs * 2;
+            var numProcessors = Environment.ProcessorCount;
+            var concurrencyLevel = numProcessors * 2;
             const int initialCapacity = 10000;
 
             Cache = new ConcurrentDictionary<string, double>(concurrencyLevel, initialCapacity);
@@ -77,8 +77,7 @@ namespace MTDBFramework.IO
         [Obsolete("Use TryGetValue")]
         public static double RetrieveValue(string peptide)
         {
-            double predictedNET;
-            if (TryGetValue(peptide, out predictedNET))
+            if (TryGetValue(peptide, out var predictedNET))
                 return predictedNET;
 
             return 0;
@@ -104,7 +103,7 @@ namespace MTDBFramework.IO
         {
             // Convert to a list to suppress the "Possible multiple enumeration" warning
             var lstEvidences = evidences.ToList();
-            if (evidences.Count() != 0)
+            if (lstEvidences.Count != 0)
             {
                 var dataset = lstEvidences.First().DataSet;
 
@@ -156,29 +155,26 @@ namespace MTDBFramework.IO
             var maxTime = scanToTime.Max(scanTimePair => scanTimePair.Value);
             var minTime = scanToTime.Min(scanTimePair => scanTimePair.Value);
 
-            List<int> lstScans = scanToTime.Keys.ToList();
+            var lstScans = scanToTime.Keys.ToList();
             lstScans.Sort();
 
             foreach (var evidence in evidences)
             {
-                double observedTime;
-
-                if (!scanToTime.TryGetValue(evidence.Scan, out observedTime))
+                if (!scanToTime.TryGetValue(evidence.Scan, out var observedTime))
                 {
                     // Exact match not found; find the closest match
                     var index = lstScans.BinarySearch(evidence.Scan);
 
                     if (index < 0)
                     {
-                        int indexSmaller = ~index - 1;
+                        var indexSmaller = ~index - 1;
 
                         if (indexSmaller < 0)
                             indexSmaller = 0;
 
-                        double timeStart;
                         double timeEnd;
 
-                        scanToTime.TryGetValue(lstScans[indexSmaller], out timeStart);
+                        scanToTime.TryGetValue(lstScans[indexSmaller], out var timeStart);
 
                         if (indexSmaller < lstScans.Count - 1)
                             scanToTime.TryGetValue(lstScans[indexSmaller + 1], out timeEnd);
@@ -202,7 +198,7 @@ namespace MTDBFramework.IO
         private Dictionary<int, double> ReadScanTimeFile(string txtPath, int scanColIndex, int timeColIndex, char delimiter)
         {
             var scanToTime = new Dictionary<int, double>();
-            int minimumColCount = Math.Max(scanColIndex, timeColIndex) + 1;
+            var minimumColCount = Math.Max(scanColIndex, timeColIndex) + 1;
 
             using (var reader = new StreamReader(txtPath))
             {
@@ -219,12 +215,10 @@ namespace MTDBFramework.IO
                     if (parsedLine.Length < minimumColCount)
                         continue;
 
-                    int scanNumber;
-                    if (!int.TryParse(parsedLine[scanColIndex], out scanNumber))
+                    if (!int.TryParse(parsedLine[scanColIndex], out var scanNumber))
                         continue;
 
-                    double elutionTimeMinutes;
-                    if (!double.TryParse(parsedLine[timeColIndex], out elutionTimeMinutes))
+                    if (!double.TryParse(parsedLine[timeColIndex], out var elutionTimeMinutes))
                         continue;
 
                     scanToTime.Add(scanNumber, elutionTimeMinutes);
@@ -265,9 +259,7 @@ namespace MTDBFramework.IO
         /// <returns></returns>
         public double ComputePeptideNET(string peptide, IRetentionTimePredictor predictor)
         {
-            double predictedNET;
-
-            if (!PeptideCache.TryGetValue(peptide, out predictedNET))
+            if (!PeptideCache.TryGetValue(peptide, out var predictedNET))
             {
                 predictedNET = predictor.GetElutionTime(peptide);
                 PeptideCache.Add(peptide, predictedNET);

@@ -31,7 +31,7 @@ namespace MTDBFramework.IO
             var filter = new XTandemTargetFilter(ReaderOptions);
 
             // Get the Evidences using PHRPReader which looks at the path that was passed in to determine the data type
-            int resultsProcessed = 0;
+            var resultsProcessed = 0;
             var reader = InitializeReader(path);
 
             while (reader.MoveNext())
@@ -44,7 +44,7 @@ namespace MTDBFramework.IO
                     break;
 
                 // Skip this PSM if it doesn't pass the import filters
-                double logPepEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Expectation_Value_LogE, 0);
+                var logPepEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_Peptide_Expectation_Value_LogE, 0);
 
                 double specProb = 0;
                 if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))

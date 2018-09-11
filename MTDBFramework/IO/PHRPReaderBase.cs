@@ -135,7 +135,7 @@ namespace MTDBFramework.IO
         /// <param name="dataFilePath"></param>
         protected void StoreDatasetInfo(Evidence result, string dataFilePath)
         {
-            string datasetName = DatasetPathUtility.CleanPath(dataFilePath);
+            var datasetName = DatasetPathUtility.CleanPath(dataFilePath);
             StoreDatasetInfo(result, datasetName, dataFilePath);
         }
 
@@ -160,9 +160,8 @@ namespace MTDBFramework.IO
         {
             // Lookup this dataset in the dataset info cache
 
-            TargetDataSet dataset;
 
-            if (!DatasetCache.TryGetValue(dataFilePath, out dataset))
+            if (!DatasetCache.TryGetValue(dataFilePath, out var dataset))
             {
                 dataset = new TargetDataSet
                 {
@@ -257,7 +256,7 @@ namespace MTDBFramework.IO
                 }
 
                 var encodedSeq = result.Sequence[0] + ".";
-                int j = 0;
+                var j = 0;
                 foreach (var ptm in result.Ptms)
                 {
                     for (; j < ptm.Location; j++)
@@ -299,7 +298,7 @@ namespace MTDBFramework.IO
         /// <param name="currentTask"></param>
         protected void UpdateProgress(float percentComplete, string currentTask)
         {
-            float percentCompleteEffective = PROGRESS_PCT_START + percentComplete * (PROGRESS_PCT_PEPTIDES_LOADED - PROGRESS_PCT_START) / 100;
+            var percentCompleteEffective = PROGRESS_PCT_START + percentComplete * (PROGRESS_PCT_PEPTIDES_LOADED - PROGRESS_PCT_START) / 100;
 
             OnProgressChanged(new PercentCompleteEventArgs(percentCompleteEffective, currentTask));
         }

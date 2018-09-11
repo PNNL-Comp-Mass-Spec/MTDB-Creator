@@ -472,7 +472,7 @@ namespace MTDBFramework.IO
         private void ReadDbSequence(XmlReader reader)
         {
             reader.MoveToContent();
-            string id = reader.GetAttribute("id");
+            var id = reader.GetAttribute("id");
             if (id != null)
             {
                 var dbSeq = new DatabaseSequence
@@ -497,7 +497,7 @@ namespace MTDBFramework.IO
         private void ReadPeptide(XmlReader reader)
         {
             reader.MoveToContent();
-            string id = reader.GetAttribute("id");
+            var id = reader.GetAttribute("id");
             if (id != null)
             {
                 var pepRef = new PeptideRef();
@@ -711,7 +711,7 @@ namespace MTDBFramework.IO
 
             reader.MoveToContent();
             var nativeId = reader.GetAttribute("spectrumID");
-            int scanNum = -1;
+            var scanNum = -1;
             reader.ReadStartElement("SpectrumIdentificationResult"); // Throws exception if we are not at the "SpectrumIdentificationResult" tag.
             while (reader.ReadState == ReadState.Interactive)
             {
@@ -857,9 +857,9 @@ namespace MTDBFramework.IO
                 }
                 // Skip this PSM if it doesn't pass the import filters
                 // Note that qValue is basically FDR
-                double qValue = item.Value.QValue;
+                var qValue = item.Value.QValue;
 
-                double specProb = item.Value.SpecEv;
+                var specProb = item.Value.SpecEv;
 
                 if (filter.ShouldFilter(qValue, specProb))
                     continue;
@@ -930,8 +930,7 @@ namespace MTDBFramework.IO
                             Location = mod.Key,
                             Mass = mod.Value.Mass
                         };
-                        UniModData.Modification unimod;
-                        if (UniModData.ModList.TryGetValue(mod.Value.Tag, out unimod))
+                        if (UniModData.ModList.TryGetValue(mod.Value.Tag, out var unimod))
                         {
                             ptm.Formula = unimod.Formula.ToString();
                             ptm.Name = unimod.Title;

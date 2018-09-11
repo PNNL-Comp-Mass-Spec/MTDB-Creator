@@ -18,7 +18,7 @@ namespace MTDBAccessIO
         private void ExportToText(string path, TargetDatabase inputData)
         {
             var pieces = path.Split('\\');
-            string directory = "";
+            var directory = "";
             foreach (var piece in pieces)
             {
                 if (piece.Contains("."))
@@ -29,7 +29,7 @@ namespace MTDBAccessIO
                 directory += "\\";
             }
 
-            var currentProt = 0;
+            var proteinsRead = 0;
 
             var targetWriter    = new StreamWriter(directory + "tempAMT.txt");
             var proteinWriter   = new StreamWriter(directory + "tempAMT_Proteins.txt");
@@ -103,7 +103,7 @@ namespace MTDBAccessIO
                 {
                     if (!m_uniqueProteins.ContainsKey(protein.ProteinName))
                     {
-                        protein.Id = ++currentProt;
+                        protein.Id = ++proteinsRead;
                         m_uniqueProteins.Add(protein.ProteinName, protein);
                         var proteinLine =
                             string.Format("{0},{1},{2}",
@@ -158,7 +158,7 @@ namespace MTDBAccessIO
             var accApplication = new ACCESS.Application();
 
             var pieces = path.Split('\\');
-            string directory = "";
+            var directory = "";
             foreach (var piece in pieces)
             {
                 if (piece.Contains("."))
