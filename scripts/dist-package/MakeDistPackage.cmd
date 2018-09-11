@@ -52,7 +52,7 @@ IF NOT EXIST ..\..\builds mkdir ..\..\builds
 IF EXIST "..\..\builds\MTDBCreator_Binary_%Configuration%_%Platform%.zip" del "..\..\builds\MTDBCreator_Binary_%Configuration%_%Platform%.zip"
 
 xcopy ..\..\doc\MTDBCreator-v1.0.pdf .\bin\ /D /Y
-xcopy ..\..\doc\Readme.txt .\bin\ /D /Y
+xcopy ..\..\README.md .\bin\ /D /Y
 
 7za.exe a -tzip "..\..\builds\MTDBCreator_Binary_%Configuration%_%Platform%.zip" .\bin\* -r
 
