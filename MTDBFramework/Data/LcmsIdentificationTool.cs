@@ -10,7 +10,7 @@
         /// </summary>
         Sequest,
         /// <summary>
-        /// XTandem
+        /// X!Tandem
         /// </summary>
         XTandem,
         /// <summary>

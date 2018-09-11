@@ -21,7 +21,7 @@
         PEPTIDE,
 
         /// <summary>
-        /// Analysis Sourder
+        /// Analysis Source
         /// </summary>
         ANALYSIS_SOURCE,
 

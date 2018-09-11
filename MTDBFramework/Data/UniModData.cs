@@ -174,7 +174,7 @@ namespace MTDBFramework.Data
             /// <param name="fullName">Modification full name</param>
             /// <param name="monoMass">Modification monoisotopic mass</param>
             /// <param name="avgMass">Modification average mass</param>
-            /// <param name="comp">Modifcation composition (UNIMOD style)</param>
+            /// <param name="comp">Modification composition (UNIMOD style)</param>
             /// <param name="id">UNIMOD record id for modification</param>
             /// <param name="formula">Chemical formula of modification</param>
             public Modification(string title, string fullName, double monoMass, double avgMass, string comp, int id, ChemFormula formula)

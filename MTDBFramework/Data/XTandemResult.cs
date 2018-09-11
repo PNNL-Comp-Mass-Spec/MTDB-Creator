@@ -1,7 +1,7 @@
 ﻿namespace MTDBFramework.Data
 {
     /// <summary>
-    /// XTandem input storage for evidence
+    /// X!Tandem input storage for evidence
     /// </summary>
     public class XTandemResult : Evidence
     {

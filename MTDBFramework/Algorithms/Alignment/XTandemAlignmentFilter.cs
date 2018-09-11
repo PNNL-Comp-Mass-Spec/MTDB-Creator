@@ -7,7 +7,7 @@ using MTDBFramework.Data;
 namespace MTDBFramework.Algorithms.Alignment
 {
     /// <summary>
-    /// Alignment Filtering for XTandem Workflows
+    /// Alignment Filtering for X!Tandem Workflows
     /// </summary>
     public class XTandemAlignmentFilter : ITargetFilter
     {

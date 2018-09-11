@@ -1,7 +1,7 @@
 ﻿namespace MTDBFramework.Data
 {
     /// <summary>
-    /// Target filtering for XTandem Workflows
+    /// Target filtering for X!Tandem Workflows
     /// </summary>
     public class XTandemTargetFilter : ITargetFilter
     {

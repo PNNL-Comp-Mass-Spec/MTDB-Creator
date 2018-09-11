@@ -154,9 +154,9 @@ namespace MTDBFramework.Data
             }
         }
 
-        // Xtandem
+        // X!Tandem
         /// <summary>
-        /// Maximum LogEVal for XTandem Alignment
+        /// Maximum LogEVal for X!Tandem Alignment
         /// </summary>
         public double MaxLogEValForXTandemAlignment
         {
