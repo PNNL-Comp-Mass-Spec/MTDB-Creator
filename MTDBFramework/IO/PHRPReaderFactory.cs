@@ -1,4 +1,5 @@
-﻿using MTDBFramework.Data;
+﻿using System;
+using MTDBFramework.Data;
 using PHRPReader;
 
 namespace MTDBFramework.IO
@@ -25,7 +26,8 @@ namespace MTDBFramework.IO
             PHRPReaderBase reader = null;
             var resultType = clsPHRPReader.AutoDetermineResultType(path);
 
-            if (path.EndsWith("mzid") || path.EndsWith("mzid.gz"))
+            if (path.EndsWith("mzid", StringComparison.OrdinalIgnoreCase) ||
+                path.EndsWith("mzid.gz", StringComparison.OrdinalIgnoreCase))
             {
                 reader = new MzIdentMlReader(options);
                 return reader;
