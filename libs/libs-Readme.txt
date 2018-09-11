@@ -1,7 +1,10 @@
-libs is a folder that stores only the private PNNL libraries.
+This directory stores DLLs not available from NuGet:
 
-The runtime libraries required by MTDBCreator are following:
+NETPrediction.dll
+* Kangas prediction algorithm classes for normalized elution time (NET) alignment
 
-PHRPReader.dll - Provide PSM and other basic data structures (Managed)
-ThermoRawFileReaderDLL.dll - The dependency library required by PHRPReader.dll (Managed)
-NETPrediction.dll - Provide Kangas prediction algorithm classes (managed)
+PHRPReader.dll
+* Used to read tab-delimited text files created by Peptide Hit Results Processor
+
+PNNLOmics.dll
+* Data analysis, file I/O, and visualization routines
