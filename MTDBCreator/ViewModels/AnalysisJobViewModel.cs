@@ -208,35 +208,34 @@ namespace MTDBCreator.ViewModels
                     }
                 }
 
-                if (result != null && param == null)
+                if (result == null || param != null) return;
+
+                var procStart = DateTime.Now;
+                result = ProcessAnalysisDatabase();
+
+                if (result == null && BackgroundWorkProcessHelper.MostRecentResult != null)
                 {
-                    var procStart = DateTime.Now;
-                    result = ProcessAnalysisDatabase();
+                    // This condition will be true if MultiThreadingEnabled = false
+                    result = BackgroundWorkProcessHelper.MostRecentResult;
 
-                    if (result == null && BackgroundWorkProcessHelper.MostRecentResult != null)
-                    {
-                        // This condition will be true if MultiThreadingEnabled = false
-                        result = BackgroundWorkProcessHelper.MostRecentResult;
+                    if (Database == null && result is TargetDatabase database)
+                        Database = database;
+                }
 
-                        if (Database == null && result is TargetDatabase database)
-                            Database = database;
-                    }
+                OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
+                end = DateTime.Now;
+                Console.WriteLine("Alignment processed after " + (end - start) + " total");
+                Console.WriteLine("Alignment took " + (end - procStart));
 
-                    OnAnalysisJobProcessed(new MtdbResultChangedEventArgs(result));
+                if (result != null && saveDatabaseDialog.FileName != "")
+                {
+
+                    var saveStart = DateTime.Now;
+
+                    SaveAnalysisDatabase(saveDatabaseDialog.FileName);
+                    IsDatabaseSaved = true;
                     end = DateTime.Now;
-                    Console.WriteLine("Alignment processed after " + (end - start) + " total");
-                    Console.WriteLine("Alignment took " + (end - procStart));
-
-                    if (result != null && saveDatabaseDialog.FileName != "")
-                    {
-
-                        var saveStart = DateTime.Now;
-
-                        SaveAnalysisDatabase(saveDatabaseDialog.FileName);
-                        IsDatabaseSaved = true;
-                        end = DateTime.Now;
-                        Console.WriteLine("Database Save took " + (end - saveStart));
-                    }
+                    Console.WriteLine("Database Save took " + (end - saveStart));
                 }
 
             }

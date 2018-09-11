@@ -85,30 +85,24 @@ namespace MTDBCreator.PageControls
 
         private void newRecentItemButton_Click(object sender, RoutedEventArgs e)
         {
-            var newRecentItemButton = e.OriginalSource as Button;
+            if (!(e.OriginalSource is Button newRecentItemButton))
+                return;
 
-            if (newRecentItemButton != null)
+            if (!(Application.Current.MainWindow is MainWindow mainWindow) || newRecentItemButton.Tag == null)
+                return;
+
+            var analysisJobViewModel = RecentAnalysisJobHelper.GetRecentAnalysisJobItem(newRecentItemButton.Tag.ToString());
+
+            var result = BackgroundWorkProcessHelper.Process(new AnalysisJobBackgroundWorkHelper(analysisJobViewModel));
+
+            if (result == null)
+                return;
+
+            BackgroundWorkProcessHelper.Process(new MtdbProcessorBackgroundWorkHelper(analysisJobViewModel));
+
+            if (analysisJobViewModel.Database != null)
             {
-                var mainWindow = Application.Current.MainWindow as MainWindow;
-
-                if (mainWindow != null && newRecentItemButton.Tag != null)
-                {
-                    var analysisJobViewModel = RecentAnalysisJobHelper.GetRecentAnalysisJobItem(newRecentItemButton.Tag.ToString());
-
-                    var result = BackgroundWorkProcessHelper.Process(new AnalysisJobBackgroundWorkHelper(analysisJobViewModel));
-
-                    if (result != null)
-                    {
-                        result = BackgroundWorkProcessHelper.Process(new MtdbProcessorBackgroundWorkHelper(analysisJobViewModel));
-
-                        if (analysisJobViewModel.Database != null)
-                        {
-
-                            mainWindow.NewWorkspacePage(analysisJobViewModel);
-
-                        }
-                    }
-                }
+                mainWindow.NewWorkspacePage(analysisJobViewModel);
             }
         }
 
