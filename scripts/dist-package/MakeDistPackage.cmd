@@ -22,7 +22,7 @@ set Platform=%%a%%b
 
 setLocal DisableDelayedExpansion
 
-rem Remove the double quotes from the 3rd and 4th variables (folder paths)
+rem Remove the double quotes from the 3rd and 4th variables (directory paths)
 set TargetDir=%~3
 set SolutionDir=%~4
 
@@ -41,7 +41,9 @@ echo.
 
 xcopy "%TargetDir%MTDBCreator.exe" .\bin /Y /D
 xcopy "%TargetDir%*.dll" .\bin /S /Y /D
+xcopy "%TargetDir%Elute1052.wts" .\bin /S /Y /D
 
+echo.
 echo Building Distribution Package in Zip Format...
 echo.
 
