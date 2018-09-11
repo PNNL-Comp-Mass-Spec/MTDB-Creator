@@ -96,7 +96,7 @@ namespace MTDBFramework.IO
                                 DataSet = m_uniqueDataSets[evidence.DataSet.Name],
                                 Parent = consensusTarget
                             };
-                            m_alignmentWriters[evidence.DataSet.Name].WriteLine(string.Format("{0}\t{1}", writtenEvidence.ObservedNet, writtenEvidence.Scan));
+                            m_alignmentWriters[evidence.DataSet.Name].WriteLine("{0}\t{1}", writtenEvidence.ObservedNet, writtenEvidence.Scan);
                             if (writtenEvidence.DiscriminantValue > 0.0)
                             {
                                 writtenEvidence.DiscriminantValue += 0.0;

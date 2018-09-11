@@ -118,23 +118,26 @@ namespace MTDBFramework
         private static LcmsIdentificationTool DetermineTool(string path)
         {
             var tool = LcmsIdentificationTool.NOT_SUPPORTED;
-            if (path.EndsWith("msgfdb_syn.txt"))
+
+            var pathLower = path.ToLower();
+
+            if (pathLower.EndsWith("msgfdb_syn.txt"))
             {
                 tool = LcmsIdentificationTool.MsgfPlus;
             }
-            else if (path.EndsWith("_syn.txt"))
+            else if (pathLower.EndsWith("_syn.txt"))
             {
                 tool = LcmsIdentificationTool.Sequest;
             }
-            else if (path.EndsWith("_xt.txt"))
+            else if (pathLower.EndsWith("_xt.txt"))
             {
                 tool = LcmsIdentificationTool.XTandem;
             }
-            else if (path.EndsWith("msgfplus.mzid"))
+            else if (pathLower.EndsWith(".mzid") || pathLower.EndsWith(".mzid.gz"))
             {
                 tool = LcmsIdentificationTool.MZIdentML;
             }
-            else if (path.EndsWith("msalign_syn.txt"))
+            else if (pathLower.EndsWith("msalign_syn.txt"))
             {
                 tool = LcmsIdentificationTool.MSAlign;
             }
