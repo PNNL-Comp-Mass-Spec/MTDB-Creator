@@ -9,7 +9,7 @@ namespace MTDBConsole
 {
     class Program
     {
-        private const string PROGRAM_DATE = "October 18, 2017";
+        private const string PROGRAM_DATE = "September 11, 2018";
 
         public static CommandOptions CommandOptions;
 
@@ -44,8 +44,8 @@ namespace MTDBConsole
                               "Website: http://panomics.pnnl.gov/ or http://omics.pnl.gov or http://www.sysbio.org/resources/staff/",
 
                  UsageExamples = {
-                     exeName + "/MzidListPath:MzidInfo.txt /DatabasePath:TestDatabase.db3",
-                     exeName + "/m:MzidInfo.txt /d:TestDatabase.db3"
+                     exeName + "/MzidListPath:MzidInfo.txt /DatabasePath:TestDatabase.mtdb",
+                     exeName + "/m:MzidInfo.txt /d:TestDatabase.mtdb"
                 }
             };
 

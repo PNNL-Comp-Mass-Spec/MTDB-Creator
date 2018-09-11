@@ -2,6 +2,7 @@
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.IO;
+using PRISM;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,14 +17,18 @@ namespace MTDBFramework
     public static class MtdbCreator
     {
         /// <summary>
-        /// Create a MTDB with the given files
+        /// Create a SQLite-based MTDB with the given files
         /// </summary>
         /// <param name="paths">Paths to the files to process</param>
         /// <param name="dbFileName">Name of MTDB to create</param>
         /// <returns></returns>
         public static TargetDatabase CreateDB(List<string> paths, string dbFileName)
         {
-            var options = new Options();
+            var options = new Options
+            {
+                ConsoleMode = true
+            };
+
             var analysisProcessor = new AnalysisJobProcessor(options);
             var mtdbProcessor = new MtdbProcessor(options);
             var bWorker = new BackgroundWorker();
@@ -34,11 +39,19 @@ namespace MTDBFramework
 
             IEnumerable<LcmsDataSet> priorDataSets = new List<LcmsDataSet>();
 
+            options.DatabaseType = DatabaseType.SQLite;
+            if (dbFileName.EndsWith(".mdb", StringComparison.OrdinalIgnoreCase))
+            {
+                ConsoleMsgUtils.ShowWarning("The console version of MtdbCreator only supports SQLite files; changing the output file extension to .mtdb");
+                dbFileName = Path.ChangeExtension(dbFileName, ".mtdb");
+            }
+
             if (File.Exists(dbFileName))
             {
                 priorDataSets = reader.Read(dbFileName);
                 existingDatabase = reader.ReadDb(dbFileName);
             }
+
             var priorDatasetList = priorDataSets.Select(x => x.Name).ToList();
             var listJobs = new List<AnalysisJobItem>();
 
@@ -67,6 +80,7 @@ namespace MTDBFramework
                     Console.WriteLine(path + " does not exist;\nExcluding this file in MTDB creation\n");
                 }
             }
+
             if (listJobs.Count != 0)
             {
                 var processedjobs = analysisProcessor.Process(listJobs, bWorker);
