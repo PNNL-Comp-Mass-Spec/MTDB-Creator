@@ -63,23 +63,23 @@ namespace MTDBFramework.IO
 
             var readConsensus = new List<ConsensusTarget>();
             var readPair = new List<ConsensusProteinPair>();
-            var readProt = new List<ProteinInformation>();
+            var readProtein = new List<ProteinInformation>();
             var readEvidence = new List<Evidence>();
             var readPtms = new List<PostTranslationalModification>();
             var readPtmPairs = new List<ConsensusPtmPair>();
             var readOptions = new List<Options>();
 
             var consensusDic = new Dictionary<int, ConsensusTarget>();
-            var consensusProtDic = new Dictionary<int, List<ConsensusProteinPair>>();
+            var consensusProteinDic = new Dictionary<int, List<ConsensusProteinPair>>();
             var consensusPtmDic = new Dictionary<int, List<ConsensusPtmPair>>();
-            var protDic = new Dictionary<int, ProteinInformation>();
+            var proteinDic = new Dictionary<int, ProteinInformation>();
             var ptmDic = new Dictionary<int, PostTranslationalModification>();
 
             using (var session = sessionFactory.OpenStatelessSession())
             {
                 using (var transact = session.BeginTransaction())
                 {
-                    session.CreateCriteria<ProteinInformation>().List(readProt);
+                    session.CreateCriteria<ProteinInformation>().List(readProtein);
                     session.CreateCriteria<ConsensusTarget>().List(readConsensus);
                     session.CreateCriteria<PostTranslationalModification>().List(readPtms);
                     session.CreateCriteria<Options>().List(readOptions);
@@ -111,11 +111,11 @@ namespace MTDBFramework.IO
 
                 foreach (var pair in readPair)
                 {
-                    if (!consensusProtDic.ContainsKey(pair.Consensus.Id))
+                    if (!consensusProteinDic.ContainsKey(pair.Consensus.Id))
                     {
-                        consensusProtDic.Add(pair.Consensus.Id, new List<ConsensusProteinPair>());
+                        consensusProteinDic.Add(pair.Consensus.Id, new List<ConsensusProteinPair>());
                     }
-                    consensusProtDic[pair.Consensus.Id].Add(pair);
+                    consensusProteinDic[pair.Consensus.Id].Add(pair);
                 }
 
                 foreach (var pair in readPtmPairs)
@@ -127,9 +127,9 @@ namespace MTDBFramework.IO
                     consensusPtmDic[pair.Target.Id].Add(pair);
                 }
 
-                foreach (var prot in readProt)
+                foreach (var protein in readProtein)
                 {
-                    protDic.Add(prot.Id, prot);
+                    proteinDic.Add(protein.Id, protein);
                 }
 
                 foreach (var ptm in readPtms)
@@ -156,16 +156,16 @@ namespace MTDBFramework.IO
 
                 foreach (var evidence in readEvidence)
                 {
-                    foreach(var pair in consensusProtDic[evidence.Parent.Id])
+                    foreach(var pair in consensusProteinDic[evidence.Parent.Id])
                     {
-                        var prot = protDic[pair.Protein.Id];
-                        prot.ResidueEnd = pair.ResidueEnd;
-                        prot.ResidueStart = pair.ResidueStart;
-                        prot.TerminusState = (clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants)pair.TerminusState;
-                        prot.CleavageState = (clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants)pair.CleavageState;
-                        //prot.Id = 0;
-                        evidence.AddProtein(prot);
-                        consensusDic[evidence.Parent.Id].AddProtein(prot);
+                        var protein = proteinDic[pair.Protein.Id];
+                        protein.ResidueEnd = pair.ResidueEnd;
+                        protein.ResidueStart = pair.ResidueStart;
+                        protein.TerminusState = (clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants)pair.TerminusState;
+                        protein.CleavageState = (clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants)pair.CleavageState;
+                        //protein.Id = 0;
+                        evidence.AddProtein(protein);
+                        consensusDic[evidence.Parent.Id].AddProtein(protein);
                     }
                     evidence.MonoisotopicMass = consensusDic[evidence.Parent.Id].TheoreticalMonoIsotopicMass;
                     evidence.Ptms = consensusDic[evidence.Parent.Id].Ptms;

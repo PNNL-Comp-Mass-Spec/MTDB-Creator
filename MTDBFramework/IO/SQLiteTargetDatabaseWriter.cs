@@ -111,15 +111,15 @@ namespace MTDBFramework.IO
                                 m_uniqueProteins.Add(protein.ProteinName, protein);
                                 session.Insert(protein);
                             }
-                            var cProt = m_uniqueProteins[protein.ProteinName];
+                            var consensusProtein = m_uniqueProteins[protein.ProteinName];
                             var cPPair = new ConsensusProteinPair
                             {
                                 Consensus = consensusTarget,
-                                Protein = cProt,
-                                CleavageState = (short) cProt.CleavageState,
-                                TerminusState = (short) cProt.TerminusState,
-                                ResidueStart = (short) cProt.ResidueStart,
-                                ResidueEnd = (short) cProt.ResidueEnd
+                                Protein = consensusProtein,
+                                CleavageState = (short)consensusProtein.CleavageState,
+                                TerminusState = (short)consensusProtein.TerminusState,
+                                ResidueStart = (short)consensusProtein.ResidueStart,
+                                ResidueEnd = (short)consensusProtein.ResidueEnd
                             };
                             session.Insert(cPPair);
 

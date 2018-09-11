@@ -205,7 +205,7 @@ namespace MTDBFramework.Data
 
         private const short MaxChargeForScore = 3;
 
-        private static readonly double[] Consts = { 0.646, -0.959, -1.460, -0.959, -0.959 };
+        private static readonly double[] Constants = { 0.646, -0.959, -1.460, -0.959, -0.959 };
         private static readonly double[] XCorrs = { 5.49, 8.362, 9.933, 8.362, 8.362 };
         private static readonly double[] Deltas = { 4.643, 7.386, 11.149, 7.386, 7.386 };
         private static readonly double[] Ranks = { -0.455, -0.194, -0.201, -0.194, -0.194 };
@@ -227,7 +227,7 @@ namespace MTDBFramework.Data
                 charge = MaxChargeForScore;
             }
 
-            var constant = Consts[charge - 1];
+            var constant = Constants[charge - 1];
             var xcorr = XCorrs[charge - 1];
             var delta = Deltas[charge - 1];
             var logRank = Ranks[charge - 1];
