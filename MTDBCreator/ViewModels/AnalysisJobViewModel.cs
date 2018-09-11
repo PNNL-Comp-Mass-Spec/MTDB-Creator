@@ -118,9 +118,16 @@ namespace MTDBCreator.ViewModels
 
                 if (Options.DatabaseType != DatabaseType.NotSaved)
                 {
-                    if (RestoreDirectory == null)
+                    if (string.IsNullOrWhiteSpace(RestoreDirectory))
                     {
-                        RestoreDirectory = "C:\\";
+                        if (AnalysisJobItems != null && AnalysisJobItems.Count > 0)
+                        {
+                            RestoreDirectory = AnalysisJobItems.First().BaseFolder;
+                        }
+                        else
+                        {
+                            RestoreDirectory = @"C:\";
+                        }
                     }
                     saveDatabaseDialog.InitialDirectory = RestoreDirectory;
                     saveDatabaseDialog.RestoreDirectory = true;
