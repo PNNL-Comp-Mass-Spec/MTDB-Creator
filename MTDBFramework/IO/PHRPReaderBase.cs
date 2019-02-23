@@ -44,6 +44,9 @@ namespace MTDBFramework.IO
         /// </summary>
         protected bool AbortRequested;
 
+        /// <summary>
+        /// Cached peptide mass calculator
+        /// </summary>
         protected clsPeptideMassCalculator mPeptideMassCalculator;
 
         /// <summary>

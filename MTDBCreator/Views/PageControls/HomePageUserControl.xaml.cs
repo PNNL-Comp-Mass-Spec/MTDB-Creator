@@ -76,7 +76,7 @@ namespace MTDBCreator.PageControls
             catch (Exception ex)
             {
                 MessageBox.Show("Exception in Page_Loaded: " + ex.Message +
-                                PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
+                                PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
 
@@ -131,7 +131,7 @@ namespace MTDBCreator.PageControls
             catch (Exception ex)
             {
                 MessageBox.Show("Exception calling AddDataWindow: " + ex.Message +
-                                PRISM.clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
+                                PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }

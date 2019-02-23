@@ -250,7 +250,7 @@ namespace MTDBCreator.ViewModels
                 {
 
                     MessageBox.Show(errMsg + ": " + ex.Message +
-                                    clsStackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
+                                    StackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
                                     "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
             }
