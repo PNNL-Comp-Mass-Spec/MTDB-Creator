@@ -7,7 +7,7 @@ using System.Windows;
 using Microsoft.Win32;
 using MTDBCreator.DmsExporter.Data;
 using MTDBCreator.DmsExporter.IO;
-using MTDBFramework.UI;
+using MTDBCreator.Helpers;
 
 namespace MTDBCreator.ViewModels
 {

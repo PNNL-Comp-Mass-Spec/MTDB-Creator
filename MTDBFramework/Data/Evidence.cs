@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using MTDBFramework.Database;
-using MTDBFramework.UI;
 using FeatureAlignment.Data;
 
 #endregion
@@ -13,7 +13,7 @@ namespace MTDBFramework.Data
     /// <summary>
     /// Collection of data pertaining to a single peptide evidence
     /// </summary>
-    public class Evidence : ObservableObject, IComparable<Evidence>
+    public class Evidence : INotifyPropertyChanged, IComparable<Evidence>
     {
         #region Private Fields
 
@@ -567,5 +567,23 @@ namespace MTDBFramework.Data
             }
             return result;
         }
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raised when a property on this object has a new value.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises this object's PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The property that has a new value.</param>
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion // INotifyPropertyChanged Members
     }
 }

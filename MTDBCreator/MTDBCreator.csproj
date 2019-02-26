@@ -89,6 +89,7 @@
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\ErrorHelper.cs" />
     <Compile Include="Helpers\HashHelper.cs" />
+    <Compile Include="Helpers\ObservableObject.cs" />
     <Compile Include="Helpers\OptionsParameterConverter.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="ViewModels\AmtListViewModel.cs" />

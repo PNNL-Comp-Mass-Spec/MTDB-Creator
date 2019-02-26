@@ -1,7 +1,7 @@
 ﻿#region Namespaces
 
 using System.Collections.Generic;
-using MTDBFramework.UI;
+using System.ComponentModel;
 using FeatureAlignment.Algorithms.Regression;
 
 #endregion
@@ -11,7 +11,7 @@ namespace MTDBFramework.Data
     /// <summary>
     /// LCMS dataset
     /// </summary>
-    public class LcmsDataSet : ObservableObject
+    public class LcmsDataSet : INotifyPropertyChanged
     {
         #region Private Fields
 
@@ -133,5 +133,23 @@ namespace MTDBFramework.Data
             Evidences = new List<Evidence>(evidences);
             RegressionResult = new LinearRegressionResult();
         }
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raised when a property on this object has a new value.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises this object's PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The property that has a new value.</param>
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion // INotifyPropertyChanged Members
     }
 }

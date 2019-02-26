@@ -1,5 +1,5 @@
 ﻿using MTDBCreator.DmsExporter.IO;
-using MTDBFramework.UI;
+using MTDBCreator.Helpers;
 
 namespace MTDBCreator.ViewModels
 {

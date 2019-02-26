@@ -140,7 +140,6 @@
     <Compile Include="UI\AlignmentProgressChangedEventArgs.cs" />
     <Compile Include="UI\MTDBCreationProgressType.cs" />
     <Compile Include="UI\MTDBProgressChangedEvent.cs" />
-    <Compile Include="UI\ObservableObject.cs" />
     <Compile Include="UI\PercentCompleteEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>

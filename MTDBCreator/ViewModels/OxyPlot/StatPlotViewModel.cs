@@ -1,5 +1,5 @@
-﻿using MTDBFramework.Database;
-using MTDBFramework.UI;
+﻿using MTDBCreator.Helpers;
+using MTDBFramework.Database;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;

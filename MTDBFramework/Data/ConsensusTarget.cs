@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using MathNet.Numerics.Statistics;
 using MTDBFramework.Database;
-using MTDBFramework.UI;
 
 namespace MTDBFramework.Data
 {
     /// <summary>
     /// Store all information pertaining to a single consensus target
     /// </summary>
-    public class ConsensusTarget : ObservableObject, IComparable
+    public class ConsensusTarget : INotifyPropertyChanged, IComparable
     {
         /// <summary>
         /// Constructor
@@ -433,5 +433,23 @@ namespace MTDBFramework.Data
 
             throw new ArgumentException("Object is not a Consensus Target");
         }
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raised when a property on this object has a new value.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises this object's PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The property that has a new value.</param>
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion // INotifyPropertyChanged Members
     }
 }

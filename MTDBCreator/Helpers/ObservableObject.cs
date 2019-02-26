@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace MTDBFramework.UI
+namespace MTDBCreator.Helpers
 {
     /// <summary>
     /// Super class for progress monitoring and notification

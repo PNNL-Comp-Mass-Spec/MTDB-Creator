@@ -12,7 +12,6 @@ using MTDBCreator.Helpers.BackgroundWork;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.IO;
-using MTDBFramework.UI;
 using Microsoft.Win32;
 using System;
 using PRISM;

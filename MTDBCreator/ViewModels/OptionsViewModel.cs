@@ -1,12 +1,12 @@
-﻿using System.Collections.ObjectModel;
-using System;
-using MTDBCreator.Commands;
-using MTDBFramework.Algorithms.RetentionTimePrediction;
-using MTDBFramework.Data;
-using MTDBFramework.UI;
+﻿using System;
 using System.Collections;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using FeatureAlignment.Algorithms.Regression;
+using MTDBCreator.Commands;
+using MTDBCreator.Helpers;
+using MTDBFramework.Algorithms.RetentionTimePrediction;
+using MTDBFramework.Data;
 
 namespace MTDBCreator.ViewModels
 {

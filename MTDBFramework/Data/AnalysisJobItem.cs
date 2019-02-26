@@ -1,7 +1,7 @@
 ﻿#region Namespaces
 
+using System.ComponentModel;
 using System.IO;
-using MTDBFramework.UI;
 
 #endregion
 
@@ -10,7 +10,7 @@ namespace MTDBFramework.Data
     /// <summary>
     /// Data encapsulation for Analysis Jobs
     /// </summary>
-    public class AnalysisJobItem : ObservableObject
+    public class AnalysisJobItem : INotifyPropertyChanged
     {
         #region Private Fields
 
@@ -128,5 +128,23 @@ namespace MTDBFramework.Data
         /// </summary>
         // ReSharper disable once UnusedMember.Global
         public int TargetCount => DataSet?.Evidences.Count ?? 0;
+
+        #region INotifyPropertyChanged Members
+
+        /// <summary>
+        /// Raised when a property on this object has a new value.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises this object's PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The property that has a new value.</param>
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion // INotifyPropertyChanged Members
     }
 }

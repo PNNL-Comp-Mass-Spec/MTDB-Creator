@@ -7,7 +7,6 @@ using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBFramework.Algorithms.Alignment;
 using MTDBFramework.Data;
-using MTDBFramework.UI;
 using OxyPlot;
 using OxyPlot.Annotations;
 using OxyPlot.Axes;
