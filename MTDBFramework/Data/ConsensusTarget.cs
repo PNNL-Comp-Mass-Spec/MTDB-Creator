@@ -335,12 +335,10 @@ namespace MTDBFramework.Data
             var pieces = cleanSeq.Split('.');
             if (pieces.Length != 1)
             {
-                PrefixResidue = pieces[0].First();
                 StrippedSequence = pieces[1];
-                SuffixResidue = pieces[2].First();
             }
 
-            if(string.IsNullOrWhiteSpace(evidence.CleanPeptide))
+            if (string.IsNullOrWhiteSpace(evidence.CleanPeptide))
             {
                 //evidence.CleanPeptide = cleanSeq;
                 evidence.CleanPeptide = StrippedSequence;

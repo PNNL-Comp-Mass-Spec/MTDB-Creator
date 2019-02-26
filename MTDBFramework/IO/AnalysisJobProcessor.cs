@@ -85,8 +85,6 @@ namespace MTDBFramework.IO
 
         private void analysisReader_ProgressChanged(object sender, PercentCompleteEventArgs e)
         {
-            var percentComplete = (m_currentItem * 100 + e.PercentComplete) / (m_totalItems * 100);
-
             var effectiveItemCount = (int)(m_currentItem * 100 + e.PercentComplete);
 
             OnProgressChanged(new MtdbProgressChangedEventArgs(effectiveItemCount, m_totalItems * 100, e.CurrentTask, m_currentJob));

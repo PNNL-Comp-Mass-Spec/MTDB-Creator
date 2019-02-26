@@ -58,7 +58,7 @@ namespace MTDBAccessIO
             {
                 var msmsObsCount = target.Evidences.Count;
                 var highestNormalized = target.Evidences.Max(x => x.NormalizedScore);
-                var seqPieces = target.CleanSequence.Split('.');
+                // Unused: var seqPieces = target.CleanSequence.Split('.');
 
                 var test = target.EncodedNumericSequence.Split('.');
                 var numSeq = "";
@@ -81,7 +81,7 @@ namespace MTDBAccessIO
                 }
 
 
-                var cleanPeptide = (seqPieces.ToList().Count == 1) ? seqPieces[0] : seqPieces[1];
+                // Unused: var cleanPeptide = (seqPieces.ToList().Count == 1) ? seqPieces[0] : seqPieces[1];
                 var targetLine = string.Format("{0},{1},{2},{3},{4},{5},\"{6}\"",
                     target.Id,
                     target.TheoreticalMonoIsotopicMass,
@@ -124,8 +124,8 @@ namespace MTDBAccessIO
             mapWriter.Close();
         }
 
-        private readonly Dictionary<string, TargetPeptideInfo> m_uniquePeptides = new Dictionary<string, TargetPeptideInfo>();
-        private readonly Dictionary<string, TargetDataSet> m_uniqueDataSets = new Dictionary<string, TargetDataSet>();
+        // Unused: private readonly Dictionary<string, TargetPeptideInfo> m_uniquePeptides = new Dictionary<string, TargetPeptideInfo>();
+        // Unused: private readonly Dictionary<string, TargetDataSet> m_uniqueDataSets = new Dictionary<string, TargetDataSet>();
         private readonly Dictionary<string, ProteinInformation> m_uniqueProteins = new Dictionary<string, ProteinInformation>();
 
         //Might not need this
