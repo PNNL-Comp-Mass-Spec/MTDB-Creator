@@ -22,13 +22,12 @@ namespace MTDBCreator
             set
             {
                 m_canExecute = value;
-                if (CanExecuteChanged != null)
-                    CanExecuteChanged(this, null);
+                CanExecuteChanged?.Invoke(this, null);
             }
         }
 
         public event EventHandler CanExecuteChanged;
-        private Action m_action;
+        private readonly Action m_action;
 
         public void Execute(object parameter)
         {

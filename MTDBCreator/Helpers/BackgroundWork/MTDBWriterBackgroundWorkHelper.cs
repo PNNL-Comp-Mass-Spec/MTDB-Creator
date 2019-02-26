@@ -117,9 +117,9 @@ namespace MTDBCreator.Helpers.BackgroundWork
             if (e.UserObject == null)
             {
                 if (e.Current > 0 && e.Total > 0)
-                    HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Writing to MTDB...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
+                    HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), string.Format("Writing to MTDB...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
                 else
-                    HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, String.Concat("Writing to MTDB: ", DatabaseFileName));
+                    HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, string.Concat("Writing to MTDB: ", DatabaseFileName));
 
                 return;
             }
@@ -130,39 +130,39 @@ namespace MTDBCreator.Helpers.BackgroundWork
             {
                 case MtdbCreationProgressType.CONSENSUS_TARGET:
                     {
-                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Analysis Evidences...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), string.Format("Processing Analysis Evidences...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
 
                         break;
                     }
                 case MtdbCreationProgressType.SEQUENCE:
                     {
-                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Sequence Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), string.Format("Processing Sequence Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
 
                         break;
                     }
                 case MtdbCreationProgressType.PEPTIDE:
                     {
-                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Peptide Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total).ToString()) });
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), string.Format("Processing Peptide Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total).ToString()) });
 
                         break;
                     }
                 case MtdbCreationProgressType.ANALYSIS_SOURCE:
                     {
-                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), String.Format("Processing Analysis Source Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, new object[] { e.Total.ToString(), string.Format("Processing Analysis Source Information...{0}%", WindowHelper.GetPercentage(e.Current, e.Total)) });
 
                         break;
                     }
                 case MtdbCreationProgressType.COMMIT:
                     {
-                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, String.Concat("Writing to MTDB: ", DatabaseFileName));
+                        HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current, string.Concat("Writing to MTDB: ", DatabaseFileName));
 
                         break;
                     }
             }
         }
 
-        private TargetDatabase Database { get; set; }
-        private Options DatabaseOptions { get; set; }
-        private string DatabaseFileName { get; set; }
+        private TargetDatabase Database { get; }
+        private Options DatabaseOptions { get; }
+        private string DatabaseFileName { get; }
     }
 }

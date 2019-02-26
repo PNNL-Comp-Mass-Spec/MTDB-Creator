@@ -38,7 +38,7 @@ namespace MTDBCreator.PageControls
     /// </summary>
     public class MTDBCreatorTabPage : TabItem
     {
-        public MTDBCreatorTabPage(string pageTitle, Image pageImage, UserControl contentControl, RoutedEventHandler closeHandler)
+        public MTDBCreatorTabPage(string pageTitle, UIElement pageImage, UserControl contentControl, RoutedEventHandler closeHandler)
         {
             ContentUserControl = contentControl;
 
@@ -73,6 +73,6 @@ namespace MTDBCreator.PageControls
             Content = contentControl;
         }
 
-        public UserControl ContentUserControl { get; private set; }
+        public UserControl ContentUserControl { get; }
     }
 }

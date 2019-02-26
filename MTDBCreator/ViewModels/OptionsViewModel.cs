@@ -108,8 +108,8 @@ namespace MTDBCreator.ViewModels
             }
         }
 
-        public ObservableCollection<RegressionType> RegressionTypes { get; private set; }
-        public ObservableCollection<DatabaseType> DatabaseTypes { get; private set; }
+        public ObservableCollection<RegressionType> RegressionTypes { get; }
+        public ObservableCollection<DatabaseType> DatabaseTypes { get; }
         public ICommand SaveCommand => m_saveCommand ?? (m_saveCommand = new RelayCommand(Save));
 
         public void Save(object param)

@@ -19,8 +19,8 @@ namespace MTDBCreator.Commands
             UserObject = userObject;
         }
 
-        public object Result { get; private set; }
-        public object UserObject { get; private set; }
+        public object Result { get; }
+        public object UserObject { get; }
     }
 
     public delegate void MtdbResultChangedEventHandler(object sender, MtdbResultChangedEventArgs e);

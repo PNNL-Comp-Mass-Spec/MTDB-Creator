@@ -37,7 +37,7 @@ namespace MTDBCreator.Helpers
             var recentAnalysisJobString = Settings.Default.RecentAnalysisJobs.
                                                 Cast<string>().FirstOrDefault(s => s.StartsWith(hash));
 
-            if (!String.IsNullOrEmpty(recentAnalysisJobString))
+            if (!string.IsNullOrEmpty(recentAnalysisJobString))
             {
                 Settings.Default.RecentAnalysisJobs.Remove(recentAnalysisJobString);
             }

@@ -9,7 +9,7 @@ namespace MTDBCreator.ViewModels.TreeView
         private readonly ProteinInformation m_proteinInformation;
 
         public ProteinTreeNodeViewModel(ProteinInformation protein, TreeNodeViewModel parent)
-            : base(String.Format("{0} ({1} peptides)", protein.ProteinName, protein.Consensus.Count), true, parent)
+            : base(string.Format("{0} ({1} peptides)", protein.ProteinName, protein.Consensus.Count), true, parent)
         {
             m_proteinInformation = protein;
         }

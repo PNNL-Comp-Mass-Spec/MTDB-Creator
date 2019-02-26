@@ -11,9 +11,9 @@ namespace MTDBCreator.Helpers.BackgroundWork
 {
     class MtdbReaderBackgroundWorkHelper : IBackgroundWorkHelper
     {
-        private TargetDatabase Database { get; set; }
-        private Options DatabaseOptions { get; set; }
-        private string DatabaseFileName { get; set; }
+        private TargetDatabase Database { get; }
+        private Options DatabaseOptions { get; }
+        private string DatabaseFileName { get; }
 
         //private bool mAbortRequested;
 

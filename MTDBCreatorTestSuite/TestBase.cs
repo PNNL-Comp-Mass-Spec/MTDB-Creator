@@ -1,4 +1,6 @@
-﻿namespace MTDBCreatorTestSuite
+﻿using System.IO;
+
+namespace MTDBCreatorTestSuite
 {
     /// <summary>
     /// Base class to assist resolving test data
@@ -15,28 +17,18 @@
         private readonly string m_outputPathBase;
 
         /// <summary>
-        /// Absolute path to the MTDBCreatorTestSuite directory
-        /// </summary>
-        private readonly string m_testSuiteDir;
-
-        /// <summary>
         /// Absolute path to the MTDBCreatorTestSuite\TestData directory
         /// </summary>
         private readonly string m_testSuiteDataDir;
-
-        /// <summary>
-        /// Absolute path to the Project/Solution Directory
-        /// </summary>
-        private readonly string m_projectDir;
 
         protected TestBase()
         {
             TextDelimiter = ",";
             m_pathBase = TestPathSingleton.TestDirectory;
             m_outputPathBase = TestPathSingleton.OutputDirectory;
-            m_testSuiteDir = TestPathSingleton.TestSuiteDirectory;
+            TestSuiteDir = TestPathSingleton.TestSuiteDirectory;
             m_testSuiteDataDir = TestPathSingleton.TestSuiteTestDataDirectory;
-            m_projectDir = TestPathSingleton.ProjectDirectory;
+            ProjectDir = TestPathSingleton.ProjectDirectory;
         }
         /// <summary>
         /// Resolves the absolute path for a given relative test data path.
@@ -45,27 +37,30 @@
         /// <returns>Absolute path based on common test data directory path.</returns>
         protected string GetPath(string path)
         {
-            return System.IO.Path.Combine(m_pathBase, path);
+            return Path.Combine(m_pathBase, path);
         }
 
         protected string GetOutputPath(string path)
         {
-            return System.IO.Path.Combine(m_outputPathBase, path);
+            return Path.Combine(m_outputPathBase, path);
         }
 
         protected string GetTestSuiteDataPath(string path)
         {
-            return System.IO.Path.Combine(m_testSuiteDataDir, path);
+            return Path.Combine(m_testSuiteDataDir, path);
         }
 
-        protected string ProjectDir => m_projectDir;
+        /// <summary>
+        /// Absolute path to the Project/Solution Directory
+        /// </summary>
+        protected string ProjectDir { get; }
 
-        protected string TestSuiteDir => m_testSuiteDir;
+        /// <summary>
+        /// Absolute path to the MTDBCreatorTestSuite directory
+        /// </summary>
+        protected string TestSuiteDir { get; }
 
-        protected string TextDelimiter
-        {
-            get;
-            private set;
-        }
+        protected string TextDelimiter { get; }
+
     }
 }

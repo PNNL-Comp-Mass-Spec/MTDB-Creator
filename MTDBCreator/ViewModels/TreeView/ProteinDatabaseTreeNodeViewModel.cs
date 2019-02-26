@@ -10,7 +10,7 @@ namespace MTDBCreator.ViewModels.TreeView
         public DelegateCommand ProteinSearchCommand { get; set; }
 
         public ProteinDatabaseTreeNodeViewModel(TargetDatabase database)
-            : base(String.Format("Target Database ({0})", database.Proteins.Count), true)
+            : base(string.Format("Target Database ({0})", database.Proteins.Count), true)
         {
             m_targetDatabase = database;
 

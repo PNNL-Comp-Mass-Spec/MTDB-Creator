@@ -133,6 +133,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
             }
         }
 
-        private AnalysisJobViewModel AnalysisJobViewModel { get; set; }
+        private AnalysisJobViewModel AnalysisJobViewModel { get; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿#region Namespaces
 
-using System;
 using System.Collections.Generic;
 using MTDBFramework.UI;
 using PNNLOmics.Algorithms.Regression;
@@ -96,10 +95,11 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Constructor
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         public LcmsDataSet()
         {
             PreviouslyAnalyzed = false;
-            Name = String.Empty;
+            Name = string.Empty;
             Tool = LcmsIdentificationTool.Raw;
             Evidences = new List<Evidence>();
             RegressionResult = new LinearRegressionResult();
@@ -113,7 +113,7 @@ namespace MTDBFramework.Data
         public LcmsDataSet(bool analyzed)
         {
             PreviouslyAnalyzed = analyzed;
-            Name = String.Empty;
+            Name = string.Empty;
             Tool = LcmsIdentificationTool.Raw;
             Evidences = new List<Evidence>();
             RegressionResult = new LinearRegressionResult();

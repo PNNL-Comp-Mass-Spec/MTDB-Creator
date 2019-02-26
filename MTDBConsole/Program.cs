@@ -84,7 +84,7 @@ namespace MTDBConsole
             {
                 while (input.Peek() > -1)
                 {
-                    string entry = input.ReadLine();
+                    var entry = input.ReadLine();
                     pathList.Add(entry);
                 }
             }

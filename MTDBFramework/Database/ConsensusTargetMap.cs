@@ -19,8 +19,7 @@ namespace MTDBFramework.Database
         {
             Table("Target");
             Not.LazyLoad();
-            Id(x => x.Id)
-                .Column("TargetId").GeneratedBy.Assigned();
+            Id(x => x.Id).Column("TargetId").GeneratedBy.Assigned();
             Map(x => x.AverageNet);
             Map(x => x.StdevNet);
             Map(x => x.PredictedNet);

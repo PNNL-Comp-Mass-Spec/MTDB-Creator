@@ -23,7 +23,7 @@ namespace MTDBFramework.IO
         /// <returns>An appropriate reader for the file</returns>
         public static PHRPReaderBase Create(string path, Options options)
         {
-            PHRPReaderBase reader = null;
+            PHRPReaderBase reader;
             var resultType = clsPHRPReader.AutoDetermineResultType(path);
 
             if (path.EndsWith("mzid", StringComparison.OrdinalIgnoreCase) ||

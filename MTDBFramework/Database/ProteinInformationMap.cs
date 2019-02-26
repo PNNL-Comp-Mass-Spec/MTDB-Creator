@@ -14,8 +14,7 @@ namespace MTDBFramework.Database
         public ProteinInformationMap()
         {
             Not.LazyLoad();
-            Id(x => x.Id)
-                .Column("ProteinId").GeneratedBy.Native();
+            Id(x => x.Id).Column("ProteinId").GeneratedBy.Native();
             Map(x => x.ProteinName);
         }
     }

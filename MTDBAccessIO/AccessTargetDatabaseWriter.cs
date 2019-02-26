@@ -62,10 +62,10 @@ namespace MTDBAccessIO
 
                 var test = target.EncodedNumericSequence.Split('.');
                 var numSeq = "";
-                if (test.Count() != 1)
+                if (test.Length != 1)
                 {
-                    bool first = true;
-                    for (var i = 1; i < test.Count() - 1; i++)
+                    var first = true;
+                    for (var i = 1; i < test.Length - 1; i++)
                     {
                         if (!first)
                         {

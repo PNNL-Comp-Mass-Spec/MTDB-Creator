@@ -110,10 +110,8 @@ namespace MTDBFramework.Data
             {
                 return string.Compare(ProteinName, otherTarget.ProteinName, StringComparison.Ordinal);
             }
-            else
-            {
-                throw new ArgumentException("Object is not a ProteinInformation object");
-            }
+
+            throw new ArgumentException("Object is not a ProteinInformation object");
         }
     }
 }

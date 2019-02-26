@@ -37,41 +37,17 @@ namespace MTDBCreator.ViewModels
 
         public ICommand CreateDatabaseCommand
         {
-            get
-            {
-                if (m_createDatabaseCommand == null)
-                {
-                    m_createDatabaseCommand = new RelayCommand(param => CreateDatabase());
-                }
-
-                return m_createDatabaseCommand;
-            }
+            get { return m_createDatabaseCommand ?? (m_createDatabaseCommand = new RelayCommand(param => CreateDatabase())); }
         }
 
         public ICommand LoadDatabaseCommand
         {
-            get
-            {
-                if (m_loadDatabaseCommand == null)
-                {
-                    m_loadDatabaseCommand = new RelayCommand(param => ReadDatabase());
-                }
-
-                return m_loadDatabaseCommand;
-            }
+            get { return m_loadDatabaseCommand ?? (m_loadDatabaseCommand = new RelayCommand(param => ReadDatabase())); }
         }
 
         public ICommand RefreshCommand
         {
-            get
-            {
-                if (m_refreshCommand == null)
-                {
-                    m_refreshCommand = new RelayCommand(param => Refresh());
-                }
-
-                return m_refreshCommand;
-            }
+            get { return m_refreshCommand ?? (m_refreshCommand = new RelayCommand(param => Refresh())); }
         }
 
         private string RestoreDirectory { get; set; }

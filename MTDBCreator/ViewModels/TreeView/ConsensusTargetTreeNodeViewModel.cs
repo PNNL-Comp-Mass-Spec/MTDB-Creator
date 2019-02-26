@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Globalization;
 using MTDBFramework.Data;
 
 namespace MTDBCreator.ViewModels.TreeView
@@ -9,7 +8,7 @@ namespace MTDBCreator.ViewModels.TreeView
         private readonly ConsensusTarget m_consensusTarget;
 
         public ConsensusTargetTreeNodeViewModel(ConsensusTarget ct, TreeNodeViewModel parent)
-            : base(String.Format("{0} ({1} evidences)", ct.EncodedNumericSequence, ct.Evidences.Count), true, parent)
+            : base(string.Format("{0} ({1} evidences)", ct.EncodedNumericSequence, ct.Evidences.Count), true, parent)
         {
             m_consensusTarget = ct;
         }
@@ -18,10 +17,10 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             base.LoadChildNodes();
 
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Theoretical Monoisotopic Mass: ", m_consensusTarget.TheoreticalMonoIsotopicMass.ToString()), this));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Average Net: ", m_consensusTarget.AverageNet.ToString()), this));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Stdev Net: ", m_consensusTarget.StdevNet.ToString()), this));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Predicted NET: ", m_consensusTarget.PredictedNet.ToString()), this));
+            m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Theoretical Monoisotopic Mass: ", m_consensusTarget.TheoreticalMonoIsotopicMass.ToString(CultureInfo.InvariantCulture)), this));
+            m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Average Net: ", m_consensusTarget.AverageNet.ToString(CultureInfo.InvariantCulture)), this));
+            m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Stdev Net: ", m_consensusTarget.StdevNet.ToString(CultureInfo.InvariantCulture)), this));
+            m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Predicted NET: ", m_consensusTarget.PredictedNet.ToString(CultureInfo.InvariantCulture)), this));
 
             m_ChildNodes.Add(new TargetCollectionTreeNodeViewModel(m_consensusTarget.Evidences, this));
         }

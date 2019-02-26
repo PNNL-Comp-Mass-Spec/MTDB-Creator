@@ -34,7 +34,7 @@ namespace MTDBFramework.IO
         {
             private static Dictionary<string, string> ParseNativeId(string nativeId)
             {
-                var tokens = nativeId.Split(new char[] { '\t', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                var tokens = nativeId.Split(new[] { '\t', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
                 var map = new Dictionary<string, string>();
                 foreach (var token in tokens)
                 {
@@ -188,7 +188,7 @@ namespace MTDBFramework.IO
 
             public int Charge { get; set; }
 
-            public List<PeptideEvidence> PepEvidence { get; private set; }
+            public List<PeptideEvidence> PepEvidence { get; }
 
             public int PepEvCount { get; set; }
 
@@ -209,9 +209,7 @@ namespace MTDBFramework.IO
             // ReSharper disable once MemberCanBePrivate.Local
             public bool IsDtaSpectrum { get; set; }
 
-            public int ScanNumCVParam => _scanNum;
-
-            private int _scanNum = -1;
+            private int ScanNumCVParam { get; set; } = -1;
 
             public int ScanNum
             {
@@ -222,9 +220,9 @@ namespace MTDBFramework.IO
                     {
                         return num;
                     }
-                    return _scanNum;
+                    return ScanNumCVParam;
                 }
-                set => _scanNum = value;
+                set => ScanNumCVParam = value;
             }
 
             // ReSharper disable once MemberCanBePrivate.Local
@@ -234,7 +232,7 @@ namespace MTDBFramework.IO
 
         }
 
-        private bool _isFromDTA = false;
+        private bool _isFromDTA;
 
         private class DatabaseSequence
         {
@@ -848,7 +846,7 @@ namespace MTDBFramework.IO
         /// </summary>
         /// <param name="results">Object to populate with the results of the Mapping</param>
         /// <param name="path">Path to MZIdentML file</param>
-        private void MapToMsgf(List<MsgfPlusResult> results, string path)
+        private void MapToMsgf(ICollection<MsgfPlusResult> results, string path)
         {
             var filter = new MsgfPlusTargetFilter(ReaderOptions);
 

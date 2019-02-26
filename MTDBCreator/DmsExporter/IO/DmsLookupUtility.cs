@@ -254,7 +254,7 @@ namespace MTDBCreator.DmsExporter.IO
 
             try
             {
-                int retryCount = MaxRetries;
+                var retryCount = MaxRetries;
                 if (retryCount < 1)
                     retryCount = 1;
 
@@ -688,7 +688,7 @@ namespace MTDBCreator.DmsExporter.IO
                     catch (Exception ex)
                     {
                         retryCount -= 1;
-                        string msg = "Exception querying database in Export: " + ex.Message;
+                        var msg = "Exception querying database in Export: " + ex.Message;
                         msg += ", RetryCount = " + retryCount;
 
                         Console.WriteLine(msg);
@@ -699,14 +699,14 @@ namespace MTDBCreator.DmsExporter.IO
             }
             catch (Exception ex)
             {
-                string msg = "Exception connecting to database in Export: " + ex.Message + "; ConnectionString: " + m_connectionString;
+                var msg = "Exception connecting to database in Export: " + ex.Message + "; ConnectionString: " + m_connectionString;
                 Console.WriteLine(msg);
             }
         }
 
         public Dictionary<string, AmtInfo> GetDatabases()
         {
-            string databaseNameFilter = string.Empty;
+            var databaseNameFilter = string.Empty;
             return GetDatabases(databaseNameFilter);
         }
 
@@ -720,7 +720,7 @@ namespace MTDBCreator.DmsExporter.IO
                           " FROM V_Active_MT_DBs " +
                           " WHERE State_ID < 15";
 
-                int retryCount = MaxRetries;
+                var retryCount = MaxRetries;
                 if (retryCount < 1)
                     retryCount = 1;
 
@@ -757,7 +757,7 @@ namespace MTDBCreator.DmsExporter.IO
                     catch (Exception ex)
                     {
                         retryCount -= 1;
-                        string msg = "Exception querying database in GetDatasets: " + ex.Message;
+                        var msg = "Exception querying database in GetDatasets: " + ex.Message;
                         msg += ", RetryCount = " + retryCount;
 
                         Console.WriteLine(msg);
@@ -769,7 +769,7 @@ namespace MTDBCreator.DmsExporter.IO
             }
             catch (Exception ex)
             {
-                string msg = "Exception connecting to database in GetDatasets: " + ex.Message + "; ConnectionString: " + m_connectionString;
+                var msg = "Exception connecting to database in GetDatasets: " + ex.Message + "; ConnectionString: " + m_connectionString;
                 Console.WriteLine(msg);
             }
 
@@ -791,7 +791,7 @@ namespace MTDBCreator.DmsExporter.IO
                     " SELECT PMT_Quality_Score, MT_Count_Passing_QS, Filter_Set_ID, Filter_Set_Name, Filter_Set_Description " +
                     " FROM V_PMT_Quality_Score_Report ";
 
-                int retryCount = MaxRetries;
+                var retryCount = MaxRetries;
                 if (retryCount < 1)
                     retryCount = 1;
 
@@ -825,7 +825,7 @@ namespace MTDBCreator.DmsExporter.IO
                     catch (Exception ex)
                     {
                         retryCount -= 1;
-                        string msg = "Exception querying database in GetStats: " + ex.Message;
+                        var msg = "Exception querying database in GetStats: " + ex.Message;
                         msg += ", RetryCount = " + retryCount;
 
                         Console.WriteLine(msg);
@@ -837,7 +837,7 @@ namespace MTDBCreator.DmsExporter.IO
             }
             catch (Exception ex)
             {
-                string msg = "Exception connecting to database in GetStats: " + ex.Message + "; ConnectionString: " + m_connectionString;
+                var msg = "Exception connecting to database in GetStats: " + ex.Message + "; ConnectionString: " + m_connectionString;
                 Console.WriteLine(msg);
             }
 

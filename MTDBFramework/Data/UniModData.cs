@@ -57,7 +57,7 @@ namespace MTDBFramework.Data
                 var output = "";
                 if (symbols[symbol] != 0)
                 {
-                    if (Char.IsDigit(symbol[0]))
+                    if (char.IsDigit(symbol[0]))
                     {
                         output += "(" + symbol + ")";
                     }

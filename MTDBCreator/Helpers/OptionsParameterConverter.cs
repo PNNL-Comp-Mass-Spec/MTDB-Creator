@@ -4,26 +4,33 @@ using System.Windows.Data;
 
 namespace MTDBCreator.Helpers
 {
+
     public class OptionsParameterConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var results = new List<string>();
+            var results = new List<string>
+            {
+                // Max MSGF SpecProb
+                (string)values[0],
 
-            results.Add((string)values[0]);
-            results.Add((string)values[1]);
+                // Max MSGF QValue
+                (string)values[1],
 
-            // Regression Type
-            results.Add(values[2].ToString());
-            results.Add((string)values[3]);
+                // Regression Type (AlignmentComboBox)
+                values[2].ToString(),
 
-            // Predictor Type
-            results.Add(values[4].ToString());
+                // OrderTextBox
+                (string)values[3],
 
-            // Filtering Type
-            results.Add(values[5].ToString());
+                // Predictor Type (KangasRadioButton)
+                values[4].ToString(),
 
-            for(int i = 0; i < results.Count; i++)
+                // Filtering Type (SpectralValueRadioButton)
+                values[5].ToString()
+            };
+
+            for(var i = 0; i < results.Count; i++)
             {
                 if (results[i] == "")
                 {

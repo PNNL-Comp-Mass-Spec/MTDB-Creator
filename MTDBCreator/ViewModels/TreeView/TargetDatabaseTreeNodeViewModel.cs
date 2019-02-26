@@ -11,7 +11,7 @@ namespace MTDBCreator.ViewModels.TreeView
 
 
         public TargetDatabaseTreeNodeViewModel(TargetDatabase database)
-            : base(String.Format("Target Database ({0})", database.ConsensusTargets.Count), true)
+            : base(string.Format("Target Database ({0})", database.ConsensusTargets.Count), true)
         {
             m_targetDatabase = database;
 

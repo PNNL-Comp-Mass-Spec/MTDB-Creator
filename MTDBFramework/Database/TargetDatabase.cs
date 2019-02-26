@@ -12,7 +12,7 @@ namespace MTDBFramework.Database
     /// </summary>
     public sealed class TargetDatabase
     {
-        private readonly Dictionary<int, ProteinInformation> m_uniqueProteins;
+        // Unused: private readonly Dictionary<int, ProteinInformation> m_uniqueProteins;
 
         /// <summary>
         /// Constructor
@@ -21,7 +21,7 @@ namespace MTDBFramework.Database
         {
             ConsensusTargets    = new List<ConsensusTarget>();
             Proteins            = new List<ProteinInformation>();
-            m_uniqueProteins    = new Dictionary<int, ProteinInformation>();
+            // Unused: m_uniqueProteins    = new Dictionary<int, ProteinInformation>();
         }
         /// <summary>
         /// Adds a target and its matching proteins to the database (unique)

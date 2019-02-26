@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using MTDBFramework.Data;
 
 namespace MTDBCreator.ViewModels.TreeView
@@ -17,10 +18,10 @@ namespace MTDBCreator.ViewModels.TreeView
         {
             base.LoadChildNodes();
 
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Scan: ", m_evidence.Scan.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Charge: ", m_evidence.Charge.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Mass: ", m_evidence.MonoisotopicMass.ToString())));
-            m_ChildNodes.Add(new TreeNodeViewModel(String.Concat("Observed Net: ", m_evidence.ObservedNet.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Scan: ", m_evidence.Scan.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Charge: ", m_evidence.Charge.ToString())));
+            m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Mass: ", m_evidence.MonoisotopicMass.ToString(CultureInfo.InvariantCulture))));
+            m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Observed Net: ", m_evidence.ObservedNet.ToString(CultureInfo.InvariantCulture))));
             m_ChildNodes.Add(new TreeNodeViewModel(string.Concat("Originating Dataset: ", m_evidence.DataSet.Name)));
         }
     }

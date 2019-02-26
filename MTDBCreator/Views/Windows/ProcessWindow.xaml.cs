@@ -14,7 +14,7 @@ namespace MTDBCreator.Windows
     /// </summary>
     public partial class ProcessWindow : Window
     {
-        public bool MultithreadingEnabled { get; private set; }
+        public bool MultithreadingEnabled { get; }
 
         public object MostRecentResult { get; private set; }
 
@@ -87,7 +87,7 @@ namespace MTDBCreator.Windows
 
         }
 
-        public BackgroundWorker MainBackgroundWorker { get; private set; }
+        public BackgroundWorker MainBackgroundWorker { get; }
         public IBackgroundWorkHelper MainBackgroundWorkHelper { get; set; }
 
     }
