@@ -693,7 +693,7 @@ namespace MTDBCreator.DmsExporter.IO
 
                         Console.WriteLine(msg);
 
-                        System.Threading.Thread.Sleep(3000);
+                        System.Threading.Thread.Sleep(500);
                     }
                 }
             }
@@ -762,8 +762,8 @@ namespace MTDBCreator.DmsExporter.IO
 
                         Console.WriteLine(msg);
 
-                        //Delay for 3 second before trying again
-                        System.Threading.Thread.Sleep(3000);
+                        // Delay 0.5 sec then try again
+                        System.Threading.Thread.Sleep(500);
                     }
                 }
             }
@@ -830,8 +830,8 @@ namespace MTDBCreator.DmsExporter.IO
 
                         Console.WriteLine(msg);
 
-                        //Delay for 3 second before trying again
-                        System.Threading.Thread.Sleep(3000);
+                        // Delay 0.5 sec then try again
+                        System.Threading.Thread.Sleep(500);
                     }
                 }
             }
