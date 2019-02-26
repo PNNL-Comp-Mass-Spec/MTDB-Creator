@@ -1,43 +1,89 @@
-﻿<UserControl x:Class="MTDBCreator.Views.Windows.AmtListView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
-             DataContext="{Binding AmtListViewModel}"
-             d:DesignHeight="800" d:DesignWidth="1280">
+﻿<UserControl
+    x:Class="MTDBCreator.Views.Windows.AmtListView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="800"
+    d:DesignWidth="1280"
+    DataContext="{Binding AmtListViewModel}"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition MaxHeight="60" MinHeight="60"/>
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition MinHeight="60" MaxHeight="60" />
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" Name="MTDBList" ItemsSource="{Binding Path=MTDBList}" SelectedItem="{Binding Path=SelectedDb}">
+        <ListView
+            Name="MTDBList"
+            Grid.Row="0"
+            ItemsSource="{Binding Path=MTDBList}"
+            SelectedItem="{Binding Path=SelectedDb}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="MT DB Name" DisplayMemberBinding="{Binding Path=Name}" Width="180"/>
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Path=Description}" Width="420"/>
-                    <GridViewColumn Header="Organism" DisplayMemberBinding="{Binding Path=Organism}" Width="170"/>
-                    <GridViewColumn Header="Campaign" DisplayMemberBinding="{Binding Path=Campaign}" Width="180"/>
-                    <GridViewColumn Header="State" DisplayMemberBinding="{Binding Path=State}" Width="100"/>
-                    <GridViewColumn Header="State ID" DisplayMemberBinding="{Binding Path=StateId}" Width="90"/>
-                    <GridViewColumn Header="Server Name" DisplayMemberBinding="{Binding Path=Server}" Width="90"/>
+                    <GridViewColumn
+                        Width="180"
+                        DisplayMemberBinding="{Binding Path=Name}"
+                        Header="MT DB Name" />
+                    <GridViewColumn
+                        Width="420"
+                        DisplayMemberBinding="{Binding Path=Description}"
+                        Header="Description" />
+                    <GridViewColumn
+                        Width="170"
+                        DisplayMemberBinding="{Binding Path=Organism}"
+                        Header="Organism" />
+                    <GridViewColumn
+                        Width="180"
+                        DisplayMemberBinding="{Binding Path=Campaign}"
+                        Header="Campaign" />
+                    <GridViewColumn
+                        Width="100"
+                        DisplayMemberBinding="{Binding Path=State}"
+                        Header="State" />
+                    <GridViewColumn
+                        Width="90"
+                        DisplayMemberBinding="{Binding Path=StateId}"
+                        Header="State ID" />
+                    <GridViewColumn
+                        Width="90"
+                        DisplayMemberBinding="{Binding Path=Server}"
+                        Header="Server Name" />
                 </GridView>
             </ListView.View>
         </ListView>
 
-        <ListView Grid.Row="1" Name="QualityStatsList" ItemsSource="{Binding Path=QualityStats}" SelectedItem="{Binding Path=SelectedStats}">
+        <ListView
+            Name="QualityStatsList"
+            Grid.Row="1"
+            ItemsSource="{Binding Path=QualityStats}"
+            SelectedItem="{Binding Path=SelectedStats}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Quality Score" DisplayMemberBinding="{Binding Path=PmtQualityScore}" Width="80"/>
-                    <GridViewColumn Header="Mass Tag Count" DisplayMemberBinding="{Binding Path=MtCountPassing}" Width="120"/>
-                    <GridViewColumn Header="Filter ID" DisplayMemberBinding="{Binding Path=FilterSetId}" Width="60"/>
-                    <GridViewColumn Header="Filter Name" DisplayMemberBinding="{Binding Path=FilterSetName}" Width="300"/>
-                    <GridViewColumn Header="Filter Description" DisplayMemberBinding="{Binding Path=FilterSetDescription}" Width="700"/>
+                    <GridViewColumn
+                        Width="80"
+                        DisplayMemberBinding="{Binding Path=PmtQualityScore}"
+                        Header="Quality Score" />
+                    <GridViewColumn
+                        Width="120"
+                        DisplayMemberBinding="{Binding Path=MtCountPassing}"
+                        Header="Mass Tag Count" />
+                    <GridViewColumn
+                        Width="60"
+                        DisplayMemberBinding="{Binding Path=FilterSetId}"
+                        Header="Filter ID" />
+                    <GridViewColumn
+                        Width="300"
+                        DisplayMemberBinding="{Binding Path=FilterSetName}"
+                        Header="Filter Name" />
+                    <GridViewColumn
+                        Width="700"
+                        DisplayMemberBinding="{Binding Path=FilterSetDescription}"
+                        Header="Filter Description" />
                 </GridView>
             </ListView.View>
         </ListView>
@@ -45,23 +91,35 @@
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="160"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="160"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="160"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="160" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="160" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="160" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Grid.Column="1" Command="{Binding Path=RefreshMTDBsCommand}">Load MT DBs from DMS</Button>
             <Button Grid.Column="3" Command="{Binding Path=GetStatsCommand}">Load Statistics</Button>
             <Button Grid.Column="5" Command="{Binding Path=ExportCommand}">Export</Button>
         </Grid>
 
-        <Border Opacity=".8" Grid.Row="0" Grid.RowSpan="3" BorderBrush="Black" BorderThickness="1" Background="DimGray" VerticalAlignment="Stretch" Visibility="{Binding IsSaving, Converter={StaticResource BoolToVis}}">
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="AntiqueWhite" FontSize="36" FontWeight="Bold"
-                       Text="{Binding Path=SavingString, UpdateSourceTrigger=PropertyChanged}">
-            </TextBlock>
+        <Border
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            VerticalAlignment="Stretch"
+            Background="DimGray"
+            BorderBrush="Black"
+            BorderThickness="1"
+            Opacity=".8"
+            Visibility="{Binding IsSaving, Converter={StaticResource BoolToVis}}">
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="36"
+                FontWeight="Bold"
+                Foreground="AntiqueWhite"
+                Text="{Binding Path=SavingString, UpdateSourceTrigger=PropertyChanged}" />
         </Border>
     </Grid>
 </UserControl>

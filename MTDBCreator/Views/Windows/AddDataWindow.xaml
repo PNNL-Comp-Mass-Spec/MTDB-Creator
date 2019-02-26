@@ -1,116 +1,174 @@
-﻿<Window x:Class="MTDBCreator.Windows.AddDataWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:windows="clr-namespace:MTDBCreator.Windows"
-        Title="Add New Datasets" Width="520" Height="400" MinWidth="520" MinHeight="300"
-        ShowInTaskbar="False" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" Closed="AddDataWindow_Closed">
+﻿<Window
+    x:Class="MTDBCreator.Windows.AddDataWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:windows="clr-namespace:MTDBCreator.Windows"
+    Title="Add New Datasets"
+    Width="520"
+    Height="400"
+    MinWidth="520"
+    MinHeight="300"
+    Closed="AddDataWindow_Closed"
+    ShowInTaskbar="False"
+    WindowStartupLocation="CenterOwner"
+    WindowStyle="ToolWindow">
 
     <Window.Resources>
         <Style TargetType="GridViewColumnHeader">
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
         </Style>
         <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>
     </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="8*"/>
-            <RowDefinition Height="48"/>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="8*" />
+            <RowDefinition Height="48" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="65"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="65" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label Content="Name:" Margin="3,0,0,0" Grid.Row="0" Grid.Column="0"/>
-            <TextBox x:Name="AnalysisJobTitleTextBox"
-                 Grid.Row="0" Grid.Column="1"
-                 Margin="3,3,5,3"
-                 Text="{Binding Path=Title}"/>
+            <Label
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="3,0,0,0"
+                Content="Name:" />
+            <TextBox
+                x:Name="AnalysisJobTitleTextBox"
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="3,3,5,3"
+                Text="{Binding Path=Title}" />
         </Grid>
 
-        <ListView Name="MainListView" Grid.Row="1" ItemsSource="{Binding Path=AnalysisJobItems}">
+        <ListView
+            Name="MainListView"
+            Grid.Row="1"
+            ItemsSource="{Binding Path=AnalysisJobItems}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="FileName" DisplayMemberBinding="{Binding Path=FileName}" Width="350"/>
-                    <GridViewColumn Header="Format" DisplayMemberBinding="{Binding Path=Format}" Width="100"/>
+                    <GridViewColumn
+                        Width="350"
+                        DisplayMemberBinding="{Binding Path=FileName}"
+                        Header="FileName" />
+                    <GridViewColumn
+                        Width="100"
+                        DisplayMemberBinding="{Binding Path=Format}"
+                        Header="Format" />
                 </GridView>
             </ListView.View>
             <ListView.InputBindings>
-                <KeyBinding Key="Delete" Command="{Binding Path=RemoveAnalysisJobCommand}" CommandParameter="{Binding SelectedItems, ElementName=MainListView}"/>
+                <KeyBinding
+                    Key="Delete"
+                    Command="{Binding Path=RemoveAnalysisJobCommand}"
+                    CommandParameter="{Binding SelectedItems, ElementName=MainListView}" />
             </ListView.InputBindings>
         </ListView>
 
         <Grid Grid.Row="2">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="75" />
             </Grid.ColumnDefinitions>
 
-            <Button Name="AddButton" Margin="5" Grid.Column="0" Click="AddButton_Click">
+            <Button
+                Name="AddButton"
+                Grid.Column="0"
+                Margin="5"
+                Click="AddButton_Click">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Images/Buttons/Add.png" Stretch="None"/>
-                        <TextBlock Text="Add >"/>
+                        <Image Source="/Images/Buttons/Add.png" Stretch="None" />
+                        <TextBlock Text="Add &gt;" />
                     </StackPanel>
                 </Button.Content>
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Name="MZIdentMLMenuItem" Header="_MZIdentML..." Tag="MZIdentML" Click="AddFileMenuItem_Click">
+                        <MenuItem
+                            Name="MZIdentMLMenuItem"
+                            Click="AddFileMenuItem_Click"
+                            Header="_MZIdentML..."
+                            Tag="MZIdentML">
                             <MenuItem.Icon>
-                                <Image Source="/Images/Menus/AnalysisFile.png"/>
+                                <Image Source="/Images/Menus/AnalysisFile.png" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Name="AnalysisMenuItem" Header="_Old Analysis Files..." Tag="Analysis Files" Click="AddFileMenuItem_Click">
+                        <MenuItem
+                            Name="AnalysisMenuItem"
+                            Click="AddFileMenuItem_Click"
+                            Header="_Old Analysis Files..."
+                            Tag="Analysis Files">
                             <MenuItem.Icon>
-                                <Image Source="/Images/Menus/AnalysisFile.png"/>
+                                <Image Source="/Images/Menus/AnalysisFile.png" />
                             </MenuItem.Icon>
                         </MenuItem>
 
-                        <MenuItem Name ="DatasetDescriptionMenuItem" Header="_Dataset Description File..." Tag="Description" Click="AddFileMenuItem_Click">
+                        <MenuItem
+                            Name="DatasetDescriptionMenuItem"
+                            Click="AddFileMenuItem_Click"
+                            Header="_Dataset Description File..."
+                            Tag="Description">
                             <MenuItem.Icon>
-                                <Image Source="/Images/Menus/DescriptionFile.png"/>
+                                <Image Source="/Images/Menus/DescriptionFile.png" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
 
-            <Button Name="AddFolderButton" Margin="5" Grid.Column="1" Click="AddFolderButton_Click">
+            <Button
+                Name="AddFolderButton"
+                Grid.Column="1"
+                Margin="5"
+                Click="AddFolderButton_Click">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Images/Buttons/Add.png" Stretch="None"/>
-                        <TextBlock Text="Add Folder>"/>
+                        <Image Source="/Images/Buttons/Add.png" Stretch="None" />
+                        <TextBlock Text="Add Folder&gt;" />
                     </StackPanel>
                 </Button.Content>
                 <Button.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Name="MZIdentMLFolderItem" Header="_MZIdentML..." Tag="MZIdentML" Click="AddFolderFileMenuItem_Click">
+                        <MenuItem
+                            Name="MZIdentMLFolderItem"
+                            Click="AddFolderFileMenuItem_Click"
+                            Header="_MZIdentML..."
+                            Tag="MZIdentML">
                             <MenuItem.Icon>
-                                <Image Source="/Images/Menus/AnalysisFile.png"/>
+                                <Image Source="/Images/Menus/AnalysisFile.png" />
                             </MenuItem.Icon>
                         </MenuItem>
 
-                        <MenuItem Name="AnalysisFolderItem" Header="_Old Analysis Files..." Tag="Analysis Files" Click="AddFolderFileMenuItem_Click">
+                        <MenuItem
+                            Name="AnalysisFolderItem"
+                            Click="AddFolderFileMenuItem_Click"
+                            Header="_Old Analysis Files..."
+                            Tag="Analysis Files">
                             <MenuItem.Icon>
-                                <Image Source="/Images/Menus/AnalysisFile.png"/>
+                                <Image Source="/Images/Menus/AnalysisFile.png" />
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
                 </Button.ContextMenu>
             </Button>
 
-            <Button Grid.Column="2" Margin="5"  Command="{Binding Path=RemoveAnalysisJobCommand}" CommandParameter="{Binding SelectedItems, ElementName=MainListView}">
+            <Button
+                Grid.Column="2"
+                Margin="5"
+                Command="{Binding Path=RemoveAnalysisJobCommand}"
+                CommandParameter="{Binding SelectedItems, ElementName=MainListView}">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
@@ -122,13 +180,17 @@
                 </Button.Style>
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Images/Buttons/Remove.png" Stretch="None"/>
-                        <TextBlock Text="Remove"/>
+                        <Image Source="/Images/Buttons/Remove.png" Stretch="None" />
+                        <TextBlock Text="Remove" />
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <Button x:Name="OptionsButton" Margin="5"  Grid.Column="3" Click="OptionsButton_Click" >
+            <Button
+                x:Name="OptionsButton"
+                Grid.Column="3"
+                Margin="5"
+                Click="OptionsButton_Click">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Setter Property="IsEnabled" Value="True" />
@@ -137,13 +199,20 @@
 
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Images/Buttons/Options.png" Stretch="None"/>
-                        <TextBlock Text="Options..."/>
+                        <Image Source="/Images/Buttons/Options.png" Stretch="None" />
+                        <TextBlock Text="Options..." />
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <Button Grid.Column="4" Margin="5"  Content="_OK" IsDefault="True" Click="OkButton_Click" Command="{Binding Path=ProcessAnalysisJobCommand}" CommandParameter="{Binding Path=WorkspaceViewModel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=windows:AddDataWindow}}">
+            <Button
+                Grid.Column="4"
+                Margin="5"
+                Click="OkButton_Click"
+                Command="{Binding Path=ProcessAnalysisJobCommand}"
+                CommandParameter="{Binding Path=WorkspaceViewModel, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=windows:AddDataWindow}}"
+                Content="_OK"
+                IsDefault="True">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
@@ -158,7 +227,12 @@
                 </Button.Style>
             </Button>
 
-            <Button Grid.Column="5" Margin="5"  Content="_Cancel" IsCancel="True" Click="CancelButton_Click"/>
+            <Button
+                Grid.Column="5"
+                Margin="5"
+                Click="CancelButton_Click"
+                Content="_Cancel"
+                IsCancel="True" />
         </Grid>
     </Grid>
 </Window>

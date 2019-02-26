@@ -1,15 +1,21 @@
-﻿<Window x:Class="MTDBCreator.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:page="clr-namespace:MTDBCreator.PageControls"
-        Title="MTDB Creator" Tag="MTDB Creator" MinWidth="640" MinHeight="480" WindowState="Maximized" Icon="PNNLLogo.ico">
+﻿<Window
+    x:Class="MTDBCreator.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:page="clr-namespace:MTDBCreator.PageControls"
+    Title="MTDB Creator"
+    MinWidth="640"
+    MinHeight="480"
+    Icon="PNNLLogo.ico"
+    Tag="MTDB Creator"
+    WindowState="Maximized">
 
     <TabControl Name="MainTabControl" TabStripPlacement="Bottom">
         <TabItem Name="HomeTabPage">
             <TabItem.Header>
-                <Image Source="Images/Pages/HomePage.png" Stretch="None"/>
+                <Image Source="Images/Pages/HomePage.png" Stretch="None" />
             </TabItem.Header>
-            <page:HomePageUserControl/>
+            <page:HomePageUserControl />
         </TabItem>
     </TabControl>
 </Window>
