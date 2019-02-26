@@ -114,9 +114,8 @@ namespace MTDBCreator.ViewModels
 
         public void Save(object param)
         {
-            var parameter = param as IList;
             // General
-            if (parameter != null)
+            if (param is IList parameter)
             {
                 Options.MaxMsgfSpecProb = Convert.ToDouble(parameter[0]);
                 Options.MsgfQValue = Convert.ToDouble(parameter[1]);
@@ -125,6 +124,7 @@ namespace MTDBCreator.ViewModels
                 Options.RegressionType = (Convert.ToString(parameter[2]) == "LinearEm")
                     ? RegressionType.LinearEm
                     : RegressionType.MixtureRegression;
+
                 Options.RegressionOrder = (Convert.ToInt16(parameter[3]));
 
                 // Predictor Type

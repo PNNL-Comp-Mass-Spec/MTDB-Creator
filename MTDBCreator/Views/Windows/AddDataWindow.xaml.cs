@@ -60,19 +60,17 @@ namespace MTDBCreator.Windows
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            AddButton.ContextMenu.IsOpen = true;
+            if (AddButton.ContextMenu != null) AddButton.ContextMenu.IsOpen = true;
         }
 
         private void AddFolderButton_Click(object sender, RoutedEventArgs e)
         {
-            AddFolderButton.ContextMenu.IsOpen = true;
+            if (AddFolderButton.ContextMenu != null) AddFolderButton.ContextMenu.IsOpen = true;
         }
 
         private void AddFolderFileMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var addFolderFileMenuItem = e.Source as MenuItem;
-
-            if (addFolderFileMenuItem != null)
+            if (e.Source is MenuItem addFolderFileMenuItem)
             {
                 var formatInfo = FileDialogFormatInfoFactory.Create(addFolderFileMenuItem.Tag.ToString());
 
@@ -134,9 +132,7 @@ namespace MTDBCreator.Windows
 
         private void AddFileMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var addFileMenuItem = e.Source as MenuItem;
-
-            if (addFileMenuItem != null)
+            if (e.Source is MenuItem addFileMenuItem)
             {
                 var formatInfo = FileDialogFormatInfoFactory.Create(addFileMenuItem.Tag.ToString());
 
@@ -151,7 +147,7 @@ namespace MTDBCreator.Windows
 
                 var dialogRes = openFileDialog.ShowDialog();
 
-                if (dialogRes.HasValue && dialogRes.Value == true)
+                if (dialogRes.HasValue && dialogRes.Value)
                 {
                     if (formatInfo.Format != LcmsIdentificationTool.Description)
                     {
@@ -197,10 +193,12 @@ namespace MTDBCreator.Windows
                             }
                             catch
                             {
+                                var caption = Application.Current.MainWindow?.Tag.ToString() ?? "Error";
+
                                 MessageBox.Show(
-                                    this, String.Format(
+                                    this, string.Format(
                                         "MTDB Creator cannot read this file.{0}This is not a valid Dataset Description file, or its format is not correct.{0}{0}{1}",
-                                        Environment.NewLine, fileName), Application.Current.MainWindow.Tag.ToString(),
+                                        Environment.NewLine, fileName), caption,
                                     MessageBoxButton.OK, MessageBoxImage.Warning);
                             }
                         }
@@ -254,9 +252,7 @@ namespace MTDBCreator.Windows
                 }
                 else if (e.Result is TargetDatabase)
                 {
-                    var mainWindow = Application.Current.MainWindow as MainWindow;
-
-                    if (mainWindow != null)
+                    if (Application.Current.MainWindow is MainWindow mainWindow)
                     {
                         mainWindow.NewWorkspacePage(AnalysisJobViewModel);
 

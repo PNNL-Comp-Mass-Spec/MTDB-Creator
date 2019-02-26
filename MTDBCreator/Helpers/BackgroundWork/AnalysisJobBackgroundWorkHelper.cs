@@ -59,9 +59,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
         {
             HostProcessWindow.MainProgressBar.IsIndeterminate = false;
 
-            var userStates = e.UserState as object[];
-
-            if (userStates != null)
+            if (e.UserState is object[] userStates)
             {
                 var total = Convert.ToInt32(userStates[0].ToString());
                 var status = userStates[1].ToString();
@@ -105,9 +103,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
         private void analysisJobProcessor_ProgressChanged(object sender, MtdbProgressChangedEventArgs e)
         {
-            var analysisJobItem = e.UserObject as AnalysisJobItem;
-
-            if (analysisJobItem == null)
+            if (!(e.UserObject is AnalysisJobItem analysisJobItem))
             {
                 if (!string.IsNullOrEmpty(e.CurrentTask))
                 {

@@ -464,6 +464,13 @@ namespace MTDBFramework.Data
             reader.MoveToContent();
 
             var title = reader.GetAttribute("title");
+            if (title == null)
+            {
+                // Invalid item; ignore it
+                reader.Close();
+                return;
+            }
+
             var fullName = reader.GetAttribute("full_name");
             var monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
             var avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));
@@ -504,6 +511,13 @@ namespace MTDBFramework.Data
             reader.MoveToContent();
 
             var title = reader.GetAttribute("title");
+            if (title == null)
+            {
+                // Invalid item; ignore it
+                reader.Close();
+                return;
+            }
+
             var fullName = reader.GetAttribute("full_name");
             var recordId = Convert.ToInt32(reader.GetAttribute("record_id"));
 
@@ -550,6 +564,13 @@ namespace MTDBFramework.Data
             reader.MoveToContent(); // Move to the "aa" element
 
             var title = reader.GetAttribute("title");
+            if (title == null)
+            {
+                // Invalid item; ignore it
+                reader.Close();
+                return;
+            }
+
             var shortName = reader.GetAttribute("three_letter");
             var fullName = reader.GetAttribute("full_name");
             var monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
@@ -592,6 +613,13 @@ namespace MTDBFramework.Data
             reader.MoveToContent(); // Move to the "aa" element
 
             var title = reader.GetAttribute("title");
+            if (title == null)
+            {
+                // Invalid item; ignore it
+                reader.Close();
+                return;
+            }
+
             var fullName = reader.GetAttribute("full_name");
             var monoMass = Convert.ToDouble(reader.GetAttribute("mono_mass"));
             var avgMass = Convert.ToDouble(reader.GetAttribute("avge_mass"));

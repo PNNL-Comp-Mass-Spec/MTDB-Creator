@@ -35,7 +35,9 @@ namespace MTDBFramework.IO
 
                     if (analysisJobItems[analysisJobItems.Count - 1].FilePath.StartsWith(@"."))
                     {
-                        Environment.CurrentDirectory = Path.GetDirectoryName(path);
+                        var workDir = Path.GetDirectoryName(path);
+
+                        Environment.CurrentDirectory = workDir ?? throw new DirectoryNotFoundException("Unable to determine the parent directory of " + path);
 
                         analysisJobItems[analysisJobItems.Count - 1].FilePath = Path.GetFullPath(analysisJobItems[analysisJobItems.Count - 1].FilePath);
                     }

@@ -38,13 +38,9 @@ namespace MTDBCreator
 
         private void TabPageCloseButton_Click(object sender, RoutedEventArgs e)
         {
-            var currentCloseButton = e.Source as Button;
-
-            if (currentCloseButton != null)
+            if (e.Source is Button currentCloseButton)
             {
-                var tabItem = currentCloseButton.Tag as TabItem;
-
-                if (tabItem != null)
+                if (currentCloseButton.Tag is TabItem tabItem)
                 {
                     MainTabControl.Items.Remove(tabItem);
                 }

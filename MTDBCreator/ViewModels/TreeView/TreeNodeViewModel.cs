@@ -53,10 +53,7 @@ namespace MTDBCreator.ViewModels.TreeView
 
                     if (value)
                     {
-                        if (ItemSelected != null)
-                        {
-                            ItemSelected(this, new EventArgs());
-                        }
+                        ItemSelected?.Invoke(this, new EventArgs());
                     }
                 }
             }

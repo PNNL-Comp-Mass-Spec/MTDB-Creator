@@ -69,9 +69,7 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
             if (e.ProgressPercentage >= 0)
             {
-                var userStates = e.UserState as object[];
-
-                if (userStates != null)
+                if (e.UserState is object[] userStates)
                 {
                     var total = Convert.ToInt32(userStates[0].ToString());
                     var status = userStates[1].ToString();
