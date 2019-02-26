@@ -48,12 +48,24 @@ namespace MTDBFrameworkBase.Data
         /// <summary>
         /// The Prefix Residue
         /// </summary>
-        public char PrefixResidue => string.IsNullOrWhiteSpace(m_sequence) ? '\0' : m_sequence.First();
+        public char PrefixResidue
+        {
+            get => string.IsNullOrWhiteSpace(m_sequence) ? '\0' : m_sequence.First();
+            // ReSharper disable once ValueParameterNotUsed
+            // ReSharper disable once UnusedMember.Local
+            private set { /* Empty setter; setter required for database reading */ }
+        }
 
         /// <summary>
         /// The Suffix Residue
         /// </summary>
-        public char SuffixResidue => string.IsNullOrWhiteSpace(m_sequence) ? '\0' : m_sequence.Last();
+        public char SuffixResidue
+        {
+            get => string.IsNullOrWhiteSpace(m_sequence) ? '\0' : m_sequence.Last();
+            // ReSharper disable once ValueParameterNotUsed
+            // ReSharper disable once UnusedMember.Local
+            private set { /* Empty setter; setter required for database reading */ }
+        }
 
         /// <summary>
         /// The ConsensusTarget/ProteinInformation relations
