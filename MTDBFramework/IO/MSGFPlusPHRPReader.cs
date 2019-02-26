@@ -106,6 +106,7 @@ namespace MTDBFramework.IO
             // Calculate the Normalized Elution Times
             ComputeNETs(results);
 
+            UpdateProgress(PROGRESS_PCT_COMPLETE, "Loading complete");
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MsgfPlus, results);
         }
