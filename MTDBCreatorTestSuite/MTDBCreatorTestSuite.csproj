@@ -91,6 +91,9 @@
     <PackageReference Include="PRISM-Library">
       <Version>2.5.11</Version>
     </PackageReference>
+    <PackageReference Include="PSI_Interface">
+      <Version>1.3.30</Version>
+    </PackageReference>
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.97</Version>
     </PackageReference>
