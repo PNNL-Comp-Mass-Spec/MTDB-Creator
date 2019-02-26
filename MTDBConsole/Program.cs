@@ -9,7 +9,7 @@ namespace MTDBConsole
 {
     class Program
     {
-        private const string PROGRAM_DATE = "September 11, 2018";
+        private const string PROGRAM_DATE = "February 25, 2019";
 
         public static CommandOptions CommandOptions;
 
