@@ -74,6 +74,7 @@
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="DmsExporter\Data\AmtInfo.cs" />
     <Compile Include="DmsExporter\Data\AmtPeptideOptions.cs" />
+    <Compile Include="DmsExporter\IO\DbValueUtilities.cs" />
     <Compile Include="DmsExporter\IO\DmsLookupUtility.cs" />
     <Compile Include="DmsExporter\IO\TextToDbConverterFactory.cs" />
     <Compile Include="DmsExporter\IO\TextToMtdbConverter.cs" />
