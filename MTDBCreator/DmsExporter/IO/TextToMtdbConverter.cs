@@ -62,14 +62,33 @@ namespace MTDBCreator.DmsExporter.IO
 
             PutDataIntoDatabase(path);
 
-            File.Delete(directory + "tempMassTags.txt");
-            File.Delete(directory + "tempPeptides.txt");
-            File.Delete(directory + "tempModInfo.txt");
-            File.Delete(directory + "tempMassTagsNet.txt");
-            File.Delete(directory + "tempProteins.txt");
-            File.Delete(directory + "tempMassTagToProteins.txt");
-            File.Delete(directory + "tempAnalysisDescription.txt");
-            File.Delete(directory + "tempFilterSet.txt");
+            DeleteIfExists(directoryPath, "tempMassTags.txt");
+            DeleteIfExists(directoryPath, "tempPeptides.txt");
+            DeleteIfExists(directoryPath, "tempModInfo.txt");
+            DeleteIfExists(directoryPath, "tempMassTagsNet.txt");
+            DeleteIfExists(directoryPath, "tempProteins.txt");
+            DeleteIfExists(directoryPath, "tempMassTagToProteins.txt");
+            DeleteIfExists(directoryPath, "tempAnalysisDescription.txt");
+            DeleteIfExists(directoryPath, "tempFilterSet.txt");
+
+            return success1 && success2 && success3;
+        }
+
+        private void DeleteIfExists(string directoryPath, string fileName)
+        {
+            try
+            {
+
+                var fileToDelete = new FileInfo(Path.Combine(directoryPath, fileName));
+                if (!fileToDelete.Exists)
+                    return;
+
+                fileToDelete.Delete();
+            }
+            catch (Exception ex)
+            {
+                ConsoleMsgUtils.ShowWarning(string.Format("Unable to delete {0} in {1}: {2}", fileName, directoryPath, ex.Message));
+            }
         }
 
         private bool PutDataIntoDatabase(string dbFilePath)
