@@ -98,19 +98,18 @@ namespace MTDBCreator.Helpers.BackgroundWork
         {
             if (e.Cancelled)
             {
-                MessageBox.Show(String.Format("Processing was cancelled prior to completion"));
+                MessageBox.Show("Processing was cancelled prior to completion");
             }
             else
             {
-                if (e.Result is Exception)
+                if (e.Result is Exception ex)
                 {
-                    var ex = e.Result as Exception;
-
                     ErrorHelper.WriteExceptionTraceInformation(ex);
 
+                    var caption = Application.Current.MainWindow?.Tag.ToString() ?? "Error";
                     MessageBox.Show(
-                        String.Format("The following exception has occurred:{0}{0}{1}", Environment.NewLine, ex.Message),
-                        Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Error);
+                        string.Format("The following exception has occurred:{0}{0}{1}", Environment.NewLine, ex.Message),
+                        caption, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {

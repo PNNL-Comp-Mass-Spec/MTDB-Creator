@@ -10,6 +10,6 @@
         /// at designated path
         /// </summary>
         /// <param name="path">Location of saved database</param>
-        void ConvertToDbFormat(string path);
+        bool ConvertToDbFormat(string path);
     }
 }

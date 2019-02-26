@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.IO;
+using PRISM;
 
 namespace MTDBCreator.DmsExporter.IO
 {
@@ -56,11 +58,11 @@ namespace MTDBCreator.DmsExporter.IO
                 outFile.Delete();
             }
 
-            RetrieveDataFromTextFiles(directory);
+            var success1 = RetrieveDataFromTextFiles(directoryPath);
 
-            CreateDataTables(path);
+            var success2 = CreateDataTables(outFilePath);
 
-            PutDataIntoDatabase(path);
+            var success3 = PutDataIntoDatabase(outFilePath);
 
             DeleteIfExists(directoryPath, "tempMassTags.txt");
             DeleteIfExists(directoryPath, "tempPeptides.txt");
@@ -217,11 +219,36 @@ namespace MTDBCreator.DmsExporter.IO
                     }
                 }
             }
+
+            return true;
         }
 
-        private void RetrieveDataFromTextFiles(string directory)
+        private bool RetrieveDataFromTextFiles(string directoryPath)
         {
-            using (var reader = new StreamReader(directory + "tempModInfo.txt"))
+            var returnFlags = new List<bool>
+            {
+                RetrieveDataFromModInfoFile(directoryPath),
+                RetrieveDataFromMassTagsFile(directoryPath),
+                RetrieveDataFromMassTagsNETFile(directoryPath),
+                RetrieveDataFromModProteinsFile(directoryPath),
+                RetrieveDataFromMassTagToProteinsFile(directoryPath),
+                RetrieveDataFromPeptidesFile(directoryPath)
+            };
+
+            return returnFlags.All(value => value);
+        }
+
+        private bool RetrieveDataFromModInfoFile(string directoryPath)
+        {
+
+            var modInfoFile = new FileInfo(Path.Combine(directoryPath, "tempModInfo.txt"));
+            if (!modInfoFile.Exists)
+            {
+                ConsoleMsgUtils.ShowWarning("File not found: " + modInfoFile.FullName);
+                return false;
+            }
+
+            using (var reader = new StreamReader(modInfoFile.FullName))
             {
                 reader.ReadLine();
                 var row = reader.ReadLine();
@@ -234,11 +261,23 @@ namespace MTDBCreator.DmsExporter.IO
                 }
             }
 
+            return true;
+        }
+
+        private bool RetrieveDataFromMassTagsFile(string directoryPath)
+        {
+            var massTagsFile = new FileInfo(Path.Combine(directoryPath, "tempMassTags.txt"));
+            if (!massTagsFile.Exists)
+            {
+                ConsoleMsgUtils.ShowWarning("File not found: " + massTagsFile.FullName);
+                return false;
+            }
+
             var ptmId = 1;
             var targetId = 1;
             var ctToPtmId = 1;
 
-            using (var reader = new StreamReader(directory + "tempMassTags.txt"))
+            using (var reader = new StreamReader(massTagsFile.FullName))
             {
                 reader.ReadLine();
                 var row = reader.ReadLine();
@@ -257,8 +296,7 @@ namespace MTDBCreator.DmsExporter.IO
                         {
                             var modPieces = mod.Split(':');
                             var modMass = m_modTagsToModMass[modPieces[0]].Item1;
-                            var ptm = new PostTranslationalModification();
-                            ptm.Name = modPieces[0];
+                            var ptm = new PostTranslationalModification {Name = modPieces[0]};
                             if (!m_ptmDictionary.ContainsKey(ptm.Name))
                             {
                                 ptm.Mass = modMass;
@@ -287,11 +325,11 @@ namespace MTDBCreator.DmsExporter.IO
                     {
                         if (ptm.Location == rowPieces[1].Length)
                         {
-                            rowPieces[1] += ptm.Mass.ToString();
+                            rowPieces[1] += ptm.Mass.ToString(CultureInfo.InvariantCulture);
                         }
                         else
                         {
-                            rowPieces[1] = fullSequence.Insert(ptm.Location, ptm.Mass.ToString());
+                            rowPieces[1] = fullSequence.Insert(ptm.Location, ptm.Mass.ToString(CultureInfo.InvariantCulture));
                         }
                     }
                     target.EncodedNumericSequence = rowPieces[1];
@@ -307,7 +345,19 @@ namespace MTDBCreator.DmsExporter.IO
                 }
             }
 
-            using (var reader = new StreamReader(directory + "tempMassTagsNet.txt"))
+            return true;
+        }
+
+        private bool RetrieveDataFromMassTagsNETFile(string directoryPath)
+        {
+            var massTagsNETFile = new FileInfo(Path.Combine(directoryPath, "tempMassTagsNet.txt"));
+            if (!massTagsNETFile.Exists)
+            {
+                ConsoleMsgUtils.ShowWarning("File not found: " + massTagsNETFile.FullName);
+                return false;
+            }
+
+            using (var reader = new StreamReader(Path.Combine(directoryPath, massTagsNETFile.FullName)))
             {
                 reader.ReadLine();
                 var row = reader.ReadLine();
@@ -324,8 +374,20 @@ namespace MTDBCreator.DmsExporter.IO
                 }
             }
 
+            return true;
+        }
+
+        private bool RetrieveDataFromModProteinsFile(string directoryPath)
+        {
+            var proteinsFile = new FileInfo(Path.Combine(directoryPath, "tempProteins.txt"));
+            if (!proteinsFile.Exists)
+            {
+                ConsoleMsgUtils.ShowWarning("File not found: " + proteinsFile.FullName);
+                return false;
+            }
+
             var proteinId = 1;
-            using (var reader = new StreamReader(directory + "tempProteins.txt"))
+            using (var reader = new StreamReader(Path.Combine(directoryPath, proteinsFile.FullName)))
             {
                 reader.ReadLine();
                 var row = reader.ReadLine();
@@ -341,8 +403,20 @@ namespace MTDBCreator.DmsExporter.IO
                 }
             }
 
+            return true;
+        }
+
+        private bool RetrieveDataFromMassTagToProteinsFile(string directoryPath)
+        {
+            var massTagToProteinsFile = new FileInfo(Path.Combine(directoryPath, "tempMassTagToProteins.txt"));
+            if (!massTagToProteinsFile.Exists)
+            {
+                ConsoleMsgUtils.ShowWarning("File not found: " + massTagToProteinsFile.FullName);
+                return false;
+            }
+
             var cppId = 1;
-            using (var reader = new StreamReader(directory + "tempMassTagToProteins.txt"))
+            using (var reader = new StreamReader(Path.Combine(directoryPath, massTagToProteinsFile.FullName)))
             {
                 reader.ReadLine();
                 var row = reader.ReadLine();
@@ -367,9 +441,20 @@ namespace MTDBCreator.DmsExporter.IO
                 }
             }
 
-            var totalCharges = 0;
+            return true;
+        }
+
+        private bool RetrieveDataFromPeptidesFile(string directoryPath)
+        {
+            var peptidesFile = new FileInfo(Path.Combine(directoryPath, "tempPeptides.txt"));
+            if (!peptidesFile.Exists)
+            {
+                ConsoleMsgUtils.ShowWarning("File not found: " + peptidesFile.FullName);
+                return false;
+            }
+
             var evId = 1;
-            using (var reader = new StreamReader(directory + "tempPeptides.txt"))
+            using (var reader = new StreamReader(Path.Combine(directoryPath, peptidesFile.FullName)))
             {
                 reader.ReadLine();
                 var row = reader.ReadLine();
@@ -419,12 +504,14 @@ namespace MTDBCreator.DmsExporter.IO
                     row = reader.ReadLine();
                 }
             }
+
+            return true;
         }
 
-        private void CreateDataTables(string path)
+        private bool CreateDataTables(string dbFilePath)
         {
-            SQLiteConnection.CreateFile(path);
-            var dbConnection = new SQLiteConnection("Data Source=" + path + ";Version=3;");
+            SQLiteConnection.CreateFile(dbFilePath);
+            var dbConnection = new SQLiteConnection("Data Source=" + dbFilePath + ";Version=3;");
             dbConnection.Open();
 
             var protTableCreate = "Create table ProteinInformation " +
@@ -501,8 +588,9 @@ namespace MTDBCreator.DmsExporter.IO
             command = new SQLiteCommand(ctPtmPairCreate, dbConnection);
             command.ExecuteNonQuery();
 
-
             dbConnection.Close();
+
+            return true;
         }
     }
 }

@@ -99,7 +99,8 @@ namespace MTDBCreator.Helpers.BackgroundWork
                 }
                 else
                 {
-                    MessageBox.Show(msg, Application.Current.MainWindow.Tag.ToString(), MessageBoxButton.OK, MessageBoxImage.Information);
+                    var caption = Application.Current.MainWindow?.Tag.ToString() ?? "Error";
+                    MessageBox.Show(msg, caption, MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }
