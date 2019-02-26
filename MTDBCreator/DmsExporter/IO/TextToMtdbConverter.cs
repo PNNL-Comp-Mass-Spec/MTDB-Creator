@@ -27,8 +27,8 @@ namespace MTDBCreator.DmsExporter.IO
         /// <summary>
         /// Writes as the data from DMS to the MTDB format
         /// </summary>
-        /// <param name="path">Location of the written database</param>
-        public void ConvertToDbFormat(string path)
+        /// <param name="outFilePath">Location of the written database</param>
+        public bool ConvertToDbFormat(string outFilePath)
         {
             m_idToMassTagDict = new Dictionary<int, string>();
             m_idToConensusTargetDict = new Dictionary<int, ConsensusTarget>();
@@ -41,22 +41,17 @@ namespace MTDBCreator.DmsExporter.IO
             m_ctToEvidenceMap = new Dictionary<int, List<int>>();
             m_evidenceDict = new Dictionary<int, Evidence>();
 
-            if (File.Exists(path))
+            var outFile = new FileInfo(outFilePath);
+
+            var directoryPath = outFile.DirectoryName;
+            if (directoryPath == null)
             {
-                File.Delete(path);
+                throw new DirectoryNotFoundException("Unable to determine the parent directory of " + outFilePath);
             }
 
-
-            var pieces = path.Split('\\');
-            string directory = "";
-            foreach (var piece in pieces)
+            if (outFile.Exists)
             {
-                if (piece.Contains("."))
-                {
-                    continue;
-                }
-                directory += piece;
-                directory += "\\";
+                outFile.Delete();
             }
 
             RetrieveDataFromTextFiles(directory);
@@ -75,9 +70,9 @@ namespace MTDBCreator.DmsExporter.IO
             File.Delete(directory + "tempFilterSet.txt");
         }
 
-        private void PutDataIntoDatabase(string path)
+        private bool PutDataIntoDatabase(string dbFilePath)
         {
-            using (var dbConnection = new SQLiteConnection("Data Source=" + path + ";Version=3;"))
+            using (var dbConnection = new SQLiteConnection("Data Source=" + dbFilePath + ";Version=3;"))
             {
                 dbConnection.Open();
 

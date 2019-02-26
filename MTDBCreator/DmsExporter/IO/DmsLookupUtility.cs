@@ -233,21 +233,19 @@ namespace MTDBCreator.DmsExporter.IO
         /// files which are deleted when the database is fully written. This
         /// workflow is necesary for the batch writing to sql or access file
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="outFilePath"></param>
         /// <param name="selectedDb"></param>
         /// <param name="selectedStats"></param>
-        public void ExportToText(string path, AmtInfo selectedDb, AmtPeptideOptions selectedStats)
+        /// <returns>True if success, otherwise false</returns>
+        public bool ExportToText(string outFilePath, AmtInfo selectedDb, AmtPeptideOptions selectedStats)
         {
-            var pieces = path.Split('\\');
-            string directory = "";
-            foreach (var piece in pieces)
+            var outFile = new FileInfo(outFilePath);
+
+            var directoryPath = outFile.DirectoryName;
+            if (directoryPath == null)
             {
-                if (piece.Contains("."))
-                {
-                    continue;
-                }
-                directory += piece;
-                directory += "\\";
+                ConsoleMsgUtils.ShowWarning("Unable to determine the parent directory of " + outFilePath);
+                return false;
             }
 
             var connectionString = string.Format("Data Source={0};Initial Catalog={1};Integrated Security=SSPI;",
@@ -274,7 +272,7 @@ namespace MTDBCreator.DmsExporter.IO
                             var reader = cmd.ExecuteReader();
 
                             var modDescriptions = new List<string>();
-                            using (var writer = new StreamWriter(directory + "tempMassTags.txt"))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempMassTags.txt")))
                             {
                                 var header = string.Format("{0}{18}{1}{18}{2}{18}{3}{18}{4}{18}{5}{18}{6}{18}{7}{18}{8}{18}{9}{18}{10}{18}{11}{18}{12}{18}{13}{18}{14}{18}{15}{18}{16}{18}{17}",
                                                             "Mass_Tag_ID",
@@ -340,7 +338,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(chargeSql, connection);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempPeptides.txt"))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempPeptides.txt")))
                             {
                                 var header = string.Format("{0}{7}{1}{7}{2}{7}{3}{7}{4}{7}{5}{7}{6}",
                                                             "Mass_Tag_ID",
@@ -377,7 +375,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(massTagModsSql, mainDb);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempModInfo.txt"))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempModInfo.txt")))
                             {
                                 var header = string.Format("{0}{3}{1}{3}{2}",
                                                             "Mod_tag",
@@ -402,7 +400,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(massTagNetSql, connection);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempMassTagsNet.txt"))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempMassTagsNet.txt")))
                             {
                                 var header = string.Format("{0}{8}{1}{8}{2}{8}{3}{8}{4}{8}{5}{8}{6}{8}{7}",
                                                             "Mass_Tag_ID",
@@ -439,7 +437,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(proteinsSql, connection);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempProteins.txt"))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempProteins.txt")))
                             {
                                 var header = string.Format("{0}{11}\"{1}\"{11}\"{2}\"{11}{3}{11}{4}{11}{5}{11}{6}{11}{7}{11}{8}{11}{9}{11}{10}",
                                                             "Ref_ID",
@@ -480,7 +478,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(proteinsNullCollectionSql, connection);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempProteins.txt", true))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempProteins.txt"), true))
                             {
                                 while (reader.Read())
                                 {
@@ -509,7 +507,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(massTagToProt, connection);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempMassTagToProteins.txt"))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempMassTagToProteins.txt")))
                             {
                                 var header = string.Format("{0}{11}{1}{11}{2}{11}{3}{11}{4}{11}{5}{11}{6}{11}{7}{11}{8}{11}{9}{11}{10}",
                                                             "Mass_Tag_ID",
@@ -549,7 +547,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(massTagNullToProt, connection);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempMassTagToProteins.txt", true))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempMassTagToProteins.txt"), true))
                             {
                                 while (reader.Read())
                                 {
@@ -576,7 +574,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(analysisDescription, connection);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempAnalysisDescription.txt"))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempAnalysisDescription.txt")))
                             {
                                 var fieldNames = string.Format("{0}{30}{1}{30}{2}{30}{3}{30}{4}{30}{5}{30}{6}{30}{7}{30}{8}{30}{9}{30}{10}{30}{11}{30}{12}{30}{13}{30}{14}{30}{15}{30}{16}{30}{17}{30}{18}{30}{19}{30}{20}{30}{21}{30}{22}{30}{23}{30}{24}{30}{25}{30}{26}{30}{27}{30}{28}{30}{29}",
                                                             "Job",
@@ -658,7 +656,7 @@ namespace MTDBCreator.DmsExporter.IO
                             cmd = new SqlCommand(filterSet, connection);
                             reader = cmd.ExecuteReader();
 
-                            using (var writer = new StreamWriter(directory + "tempFilterSet.txt"))
+                            using (var writer = new StreamWriter(Path.Combine(directoryPath, "tempFilterSet.txt")))
                             {
                                 var header = string.Format("{0}{5}{1}{5}{2}{5}{3}{5}{4}",
                                                             "Filter_Type",

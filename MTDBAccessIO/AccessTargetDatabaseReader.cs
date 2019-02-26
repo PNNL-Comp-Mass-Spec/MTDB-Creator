@@ -12,68 +12,57 @@ namespace MTDBAccessIO
     public class AccessTargetDatabaseReader: ITargetDatabaseReader
     {
 
-        public IEnumerable<LcmsDataSet> Read(string path)
+        public IEnumerable<LcmsDataSet> Read(string sourceFilePath)
         {
             // Read in the data from the access database
             // put it into a text file (?)
             // Read the data from the text file into program
             var accApplication = new ACCESS.Application();
 
-            var pathPieces = path.Split('\\');
-            string directory = "";
-            foreach (var piece in pathPieces)
+            var outFile = new FileInfo(sourceFilePath);
+
+            var directoryPath = outFile.DirectoryName;
+            if (directoryPath == null)
             {
-                if (piece.Contains("."))
-                {
-                    continue;
-                }
-                directory += piece;
-                directory += "\\";
+                throw new DirectoryNotFoundException("Unable to determine the parent directory of " + sourceFilePath);
             }
 
-            accApplication.OpenCurrentDatabase(path);
+            accApplication.OpenCurrentDatabase(sourceFilePath);
             accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acExportDelim,
-                TableName: "AMT", FileName: directory + "outTempAMT.txt", HasFieldNames: true);
+                TableName: "AMT", FileName: Path.Combine(directoryPath, "outTempAMT.txt"), HasFieldNames: true);
             accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acExportDelim,
-                TableName: "AMT_Proteins", FileName: directory + "outTempAMT_Proteins.txt", HasFieldNames: true);
+                TableName: "AMT_Proteins", FileName: Path.Combine(directoryPath, "outTempAMT_Proteins.txt"), HasFieldNames: true);
             accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acExportDelim,
-                TableName: "AMT_to_Protein_Map", FileName: directory + "outTempAMT_to_Protein_Map.txt", HasFieldNames: true);
+                TableName: "AMT_to_Protein_Map", FileName: Path.Combine(directoryPath, "outTempAMT_to_Protein_Map.txt"), HasFieldNames: true);
             accApplication.CloseCurrentDatabase();
             accApplication.Quit();
 
             var priorDatasets = new List<LcmsDataSet>();
 
-
-
             return priorDatasets;
         }
 
-        public TargetDatabase ReadDb(string path)
+        public TargetDatabase ReadDb(string dbFilePath)
         {
             // Read in the data from the access database
             // put it into a text file (?)
             // Read the data from the text file into program
             var accApplication = new ACCESS.Application();
 
-            var pathPieces = path.Split('\\');
-            string directory = "";
-            foreach (var piece in pathPieces)
+            var dbFile = new FileInfo(dbFilePath);
+            var directoryPath = dbFile.DirectoryName;
+            if (directoryPath == null)
             {
-                if (piece.Contains("."))
-                {
-                    continue;
-                }
-                directory += piece;
-                directory += "\\";
+                throw new DirectoryNotFoundException("Unable to determine the parent directory of " + dbFilePath);
             }
 
-            accApplication.OpenCurrentDatabase(path);
+            accApplication.OpenCurrentDatabase(dbFile.FullName);
             accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acExportDelim,
-                TableName: "AMT", FileName: directory + "outTempAMT.txt", HasFieldNames: true);
+                TableName: "AMT", FileName: Path.Combine(directoryPath, "outTempAMT.txt"), HasFieldNames: true);
             accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acExportDelim,
-                TableName: "AMT_Proteins", FileName: directory + "outTempAMT_Proteins.txt", HasFieldNames: true);
+                TableName: "AMT_Proteins", FileName: Path.Combine(directoryPath, "outTempAMT_Proteins.txt"), HasFieldNames: true);
             accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acExportDelim,
-                TableName: "AMT_to_Protein_Map", FileName: directory + "outTempAMT_to_Protein_Map.txt", HasFieldNames: true);
+                TableName: "AMT_to_Protein_Map", FileName: Path.Combine(directoryPath, "outTempAMT_to_Protein_Map.txt"), HasFieldNames: true);
             accApplication.CloseCurrentDatabase();
             accApplication.Quit();
 
@@ -90,9 +79,9 @@ namespace MTDBAccessIO
             var consensusTargets    = new Dictionary<int, ConsensusTarget>();
             var proteins            = new Dictionary<int, ProteinInformation>();
 
-            var ctReader    = new StreamReader(directory + "outTempAMT.txt");
-            var protReader  = new StreamReader(directory + "outTempAMT_Proteins.txt");
-            var mapReader   = new StreamReader(directory + "outTempAMT_to_Protein_Map.txt");
+            var ctReader       = new StreamReader(Path.Combine(directoryPath, "outTempAMT.txt"));
+            var proteinReader  = new StreamReader(Path.Combine(directoryPath, "outTempAMT_Proteins.txt"));
+            var mapReader      = new StreamReader(Path.Combine(directoryPath, "outTempAMT_to_Protein_Map.txt"));
 
             // Read the headers for the files
             ctReader.ReadLine();
@@ -159,9 +148,9 @@ namespace MTDBAccessIO
             protReader.Close();
             mapReader.Close();
 
-            File.Delete(directory + "outTempAMT.txt");
-            File.Delete(directory + "outTempAMT_Proteins.txt");
-            File.Delete(directory + "outTempAMT_to_Protein_Map.txt");
+            File.Delete(Path.Combine(directoryPath, "outTempAMT.txt"));
+            File.Delete(Path.Combine(directoryPath, "outTempAMT_Proteins.txt"));
+            File.Delete(Path.Combine(directoryPath, "outTempAMT_to_Protein_Map.txt"));
 
             var database = new TargetDatabase();
             foreach (var target in consensusTargets)

@@ -25,11 +25,14 @@ namespace MTDBFramework.IO
         /// </summary>
         /// <param name="database"></param>
         /// <param name="options"></param>
-        /// <param name="path"></param>
-        public void Write(TargetDatabase database, Options options, string path)
+        /// <param name="dbFilePath"></param>
+        public void Write(TargetDatabase database, Options options, string dbFilePath)
         {
-            DatabaseFactory.DatabaseFile = path;
-            var databaseDirectory = Path.GetDirectoryName(path);
+            DatabaseFactory.DatabaseFile = dbFilePath;
+            var databaseDirectory = Path.GetDirectoryName(dbFilePath);
+            if (databaseDirectory == null)
+                throw new DirectoryNotFoundException("Unable to determine the parent directory of " + dbFilePath);
+
             /**********************************************************************************************
              * TODO: Get the append capability working
              * Set to false to avoid problems. Setting it to true will append some items, but not others.
@@ -74,8 +77,7 @@ namespace MTDBFramework.IO
                             {
                                 evidence.DataSet.Id = ++datasetCount;
                                 m_uniqueDataSets.Add(evidence.DataSet.Name, evidence.DataSet);
-                                var outputPath = databaseDirectory + evidence.DataSet.Name + "Alignment.tsv";
-                                var datasetWriter = new StreamWriter(databaseDirectory + "\\" + evidence.DataSet.Name + "Alignment.tsv");
+                                var datasetWriter = new StreamWriter(Path.Combine(databaseDirectory, evidence.DataSet.Name + "Alignment.tsv"));
                                 datasetWriter.WriteLine("GANET_Obs\tScan_Number");
                                 m_alignmentWriters.Add(evidence.DataSet.Name, datasetWriter);
                                 session.Insert(evidence.DataSet);

@@ -15,25 +15,21 @@ namespace MTDBAccessIO
     public class AccessTargetDatabaseWriter : ITargetDatabaseWriter
     {
 
-        private void ExportToText(string path, TargetDatabase inputData)
+        private void ExportToText(string outFilePath, TargetDatabase inputData)
         {
-            var pieces = path.Split('\\');
-            var directory = "";
-            foreach (var piece in pieces)
+            var outFile = new FileInfo(outFilePath);
+
+            var directoryPath = outFile.DirectoryName;
+            if (directoryPath == null)
             {
-                if (piece.Contains("."))
-                {
-                    continue;
-                }
-                directory += piece;
-                directory += "\\";
+                throw new DirectoryNotFoundException("Unable to determine the parent directory of " + outFilePath);
             }
 
             var proteinsRead = 0;
 
-            var targetWriter    = new StreamWriter(directory + "tempAMT.txt");
-            var proteinWriter   = new StreamWriter(directory + "tempAMT_Proteins.txt");
-            var mapWriter       = new StreamWriter(directory + "tempAMT_to_Protein_Map.txt");
+            var targetWriter    = new StreamWriter(Path.Combine(directoryPath, "tempAMT.txt"));
+            var proteinWriter   = new StreamWriter(Path.Combine(directoryPath, "tempAMT_Proteins.txt"));
+            var mapWriter       = new StreamWriter(Path.Combine(directoryPath, "tempAMT_to_Protein_Map.txt"));
 
             var targetHeader = string.Format("{0},{1},{2},{3},{4},{5},{6}",
                 "AMT_ID",
@@ -153,39 +149,37 @@ namespace MTDBAccessIO
             TextToAccessConvert(path);
         }
 
-        private void TextToAccessConvert(string path)
+        private void TextToAccessConvert(string outFilePath)
         {
             var accApplication = new ACCESS.Application();
 
-            var pieces = path.Split('\\');
-            var directory = "";
-            foreach (var piece in pieces)
+            var outFile = new FileInfo(outFilePath);
+
+            var directoryPath = outFile.DirectoryName;
+            if (directoryPath == null)
             {
-                if (piece.Contains("."))
-                {
-                    continue;
-                }
-                directory += piece;
-                directory += "\\";
+                throw new DirectoryNotFoundException("Unable to determine the parent directory of " + outFilePath);
             }
 
-            if (File.Exists(path))
+
+            if (outFile.Exists)
             {
-                File.Delete(path);
+                outFile.Delete();
             }
 
-            accApplication.NewCurrentDatabase(path);
+            accApplication.NewCurrentDatabase(outFile.FullName);
             accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
-                TableName: "AMT", FileName: directory + "tempAMT.txt", HasFieldNames: true);
+                TableName: "AMT", FileName: Path.Combine(directoryPath, "tempAMT.txt"), HasFieldNames: true);
             accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
-                TableName: "AMT_Proteins", FileName: directory + "tempAMT_Proteins.txt", HasFieldNames: true);
+                TableName: "AMT_Proteins", FileName: Path.Combine(directoryPath, "tempAMT_Proteins.txt"), HasFieldNames: true);
             accApplication.DoCmd.TransferText(TransferType: ACCESS.AcTextTransferType.acImportDelim,
-                TableName: "AMT_to_Protein_Map", FileName: directory + "tempAMT_to_Protein_Map.txt", HasFieldNames: true);
+                TableName: "AMT_to_Protein_Map", FileName: Path.Combine(directoryPath, "tempAMT_to_Protein_Map.txt"), HasFieldNames: true);
             accApplication.CloseCurrentDatabase();
             accApplication.Quit();
-            File.Delete(directory + "tempAMT.txt");
-            File.Delete(directory + "tempAMT_Proteins.txt");
-            File.Delete(directory + "tempAMT_to_Protein_Map.txt");
+
+            File.Delete(Path.Combine(directoryPath, "tempAMT.txt"));
+            File.Delete(Path.Combine(directoryPath, "tempAMT_Proteins.txt"));
+            File.Delete(Path.Combine(directoryPath, "tempAMT_to_Protein_Map.txt"));
         }
 
 
