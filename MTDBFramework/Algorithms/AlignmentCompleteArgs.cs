@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using PNNLOmics.Algorithms.Alignment.LcmsWarp;
+using FeatureAlignment.Data.Alignment;
 
 namespace MTDBFramework.Algorithms
 {
@@ -13,7 +13,7 @@ namespace MTDBFramework.Algorithms
         /// Constructor
         /// </summary>
         /// <param name="alignmentData"></param>
-        public AlignmentCompleteArgs(IEnumerable<LcmsWarpAlignmentData> alignmentData)
+        public AlignmentCompleteArgs(IEnumerable<AlignmentData> alignmentData)
         {
             AlignmentData = alignmentData;
         }
@@ -21,6 +21,6 @@ namespace MTDBFramework.Algorithms
         /// <summary>
         /// Alignment data
         /// </summary>
-        public IEnumerable<LcmsWarpAlignmentData> AlignmentData { get; }
+        public IEnumerable<AlignmentData> AlignmentData { get; }
     }
 }

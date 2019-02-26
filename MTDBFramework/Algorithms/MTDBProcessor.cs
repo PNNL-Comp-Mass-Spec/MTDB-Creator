@@ -10,9 +10,9 @@ using MTDBFramework.Algorithms.Clustering;
 using MTDBFramework.Data;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
-using PNNLOmics.Algorithms.Alignment.LcmsWarp;
-using PNNLOmics.Annotations;
-using PNNLOmics.Data.Features;
+using FeatureAlignment.Algorithms.Alignment.LcmsWarp;
+using FeatureAlignment.Data.Alignment;
+using FeatureAlignment.Data.Features;
 
 #endregion
 
@@ -90,7 +90,6 @@ namespace MTDBFramework.Algorithms
         /// <param name="dataSets"></param>
         /// <param name="bWorker"></param>
         /// <returns></returns>
-        [UsedImplicitly]
         public TargetDatabase Process(IEnumerable<LcmsDataSet> dataSets, BackgroundWorker bWorker)
         {
             m_abortRequested = false;
@@ -204,13 +203,13 @@ namespace MTDBFramework.Algorithms
             if (bWorker.CancellationPending || m_abortRequested)
                 return targetDatabase;
 
-            var alignmentData = new List<LcmsWarpAlignmentData>();
+            var alignmentData = new List<AlignmentData>();
             var options = new LcmsWarpAlignmentOptions();
-            var lcmsAligner = new LcmsWarpAdapter(options);
+            var lcmsAligner = new LcmsWarpFeatureAligner(options);
 
             //For performing net warping without mass correction
-            options.AlignType = PNNLOmics.Algorithms.Alignment.LcmsWarp.AlignmentType.NET_WARP;
-            var lcmsNetAligner = new LcmsWarpAdapter(options);
+            options.AlignType = LcmsWarpAlignmentType.NET_WARP;
+            var lcmsNetAligner = new LcmsWarpFeatureAligner(options);
 
             //Foreach dataset
             foreach (var dataSet in dataSets)
@@ -252,7 +251,7 @@ namespace MTDBFramework.Algorithms
                     }
                 }
                 umcDataset.Sort((x, y) => x.MassMonoisotopic.CompareTo(y.MassMonoisotopic));
-                LcmsWarpAlignmentData alignedData;
+                AlignmentData alignedData;
                 try
                 {
                     alignedData = lcmsAligner.Align(massTagLightTargets, umcDataset);
@@ -304,9 +303,9 @@ namespace MTDBFramework.Algorithms
                 }
                 if (alignedData != null)
                 {
-                    dataSet.RegressionResult.Slope = alignedData.NetSlope;
-                    dataSet.RegressionResult.Intercept = alignedData.NetIntercept;
-                    dataSet.RegressionResult.RSquared = alignedData.NetRsquared;
+                    dataSet.RegressionResult.Slope = alignedData.NETSlope;
+                    dataSet.RegressionResult.Intercept = alignedData.NETIntercept;
+                    dataSet.RegressionResult.RSquared = alignedData.NETRsquared;
                     alignmentData.Add(alignedData);
                 }
                 else

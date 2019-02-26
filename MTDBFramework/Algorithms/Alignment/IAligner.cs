@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 using MTDBFramework.Data;
-using PNNLOmics.Algorithms.Regression;
+using FeatureAlignment.Algorithms.Regression;
 
 #endregion
 

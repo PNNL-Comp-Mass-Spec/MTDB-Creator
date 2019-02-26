@@ -6,7 +6,7 @@ using MTDBFramework.Data;
 using MTDBFramework.UI;
 using System.Collections;
 using System.Windows.Input;
-using PNNLOmics.Algorithms.Regression;
+using FeatureAlignment.Algorithms.Regression;
 
 namespace MTDBCreator.ViewModels
 {

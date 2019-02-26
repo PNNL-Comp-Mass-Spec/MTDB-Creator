@@ -4,8 +4,8 @@ using System.Linq;
 using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
+using FeatureAlignment.Algorithms.Regression;
 using NUnit.Framework;
-using PNNLOmics.Algorithms.Regression;
 
 namespace MTDBCreatorTestSuite.Algorithms.Alignment
 {

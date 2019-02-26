@@ -38,18 +38,16 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FeatureAlignment">
+      <HintPath>..\libs\FeatureAlignment.dll</HintPath>
+    </Reference>
     <Reference Include="NETPrediction">
       <HintPath>..\libs\NETPrediction.dll</HintPath>
     </Reference>
     <Reference Include="PHRPReader">
       <HintPath>..\libs\PHRPReader.dll</HintPath>
     </Reference>
-    <Reference Include="PNNLOmics">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\PNNLOmics.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Numerics" />

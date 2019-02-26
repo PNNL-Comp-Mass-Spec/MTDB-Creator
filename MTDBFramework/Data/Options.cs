@@ -3,7 +3,7 @@
 using MTDBFramework.Algorithms;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.UI;
-using PNNLOmics.Algorithms.Regression;
+using FeatureAlignment.Algorithms.Regression;
 
 #endregion
 

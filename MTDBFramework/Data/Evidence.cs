@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using MTDBFramework.Database;
 using MTDBFramework.UI;
-using PNNLOmics.Data;
+using FeatureAlignment.Data;
 
 #endregion
 
