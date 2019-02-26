@@ -1,4 +1,5 @@
 ﻿using MTDBFramework.Data;
+using MTDBFrameworkBase.Data;
 
 namespace MTDBCreator.Helpers.Dialog
 {

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
+using MTDBFrameworkBase.Data;
 using NUnit.Framework;
 using PHRPReader;
 

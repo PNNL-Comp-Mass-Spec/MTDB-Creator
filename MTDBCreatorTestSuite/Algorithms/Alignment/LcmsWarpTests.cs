@@ -5,6 +5,7 @@ using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
 using FeatureAlignment.Algorithms.Regression;
+using MTDBFrameworkBase.Data;
 using NUnit.Framework;
 
 namespace MTDBCreatorTestSuite.Algorithms.Alignment

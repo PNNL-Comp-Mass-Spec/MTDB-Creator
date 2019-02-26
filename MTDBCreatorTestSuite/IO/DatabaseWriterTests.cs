@@ -1,12 +1,14 @@
 ﻿using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
-using MTDBFramework.Database;
 using MTDBFramework.IO;
 using NUnit.Framework;
 using PHRPReader;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using MTDBFrameworkBase.Data;
+using MTDBFrameworkBase.Database;
+using MTDBFrameworkBase.IO;
 
 namespace MTDBCreatorTestSuite.IO
 {

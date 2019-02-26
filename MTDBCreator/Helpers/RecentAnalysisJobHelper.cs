@@ -8,6 +8,7 @@ using MTDBCreator.Properties;
 using MTDBCreator.ViewModels;
 using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
+using MTDBFrameworkBase.Data;
 
 #endregion
 

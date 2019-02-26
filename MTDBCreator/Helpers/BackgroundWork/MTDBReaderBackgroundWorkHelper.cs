@@ -3,8 +3,10 @@ using System.ComponentModel;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Windows;
 using MTDBFramework.Data;
-using MTDBFramework.Database;
 using MTDBFramework.IO;
+using MTDBFrameworkBase.Data;
+using MTDBFrameworkBase.Database;
+using MTDBFrameworkBase.IO;
 
 namespace MTDBCreator.Helpers.BackgroundWork
 {

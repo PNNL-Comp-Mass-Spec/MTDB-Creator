@@ -2,6 +2,7 @@
 
 using System.ComponentModel;
 using System.IO;
+using MTDBFrameworkBase.Data;
 
 #endregion
 

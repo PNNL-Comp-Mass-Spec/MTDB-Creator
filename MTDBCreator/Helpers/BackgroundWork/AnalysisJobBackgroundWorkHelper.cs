@@ -10,6 +10,7 @@ using MTDBCreator.Windows;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
 using MTDBFramework.UI;
+using MTDBFrameworkBase.Events;
 
 #endregion
 

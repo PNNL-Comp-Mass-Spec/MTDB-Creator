@@ -5,11 +5,14 @@ using System.IO;
 using System.IO.Compression;
 using System.Xml;
 using MTDBFramework.Data;
-using MTDBFramework.Database;
+using MTDBFrameworkBase.Data;
+using MTDBFrameworkBase.Database;
 using PHRPReader;
 
 namespace MTDBFramework.IO
 {
+    // TODO: Use PSI_Interface SimpleMzIdentMlReader, and make this class just wrap it?
+
     /// <summary>
     /// Read and perform some processing on a MZIdentML file
     /// Processes the data into an LCMS DataSet

@@ -2,9 +2,12 @@
 using System.IO;
 using System.Linq;
 using MTDBFramework.Data;
-using MTDBFramework.Database;
 using MTDBFramework.IO;
 using MTDBFramework.UI;
+using MTDBFrameworkBase.Data;
+using MTDBFrameworkBase.Database;
+using MTDBFrameworkBase.Events;
+using MTDBFrameworkBase.IO;
 using ACCESS = Microsoft.Office.Interop.Access;
 
 namespace MTDBAccessIO

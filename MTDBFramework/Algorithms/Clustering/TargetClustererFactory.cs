@@ -1,4 +1,6 @@
-﻿namespace MTDBFramework.Algorithms.Clustering
+﻿using MTDBFrameworkBase.Data;
+
+namespace MTDBFramework.Algorithms.Clustering
 {
     /// <summary>
     /// Tools for clustering targets

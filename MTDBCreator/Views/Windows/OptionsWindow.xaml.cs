@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using MTDBCreator.ViewModels;
 using MTDBFramework.Data;
+using MTDBFrameworkBase.Data;
 
 namespace MTDBCreator.Views
 {

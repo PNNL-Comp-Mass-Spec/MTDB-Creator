@@ -5,6 +5,7 @@
     xmlns:helpers="clr-namespace:MTDBCreator.Helpers"
     xmlns:msgfFilterType="clr-namespace:MTDBFramework.Data;assembly=MTDBFramework"
     xmlns:retentionTimePrediction="clr-namespace:MTDBFramework.Algorithms.RetentionTimePrediction;assembly=MTDBFramework"
+    xmlns:data="clr-namespace:MTDBFrameworkBase.Data;assembly=MTDBFrameworkBase"
     Title="Options"
     Width="420"
     Height="670"
@@ -90,14 +91,14 @@
                                 x:Name="SpectralValueRadioButton"
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static msgfFilterType:MsgfFilterType.SPECTRAL_PROBABILITY}, UpdateSourceTrigger=Explicit}">
+                                IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static data:MsgfFilterType.SPECTRAL_PROBABILITY}, UpdateSourceTrigger=Explicit}">
                                 Spectral E Value
                             </RadioButton>
                             <RadioButton
                                 x:Name="QValueRadioButton"
                                 Grid.Row="3"
                                 Grid.Column="1"
-                                IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static msgfFilterType:MsgfFilterType.Q_VALUE}, UpdateSourceTrigger=Explicit}">
+                                IsChecked="{Binding Path=Options.MsgfFilter, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static data:MsgfFilterType.Q_VALUE}, UpdateSourceTrigger=Explicit}">
                                 Q Value
                             </RadioButton>
                         </Grid>
@@ -164,7 +165,7 @@
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Command="{Binding Path=UpdatePredictionCommand}"
-                                IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.KANGAS}, UpdateSourceTrigger=Explicit}">
+                                IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static data:RetentionTimePredictionType.KANGAS}, UpdateSourceTrigger=Explicit}">
                                 Kangas ANN
                             </RadioButton>
                             <RadioButton
@@ -172,7 +173,7 @@
                                 Grid.Row="3"
                                 Grid.Column="1"
                                 Command="{Binding Path=UpdatePredictionCommand}"
-                                IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static retentionTimePrediction:RetentionTimePredictionType.KROKHIN}, UpdateSourceTrigger=Explicit}">
+                                IsChecked="{Binding Path=Options.PredictorType, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static data:RetentionTimePredictionType.KROKHIN}, UpdateSourceTrigger=Explicit}">
                                 Krokhin
                             </RadioButton>
                             <TextBox

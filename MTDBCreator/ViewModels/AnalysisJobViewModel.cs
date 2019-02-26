@@ -10,10 +10,12 @@ using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.BackgroundWork;
 using MTDBFramework.Data;
-using MTDBFramework.Database;
 using MTDBFramework.IO;
 using Microsoft.Win32;
 using System;
+using MTDBFrameworkBase.Data;
+using MTDBFrameworkBase.Database;
+using MTDBFrameworkBase.IO;
 using PRISM;
 
 namespace MTDBCreator.ViewModels

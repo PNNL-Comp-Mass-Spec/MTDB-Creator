@@ -1,4 +1,6 @@
-﻿namespace MTDBFramework.Algorithms.RetentionTimePrediction
+﻿using MTDBFrameworkBase.Data;
+
+namespace MTDBFramework.Algorithms.RetentionTimePrediction
 {
     /// <summary>
     /// Determination and configuration of a Retention Time Predictor

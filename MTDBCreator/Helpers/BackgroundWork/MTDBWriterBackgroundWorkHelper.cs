@@ -4,10 +4,13 @@ using System.Windows;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Windows;
 using MTDBFramework.Data;
-using MTDBFramework.Database;
 using MTDBFramework.IO;
 using MTDBFramework.UI;
 using MTDBAccessIO;
+using MTDBFrameworkBase.Data;
+using MTDBFrameworkBase.Database;
+using MTDBFrameworkBase.Events;
+using MTDBFrameworkBase.IO;
 using PRISM;
 
 namespace MTDBCreator.Helpers.BackgroundWork

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using MTDBFramework.Data;
+using MTDBFrameworkBase.Data;
 
 #endregion
 

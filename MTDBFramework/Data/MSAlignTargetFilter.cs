@@ -1,4 +1,6 @@
-﻿namespace MTDBFramework.Data
+﻿using MTDBFrameworkBase.Data;
+
+namespace MTDBFramework.Data
 {
     /// <summary>
     /// Target filtering for MSAlign Workflows

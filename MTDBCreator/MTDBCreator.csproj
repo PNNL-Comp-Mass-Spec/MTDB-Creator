@@ -229,6 +229,10 @@
       <Project>{57ae3323-1592-4cfe-a054-3eb2f468bc5c}</Project>
       <Name>MTDBAccessIO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MTDBFrameworkBase\MTDBFrameworkBase.csproj">
+      <Project>{a0874624-f72a-4d78-8c84-28a90bdd44d8}</Project>
+      <Name>MTDBFrameworkBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MTDBFramework\MTDBFramework.csproj">
       <Project>{3ee14e5d-3881-410e-86df-611bae112e90}</Project>
       <Name>MTDBFramework</Name>

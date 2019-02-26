@@ -8,8 +8,8 @@ using System.Windows.Threading;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Windows;
 using MTDBFramework.Algorithms;
-using MTDBFramework.Database;
 using MTDBFramework.UI;
+using MTDBFrameworkBase.Database;
 
 #endregion
 

@@ -5,9 +5,10 @@ using System.IO;
 using System.Linq;
 using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
-using MTDBFramework.Database;
 using MTDBFramework.IO;
 using MTDBAccessIO;
+using MTDBFrameworkBase.Data;
+using MTDBFrameworkBase.Database;
 using NUnit.Framework;
 using PHRPReader;
 

@@ -7,6 +7,7 @@ using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
 using MTDBFramework.Data;
+using MTDBFrameworkBase.Data;
 
 namespace MTDBCreator.ViewModels
 {

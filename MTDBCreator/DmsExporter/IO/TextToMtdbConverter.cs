@@ -5,8 +5,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using MTDBFramework.Data;
-using MTDBFramework.Database;
 using MTDBFramework.IO;
+using MTDBFrameworkBase.Data;
+using MTDBFrameworkBase.Database;
 using PRISM;
 
 namespace MTDBCreator.DmsExporter.IO

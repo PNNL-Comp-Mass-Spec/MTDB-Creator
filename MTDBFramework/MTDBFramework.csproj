@@ -72,40 +72,17 @@
     <Compile Include="Algorithms\MTDBProcessor.cs" />
     <Compile Include="Algorithms\Alignment\PeptideTargetAligner.cs" />
     <Compile Include="Algorithms\Alignment\ProteinTargetAligner.cs" />
-    <Compile Include="Algorithms\RetentionTimePrediction\RetentionTimePredictionType.cs" />
     <Compile Include="Algorithms\RetentionTimePrediction\RetentionTimePredictorFactory.cs" />
-    <Compile Include="Algorithms\TargetWorkflowType.cs" />
-    <Compile Include="Database\ConsensusProteinPair.cs" />
-    <Compile Include="Database\ConsensusProteinPairMap.cs" />
-    <Compile Include="Database\ConsensusPtmPairMap.cs" />
-    <Compile Include="Database\ConsensusTargetMap.cs" />
-    <Compile Include="Database\DatabaseFactory.cs" />
-    <Compile Include="Database\OptionsMap.cs" />
-    <Compile Include="Database\PostTranslationalModificationMap.cs" />
-    <Compile Include="Database\ProteinInformationMap.cs" />
-    <Compile Include="Database\TargetDatasetMap.cs" />
-    <Compile Include="Database\EvidenceMap.cs" />
     <Compile Include="Data\AnalysisJobItem.cs" />
-    <Compile Include="Data\ConsensusPtmPair.cs" />
-    <Compile Include="Data\ConsensusTarget.cs" />
-    <Compile Include="Data\DatabaseType.cs" />
     <Compile Include="Data\MSAlignResult.cs" />
     <Compile Include="Data\MSAlignTargetFilter.cs" />
-    <Compile Include="Data\MsgfFilterType.cs" />
     <Compile Include="Data\MSGFPlusResult.cs" />
     <Compile Include="Data\MSGFPlusTargetFilter.cs" />
-    <Compile Include="Data\PostTranslationalModification.cs" />
-    <Compile Include="Data\ProteinInformation.cs" />
     <Compile Include="Data\ITargetFilter.cs" />
-    <Compile Include="Data\LcmsIdentificationTool.cs" />
-    <Compile Include="Data\Options.cs" />
     <Compile Include="Data\SequestResult.cs" />
     <Compile Include="Data\SequestTargetFilter.cs" />
-    <Compile Include="Data\Evidence.cs" />
     <Compile Include="Algorithms\Alignment\TargetAlignmentFactory.cs" />
-    <Compile Include="Database\TargetDataSet.cs" />
     <Compile Include="Data\TargetFilterFactory.cs" />
-    <Compile Include="Database\TargetPeptideInfo.cs" />
     <Compile Include="Data\UniModData.cs" />
     <Compile Include="Data\XTandemResult.cs" />
     <Compile Include="Data\XTandemTargetFilter.cs" />
@@ -114,21 +91,15 @@
     <Compile Include="IO\AnalysisJobProcessor.cs" />
     <Compile Include="IO\DatasetPathUtility.cs" />
     <Compile Include="IO\IPHRPReader.cs" />
-    <Compile Include="IO\ITargetDatabaseReader.cs" />
-    <Compile Include="IO\ITargetDatabaseWriter.cs" />
     <Compile Include="IO\ITextToDbConverter.cs" />
     <Compile Include="IO\MSAlignPHRPReader.cs" />
     <Compile Include="IO\MSGFPlusPHRPReader.cs" />
     <Compile Include="IO\MZIdentMLReader.cs" />
     <Compile Include="IO\PHRPReaderBase.cs" />
     <Compile Include="IO\SequestPHRPReader.cs" />
-    <Compile Include="IO\SQLiteTargetDatabaseReader.cs" />
-    <Compile Include="IO\SQLiteTargetDatabaseWriter.cs" />
     <Compile Include="IO\XTandemPHRPReader.cs" />
     <Compile Include="IO\PHRPReaderFactory.cs" />
     <Compile Include="IO\TableDataReaderBase.cs" />
-    <Compile Include="Data\LcmsDataSet.cs" />
-    <Compile Include="Database\TargetDatabase.cs" />
     <Compile Include="IProcessor.cs" />
     <Compile Include="MtdbCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,12 +109,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="UI\AlignmentProgressChangedEventArgs.cs" />
-    <Compile Include="UI\MTDBCreationProgressType.cs" />
-    <Compile Include="UI\MTDBProgressChangedEvent.cs" />
     <Compile Include="UI\PercentCompleteEventArgs.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -164,6 +130,12 @@
     <PackageReference Include="System.Data.SQLite.Core">
       <Version>1.0.97</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MTDBFrameworkBase\MTDBFrameworkBase.csproj">
+      <Project>{a0874624-f72a-4d78-8c84-28a90bdd44d8}</Project>
+      <Name>MTDBFrameworkBase</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

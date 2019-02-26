@@ -1,4 +1,6 @@
-﻿namespace MTDBFramework.Data
+﻿using MTDBFrameworkBase.Data;
+
+namespace MTDBFramework.Data
 {
     /// <summary>
     /// Addition properties for MSAlign input files
