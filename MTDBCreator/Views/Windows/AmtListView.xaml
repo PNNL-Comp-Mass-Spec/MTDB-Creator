@@ -16,7 +16,7 @@
             <RowDefinition Height="3*"/>
             <RowDefinition MaxHeight="60" MinHeight="60"/>
         </Grid.RowDefinitions>
-        <ListView Grid.Row="0" Name="MtdbList" ItemsSource="{Binding Path=MtdbList}" SelectedItem="{Binding Path=SelectedDb}">
+        <ListView Grid.Row="0" Name="MTDBList" ItemsSource="{Binding Path=MTDBList}" SelectedItem="{Binding Path=SelectedDb}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="MT DB Name" DisplayMemberBinding="{Binding Path=Name}" Width="180"/>
@@ -53,7 +53,7 @@
                 <ColumnDefinition Width="160"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Command="{Binding Path=RefreshMtdbsCommand}">Load MT DBs from DMS</Button>
+            <Button Grid.Column="1" Command="{Binding Path=RefreshMTDBsCommand}">Load MT DBs from DMS</Button>
             <Button Grid.Column="3" Command="{Binding Path=GetStatsCommand}">Load Statistics</Button>
             <Button Grid.Column="5" Command="{Binding Path=ExportCommand}">Export</Button>
         </Grid>

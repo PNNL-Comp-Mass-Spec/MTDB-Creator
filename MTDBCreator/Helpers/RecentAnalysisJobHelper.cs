@@ -61,17 +61,18 @@ namespace MTDBCreator.Helpers
         {
             // Format: <Hash>|<No>|<Title>|<Workflow>|<FileName 1>|<Format 1>|<FileName 2>|<Format 2>|<FileName 3>|<Format 3>|...
 
-            var strs = analysisJobString.Split('|');
+            var dataParts = analysisJobString.Split('|');
 
             var analysisJobViewModel = new AnalysisJobViewModel
             {
-                Title = strs[2],
-                Options = {TargetFilterType = (TargetWorkflowType) Enum.Parse(typeof (TargetWorkflowType), strs[3])}
+                Title = dataParts[2],
+                Options = {TargetFilterType = (TargetWorkflowType) Enum.Parse(typeof (TargetWorkflowType), dataParts[3])}
             };
 
-            for (var i = 4; i < strs.Length; i += 2)
+            for (var i = 4; i < dataParts.Length; i += 2)
             {
-                analysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(strs[i], (LcmsIdentificationTool)Enum.Parse(typeof(LcmsIdentificationTool), strs[i + 1])));
+                var idTool = (LcmsIdentificationTool)Enum.Parse(typeof(LcmsIdentificationTool), dataParts[i + 1]);
+                analysisJobViewModel.AnalysisJobItems.Add(new AnalysisJobItem(dataParts[i], idTool));
             }
 
             return analysisJobViewModel;

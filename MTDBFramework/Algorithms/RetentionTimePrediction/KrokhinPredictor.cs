@@ -8,7 +8,7 @@ using NETPrediction;
 namespace MTDBFramework.Algorithms.RetentionTimePrediction
 {
     /// <summary>
-    /// Normal Elution Time prediction using the KROKHIN algorithm
+    /// Elution Time prediction using the Krokhin algorithm
     /// </summary>
     public class KrokhinPredictor : IRetentionTimePredictor
     {

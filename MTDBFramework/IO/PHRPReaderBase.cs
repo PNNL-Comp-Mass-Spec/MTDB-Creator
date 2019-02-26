@@ -84,10 +84,10 @@ namespace MTDBFramework.IO
         }
 
         /// <summary>
-        /// Calculate the Normal Elution Time
+        /// Calculate the Observed and Predicted Normalized Elution Time (NET)
         /// </summary>
         /// <param name="results"></param>
-        protected void ComputeNets(IEnumerable<Evidence> results)
+        protected void ComputeNETs(IEnumerable<Evidence> results)
         {
             if (!AbortRequested)
             {

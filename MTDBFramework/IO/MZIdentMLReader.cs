@@ -175,6 +175,7 @@ namespace MTDBFramework.IO
 
             public string SpecItemId { get; set; }
 
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
             public bool PassThreshold { get; set; }
 
             public int Rank { get; set; }
@@ -205,6 +206,7 @@ namespace MTDBFramework.IO
 
             public int IsoError { get; set; }
 
+            // ReSharper disable once MemberCanBePrivate.Local
             public bool IsDtaSpectrum { get; set; }
 
             public int ScanNumCVParam => _scanNum;
@@ -225,7 +227,9 @@ namespace MTDBFramework.IO
                 set => _scanNum = value;
             }
 
+            // ReSharper disable once MemberCanBePrivate.Local
             public string NativeId { get; set; }
+
             #endregion
 
         }
@@ -236,8 +240,10 @@ namespace MTDBFramework.IO
         {
             public string Accession { get; set; }
 
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
             public int Length { get; set; }
 
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
             public string ProteinDescription { get; set; }
         }
 
@@ -269,6 +275,7 @@ namespace MTDBFramework.IO
 
         private class PeptideEvidence
         {
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
             public bool IsDecoy { get; set; }
 
             public string Post { get; set; }
@@ -279,6 +286,7 @@ namespace MTDBFramework.IO
 
             public int Start { get; set; }
 
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
             public PeptideRef PeptideRef { get; set; }
 
             public DatabaseSequence DbSeq { get; set; }
@@ -296,7 +304,7 @@ namespace MTDBFramework.IO
         ///   Database Information holds the length of the peptide and the protein description
         ///   Peptide Evidence holds the pre, post, start and end for the peptide for Tryptic End calculations.
         /// The element that holds the most information is the Spectrum ID Item, which has the calculated mz,
-        /// experimental mz, charge state, MSGF raw score, Denovo score, MSGF SpecEValue, MSGF EValue,
+        /// experimental mz, charge state, MSGF raw score, DeNovo score, MSGF SpecEValue, MSGF EValue,
         /// MSGF QValue, MSGR PepQValue, Scan number as well as which peptide it is and which evidences
         /// it has from the analysis run.
         ///
@@ -326,8 +334,8 @@ namespace MTDBFramework.IO
             // Map to MSGF+ results
             MapToMsgf(results, path);
 
-            // Calculate the Normal Elution Times
-            ComputeNets(results);
+            // Calculate the Normalized Elution Times
+            ComputeNETs(results);
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MZIdentML, results);
         }

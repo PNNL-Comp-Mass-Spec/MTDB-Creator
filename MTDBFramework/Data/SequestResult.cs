@@ -34,6 +34,7 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Scan Count
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         public short ScanCount
         {
             get => m_scanCount;
@@ -152,6 +153,7 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Passed Filter
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         public bool PassFilt
         {
             get => m_passFilt;
@@ -178,6 +180,7 @@ namespace MTDBFramework.Data
         /// <summary>
         /// M Score
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         public double MScore
         {
             get => m_mScore;

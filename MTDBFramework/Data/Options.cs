@@ -31,6 +31,8 @@ namespace MTDBFramework.Data
         private double m_maxMsgfSpecProb;
         private double m_minimumObservedNet;
         private double m_maximumObservedNet;
+
+        // ReSharper disable once IdentifierTypo
         private MsgfFilterType m_msfgFilterType;
 
         #endregion

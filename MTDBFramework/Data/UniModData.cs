@@ -78,6 +78,7 @@ namespace MTDBFramework.Data
             /// </summary>
             /// <param name="element"></param>
             /// <returns></returns>
+            // ReSharper disable once UnusedMember.Global
             public int GetElementCount(string element)
             {
                 if (symbols.ContainsKey(element))
@@ -92,6 +93,7 @@ namespace MTDBFramework.Data
             /// </summary>
             /// <param name="element"></param>
             /// <returns></returns>
+            // ReSharper disable once UnusedMember.Global
             public int GetElementCountWithIsotopes(string element)
             {
                 var count = 0;
@@ -376,8 +378,11 @@ namespace MTDBFramework.Data
             var xSettings = new XmlReaderSettings { IgnoreWhitespace = true };
             var memStream = new MemoryStream();
             var streamWrite = new StreamWriter(memStream);
+
+            // ReSharper disable once RedundantNameQualifier
             streamWrite.Write(MTDBFramework.Properties.Resources.unimod);
             streamWrite.Flush();
+
             memStream.Position = 0;
             var sr = new StreamReader(memStream);
 
@@ -443,6 +448,7 @@ namespace MTDBFramework.Data
             while (reader.Name == "umod:elem")
             {
                 ReadElement(reader.ReadSubtree());
+
                 // Consume the element we just processed.
                 reader.Read();
             }
@@ -450,7 +456,7 @@ namespace MTDBFramework.Data
 
         /// <summary>
         /// Handle a single umod:elem element
-        /// Called by ReadElements (xml hierarchy)
+        /// Called by ReadElements (XML hierarchy)
         /// </summary>
         /// <param name="reader">XmlReader that is only valid for the scope of the single umod:elem element</param>
         private static void ReadElement(XmlReader reader)
@@ -464,8 +470,8 @@ namespace MTDBFramework.Data
 
             var elem = new Element(title, fullName, monoMass, avgMass);
             Elements.Add(title, elem);
-            // To advance to the next node
 
+            // To advance to the next node
             reader.Close();
         }
 

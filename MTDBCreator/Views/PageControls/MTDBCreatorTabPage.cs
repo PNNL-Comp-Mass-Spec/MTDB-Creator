@@ -54,7 +54,7 @@ namespace MTDBCreator.PageControls
                 Text = pageTitle
             };
 
-            // Width of the textblock is set to auto at present
+            // Width of the text block is set to auto at present
 
             var tabPageCloseButton = new Button
             {

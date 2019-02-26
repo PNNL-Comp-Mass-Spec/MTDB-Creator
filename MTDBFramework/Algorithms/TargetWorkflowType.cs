@@ -10,10 +10,12 @@ namespace MTDBFramework.Algorithms
         /// Top-down workflow
         /// </summary>
         TOP_DOWN,
+
         /// <summary>
         /// Bottom-up workflow
         /// </summary>
         BOTTOM_UP,
+
         /// <summary>
         /// Spectral workflow
         /// </summary>

@@ -1,6 +1,5 @@
 ﻿#region Namespaces
 
-using System;
 using System.IO;
 using MTDBFramework.UI;
 
@@ -127,6 +126,7 @@ namespace MTDBFramework.Data
         /// <summary>
         /// Accessor for count of targets
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         public int TargetCount => DataSet?.Evidences.Count ?? 0;
     }
 }

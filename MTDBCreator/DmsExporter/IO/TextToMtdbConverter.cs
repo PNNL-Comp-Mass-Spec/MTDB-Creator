@@ -13,8 +13,10 @@ namespace MTDBCreator.DmsExporter.IO
     {
         private char m_separator = '\t';
 
+        // ReSharper disable once CollectionNeverQueried.Local
         private Dictionary<int, string> m_idToMassTagDict;
-        private Dictionary<int, ConsensusTarget> m_idToConensusTargetDict;
+
+        private Dictionary<int, ConsensusTarget> m_idToConsensusTargetDict;
         private Dictionary<int, Tuple<string, List<short>>> m_idToChargeAndPeptide;
         private Dictionary<string, Tuple<double, string>> m_modTagsToModMass;
         private Dictionary<string, PostTranslationalModification> m_ptmDictionary;
@@ -31,7 +33,7 @@ namespace MTDBCreator.DmsExporter.IO
         public bool ConvertToDbFormat(string outFilePath)
         {
             m_idToMassTagDict = new Dictionary<int, string>();
-            m_idToConensusTargetDict = new Dictionary<int, ConsensusTarget>();
+            m_idToConsensusTargetDict = new Dictionary<int, ConsensusTarget>();
             m_idToChargeAndPeptide = new Dictionary<int, Tuple<string, List<short>>>();
             m_modTagsToModMass = new Dictionary<string, Tuple<double, string>>();
             m_ptmDictionary = new Dictionary<string, PostTranslationalModification>();
@@ -86,7 +88,7 @@ namespace MTDBCreator.DmsExporter.IO
                                        " ModificationCount, ModificationDescription, MultiProteinCount) " +
                                        " VALUES (";
 
-                        foreach (var target in m_idToConensusTargetDict.Values)
+                        foreach (var target in m_idToConsensusTargetDict.Values)
                         {
                             var ctValue = string.Format("{0}, {1}, {2}, {3}, {4}, '{5}', '{6}', '{7}', {8}, '{9}', {10});",
                                                         target.Id,
@@ -224,8 +226,7 @@ namespace MTDBCreator.DmsExporter.IO
                 while (!string.IsNullOrEmpty(row))
                 {
                     var rowPieces = row.Split(m_separator);
-                    var target = new ConsensusTarget();
-                    target.Id = targetId++;
+                    var target = new ConsensusTarget {Id = targetId++};
                     var quote = "";
                     var unescapedPiece = rowPieces[14].Replace("\"\"", quote);
                     var sequence = rowPieces[1];
@@ -281,7 +282,7 @@ namespace MTDBCreator.DmsExporter.IO
                     target.ModificationCount = Convert.ToInt16(rowPieces[13]);
 
                     m_idToMassTagDict.Add(Convert.ToInt32(rowPieces[0]), row);
-                    m_idToConensusTargetDict.Add(Convert.ToInt32(rowPieces[0]), target);
+                    m_idToConsensusTargetDict.Add(Convert.ToInt32(rowPieces[0]), target);
 
                     row = reader.ReadLine();
                 }
@@ -296,9 +297,9 @@ namespace MTDBCreator.DmsExporter.IO
                     var rowPieces = row.Split(m_separator);
 
                     var id = Convert.ToInt32(rowPieces[0]);
-                    m_idToConensusTargetDict[id].PredictedNet = Convert.ToDouble(rowPieces[7]);
-                    m_idToConensusTargetDict[id].StdevNet = Convert.ToDouble(rowPieces[5]);
-                    m_idToConensusTargetDict[id].AverageNet = Convert.ToDouble(rowPieces[3]);
+                    m_idToConsensusTargetDict[id].PredictedNet = Convert.ToDouble(rowPieces[7]);
+                    m_idToConsensusTargetDict[id].StdevNet = Convert.ToDouble(rowPieces[5]);
+                    m_idToConsensusTargetDict[id].AverageNet = Convert.ToDouble(rowPieces[3]);
 
                     row = reader.ReadLine();
                 }
@@ -331,13 +332,15 @@ namespace MTDBCreator.DmsExporter.IO
                     var rowPieces = row.Split(m_separator);
                     var mt_id = Convert.ToInt32(rowPieces[0]);
                     var prot_id = Convert.ToInt32(rowPieces[2]);
-                    var ctToProt = new ConsensusProteinPair();
-                    ctToProt.CleavageState = Convert.ToInt16(rowPieces[3]);
-                    ctToProt.ResidueStart = Convert.ToInt32(rowPieces[6]);
-                    ctToProt.ResidueEnd = Convert.ToInt32(rowPieces[7]);
-                    ctToProt.TerminusState = Convert.ToInt16(rowPieces[9]);
-                    ctToProt.ConsensusId = m_idToConensusTargetDict[mt_id].Id;
-                    ctToProt.ProteinId = m_idToProteinDict[prot_id].Id;
+                    var ctToProt = new ConsensusProteinPair
+                    {
+                        CleavageState = Convert.ToInt16(rowPieces[3]),
+                        ResidueStart = Convert.ToInt32(rowPieces[6]),
+                        ResidueEnd = Convert.ToInt32(rowPieces[7]),
+                        TerminusState = Convert.ToInt16(rowPieces[9]),
+                        ConsensusId = m_idToConsensusTargetDict[mt_id].Id,
+                        ProteinId = m_idToProteinDict[prot_id].Id
+                    };
                     m_ctToProtDict[cppId] = ctToProt;
                     cppId++;
 
@@ -359,33 +362,33 @@ namespace MTDBCreator.DmsExporter.IO
                     {
                         m_idToChargeAndPeptide[id] = new Tuple<string, List<short>>(rowPieces[1], new List<short>());
                         m_idToChargeAndPeptide[id].Item2.Add(Convert.ToInt16(rowPieces[2]));
-                        m_idToConensusTargetDict[id].Sequence = rowPieces[1][0] + "." +
-                                                                m_idToConensusTargetDict[id].Sequence + "." +
+                        m_idToConsensusTargetDict[id].Sequence = rowPieces[1][0] + "." +
+                                                                m_idToConsensusTargetDict[id].Sequence + "." +
                                                                 rowPieces[1][rowPieces[1].Length - 1];
-                        m_idToConensusTargetDict[id].CleanSequence = m_idToConensusTargetDict[id].Sequence;
-                        m_idToConensusTargetDict[id].Charges.Add(Convert.ToInt16(rowPieces[2]));
-                        totalCharges++;
+                        m_idToConsensusTargetDict[id].CleanSequence = m_idToConsensusTargetDict[id].Sequence;
+                        m_idToConsensusTargetDict[id].Charges.Add(Convert.ToInt16(rowPieces[2]));
                     }
                     if (!m_idToChargeAndPeptide[id].Item2.Contains(Convert.ToInt16(rowPieces[2])))
                     {
                         m_idToChargeAndPeptide[id].Item2.Add(Convert.ToInt16(rowPieces[2]));
-                        m_idToConensusTargetDict[id].Charges.Add(Convert.ToInt16(rowPieces[2]));
-                        totalCharges++;
+                        m_idToConsensusTargetDict[id].Charges.Add(Convert.ToInt16(rowPieces[2]));
                     }
 
-                    var ctId = m_idToConensusTargetDict[id].Id;
-                    var ev = new Evidence();
-                    ev.Id = evId++;
-                    ev.Charge = Convert.ToInt16(rowPieces[2]);
-                    ev.Sequence = m_idToConensusTargetDict[id].CleanSequence;
-                    ev.Scan = Convert.ToInt32(rowPieces[3]);
-                    ev.DelMPpm = Convert.ToDouble(rowPieces[4]);
-                    ev.ObservedNet = Convert.ToDouble(rowPieces[5]);
-                    ev.ObservedMonoisotopicMass = Convert.ToDouble(rowPieces[6]);
+                    var ctId = m_idToConsensusTargetDict[id].Id;
+                    var ev = new Evidence
+                    {
+                        Id = evId++,
+                        Charge = Convert.ToInt16(rowPieces[2]),
+                        Sequence = m_idToConsensusTargetDict[id].CleanSequence,
+                        Scan = Convert.ToInt32(rowPieces[3]),
+                        DelMPpm = Convert.ToDouble(rowPieces[4]),
+                        ObservedNet = Convert.ToDouble(rowPieces[5]),
+                        ObservedMonoisotopicMass = Convert.ToDouble(rowPieces[6])
+                    };
                     ev.Mz = ev.ObservedMonoisotopicMass/ev.Charge;
                     ev.NetShift = 0;
                     ev.DelM = ev.DelMPpm/1000000;
-                    ev.Parent = m_idToConensusTargetDict[id];
+                    ev.Parent = m_idToConsensusTargetDict[id];
 
                     m_evidenceDict[evId] = ev;
                     if (!m_ctToEvidenceMap.ContainsKey(ctId))

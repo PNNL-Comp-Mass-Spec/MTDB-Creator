@@ -68,13 +68,13 @@ namespace MTDBAccessIO
 
             // Put the data into its objects
             // AMT stuff going in Consensus targets
-            // NET, MonoMass, Pred. Net, Peptide (Sequence with numeric mods), ID (can be crushed later)
+            // NET, MonoMass, Predicted NET, Peptide (Sequence with numeric mods), ID (can be crushed later)
             // OBSERVED <-- number of times this peptide was seen in the AMT
-            // for <observed> times, add an evidence with the info? would make sense and would allow the stats calcs to be accurate
-            // Prot stuff going into ProteinInfo
-            // Prot name only thing important for MTDB, ID (can be crushed later)
+            // for <observed> times, add an evidence with the info? would make sense and would allow the stats calculations to be accurate
+            // Protein stuff going into ProteinInfo
+            // Protein name only thing important for MTDB, ID (can be crushed later)
             // AMT map
-            // Link Consensus and Protein (ct[ct_id].protein.add(protein[prot_id]))
+            // Link Consensus and Protein (ct[ct_id].protein.add(protein[protein_id]))
 
             var consensusTargets    = new Dictionary<int, ConsensusTarget>();
             var proteins            = new Dictionary<int, ProteinInformation>();
@@ -85,12 +85,12 @@ namespace MTDBAccessIO
 
             // Read the headers for the files
             ctReader.ReadLine();
-            protReader.ReadLine();
+            proteinReader.ReadLine();
             mapReader.ReadLine();
 
             // Read the first "Data" lines from the files
             var ctLine      = ctReader.ReadLine();
-            var protLine    = protReader.ReadLine();
+            var proteinLine = proteinReader.ReadLine();
             var mapLine     = mapReader.ReadLine();
 
             while (ctLine != null)
@@ -124,16 +124,16 @@ namespace MTDBAccessIO
                 ctLine = ctReader.ReadLine();
             }
 
-            while (protLine != null)
+            while (proteinLine != null)
             {
-                var pieces = protLine.Split(',');
+                var pieces = proteinLine.Split(',');
 
                 var protein = new ProteinInformation
                 {
                     ProteinName = pieces[1]
                 };
                 proteins.Add(Convert.ToInt32(pieces[0]), protein);
-                protLine = protReader.ReadLine();
+                proteinLine = proteinReader.ReadLine();
             }
 
             while (mapLine != null)
@@ -145,7 +145,7 @@ namespace MTDBAccessIO
             }
 
             ctReader.Close();
-            protReader.Close();
+            proteinReader.Close();
             mapReader.Close();
 
             File.Delete(Path.Combine(directoryPath, "outTempAMT.txt"));

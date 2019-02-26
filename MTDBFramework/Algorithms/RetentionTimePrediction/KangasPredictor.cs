@@ -8,7 +8,7 @@ using NETPrediction;
 namespace MTDBFramework.Algorithms.RetentionTimePrediction
 {
     /// <summary>
-    /// Normal Elution Time prediction using the KANGAS algorithm
+    /// Elution Time prediction using the Kangas algorithm
     /// </summary>
     public class KangasPredictor : IRetentionTimePredictor
     {

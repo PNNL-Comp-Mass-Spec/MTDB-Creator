@@ -206,12 +206,12 @@
             <Button Grid.Column="1" Content="_OK" IsDefault="True" Command="{Binding SaveCommand}" Click="Button_Click">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource OptionsParameterConverter}">
-                        <Binding ElementName="MaxMsgfSpecProbBox" Path="Text"/>
-                        <Binding ElementName="MaxMsgfQvalueBox" Path ="Text"/>
-                        <Binding ElementName="AlignmentComboBox" Path="Text"/>
-                        <Binding ElementName="OrderTextBox" Path="Text"/>
-                        <Binding ElementName="KangasRadioButton" Path="IsChecked"/>
-                        <Binding ElementName="SpectralValueRadioButton" Path="IsChecked"/>
+                        <Binding ElementName="MaxMsgfSpecProbBox" Path="Text" />
+                        <Binding ElementName="MaxMsgfQValueBox" Path="Text" />
+                        <Binding ElementName="AlignmentComboBox" Path="Text" />
+                        <Binding ElementName="OrderTextBox" Path="Text" />
+                        <Binding ElementName="KangasRadioButton" Path="IsChecked" />
+                        <Binding ElementName="SpectralValueRadioButton" Path="IsChecked" />
                     </MultiBinding>
                 </Button.CommandParameter>
             </Button>

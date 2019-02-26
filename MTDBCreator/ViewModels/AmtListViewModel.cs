@@ -15,13 +15,13 @@ namespace MTDBCreator.ViewModels
     {
         public DmsLookupUtility Lookup { get; set; }
 
-        public ObservableCollection<AmtInfo> MtdbList { get; set; }
+        public ObservableCollection<AmtInfo> MTDBList { get; set; }
         public ObservableCollection<AmtPeptideOptions> QualityStats { get; set;}
 
         public AmtInfo SelectedDb { get; set; }
         public AmtPeptideOptions SelectedStats { get; set; }
 
-        public DelegateCommand RefreshMtdbsCommand { get; set; }
+        public DelegateCommand RefreshMTDBsCommand { get; set; }
         public DelegateCommand GetStatsCommand { get; set; }
         public DelegateCommand ExportCommand { get; set; }
 
@@ -50,32 +50,30 @@ namespace MTDBCreator.ViewModels
 
         public AmtListViewModel()
         {
-            MtdbList = new ObservableCollection<AmtInfo>();
+            MTDBList = new ObservableCollection<AmtInfo>();
             QualityStats = new ObservableCollection<AmtPeptideOptions>();
             IsSaving = false;
 
             Lookup = new DmsLookupUtility();
 
-            Action refreshMtdbsAction   = RefreshMtdbs;
+            Action refreshMTDBsAction   = RefreshMTDBs;
             Action getStatsAction       = GetStats;
             Action exportAction         = Export;
-            RefreshMtdbsCommand = new DelegateCommand(refreshMtdbsAction);
-            GetStatsCommand     = new DelegateCommand(getStatsAction);
-            GetStatsCommand.Executable = false;
-            ExportCommand       = new DelegateCommand(exportAction);
-            ExportCommand.Executable = false;
+            RefreshMTDBsCommand = new DelegateCommand(refreshMTDBsAction);
+            GetStatsCommand =     new DelegateCommand(getStatsAction) {Executable = false};
+            ExportCommand =       new DelegateCommand(exportAction) {Executable = false};
         }
 
-        private void RefreshMtdbs()
+        private void RefreshMTDBs()
         {
             var list = Lookup.GetDatabases().Values.ToList();
 
-            list.Sort((x, y) => x.Name.CompareTo(y.Name));
+            list.Sort((x, y) => string.Compare(x.Name, y.Name, StringComparison.Ordinal));
 
-            MtdbList.Clear();
+            MTDBList.Clear();
             foreach (var db in list)
             {
-                MtdbList.Add(db);
+                MTDBList.Add(db);
             }
 
             if (list.Count != 0)
@@ -135,7 +133,7 @@ namespace MTDBCreator.ViewModels
                 {
                     Task.Factory.StartNew(() =>
                     {
-                        int index = 0;
+                        var index = 0;
                         while (IsSaving)
                         {
                             Thread.Sleep(750);
@@ -150,21 +148,43 @@ namespace MTDBCreator.ViewModels
                         RestoreDirectory = true,
                         Title = "Save Mass Tag Data Base",
                         Filter = "Access file (*.mdb)|*.mdb|Sql file (*.mtdb)|*.mtdb",
-                        FilterIndex = 2
+                        FilterIndex = 2,
+                        FileName = SelectedDb.Name + ".mtdb"
                     };
 
                     if (dialog.ShowDialog() == true)
                     {
                         var path = dialog.FileName;
 
-                        if (path.EndsWith(".mdb"))
+                        if (path.EndsWith(".mdb", StringComparison.OrdinalIgnoreCase))
                         {
-                            Lookup.Separator = ',';
+                            Lookup.Separator = ",";
                         }
-                        Lookup.ExportToText(path, SelectedDb, SelectedStats);
+                        else
+                        {
+                            Lookup.Separator = DmsLookupUtility.DEFAULT_SEPARATOR;
+                        }
 
-                        var exporter = TextToDbConverterFactory.Create(path);
-                        exporter.ConvertToDbFormat(path);
+                        var success = Lookup.ExportToText(path, SelectedDb, SelectedStats);
+
+                        if (success)
+                        {
+                            var exporter = TextToDbConverterFactory.Create(path);
+                            var success2 = exporter.ConvertToDbFormat(path);
+
+                            if (success2)
+                                MessageBox.Show("Process complete", "Done", MessageBoxButton.OK, MessageBoxImage.Information);
+                            else
+                            {
+                                MessageBox.Show("Error with ConvertToDbFormat", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Error with ExportToText", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                        }
+
+
                     }
 
                     IsSaving = false;

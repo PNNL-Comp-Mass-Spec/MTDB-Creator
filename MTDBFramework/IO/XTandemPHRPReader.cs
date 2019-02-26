@@ -84,7 +84,9 @@ namespace MTDBFramework.IO
                 results.Add(result);
             }
 
-            ComputeNets(results);
+            // Calculate the Normalized Elution Times
+            ComputeNETs(results);
+
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.XTandem, results);
         }
