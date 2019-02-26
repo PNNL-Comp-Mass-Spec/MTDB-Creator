@@ -89,13 +89,22 @@ namespace MTDBFramework.IO
         /// <param name="results"></param>
         protected void ComputeNETs(IEnumerable<Evidence> results)
         {
+            ComputeNETsOnList(results.ToList());
+        }
+
+        /// <summary>
+        /// Calculate the Observed and Predicted Normalized Elution Time (NET)
+        /// </summary>
+        /// <param name="results"></param>
+        private void ComputeNETsOnList(IList<Evidence> results)
+        {
             if (!AbortRequested)
             {
-                UpdateProgress(99, "Loading elution times");
+                UpdateProgress(97, "Loading elution times");
 
                 NETPredictor.CalculateObservedNet(results);
 
-                UpdateProgress(99, "Initializing NET predictor");
+                UpdateProgress(98, "Initializing NET predictor");
                 var netPredictor = RetentionTimePredictorFactory.CreatePredictor(ReaderOptions.PredictorType);
 
                 UpdateProgress(99, "Computing NET values");
