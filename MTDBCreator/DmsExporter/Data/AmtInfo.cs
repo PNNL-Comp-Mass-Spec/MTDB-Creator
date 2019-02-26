@@ -15,5 +15,10 @@
         public int StateId { get; set; }
 
         public string Server { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}: {1}", Server ?? "NoServer", Name ?? string.Empty);
+        }
     }
 }
