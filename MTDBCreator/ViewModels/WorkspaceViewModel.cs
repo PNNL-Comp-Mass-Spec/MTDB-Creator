@@ -140,12 +140,15 @@ namespace MTDBCreator.ViewModels
         {
             if (!IsDatabaseSaved)
             {
-                var saveDatabaseDialog = new SaveFileDialog();
-                saveDatabaseDialog.Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*";
-                saveDatabaseDialog.Title = "Save to MTDB";
+                var saveDatabaseDialog = new SaveFileDialog
+                {
+                    Filter = "Mass Tag Database (*.mtdb)|*.mtdb|All Files (*.*)|*.*",
+                    Title = "Save to MTDB"
+                };
+
                 if (RestoreDirectory == null)
                 {
-                    RestoreDirectory = "C:\\";
+                    RestoreDirectory = @"C:\";
                 }
                 saveDatabaseDialog.InitialDirectory = RestoreDirectory;
                 saveDatabaseDialog.RestoreDirectory = true;
