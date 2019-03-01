@@ -25,6 +25,11 @@ namespace MTDBCreatorTestSuite.IO
         [TestCase(@"testAccess-3-3-1.mdb", 3, 3, 1)]
         public void TestWriteAccessDb(string path, int numberConsensus, int numberProteins, int numberEvidences)
         {
+            if (AccessReaderTests.IsRunningAsService())
+            {
+                Assert.Ignore("Cannot run Access tests from a non-interactive session");
+            }
+
             var writer = new AccessTargetDatabaseWriter();
             var options = new Options();
             var database = new TargetDatabase();
