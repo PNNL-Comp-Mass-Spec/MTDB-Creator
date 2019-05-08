@@ -38,24 +38,27 @@ namespace MTDBCreatorTestSuite.Data
                     switch (resultType)
                     {
                         case clsPHRPReader.ePeptideHitResultType.XTandem:
-                            foreach (XTandemResult evidence in data.Evidences)
+                            foreach (var item in data.Evidences)
                             {
+                                var evidence = (XTandemResult)item;
                                 Debug.Assert(evidence.NumTrypticEnds >= 0);
                                 Debug.Assert(evidence.NumTrypticEnds < 3);
                             }
                             break;
 
                         case clsPHRPReader.ePeptideHitResultType.Sequest:
-                            foreach (SequestResult evidence in data.Evidences)
+                            foreach (var item in data.Evidences)
                             {
+                                var evidence = (SequestResult)item;
                                 Debug.Assert(evidence.NumTrypticEnds >= 0);
                                 Debug.Assert(evidence.NumTrypticEnds < 3);
                             }
                             break;
 
-                        case clsPHRPReader.ePeptideHitResultType.MSGFDB:
-                            foreach (MsgfPlusResult evidence in data.Evidences)
+                        case clsPHRPReader.ePeptideHitResultType.MSGFPlus:
+                            foreach (var item in data.Evidences)
                             {
+                                var evidence = (MsgfPlusResult)item;
                                 Debug.Assert(evidence.NumTrypticEnds >= 0);
                                 Debug.Assert(evidence.NumTrypticEnds < 3);
                             }

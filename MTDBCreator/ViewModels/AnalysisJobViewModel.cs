@@ -10,7 +10,6 @@ using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.BackgroundWork;
 using MTDBFramework.Data;
-using MTDBFramework.IO;
 using Microsoft.Win32;
 using System;
 using MTDBFrameworkBase.Data;
@@ -75,7 +74,7 @@ namespace MTDBCreator.ViewModels
             {
                 if (m_processAnalysisJobCommand == null)
                 {
-                    m_processAnalysisJobCommand = new RelayCommand(param => ProcessAnalysisJob(param));
+                    m_processAnalysisJobCommand = new RelayCommand(ProcessAnalysisJob);
                 }
 
                 return m_processAnalysisJobCommand;
@@ -88,7 +87,7 @@ namespace MTDBCreator.ViewModels
             {
                 if (m_removeAnalysisJobCommand == null)
                 {
-                    m_removeAnalysisJobCommand = new RelayCommand(items => RemoveAnalysisJob(items));
+                    m_removeAnalysisJobCommand = new RelayCommand(RemoveAnalysisJob);
                 }
 
                 return m_removeAnalysisJobCommand;

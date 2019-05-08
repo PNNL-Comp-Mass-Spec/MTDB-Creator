@@ -11,18 +11,12 @@ namespace MTDBConsole
     {
         private const string PROGRAM_DATE = "February 25, 2019";
 
-        public static CommandOptions CommandOptions;
 
         public static string GetAppVersion()
         {
             var version = Assembly.GetExecutingAssembly().GetName().Version + " (" + PROGRAM_DATE + ")";
 
             return version;
-        }
-
-        static Program()
-        {
-            CommandOptions = new CommandOptions();
         }
 
         static int Main(string[] args)

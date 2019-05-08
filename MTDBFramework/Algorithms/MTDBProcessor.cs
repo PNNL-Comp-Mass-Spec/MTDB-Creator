@@ -229,7 +229,7 @@ namespace MTDBFramework.Algorithms
                 dataSet.Evidences.Sort((x, y) => x.Scan.CompareTo(y.Scan));
 
                 var evidenceAndUmc = new List<EvidenceUMCAssociation>(); // Only put evidences that pass the minimum observed net in this list.
-                var backupDataset = new List<UMCLight>();
+
                 foreach (var evidence in dataSet.Evidences)
                 {
                     if (evidence.ObservedNet >= ProcessorOptions.MinimumObservedNet)
@@ -247,7 +247,6 @@ namespace MTDBFramework.Algorithms
                             ScanEnd = evidence.Scan,
                         };
                         umcDataset.Add(umc);
-                        backupDataset.Add(umc);
                         evidenceAndUmc.Add(new EvidenceUMCAssociation(evidence, umc));
                     }
                 }
