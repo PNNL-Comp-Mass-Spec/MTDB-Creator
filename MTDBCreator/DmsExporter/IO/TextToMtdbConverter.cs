@@ -90,7 +90,7 @@ namespace MTDBCreator.DmsExporter.IO
             }
             catch (Exception ex)
             {
-                ConsoleMsgUtils.ShowWarning(string.Format("Unable to delete {0} in {1}: {2}", fileName, directoryPath, ex.Message));
+                ConsoleMsgUtils.ShowWarning("Unable to delete {0} in {1}: {2}", fileName, directoryPath, ex.Message);
             }
         }
 

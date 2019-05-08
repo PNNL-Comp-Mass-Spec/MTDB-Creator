@@ -136,12 +136,12 @@ namespace MTDBCreator.DmsExporter.IO
                     if (byte.TryParse(valueText, out var value))
                         return value;
 
-                    ConsoleMsgUtils.ShowWarning(string.Format("ColIndex {0} for {1} is not an integer: {2}", colIndex, CurrentQueryInfo, valueText));
+                    ConsoleMsgUtils.ShowWarning("ColIndex {0} for {1} is not an integer: {2}", colIndex, CurrentQueryInfo, valueText);
                     return valueIfMissing;
                 }
                 catch (Exception)
                 {
-                    ConsoleMsgUtils.ShowWarning(string.Format("Error parsing colIndex {0} for {1} as an integer: {2}", colIndex, CurrentQueryInfo, ex));
+                    ConsoleMsgUtils.ShowWarning("Error parsing colIndex {0} for {1} as an integer: {2}", colIndex, CurrentQueryInfo, ex.Message);
                     return valueIfMissing;
                 }
             }
@@ -196,12 +196,12 @@ namespace MTDBCreator.DmsExporter.IO
                     if (double.TryParse(valueText, out var value))
                         return value;
 
-                    ConsoleMsgUtils.ShowWarning(string.Format("ColIndex {0} for {1} is not numeric: {2}", colIndex, CurrentQueryInfo, valueText));
+                    ConsoleMsgUtils.ShowWarning("ColIndex {0} for {1} is not numeric: {2}", colIndex, CurrentQueryInfo, valueText);
                     return valueIfMissing;
                 }
                 catch (Exception)
                 {
-                    ConsoleMsgUtils.ShowWarning(string.Format("Error parsing colIndex {0} for {1} as a double: {2}", colIndex, CurrentQueryInfo, ex));
+                    ConsoleMsgUtils.ShowWarning("Error parsing colIndex {0} for {1} as a double: {2}", colIndex, CurrentQueryInfo, ex.Message);
                     return valueIfMissing;
                 }
             }
@@ -256,12 +256,12 @@ namespace MTDBCreator.DmsExporter.IO
                     if (int.TryParse(valueText, out var value))
                         return value;
 
-                    ConsoleMsgUtils.ShowWarning(string.Format("ColIndex {0} for {1} is not an integer: {2}", colIndex, CurrentQueryInfo, valueText));
+                    ConsoleMsgUtils.ShowWarning("ColIndex {0} for {1} is not an integer: {2}", colIndex, CurrentQueryInfo, valueText);
                     return valueIfMissing;
                 }
                 catch (Exception)
                 {
-                    ConsoleMsgUtils.ShowWarning(string.Format("Error parsing colIndex {0} for {1} as an integer: {2}", colIndex, CurrentQueryInfo, ex));
+                    ConsoleMsgUtils.ShowWarning("Error parsing colIndex {0} for {1} as an integer: {2}", colIndex, CurrentQueryInfo, ex.Message);
                     return valueIfMissing;
                 }
             }
@@ -294,12 +294,12 @@ namespace MTDBCreator.DmsExporter.IO
                     if (short.TryParse(valueText, out var value))
                         return value;
 
-                    ConsoleMsgUtils.ShowWarning(string.Format("ColIndex {0} for {1} is not an integer: {2}", colIndex, CurrentQueryInfo, valueText));
+                    ConsoleMsgUtils.ShowWarning("ColIndex {0} for {1} is not an integer: {2}", colIndex, CurrentQueryInfo, valueText);
                     return valueIfMissing;
                 }
                 catch (Exception)
                 {
-                    ConsoleMsgUtils.ShowWarning(string.Format("Error parsing colIndex {0} for {1} as an integer: {2}", colIndex, CurrentQueryInfo, ex));
+                    ConsoleMsgUtils.ShowWarning("Error parsing colIndex {0} for {1} as an integer: {2}", colIndex, CurrentQueryInfo, ex.Message);
                     return valueIfMissing;
                 }
             }
@@ -331,7 +331,7 @@ namespace MTDBCreator.DmsExporter.IO
                 }
                 catch (Exception)
                 {
-                    ConsoleMsgUtils.ShowWarning(string.Format("Error parsing colIndex {0} for {1}: {2}", colIndex, CurrentQueryInfo, ex));
+                    ConsoleMsgUtils.ShowWarning("Error parsing colIndex {0} for {1}: {2}", colIndex, CurrentQueryInfo, ex.Message);
                     return valueIfMissing;
                 }
             }
