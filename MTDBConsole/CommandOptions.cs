@@ -20,20 +20,21 @@ namespace MTDBConsole
 
         }
 
-        public bool ValidateArgs()
+        public bool ValidateArgs(out string errorMessage)
         {
             if (string.IsNullOrWhiteSpace(MzidListPath))
             {
-                Console.WriteLine("Mzid List file must be defined");
+                errorMessage = "Mzid List file must be defined";
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(MzidListPath))
             {
-                Console.WriteLine("Database file path to create must be defined");
+                errorMessage = "Database file path to create must be defined";
                 return false;
             }
 
+            errorMessage = string.Empty;
             return true;
         }
 

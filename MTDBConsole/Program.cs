@@ -9,8 +9,7 @@ namespace MTDBConsole
 {
     class Program
     {
-        private const string PROGRAM_DATE = "February 25, 2019";
-
+        private const string PROGRAM_DATE = "May 8, 2019";
 
         public static string GetAppVersion()
         {
@@ -52,9 +51,14 @@ namespace MTDBConsole
                 return -1;
             }
 
-            if (!options.ValidateArgs())
+            if (!options.ValidateArgs(out var errorMessage))
             {
                 parser.PrintHelp();
+
+                Console.WriteLine();
+                ConsoleMsgUtils.ShowWarning("Validation error:");
+                ConsoleMsgUtils.ShowWarning(errorMessage);
+
                 System.Threading.Thread.Sleep(1500);
                 return -1;
             }
