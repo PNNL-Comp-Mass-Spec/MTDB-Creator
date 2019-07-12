@@ -100,7 +100,7 @@ namespace MTDBCreator.Windows
                     {
                         foreach (var file in directory.GetFiles(fileExt, SearchOption.AllDirectories))
                         {
-                            if (file.Name.EndsWith("msgfdb_syn.txt"))
+                            if (file.Name.EndsWith("msgfdb_syn.txt") || file.Name.EndsWith("msgfplus_syn.txt"))
                             {
                                 formatInfo.Format = LcmsIdentificationTool.MsgfPlus;
                             }
@@ -154,7 +154,7 @@ namespace MTDBCreator.Windows
                     {
                         foreach (var fileName in openFileDialog.FileNames)
                         {
-                            if (fileName.EndsWith("msgfdb_syn.txt"))
+                            if (fileName.EndsWith("msgfdb_syn.txt") || fileName.EndsWith("msgfplus_syn.txt"))
                             {
                                 formatInfo.Format = LcmsIdentificationTool.MsgfPlus;
                             }

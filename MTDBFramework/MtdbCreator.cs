@@ -130,7 +130,7 @@ namespace MTDBFramework
 
             var pathLower = path.ToLower();
 
-            if (pathLower.EndsWith("msgfdb_syn.txt"))
+            if (pathLower.EndsWith("msgfdb_syn.txt") || pathLower.EndsWith("msgfplus_syn.txt"))
             {
                 tool = LcmsIdentificationTool.MsgfPlus;
             }

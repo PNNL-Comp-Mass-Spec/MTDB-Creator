@@ -19,8 +19,8 @@ namespace MTDBCreatorTestSuite.Algorithms.Alignment
         /// to the baseline (in this case, the clusters created through the process)
         /// </summary>
         /// <param name="paths"></param>
-        [TestCase(@"QC_Shew_13_02_2a_03Mar14\QC_Shew_13_02_2a_03Mar14_Leopard_14-02-01_msgfdb_syn.txt",
-            @"QC_Shew_13_02_2b_03Mar14\QC_Shew_13_02_2b_03Mar14_Leopard_14-02-02_msgfdb_syn.txt", Ignore = "false"
+        [TestCase(@"QC_Shew_13_02_2a_03Mar14\QC_Shew_13_02_2a_03Mar14_Leopard_14-02-01_msgfplus_syn.txt",
+            @"QC_Shew_13_02_2b_03Mar14\QC_Shew_13_02_2b_03Mar14_Leopard_14-02-02_msgfplus_syn.txt", Ignore = "false"
             )]
         public void TestLcmsWarpWrite(params string[] paths)
         {

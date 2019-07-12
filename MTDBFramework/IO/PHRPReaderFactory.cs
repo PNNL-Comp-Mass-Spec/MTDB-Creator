@@ -44,7 +44,7 @@ namespace MTDBFramework.IO
                     reader = new SequestPhrpReader(options);
                     break;
 
-                case clsPHRPReader.ePeptideHitResultType.MSGFDB:
+                case clsPHRPReader.ePeptideHitResultType.MSGFPlus:
                     reader = new MsgfPlusPhrpReader(options);
                     break;
 
