@@ -46,9 +46,9 @@ namespace MTDBFramework.IO
 
                 // Skip this PSM if it doesn't pass the import filters
                 // Note that qValue is basically FDR
-                var qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_QValue, -1);
+                var qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFPlus.DATA_COLUMN_QValue, -1);
                 if (qValue < 0)
-                    qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_FDR, 0);
+                    qValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFPlus.DATA_COLUMN_FDR, 0);
 
                 double specProb = 0;
                 if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
@@ -76,30 +76,30 @@ namespace MTDBFramework.IO
                 result.Reference = reader.CurrentPSM.ProteinFirst;
                 result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
 
-                result.DeNovoScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_DeNovoScore, 0);
-                result.MsgfScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFScore, 0);
+                result.DeNovoScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFPlus.DATA_COLUMN_DeNovoScore, 0);
+                result.MsgfScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFPlus.DATA_COLUMN_MSGFScore, 0);
 
-                result.SpecEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFPlus_SpecEValue, -1);
+                result.SpecEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFPlus.DATA_COLUMN_MSGFPlus_SpecEValue, -1);
                 if (result.SpecEValue < 0)
                 {
-                    result.SpecEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFDB_SpecProb, 0);
-                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_Rank_MSGFDB_SpecProb, 0);
+                    result.SpecEValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFPlus.DATA_COLUMN_MSGFDB_SpecProb, 0);
+                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFPlus.DATA_COLUMN_Rank_MSGFDB_SpecProb, 0);
                 }
                 else
                 {
-                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_MSGFPlus_SpecEValue, 0);
+                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFPlus.DATA_COLUMN_MSGFPlus_SpecEValue, 0);
                 }
 
-                result.EValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_EValue, 0);
+                result.EValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFPlus.DATA_COLUMN_EValue, 0);
 
                 result.QValue = qValue;
                 result.DiscriminantValue = qValue;
 
-                result.PepQValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_PepQValue, -1);
+                result.PepQValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFPlus.DATA_COLUMN_PepQValue, -1);
                 if (result.PepQValue < 0)
-                    result.PepQValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFDB.DATA_COLUMN_PepFDR, 0);
+                    result.PepQValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSGFPlus.DATA_COLUMN_PepFDR, 0);
 
-                result.IsotopeError = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFDB.DATA_COLUMN_Isotope_Error, 0);
+                result.IsotopeError = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFPlus.DATA_COLUMN_Isotope_Error, 0);
 
                 results.Add(result);
             }
