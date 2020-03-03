@@ -93,6 +93,11 @@ namespace MTDBCreatorTestSuite.IO
             @"QC_Shew_13_02_2b_03Mar14\QC_Shew_13_02_2b_03Mar14_Leopard_14-02-02_msgfplus_syn.txt")]
         public void TestWriteAccessReal(params string[] paths)
         {
+            if (AccessReaderTests.IsRunningAsService())
+            {
+                Assert.Ignore("Cannot run Access tests from a non-interactive session");
+            }
+
             var fullPaths = new List<string>();
             var fullOutputPaths = new List<string>();
             foreach (var path in paths)
