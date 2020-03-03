@@ -23,10 +23,10 @@ namespace MTDBCreatorTestSuite.IO
         /// <param name="numberOfEvidences">Number of evidences to put in each target.</param>
         /// All ignored right now until I get mtdbs locally
         [Test]
-        [TestCase(@"testDatabase-1-1.mtdb", 1, 1, Ignore = "false")]
-        [TestCase(@"testDatabase-1-2.mtdb", 1, 2, Ignore = "false")]
-        [TestCase(@"testDatabase-2-1.mtdb", 2, 1, Ignore = "false")]
-        [TestCase(@"testDatabase-100-3.mtdb", 100, 3, Ignore = "false")]
+        [TestCase(@"testDatabase-1-1.mtdb", 1, 1)]
+        [TestCase(@"testDatabase-1-2.mtdb", 1, 2)]
+        [TestCase(@"testDatabase-2-1.mtdb", 2, 1)]
+        [TestCase(@"testDatabase-100-3.mtdb", 100, 3)]
         public void TestWriteDatabase(string path, int numberOfTargets, int numberOfEvidences)
         {
             var reader       = new SqLiteTargetDatabaseWriter();
@@ -74,8 +74,7 @@ namespace MTDBCreatorTestSuite.IO
 
         [Test]
         [TestCase(@"QC_Shew_13_02_2a_03Mar14\QC_Shew_13_02_2a_03Mar14_Leopard_14-02-01_msgfplus_syn.txt",
-            @"QC_Shew_13_02_2b_03Mar14\QC_Shew_13_02_2b_03Mar14_Leopard_14-02-02_msgfplus_syn.txt", Ignore = "false"
-            )]
+            @"QC_Shew_13_02_2b_03Mar14\QC_Shew_13_02_2b_03Mar14_Leopard_14-02-02_msgfplus_syn.txt")]
         public void TestWriteReal(params string[] paths)
         {
             var fullPaths = new List<string>();
