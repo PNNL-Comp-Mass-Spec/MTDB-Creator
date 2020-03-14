@@ -19,7 +19,8 @@ namespace MTDBCreator.Commands
 
         public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            if (execute == null) throw new ArgumentNullException("execute"); m_execute = execute; m_canExecute = canExecute;
+            m_execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            m_canExecute = canExecute;
         }
 
         #endregion // Constructors
