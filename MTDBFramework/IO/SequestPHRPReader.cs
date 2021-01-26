@@ -70,7 +70,7 @@ namespace MTDBFramework.IO
 
                 // Populate items specific to Sequest
                 result.Reference = reader.CurrentPSM.ProteinFirst;
-                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
+                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTermini;
 
                 result.DelCn = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_DelCn, 0);
                 result.DelCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_DelCn2, 0);

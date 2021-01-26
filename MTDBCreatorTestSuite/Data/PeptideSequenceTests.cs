@@ -37,7 +37,7 @@ namespace MTDBCreatorTestSuite.Data
                     var resultType  = clsPHRPReader.AutoDetermineResultType(pathName);
                     switch (resultType)
                     {
-                        case clsPHRPReader.ePeptideHitResultType.XTandem:
+                        case clsPHRPReader.PeptideHitResultTypes.XTandem:
                             foreach (var item in data.Evidences)
                             {
                                 var evidence = (XTandemResult)item;
@@ -46,7 +46,7 @@ namespace MTDBCreatorTestSuite.Data
                             }
                             break;
 
-                        case clsPHRPReader.ePeptideHitResultType.Sequest:
+                        case clsPHRPReader.PeptideHitResultTypes.Sequest:
                             foreach (var item in data.Evidences)
                             {
                                 var evidence = (SequestResult)item;
@@ -55,7 +55,7 @@ namespace MTDBCreatorTestSuite.Data
                             }
                             break;
 
-                        case clsPHRPReader.ePeptideHitResultType.MSGFPlus:
+                        case clsPHRPReader.PeptideHitResultTypes.MSGFPlus:
                             foreach (var item in data.Evidences)
                             {
                                 var evidence = (MsgfPlusResult)item;

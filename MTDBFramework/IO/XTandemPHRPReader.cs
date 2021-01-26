@@ -70,7 +70,7 @@ namespace MTDBFramework.IO
                 result.DataSet.Tool = LcmsIdentificationTool.XTandem;
 
                 // Populate items specific to X!Tandem
-                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
+                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTermini;
 
                 result.BScore = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_b_score, 0);
                 result.DeltaCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserXTandem.DATA_COLUMN_DeltaCn2, 0);

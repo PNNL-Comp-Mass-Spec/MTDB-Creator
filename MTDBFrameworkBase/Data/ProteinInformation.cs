@@ -37,12 +37,12 @@ namespace MTDBFrameworkBase.Data
         /// <summary>
         /// Terminus State
         /// </summary>
-        public clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants TerminusState { get; set; }
+        public clsPeptideCleavageStateCalculator.PeptideTerminusStateConstants TerminusState { get; set; }
 
         /// <summary>
         /// Cleavage State
         /// </summary>
-        public clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants CleavageState { get; set; }
+        public clsPeptideCleavageStateCalculator.PeptideCleavageStateConstants CleavageState { get; set; }
 
         /// <summary>
         /// Residue Start Position

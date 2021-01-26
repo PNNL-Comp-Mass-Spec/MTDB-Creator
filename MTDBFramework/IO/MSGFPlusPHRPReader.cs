@@ -74,7 +74,7 @@ namespace MTDBFramework.IO
 
                 // Populate items specific to MGSF+
                 result.Reference = reader.CurrentPSM.ProteinFirst;
-                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTerminii;
+                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTermini;
 
                 result.DeNovoScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFPlus.DATA_COLUMN_DeNovoScore, 0);
                 result.MsgfScore = reader.CurrentPSM.GetScoreInt(clsPHRPParserMSGFPlus.DATA_COLUMN_MSGFScore, 0);

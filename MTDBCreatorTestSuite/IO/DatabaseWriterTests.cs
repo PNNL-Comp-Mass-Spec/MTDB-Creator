@@ -42,8 +42,8 @@ namespace MTDBCreatorTestSuite.IO
                 var protein = new ProteinInformation
                 {
                     ProteinName = "SO_Test" + proteinCount++,
-                    CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full,
-                    TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNTerminus,
+                    CleavageState = clsPeptideCleavageStateCalculator.PeptideCleavageStateConstants.Full,
+                    TerminusState = clsPeptideCleavageStateCalculator.PeptideTerminusStateConstants.ProteinNTerminus,
                 };
                 protein.Consensus.Add(target);
 

@@ -36,19 +36,19 @@ namespace MTDBFramework.IO
 
             switch (resultType)
             {
-                case clsPHRPReader.ePeptideHitResultType.XTandem:
+                case clsPHRPReader.PeptideHitResultTypes.XTandem:
                     reader = new XTandemPhrpReader(options);
                     break;
 
-                case clsPHRPReader.ePeptideHitResultType.Sequest:
+                case clsPHRPReader.PeptideHitResultTypes.Sequest:
                     reader = new SequestPhrpReader(options);
                     break;
 
-                case clsPHRPReader.ePeptideHitResultType.MSGFPlus:
+                case clsPHRPReader.PeptideHitResultTypes.MSGFPlus:
                     reader = new MsgfPlusPhrpReader(options);
                     break;
 
-                case clsPHRPReader.ePeptideHitResultType.MSAlign:
+                case clsPHRPReader.PeptideHitResultTypes.MSAlign:
                     reader = new MsAlignPhrpReader(options);
                     break;
                 default:

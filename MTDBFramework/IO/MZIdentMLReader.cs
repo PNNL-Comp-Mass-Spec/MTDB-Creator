@@ -255,34 +255,34 @@ namespace MTDBFramework.IO
                 if (evidence.Post[0] == '-')
                 {
                     protein.TerminusState =
-                        clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNandCCTerminus;
-                    protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
+                        clsPeptideCleavageStateCalculator.PeptideTerminusStateConstants.ProteinNandCCTerminus;
+                    protein.CleavageState = clsPeptideCleavageStateCalculator.PeptideCleavageStateConstants.Full;
                 }
                 else
                 {
-                    protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinNTerminus;
+                    protein.TerminusState = clsPeptideCleavageStateCalculator.PeptideTerminusStateConstants.ProteinNTerminus;
                 }
             }
             else if (evidence.Post[0] == '-')
             {
-                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.ProteinCTerminus;
+                protein.TerminusState = clsPeptideCleavageStateCalculator.PeptideTerminusStateConstants.ProteinCTerminus;
             }
             else
             {
-                protein.TerminusState = clsPeptideCleavageStateCalculator.ePeptideTerminusStateConstants.None;
+                protein.TerminusState = clsPeptideCleavageStateCalculator.PeptideTerminusStateConstants.None;
             }
 
             switch (numTrypticEnds)
             {
                 case 0:
-                    protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.NonSpecific;
+                    protein.CleavageState = clsPeptideCleavageStateCalculator.PeptideCleavageStateConstants.NonSpecific;
                     break;
                 case 1:
                     protein.CleavageState =
-                        clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Partial;
+                        clsPeptideCleavageStateCalculator.PeptideCleavageStateConstants.Partial;
                     break;
                 case 2:
-                    protein.CleavageState = clsPeptideCleavageStateCalculator.ePeptideCleavageStateConstants.Full;
+                    protein.CleavageState = clsPeptideCleavageStateCalculator.PeptideCleavageStateConstants.Full;
                     break;
             }
         }
