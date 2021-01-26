@@ -3,7 +3,7 @@ using MTDBFrameworkBase.Data;
 
 namespace MTDBCreator.Helpers.Dialog
 {
-    public class FileDialogFormatInfoFactory
+    public static class FileDialogFormatInfoFactory
     {
         public static FileDialogFormatInfo Create(string format)
         {
