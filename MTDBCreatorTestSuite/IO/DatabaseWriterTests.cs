@@ -21,7 +21,7 @@ namespace MTDBCreatorTestSuite.IO
         /// <param name="path"></param>
         /// <param name="numberOfTargets">Number of targets to put in the database</param>
         /// <param name="numberOfEvidences">Number of evidences to put in each target.</param>
-        /// All ignored right now until I get mtdbs locally
+        /// All ignored right now until I get MTDBs locally
         [Test]
         [TestCase(@"testDatabase-1-1.mtdb", 1, 1)]
         [TestCase(@"testDatabase-1-2.mtdb", 1, 2)]
@@ -42,8 +42,8 @@ namespace MTDBCreatorTestSuite.IO
                 var protein = new ProteinInformation
                 {
                     ProteinName = "SO_Test" + proteinCount++,
-                    CleavageState = clsPeptideCleavageStateCalculator.PeptideCleavageStateConstants.Full,
-                    TerminusState = clsPeptideCleavageStateCalculator.PeptideTerminusStateConstants.ProteinNTerminus,
+                    CleavageState = PeptideCleavageStateCalculator.PeptideCleavageState.Full,
+                    TerminusState = PeptideCleavageStateCalculator.PeptideTerminusState.ProteinNTerminus,
                 };
                 protein.Consensus.Add(target);
 

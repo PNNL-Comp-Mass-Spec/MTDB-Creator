@@ -34,10 +34,10 @@ namespace MTDBCreatorTestSuite.Data
                     pathName        = Path.Combine(jobDirectoryPath, pathName);
                     var reader      = PhrpReaderFactory.Create(pathName, options);
                     var data            = reader.Read(pathName);
-                    var resultType  = clsPHRPReader.AutoDetermineResultType(pathName);
+                    var resultType  = ReaderFactory.AutoDetermineResultType(pathName);
                     switch (resultType)
                     {
-                        case clsPHRPReader.PeptideHitResultTypes.XTandem:
+                        case PeptideHitResultTypes.XTandem:
                             foreach (var item in data.Evidences)
                             {
                                 var evidence = (XTandemResult)item;
@@ -46,7 +46,7 @@ namespace MTDBCreatorTestSuite.Data
                             }
                             break;
 
-                        case clsPHRPReader.PeptideHitResultTypes.Sequest:
+                        case PeptideHitResultTypes.Sequest:
                             foreach (var item in data.Evidences)
                             {
                                 var evidence = (SequestResult)item;
@@ -55,7 +55,7 @@ namespace MTDBCreatorTestSuite.Data
                             }
                             break;
 
-                        case clsPHRPReader.PeptideHitResultTypes.MSGFPlus:
+                        case PeptideHitResultTypes.MSGFPlus:
                             foreach (var item in data.Evidences)
                             {
                                 var evidence = (MsgfPlusResult)item;

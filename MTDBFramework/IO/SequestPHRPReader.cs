@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
-using PHRPReader;
+using PHRPReader.Reader;
 
 namespace MTDBFramework.IO
 {
@@ -45,7 +45,7 @@ namespace MTDBFramework.IO
                     break;
 
                 // Skip this PSM if it doesn't pass the import filters
-                var xcorr = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XCorr, 0);
+                var xcorr = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_XCorr, 0);
 
                 double specProb = 0;
                 if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
@@ -72,15 +72,15 @@ namespace MTDBFramework.IO
                 result.Reference = reader.CurrentPSM.ProteinFirst;
                 result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTermini;
 
-                result.DelCn = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_DelCn, 0);
-                result.DelCn2 = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_DelCn2, 0);
+                result.DelCn = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_DelCn, 0);
+                result.DelCn2 = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_DelCn2, 0);
 
-                result.RankSp = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserSequest.DATA_COLUMN_RankSp, 0);
-                result.RankXc = (short)reader.CurrentPSM.GetScoreInt(clsPHRPParserSequest.DATA_COLUMN_RankXc, 0);
-                result.Sp = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_Sp, 0);
+                result.RankSp = (short)reader.CurrentPSM.GetScoreInt(SequestSynFileReader.DATA_COLUMN_RankSp, 0);
+                result.RankXc = (short)reader.CurrentPSM.GetScoreInt(SequestSynFileReader.DATA_COLUMN_RankXc, 0);
+                result.Sp = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_Sp, 0);
                 result.XCorr = xcorr;
                 result.DiscriminantValue = xcorr;
-                result.XcRatio = reader.CurrentPSM.GetScoreDbl(clsPHRPParserSequest.DATA_COLUMN_XcRatio, 0);
+                result.XcRatio = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_XcRatio, 0);
 
                 result.FScore = SequestResult.CalculatePeptideProphetDiscriminantScore(result);
 

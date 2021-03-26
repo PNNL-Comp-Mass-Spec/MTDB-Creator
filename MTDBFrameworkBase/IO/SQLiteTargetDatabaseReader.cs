@@ -163,8 +163,8 @@ namespace MTDBFrameworkBase.IO
                         var protein = proteinDic[pair.Protein.Id];
                         protein.ResidueEnd = pair.ResidueEnd;
                         protein.ResidueStart = pair.ResidueStart;
-                        protein.TerminusState = (clsPeptideCleavageStateCalculator.PeptideTerminusStateConstants)pair.TerminusState;
-                        protein.CleavageState = (clsPeptideCleavageStateCalculator.PeptideCleavageStateConstants)pair.CleavageState;
+                        protein.TerminusState = (PeptideCleavageStateCalculator.PeptideTerminusState)pair.TerminusState;
+                        protein.CleavageState = (PeptideCleavageStateCalculator.PeptideCleavageState)pair.CleavageState;
                         //protein.Id = 0;
                         evidence.AddProtein(protein);
                         consensusDic[evidence.Parent.Id].AddProtein(protein);

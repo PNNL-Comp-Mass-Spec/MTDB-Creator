@@ -10,6 +10,8 @@ namespace MTDBFramework.IO
     /// </summary>
     public static class PhrpReaderFactory
     {
+        // Ignore Spelling: MZIdentML
+
         /// <summary>
         /// Entry point for creating an LCMS Dataset using the PHRP Reader.
         /// </summary>
@@ -25,7 +27,7 @@ namespace MTDBFramework.IO
         public static PHRPReaderBase Create(string path, Options options)
         {
             PHRPReaderBase reader;
-            var resultType = clsPHRPReader.AutoDetermineResultType(path);
+            var resultType = PHRPReader.ReaderFactory.AutoDetermineResultType(path);
 
             if (path.EndsWith("mzid", StringComparison.OrdinalIgnoreCase) ||
                 path.EndsWith("mzid.gz", StringComparison.OrdinalIgnoreCase))
@@ -36,21 +38,22 @@ namespace MTDBFramework.IO
 
             switch (resultType)
             {
-                case clsPHRPReader.PeptideHitResultTypes.XTandem:
+                case PHRPReader.PeptideHitResultTypes.XTandem:
                     reader = new XTandemPhrpReader(options);
                     break;
 
-                case clsPHRPReader.PeptideHitResultTypes.Sequest:
+                case PHRPReader.PeptideHitResultTypes.Sequest:
                     reader = new SequestPhrpReader(options);
                     break;
 
-                case clsPHRPReader.PeptideHitResultTypes.MSGFPlus:
+                case PHRPReader.PeptideHitResultTypes.MSGFPlus:
                     reader = new MsgfPlusPhrpReader(options);
                     break;
 
-                case clsPHRPReader.PeptideHitResultTypes.MSAlign:
+                case PHRPReader.PeptideHitResultTypes.MSAlign:
                     reader = new MsAlignPhrpReader(options);
                     break;
+
                 default:
                     //Unsupported format!! Oh no!!
                     reader = null;

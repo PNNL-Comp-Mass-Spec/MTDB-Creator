@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
-using PHRPReader;
+using PHRPReader.Reader;
 
 namespace MTDBFramework.IO
 {
@@ -36,7 +36,7 @@ namespace MTDBFramework.IO
                     break;
 
                 // Skip this PSM if it doesn't pass the import filters
-                var eValue = reader.CurrentPSM.GetScoreDbl(clsPHRPParserMSAlign.DATA_COLUMN_EValue, 0);
+                var eValue = reader.CurrentPSM.GetScoreDbl(MSAlignSynFileReader.DATA_COLUMN_EValue, 0);
 
                 double specProb = 0;
                 if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))

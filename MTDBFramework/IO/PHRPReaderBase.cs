@@ -48,7 +48,7 @@ namespace MTDBFramework.IO
         /// <summary>
         /// Cached peptide mass calculator
         /// </summary>
-        protected clsPeptideMassCalculator mPeptideMassCalculator;
+        protected PeptideMassCalculator mPeptideMassCalculator;
 
         /// <summary>
         /// Constructor
@@ -61,7 +61,7 @@ namespace MTDBFramework.IO
 
             AbortRequested = false;
 
-            mPeptideMassCalculator = new clsPeptideMassCalculator();
+            mPeptideMassCalculator = new PeptideMassCalculator();
         }
 
         /// <summary>
@@ -118,11 +118,11 @@ namespace MTDBFramework.IO
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        protected clsPHRPReader InitializeReader(string path)
+        protected ReaderFactory InitializeReader(string path)
         {
             AbortRequested = false;
 
-            var oStartupOptions = new clsPHRPStartupOptions
+            var startupOptions = new StartupOptions
             {
                 LoadModsAndSeqInfo = true,
                 LoadMSGFResults = true,
@@ -132,13 +132,11 @@ namespace MTDBFramework.IO
 
             UpdateProgress(0, "Initializing reader");
 
-            var reader = new clsPHRPReader(path, oStartupOptions)
+            return  new ReaderFactory(path, startupOptions)
             {
                 SkipDuplicatePSMs = true,
                 FastReadMode = true
             };
-
-            return reader;
         }
 
         /// <summary>
@@ -158,7 +156,7 @@ namespace MTDBFramework.IO
         /// <param name="result"></param>
         /// <param name="reader"></param>
         /// <param name="dataFilePath"></param>
-        protected void StoreDatasetInfo(Evidence result, clsPHRPReader reader, string dataFilePath)
+        protected void StoreDatasetInfo(Evidence result, ReaderFactory reader, string dataFilePath)
         {
             StoreDatasetInfo(result, reader.DatasetName, dataFilePath);
         }
@@ -198,7 +196,7 @@ namespace MTDBFramework.IO
         /// </summary>
         /// <param name="reader"></param>
         /// <param name="result"></param>
-        protected static void StoreProteinInfo(clsPHRPReader reader, Evidence result)
+        protected static void StoreProteinInfo(ReaderFactory reader, Evidence result)
         {
             foreach (var p in reader.CurrentPSM.ProteinDetails)
             {
@@ -221,7 +219,7 @@ namespace MTDBFramework.IO
         /// <param name="result"></param>
         /// <param name="reader"></param>
         /// <param name="specProb"></param>
-        protected void StorePsmData(Evidence result, clsPHRPReader reader, double specProb)
+        protected void StorePsmData(Evidence result, ReaderFactory reader, double specProb)
         {
             result.Charge = reader.CurrentPSM.Charge;
             result.CleanPeptide = reader.CurrentPSM.PeptideCleanSequence;
