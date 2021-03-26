@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
-using MTDBFramework.Data;
 using FeatureAlignment.Algorithms.Regression;
 using MTDBFrameworkBase.Data;
 

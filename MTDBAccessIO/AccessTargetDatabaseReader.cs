@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MTDBFramework.Data;
-using MTDBFramework.IO;
 using MTDBFrameworkBase.Data;
 using MTDBFrameworkBase.Database;
 using MTDBFrameworkBase.IO;

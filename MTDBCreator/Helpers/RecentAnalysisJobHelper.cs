@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using MTDBCreator.Properties;
 using MTDBCreator.ViewModels;
-using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
 

@@ -1,5 +1,4 @@
-﻿using MTDBFramework.Data;
-using MTDBFrameworkBase.Data;
+﻿using MTDBFrameworkBase.Data;
 
 namespace MTDBFramework.Algorithms.Alignment
 {

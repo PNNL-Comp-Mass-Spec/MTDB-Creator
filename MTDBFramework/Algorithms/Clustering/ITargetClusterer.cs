@@ -1,7 +1,6 @@
 ﻿#region Namespaces
 
 using System.Collections.Generic;
-using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
 
 #endregion

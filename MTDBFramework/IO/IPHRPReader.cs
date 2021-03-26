@@ -1,6 +1,5 @@
 ﻿#region Namespaces
 
-using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
 
 #endregion

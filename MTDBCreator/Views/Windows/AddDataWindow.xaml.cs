@@ -9,7 +9,6 @@ using MTDBCreator.Helpers;
 using MTDBCreator.Helpers.Dialog;
 using MTDBCreator.ViewModels;
 using MTDBCreator.Views;
-using MTDBFramework.Algorithms;
 using MTDBFramework.Data;
 using MTDBFramework.IO;
 using MTDBFrameworkBase.Data;

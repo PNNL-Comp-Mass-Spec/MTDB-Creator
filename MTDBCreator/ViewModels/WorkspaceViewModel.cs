@@ -4,7 +4,6 @@ using System.Windows.Input;
 using Microsoft.Win32;
 using MTDBCreator.Commands;
 using MTDBCreator.Helpers;
-using MTDBFramework.IO;
 using MTDBFrameworkBase.IO;
 
 namespace MTDBCreator.ViewModels

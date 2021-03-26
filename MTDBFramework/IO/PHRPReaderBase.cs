@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
-using MTDBFramework.Data;
 using MTDBFramework.UI;
 using MTDBFrameworkBase.Data;
 using MTDBFrameworkBase.Database;

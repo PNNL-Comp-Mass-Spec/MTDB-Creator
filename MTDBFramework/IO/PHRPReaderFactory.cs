@@ -1,7 +1,5 @@
 ﻿using System;
-using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
-using PHRPReader;
 
 namespace MTDBFramework.IO
 {

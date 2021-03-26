@@ -1,6 +1,4 @@
-﻿using System;
-using System.Globalization;
-using MTDBFramework.Data;
+﻿using System.Globalization;
 using MTDBFrameworkBase.Data;
 
 namespace MTDBCreator.ViewModels.TreeView

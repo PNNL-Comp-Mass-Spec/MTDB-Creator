@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.IO;
 using MTDBFramework.Algorithms;
-using MTDBFramework.Data;
 using MTDBFramework.IO;
 using MTDBFrameworkBase.Data;
 using NUnit.Framework;

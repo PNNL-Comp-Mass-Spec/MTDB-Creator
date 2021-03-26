@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MTDBFramework.Algorithms.RetentionTimePrediction;
-using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
 
 #endregion
