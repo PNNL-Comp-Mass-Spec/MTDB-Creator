@@ -16,6 +16,8 @@ namespace MTDBFramework.IO
     /// </summary>
     public class MzIdentMlReader : PHRPReaderBase
     {
+        // Ignore Spelling: DeNovo, MZIdent, UniMod
+
         /// <summary>
         /// Initialize a MzIdentMlReader object
         /// </summary>
@@ -26,7 +28,7 @@ namespace MTDBFramework.IO
         }
 
         /// <summary>
-        /// Entry point for MZIdentMLReader, overriden from PHRPReaderBase
+        /// Entry point for MZIdentMLReader, overridden from PHRPReaderBase
         /// Read the MZIdentML file, map the data to MSGF+ data, compute the NETs, and return the LCMS DataSet
         /// </summary>
         /// <param name="path">Path to *.mzid/mzIdentML file</param>
@@ -167,7 +169,7 @@ namespace MTDBFramework.IO
                         }
                         else
                         {
-                            // Unknown modification (to unimod) - store the name if we have it, otherwise use the mass as the name
+                            // Unknown modification (to UniMod) - store the name if we have it, otherwise use the mass as the name
                             if (mod.Value.Tag.Length > 0)
                             {
                                 ptm.Name = mod.Value.Tag;
