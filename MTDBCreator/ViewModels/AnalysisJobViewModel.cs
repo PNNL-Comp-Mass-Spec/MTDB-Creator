@@ -112,7 +112,6 @@ namespace MTDBCreator.ViewModels
         {
             try
             {
-
                 // Insert database save location here
                 var saveDatabaseDialog = new SaveFileDialog();
 
@@ -149,8 +148,6 @@ namespace MTDBCreator.ViewModels
                         SavedDatabasePath = saveDatabaseDialog.FileName;
                     }
                 }
-
-
 
                 var start = DateTime.Now;
                 var result = ProcessAnalysisTargets();
@@ -229,7 +226,6 @@ namespace MTDBCreator.ViewModels
 
                 if (result != null && saveDatabaseDialog.FileName != "")
                 {
-
                     var saveStart = DateTime.Now;
 
                     SaveAnalysisDatabase(saveDatabaseDialog.FileName);
@@ -237,7 +233,6 @@ namespace MTDBCreator.ViewModels
                     end = DateTime.Now;
                     Console.WriteLine("Database Save took " + (end - saveStart));
                 }
-
             }
             catch (Exception ex)
             {
@@ -248,7 +243,6 @@ namespace MTDBCreator.ViewModels
                 }
                 else
                 {
-
                     MessageBox.Show(errMsg + ": " + ex.Message +
                                     StackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
                                     "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);

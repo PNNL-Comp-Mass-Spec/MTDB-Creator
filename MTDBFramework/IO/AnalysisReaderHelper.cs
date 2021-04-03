@@ -81,7 +81,6 @@ namespace MTDBFramework.IO
                 return predictedNET;
 
             return 0;
-
         }
     }
 
@@ -90,7 +89,6 @@ namespace MTDBFramework.IO
     /// </summary>
     public class AnalysisReaderHelper
     {
-
         //private int mPeptidesProcessed;
         //private int mPeptidesToProcess;
 
@@ -126,7 +124,6 @@ namespace MTDBFramework.IO
                     var scanToTime = ReadScanTimeFile(txtPath, 1, 2, '\t');
 
                     ConvertElutionTimeToNET(lstEvidences, scanToTime);
-
                 }
                 else if (File.Exists(csvPath))
                 {
@@ -187,8 +184,6 @@ namespace MTDBFramework.IO
                     {
                         scanToTime.TryGetValue(lstScans[index], out observedTime);
                     }
-
-
                 }
 
                 evidence.ObservedNet = (observedTime - minTime) / (maxTime - minTime);
@@ -202,7 +197,6 @@ namespace MTDBFramework.IO
 
             using (var reader = new StreamReader(txtPath))
             {
-
                 while (reader.Peek() > -1)
                 {
                     var line = reader.ReadLine();
@@ -222,7 +216,6 @@ namespace MTDBFramework.IO
                         continue;
 
                     scanToTime.Add(scanNumber, elutionTimeMinutes);
-
                 }
             }
 
@@ -248,7 +241,6 @@ namespace MTDBFramework.IO
             {
                 evidence.PredictedNet = ComputePeptideNET(evidence.CleanPeptide, predictor);
             });
-
         }
 
         /// <summary>
@@ -267,8 +259,5 @@ namespace MTDBFramework.IO
 
             return predictedNET;
         }
-
     }
-
-
 }

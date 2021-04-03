@@ -11,7 +11,6 @@ namespace MTDBFramework.UI
     /// </summary>
     public class PercentCompleteEventArgs : EventArgs
     {
-
         /// <summary>
         /// Constructor
         /// </summary>

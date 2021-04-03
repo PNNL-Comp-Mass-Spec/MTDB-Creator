@@ -74,6 +74,5 @@ namespace MTDBFramework.IO
 
             return new LcmsDataSet(Path.GetFileNameWithoutExtension(path), LcmsIdentificationTool.MSAlign, results);
         }
-
     }
 }

@@ -72,7 +72,6 @@ namespace MTDBCreator.DmsExporter.IO
 
         private string ProteinsAccessDbQuery(AmtPeptideOptions stats)
         {
-
             return "SELECT Prot.Ref_ID, Prot.Reference, Prot.Description, " +
                          " Prot.Protein_Residue_Count, Prot.Monoisotopic_Mass, " +
                          " Prot.Protein_Collection_ID, Prot.Last_Affected, " +
@@ -121,7 +120,6 @@ namespace MTDBCreator.DmsExporter.IO
 
         private string MassTagToProteinMapAccessDbQuery(AmtPeptideOptions stats)
         {
-
             return "SELECT MTPM.Mass_Tag_ID, MTPM.Mass_Tag_Name, " +
                          " MTPM.Ref_ID, MTPM.Cleavage_State, " +
                          " MTPM.Fragment_Number, MTPM.Fragment_Span, " +
@@ -218,7 +216,6 @@ namespace MTDBCreator.DmsExporter.IO
         public DmsLookupUtility()
             : this(DmsConnectionString)
         {
-
         }
 
         /// <summary>
@@ -408,7 +405,6 @@ namespace MTDBCreator.DmsExporter.IO
                                     };
 
                                     writer.WriteLine(string.Join(Separator, dataValues));
-
                                 }
                                 reader.Close();
                             }
@@ -449,7 +445,6 @@ namespace MTDBCreator.DmsExporter.IO
                                     };
 
                                     writer.WriteLine(string.Join(Separator, dataValues));
-
                                 }
                                 reader.Close();
                             }
@@ -497,7 +492,6 @@ namespace MTDBCreator.DmsExporter.IO
                                     };
 
                                     writer.WriteLine(string.Join(Separator, dataValues));
-
                                 }
                                 reader.Close();
                             }
@@ -528,7 +522,6 @@ namespace MTDBCreator.DmsExporter.IO
                                     };
 
                                     writer.WriteLine(string.Join(Separator, dataValues));
-
                                 }
                                 reader.Close();
                             }
@@ -576,7 +569,6 @@ namespace MTDBCreator.DmsExporter.IO
                                     };
 
                                     writer.WriteLine(string.Join(Separator, dataValues));
-
                                 }
                                 reader.Close();
                             }
@@ -606,7 +598,6 @@ namespace MTDBCreator.DmsExporter.IO
                                     };
 
                                     writer.WriteLine(string.Join(Separator, dataValues));
-
                                 }
                                 reader.Close();
                             }
@@ -656,7 +647,6 @@ namespace MTDBCreator.DmsExporter.IO
 
                                 while (reader.Read())
                                 {
-
                                     var dataValues = new List<string>
                                     {
                                         DbValueUtilities.DbValueToString(reader, 0, 0),         // Job
@@ -726,11 +716,9 @@ namespace MTDBCreator.DmsExporter.IO
                                     };
 
                                     writer.WriteLine(string.Join(Separator, dataValues));
-
                                 }
                                 reader.Close();
                             }
-
                         }
 
                         return true;
@@ -804,7 +792,6 @@ namespace MTDBCreator.DmsExporter.IO
                                 };
 
                                 mtdbDictionary.Add(amtInfo.Name, amtInfo);
-
                             }
                         }
                         break;
@@ -830,7 +817,6 @@ namespace MTDBCreator.DmsExporter.IO
 
             DbValueUtilities.CurrentQueryInfo = "";
             return mtdbDictionary;
-
         }
 
         public Dictionary<double, AmtPeptideOptions> GetStats(AmtInfo amt)
@@ -881,7 +867,6 @@ namespace MTDBCreator.DmsExporter.IO
                                 {
                                     statsDictionary.Add(pmtQSDouble, peptideOptions);
                                 }
-
                             }
                         }
                         break;
@@ -907,8 +892,6 @@ namespace MTDBCreator.DmsExporter.IO
 
             DbValueUtilities.CurrentQueryInfo = "";
             return statsDictionary;
-
         }
-
     }
 }

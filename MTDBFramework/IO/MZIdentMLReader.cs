@@ -216,7 +216,6 @@ namespace MTDBFramework.IO
                     PeptideWithNumericMods = result.SeqWithNumericMods
                 };
 
-
                 result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
                 result.ModificationDescription = null;
 
@@ -234,7 +233,6 @@ namespace MTDBFramework.IO
 
                 if (result.ModificationCount > 0)
                 {
-
                     foreach (var mod in item.Peptide.Mods)
                     {
                         // TODO: Confirm that this is valid math (MEM thinks it may not be)

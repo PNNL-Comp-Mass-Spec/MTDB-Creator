@@ -4,7 +4,6 @@ using System.Windows.Data;
 
 namespace MTDBCreator.Helpers
 {
-
     public class OptionsParameterConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)

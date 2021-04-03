@@ -80,7 +80,6 @@ namespace MTDBCreator.DmsExporter.IO
         {
             try
             {
-
                 var fileToDelete = new FileInfo(Path.Combine(directoryPath, fileName));
                 if (!fileToDelete.Exists)
                     return;
@@ -240,7 +239,6 @@ namespace MTDBCreator.DmsExporter.IO
 
         private bool RetrieveDataFromModInfoFile(string directoryPath)
         {
-
             var modInfoFile = new FileInfo(Path.Combine(directoryPath, "tempModInfo.txt"));
             if (!modInfoFile.Exists)
             {

@@ -167,6 +167,5 @@ namespace MTDBFramework.Data
                 OnPropertyChanged("IsotopeError");
             }
         }
-
     }
 }

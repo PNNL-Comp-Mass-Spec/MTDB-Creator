@@ -10,7 +10,6 @@ using NUnit.Framework;
 
 namespace MTDBCreatorTestSuite.Algorithms.Alignment
 {
-
     [TestFixture]
     public sealed class LcmsWarpTests : TestBase
     {

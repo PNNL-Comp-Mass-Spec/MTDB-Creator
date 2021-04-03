@@ -183,8 +183,6 @@ namespace MTDBCreator.ViewModels
                         {
                             MessageBox.Show("Error with ExportToText", "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                         }
-
-
                     }
 
                     IsSaving = false;

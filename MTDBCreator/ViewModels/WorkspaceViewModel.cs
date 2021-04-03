@@ -127,7 +127,6 @@ namespace MTDBCreator.ViewModels
 
                     UpdateDataViewModels();
                     AnalysisJobViewModel.Options.OptionsChanged = false;
-
                 }
             }
             else

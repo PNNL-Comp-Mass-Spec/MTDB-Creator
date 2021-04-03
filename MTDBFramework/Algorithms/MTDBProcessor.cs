@@ -128,16 +128,13 @@ namespace MTDBFramework.Algorithms
                     if (t.ObservedNet >= ProcessorOptions.MinimumObservedNet &&
                         t.ObservedNet <= ProcessorOptions.MaximumObservedNet)
                     {
-
                         // To prevent filtration of evidences which have previously passed alignment,
                         if (dataSet.PreviouslyAnalyzed || !targetFilter.ShouldFilter(t))
                         {
-
                             filteredTargets.Add(t);
 
                             if (!alignmentFilter.ShouldFilter(t))
                             {
-
                                 alignedTargets.Add(t);
                             }
                         }
@@ -295,7 +292,6 @@ namespace MTDBFramework.Algorithms
                     medNetDiff[binNum] = netDiffList.Median();
                     netDiffList.Clear();
                 }
-
 
                 foreach (var data in dataSet.Evidences.Where(data => !evidenceMap.ContainsKey(data.Id)))
                 {

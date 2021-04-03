@@ -29,7 +29,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
         {
             m_abortRequested = true;
             m_analysisJobProcessor.AbortProcessing();
-
         }
 
         public void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -48,7 +47,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
                     e.Cancel = true;
                 }
             }
-
             catch (Exception ex)
             {
                 e.Result = ex;
@@ -90,7 +88,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
                                     caption, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 HostProcessWindow.DialogResult = !(e.Result is Exception);
-
             }
             HostProcessWindow.Close();
         }

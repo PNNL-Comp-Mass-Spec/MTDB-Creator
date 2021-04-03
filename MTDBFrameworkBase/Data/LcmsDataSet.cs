@@ -103,7 +103,6 @@ namespace MTDBFrameworkBase.Data
             Tool = LcmsIdentificationTool.Raw;
             Evidences = new List<Evidence>();
             RegressionResult = new LinearRegressionResult();
-
         }
 
         /// <summary>

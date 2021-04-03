@@ -59,7 +59,6 @@ namespace MTDBCreatorTestSuite.IO
                         Mz              = 405,
                         Scan            = evidenceCount++,
                         PeptideInfo =  new TargetPeptideInfo()
-
                     };
 
                     evidence.AddProtein(protein);

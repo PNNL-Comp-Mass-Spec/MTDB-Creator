@@ -11,7 +11,6 @@ namespace MTDBFrameworkBase.IO
     /// </summary>
     public class SqLiteTargetDatabaseWriter : ITargetDatabaseWriter
     {
-
         // TODO: Implement these (or maybe dictionaries)
         //private readonly Dictionary<string, TargetPeptideInfo> m_uniquePeptides = new Dictionary<string, TargetPeptideInfo>();
         private readonly Dictionary<string, TargetDataSet> m_uniqueDataSets = new Dictionary<string, TargetDataSet>();

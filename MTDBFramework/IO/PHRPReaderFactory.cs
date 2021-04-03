@@ -56,10 +56,8 @@ namespace MTDBFramework.IO
                     //Unsupported format!! Oh no!!
                     reader = null;
                     break;
-
             }
             return reader;
         }
     }
-
 }

@@ -16,7 +16,6 @@ namespace MTDBCreator.ViewModels
         private string m_predictionText;
         private Options m_options;
 
-
         private ICommand m_updatePredictionCommand;
         private ICommand m_saveCommand;
         private bool m_enabled;
@@ -46,7 +45,6 @@ namespace MTDBCreator.ViewModels
 
         #region Public Properties
 
-
         public string PredictionText
         {
             get => m_predictionText;
@@ -72,7 +70,6 @@ namespace MTDBCreator.ViewModels
 
         public RegressionType SelectedRegressionType
         {
-
             get => m_options.RegressionType;
 
             set
@@ -96,7 +93,6 @@ namespace MTDBCreator.ViewModels
 
         public DatabaseType SelectedDatabaseType
         {
-
             get => m_options.DatabaseType;
 
             set

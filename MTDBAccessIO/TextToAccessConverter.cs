@@ -8,7 +8,6 @@ namespace MTDBAccessIO
     {
         public bool ConvertToDbFormat(string outFilePath)
         {
-
             var accApplication = new ACCESS.Application();
 
             var outFile = new FileInfo(outFilePath);

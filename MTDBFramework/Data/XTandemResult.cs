@@ -140,7 +140,6 @@ namespace MTDBFramework.Data
                         break;
                 }
 
-
                 OnPropertyChanged("PeptideHyperscore");
             }
         }

@@ -7,7 +7,6 @@ namespace MTDBCreator.DmsExporter.IO
 {
     static class DbValueUtilities
     {
-
         public static string CurrentQueryInfo { get; set; } = string.Empty;
 
         /// <summary>
@@ -98,7 +97,6 @@ namespace MTDBCreator.DmsExporter.IO
             return GetDbFieldValue(reader, colIndex, valueIfMissing).ToString();
         }
 
-
         /// <summary>
         /// Get the smallint field value as a string
         /// </summary>
@@ -126,7 +124,6 @@ namespace MTDBCreator.DmsExporter.IO
                     return valueIfMissing;
 
                 return reader.GetByte(colIndex);
-
             }
             catch (Exception ex)
             {
@@ -145,7 +142,6 @@ namespace MTDBCreator.DmsExporter.IO
                     return valueIfMissing;
                 }
             }
-
         }
 
         /// <summary>
@@ -169,7 +165,6 @@ namespace MTDBCreator.DmsExporter.IO
                 var valueAsDouble = GetDbFieldValue(reader, colIndex, (double)valueIfMissing);
                 return (decimal)valueAsDouble;
             }
-
         }
 
         /// <summary>
@@ -228,7 +223,6 @@ namespace MTDBCreator.DmsExporter.IO
                 var valueAsDouble = GetDbFieldValue(reader, colIndex, (double)valueIfMissing);
                 return (float)valueAsDouble;
             }
-
         }
 
         /// <summary>
@@ -246,7 +240,6 @@ namespace MTDBCreator.DmsExporter.IO
                     return valueIfMissing;
 
                 return reader.GetInt32(colIndex);
-
             }
             catch (Exception ex)
             {
@@ -265,9 +258,7 @@ namespace MTDBCreator.DmsExporter.IO
                     return valueIfMissing;
                 }
             }
-
         }
-
 
         /// <summary>
         /// Get the smallint field value
@@ -284,7 +275,6 @@ namespace MTDBCreator.DmsExporter.IO
                     return valueIfMissing;
 
                 return reader.GetInt16(colIndex);
-
             }
             catch (Exception ex)
             {
@@ -303,7 +293,6 @@ namespace MTDBCreator.DmsExporter.IO
                     return valueIfMissing;
                 }
             }
-
         }
 
         /// <summary>
@@ -335,7 +324,6 @@ namespace MTDBCreator.DmsExporter.IO
                     return valueIfMissing;
                 }
             }
-
         }
 
         public static string PossiblyQuoteString(string fieldValue, string separator)

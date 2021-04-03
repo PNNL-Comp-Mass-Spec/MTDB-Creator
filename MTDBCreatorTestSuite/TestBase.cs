@@ -61,6 +61,5 @@ namespace MTDBCreatorTestSuite
         protected string TestSuiteDir { get; }
 
         protected string TextDelimiter { get; }
-
     }
 }

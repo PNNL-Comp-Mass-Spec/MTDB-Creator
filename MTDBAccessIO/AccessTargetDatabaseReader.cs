@@ -11,7 +11,6 @@ namespace MTDBAccessIO
 {
     public class AccessTargetDatabaseReader: ITargetDatabaseReader
     {
-
         public IEnumerable<LcmsDataSet> Read(string sourceFilePath)
         {
             // Read in the data from the access database

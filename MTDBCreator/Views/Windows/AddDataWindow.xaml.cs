@@ -125,7 +125,6 @@ namespace MTDBCreator.Windows
                             }
                         }
                     }
-
                 }
             }
         }
@@ -263,8 +262,6 @@ namespace MTDBCreator.Windows
                 }
             }
         }
-
-
 
         private void AddDataWindow_Closed(object sender, EventArgs e)
         {

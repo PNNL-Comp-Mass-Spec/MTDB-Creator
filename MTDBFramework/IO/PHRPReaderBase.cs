@@ -170,7 +170,6 @@ namespace MTDBFramework.IO
         {
             // Lookup this dataset in the dataset info cache
 
-
             if (!DatasetCache.TryGetValue(dataFilePath, out var dataset))
             {
                 dataset = new TargetDataSet
@@ -187,7 +186,6 @@ namespace MTDBFramework.IO
             }
 
             result.DataSet = dataset;
-
         }
 
         /// <summary>
@@ -287,7 +285,6 @@ namespace MTDBFramework.IO
             {
                 result.EncodedNonNumericSequence = result.Sequence;
             }
-
         }
 
         #region ProgressHandlers

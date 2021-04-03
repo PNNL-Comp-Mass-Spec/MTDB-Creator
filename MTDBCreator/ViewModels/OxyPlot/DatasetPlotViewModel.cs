@@ -252,7 +252,6 @@ namespace MTDBCreator.ViewModels
             return scatterSeries;
         }
 
-
         public LineAnnotation MakeRegressionLineAnnotation(AnalysisJobItem analysisJobItem)
         {
             return new LineAnnotation
@@ -316,7 +315,6 @@ namespace MTDBCreator.ViewModels
                                 break;
                         }
                     }
-
                 }
                 plotModel.InvalidatePlot(true);
             }

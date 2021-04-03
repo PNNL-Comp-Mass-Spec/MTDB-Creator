@@ -14,7 +14,6 @@ namespace MTDBAccessIO
     /// </summary>
     public class AccessTargetDatabaseWriter : ITargetDatabaseWriter
     {
-
         private void ExportToText(string outFilePath, TargetDatabase inputData)
         {
             var outFile = new FileInfo(outFilePath);
@@ -79,7 +78,6 @@ namespace MTDBAccessIO
                 {
                     numSeq = test[0];
                 }
-
 
                 // Unused: var cleanPeptide = (seqPieces.ToList().Count == 1) ? seqPieces[0] : seqPieces[1];
                 var targetLine = string.Format("{0},{1},{2},{3},{4},{5},\"{6}\"",
@@ -161,7 +159,6 @@ namespace MTDBAccessIO
                 throw new DirectoryNotFoundException("Unable to determine the parent directory of " + outFilePath);
             }
 
-
             if (outFile.Exists)
             {
                 outFile.Delete();
@@ -181,8 +178,6 @@ namespace MTDBAccessIO
             File.Delete(Path.Combine(directoryPath, "tempAMT_Proteins.txt"));
             File.Delete(Path.Combine(directoryPath, "tempAMT_to_Protein_Map.txt"));
         }
-
-
 
         #region Events
 

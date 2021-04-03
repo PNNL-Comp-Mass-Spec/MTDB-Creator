@@ -45,7 +45,6 @@ namespace MTDBCreator.Windows
         {
             if (MultithreadingEnabled)
                 MainBackgroundWorker.RunWorkerAsync();
-
         }
 
         private void CancelProcessing_Click(object sender, RoutedEventArgs e)
@@ -89,6 +88,5 @@ namespace MTDBCreator.Windows
 
         public BackgroundWorker MainBackgroundWorker { get; }
         public IBackgroundWorkHelper MainBackgroundWorkHelper { get; set; }
-
     }
 }

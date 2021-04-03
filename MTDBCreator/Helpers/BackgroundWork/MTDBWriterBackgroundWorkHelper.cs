@@ -54,13 +54,11 @@ namespace MTDBCreator.Helpers.BackgroundWork
                 }
                 else
                 {
-
                     MessageBox.Show(errMsg + ": " + ex.Message +
                                     StackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
                                     "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 }
             }
-
         }
 
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)

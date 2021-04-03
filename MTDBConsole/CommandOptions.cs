@@ -17,7 +17,6 @@ namespace MTDBConsole
 
             Console.WriteLine("MzidListPath: " + MzidListPath);
             Console.WriteLine("DatabasePath: " + DatabasePath);
-
         }
 
         public bool ValidateArgs(out string errorMessage)
@@ -37,6 +36,5 @@ namespace MTDBConsole
             errorMessage = string.Empty;
             return true;
         }
-
     }
 }

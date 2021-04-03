@@ -11,7 +11,6 @@ namespace MTDBFrameworkBase.Events
     /// </summary>
     public class MtdbProgressChangedEventArgs : EventArgs
     {
-
         /// <summary>
         /// Constructor
         /// </summary>

@@ -49,7 +49,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
                     {
                         e.Cancel = true;
                     }
-
             }
             catch (Exception ex)
             {
@@ -72,7 +71,6 @@ namespace MTDBCreator.Helpers.BackgroundWork
 
             HostProcessWindow.MainBackgroundWorker.ReportProgress(e.Current,
                                                                   new object[] { e.Total.ToString(), statusMessage });
-
         }
 
         public void BackgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)

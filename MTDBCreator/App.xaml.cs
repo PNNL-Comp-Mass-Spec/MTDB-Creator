@@ -24,6 +24,5 @@ namespace MTDBCreator
 
             Settings.Default.RecentAnalysisJobs.Remove("placeholder");
         }
-
     }
 }

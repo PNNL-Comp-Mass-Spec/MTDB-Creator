@@ -37,7 +37,6 @@ namespace MTDBCreator.PageControls
 
             try
             {
-
                 RecentAnalysisJobStackPanel.Children.Clear();
 
                 if (Settings.Default.RecentAnalysisJobs.Count > 0)
@@ -79,9 +78,7 @@ namespace MTDBCreator.PageControls
                                 PRISM.StackTraceFormatter.GetExceptionStackTraceMultiLine(ex),
                                 "Error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
-
         }
-
 
         private void newRecentItemButton_Click(object sender, RoutedEventArgs e)
         {
@@ -114,7 +111,6 @@ namespace MTDBCreator.PageControls
             };
 
             addDataWindow.ShowDialog();
-
         }
 
         private void NewAnalysisJobButton_Click(object sender, RoutedEventArgs e)

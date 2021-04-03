@@ -32,7 +32,6 @@ namespace MTDBCreator.ViewModels.TreeView
             {
                 m_ChildNodes.Add(new ProteinTreeNodeViewModel(prot, this));
             }
-
         }
 
         public override void LoadChildNodes()

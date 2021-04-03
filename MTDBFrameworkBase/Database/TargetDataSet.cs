@@ -27,5 +27,4 @@ namespace MTDBFrameworkBase.Database
         /// </summary>
         public LcmsIdentificationTool Tool { get; set; }
     }
-
 }

@@ -49,7 +49,6 @@ namespace MTDBCreator.ViewModels
             {
                 ProteinDatabaseTreeNodeViewModels.First().ProteinSearch();
             }
-
         }
 
         public string SearchFilter

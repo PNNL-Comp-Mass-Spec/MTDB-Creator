@@ -9,7 +9,6 @@ namespace MTDBCreator.ViewModels.TreeView
         private readonly TargetDatabase m_targetDatabase;
         public DelegateCommand PeptideSearchCommand { get; set;}
 
-
         public TargetDatabaseTreeNodeViewModel(TargetDatabase database)
             : base(string.Format("Target Database ({0})", database.ConsensusTargets.Count), true)
         {
@@ -32,7 +31,6 @@ namespace MTDBCreator.ViewModels.TreeView
             {
                 m_ChildNodes.Add(new ConsensusTargetTreeNodeViewModel(ct, this));
             }
-
         }
 
         public override void LoadChildNodes()

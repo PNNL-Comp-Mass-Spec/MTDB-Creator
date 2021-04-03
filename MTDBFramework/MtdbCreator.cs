@@ -28,7 +28,6 @@ namespace MTDBFramework
         {
             try
             {
-
                 var options = new Options
                 {
                     ConsoleMode = true
@@ -106,7 +105,6 @@ namespace MTDBFramework
                 ConsoleMsgUtils.ShowError("Exception creating the AMT Tag DB", ex);
                 return new TargetDatabase();
             }
-
         }
 
         /// <summary>

@@ -8,7 +8,6 @@ namespace MTDBCreator.Views.Windows
     /// </summary>
     public partial class AmtListView
     {
-
         public AmtPeptideOptionsViewModel QualityStats { get; set; }
 
         public Action StatAction { get; set; }

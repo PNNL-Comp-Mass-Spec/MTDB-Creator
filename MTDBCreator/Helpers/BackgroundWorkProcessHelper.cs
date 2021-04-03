@@ -14,7 +14,6 @@ namespace MTDBCreator.Helpers
 
             if (processWindow.MultithreadingEnabled)
             {
-
                 if (processWindow.ShowDialog() == true)
                 {
                     return backgroundWorkHelper.Result;

@@ -78,7 +78,6 @@ namespace MTDBFramework.IO
                 jobItem.DataSet = m_analysisReader.Read(jobItem.FilePath);
 
                 m_currentItem++;
-
             }
 
             return analysisJobItems;
