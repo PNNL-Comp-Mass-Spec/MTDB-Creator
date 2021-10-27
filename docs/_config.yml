@@ -2,3 +2,6 @@
 name: MTDB-Creator
 description: This software can be used to generate an Accurate Mass and Time tag database from local MS/MS search engine results from MSGF+, X!Tandem, or SEQUEST.
 url: https://pnnl-comp-mass-spec.github.io/MTDB-Creator/
+
+# Google Analytics
+google_analytics: G-LXXKP1N66C
