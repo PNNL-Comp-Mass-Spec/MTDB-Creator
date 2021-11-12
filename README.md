@@ -9,8 +9,8 @@ peptides across datasets, then writes the results to the database.
 MTDB Creator can directly load the .mzid files created by MS-GF+. 
 It can also load .mzid.gz files. To process X!Tandem results, .xml 
 file created by X!Tandem must first be converted to a tab-delimited 
-format using the Peptide Hit Results Processor application (PHRP); 
-see https://omics.pnl.gov/software/peptide-hit-results-processor.
+format using the Peptide Hit Results Processor application (PHRP); 
+see [GitHub](https://github.com/PNNL-Comp-Mass-Spec/PHRP/releases)
 
 ## Details
 
@@ -34,8 +34,8 @@ and a window appear with alignment plots.
 
 ## Example Data
 
-Example data files are available in a 130 MB .zip file at 
-https://omics.pnl.gov/sites/default/files/MTDB_Creator_Example_Data.zip
+Example data files are available in a 130 MB .zip file on [GitHub](https://github.com/PNNL-Comp-Mass-Spec/MTDB-Creator/releases)
+named MTDB_Creator_Example_Data.zip
 for you to explore MTDB Creator's functionality. Unzip that .Zip file to obtain these files:
 
 1. MSGF+ results files to be used as input files for MTDB Creator
