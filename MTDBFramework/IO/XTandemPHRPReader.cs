@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
+using PHRPReader.Data;
 using PHRPReader.Reader;
 
 namespace MTDBFramework.IO
@@ -44,24 +45,26 @@ namespace MTDBFramework.IO
                 if (AbortRequested)
                     break;
 
+                var currentPSM = reader.CurrentPSM;
+
                 // Skip this PSM if it doesn't pass the import filters
-                var logPepEValue = reader.CurrentPSM.GetScoreDbl(XTandemSynFileReader.DATA_COLUMN_Peptide_Expectation_Value_LogE, 0);
+                var logPepEValue = currentPSM.GetScoreDbl(XTandemSynFileReader.GetColumnNameByID(XTandemSynFileColumns.EValue), 0);
 
                 double specProb = 0;
-                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
-                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecEValue);
+                if (!string.IsNullOrEmpty(currentPSM.MSGFSpecEValue))
+                    specProb = Convert.ToDouble(currentPSM.MSGFSpecEValue);
 
                 if (filter.ShouldFilter(logPepEValue, specProb))
                     continue;
 
                 reader.FinalizeCurrentPSM();
 
-                if (reader.CurrentPSM.SeqID == 0)
+                if (currentPSM.SeqID == 0)
                     continue;
 
                 var result = new XTandemResult
                 {
-                    AnalysisId = reader.CurrentPSM.ResultID
+                    AnalysisId = currentPSM.ResultID
                 };
 
                 StorePsmData(result, reader, specProb);
@@ -70,17 +73,17 @@ namespace MTDBFramework.IO
                 result.DataSet.Tool = LcmsIdentificationTool.XTandem;
 
                 // Populate items specific to X!Tandem
-                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTermini;
+                result.NumTrypticEnds = currentPSM.NumTrypticTermini;
 
-                result.BScore = reader.CurrentPSM.GetScoreDbl(XTandemSynFileReader.DATA_COLUMN_b_score, 0);
-                result.DeltaCn2 = reader.CurrentPSM.GetScoreDbl(XTandemSynFileReader.DATA_COLUMN_DeltaCn2, 0);
-                result.LogIntensity = reader.CurrentPSM.GetScoreDbl(XTandemSynFileReader.DATA_COLUMN_Peptide_Intensity_LogI, 0);
+                result.BScore = currentPSM.GetScoreDbl(XTandemSynFileReader.GetColumnNameByID(XTandemSynFileColumns.BScore), 0);
+                result.DeltaCn2 = currentPSM.GetScoreDbl(XTandemSynFileReader.GetColumnNameByID(XTandemSynFileColumns.DeltaCn2), 0);
+                result.LogIntensity = currentPSM.GetScoreDbl(XTandemSynFileReader.GetColumnNameByID(XTandemSynFileColumns.Intensity), 0);
                 result.LogPeptideEValue = logPepEValue;
                 result.DiscriminantValue = logPepEValue;
-                result.NumberBIons = (short)reader.CurrentPSM.GetScoreInt(XTandemSynFileReader.DATA_COLUMN_b_ions);
-                result.NumberYIons = (short)reader.CurrentPSM.GetScoreInt(XTandemSynFileReader.DATA_COLUMN_y_ions);
-                result.PeptideHyperscore = reader.CurrentPSM.GetScoreDbl(XTandemSynFileReader.DATA_COLUMN_Peptide_Hyperscore, 0);
-                result.YScore = reader.CurrentPSM.GetScoreDbl(XTandemSynFileReader.DATA_COLUMN_y_score, 0);
+                result.NumberBIons = (short)currentPSM.GetScoreInt(XTandemSynFileReader.GetColumnNameByID(XTandemSynFileColumns.BIons));
+                result.NumberYIons = (short)currentPSM.GetScoreInt(XTandemSynFileReader.GetColumnNameByID(XTandemSynFileColumns.YIons));
+                result.PeptideHyperscore = currentPSM.GetScoreDbl(XTandemSynFileReader.GetColumnNameByID(XTandemSynFileColumns.Hyperscore), 0);
+                result.YScore = currentPSM.GetScoreDbl(XTandemSynFileReader.GetColumnNameByID(XTandemSynFileColumns.YScore), 0);
 
                 results.Add(result);
             }

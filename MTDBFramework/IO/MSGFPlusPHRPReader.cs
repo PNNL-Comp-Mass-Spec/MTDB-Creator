@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
+using PHRPReader.Data;
 using PHRPReader.Reader;
 
 namespace MTDBFramework.IO
@@ -44,27 +45,29 @@ namespace MTDBFramework.IO
                 if (AbortRequested)
                     break;
 
+                var currentPSM = reader.CurrentPSM;
+
                 // Skip this PSM if it doesn't pass the import filters
                 // Note that qValue is basically FDR
-                var qValue = reader.CurrentPSM.GetScoreDbl(MSGFPlusSynFileReader.DATA_COLUMN_QValue, -1);
+                var qValue = currentPSM.GetScoreDbl(MSGFPlusSynFileReader.GetColumnNameByID(MSGFPlusSynFileColumns.QValue), -1);
                 if (qValue < 0)
-                    qValue = reader.CurrentPSM.GetScoreDbl(MSGFPlusSynFileReader.DATA_COLUMN_FDR, 0);
+                    qValue = currentPSM.GetScoreDbl(MSGFPlusSynFileReader.GetMSGFDBColumnNameByID(MSGFDBSynFileColumns.FDR), 0);
 
                 double specProb = 0;
-                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
-                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecEValue);
+                if (!string.IsNullOrEmpty(currentPSM.MSGFSpecEValue))
+                    specProb = Convert.ToDouble(currentPSM.MSGFSpecEValue);
 
                 if (filter.ShouldFilter(qValue, specProb))
                     continue;
 
                 reader.FinalizeCurrentPSM();
 
-                if (reader.CurrentPSM.SeqID == 0)
+                if (currentPSM.SeqID == 0)
                     continue;
 
                 var result = new MsgfPlusResult
                 {
-                    AnalysisId = reader.CurrentPSM.ResultID
+                    AnalysisId = currentPSM.ResultID
                 };
 
                 StorePsmData(result, reader, specProb);
@@ -73,33 +76,33 @@ namespace MTDBFramework.IO
                 result.DataSet.Tool = LcmsIdentificationTool.MsgfPlus;
 
                 // Populate items specific to MGSF+
-                result.Reference = reader.CurrentPSM.ProteinFirst;
-                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTermini;
+                result.Reference = currentPSM.ProteinFirst;
+                result.NumTrypticEnds = currentPSM.NumTrypticTermini;
 
-                result.DeNovoScore = reader.CurrentPSM.GetScoreInt(MSGFPlusSynFileReader.DATA_COLUMN_DeNovoScore, 0);
-                result.MsgfScore = reader.CurrentPSM.GetScoreInt(MSGFPlusSynFileReader.DATA_COLUMN_MSGFScore, 0);
+                result.DeNovoScore = currentPSM.GetScoreInt(MSGFPlusSynFileReader.GetColumnNameByID(MSGFPlusSynFileColumns.DeNovoScore));
+                result.MsgfScore = currentPSM.GetScoreInt(MSGFPlusSynFileReader.GetColumnNameByID(MSGFPlusSynFileColumns.MSGFScore), 0);
 
-                result.SpecEValue = reader.CurrentPSM.GetScoreDbl(MSGFPlusSynFileReader.DATA_COLUMN_MSGFPlus_SpecEValue, -1);
+                result.SpecEValue = currentPSM.GetScoreDbl(MSGFPlusSynFileReader.GetColumnNameByID(MSGFPlusSynFileColumns.SpecEValue), -1);
                 if (result.SpecEValue < 0)
                 {
-                    result.SpecEValue = reader.CurrentPSM.GetScoreDbl(MSGFPlusSynFileReader.DATA_COLUMN_MSGFDB_SpecProb, 0);
-                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(MSGFPlusSynFileReader.DATA_COLUMN_Rank_MSGFDB_SpecProb, 0);
+                    result.SpecEValue = currentPSM.GetScoreDbl(MSGFPlusSynFileReader.GetMSGFDBColumnNameByID(MSGFDBSynFileColumns.SpecProb), 0);
+                    result.RankSpecEValue = currentPSM.GetScoreInt(MSGFPlusSynFileReader.GetMSGFDBColumnNameByID(MSGFDBSynFileColumns.RankSpecProb), 0);
                 }
                 else
                 {
-                    result.RankSpecEValue = reader.CurrentPSM.GetScoreInt(MSGFPlusSynFileReader.DATA_COLUMN_MSGFPlus_SpecEValue, 0);
+                    result.RankSpecEValue = currentPSM.GetScoreInt(MSGFPlusSynFileReader.GetColumnNameByID(MSGFPlusSynFileColumns.SpecEValue), 0);
                 }
 
-                result.EValue = reader.CurrentPSM.GetScoreDbl(MSGFPlusSynFileReader.DATA_COLUMN_EValue, 0);
+                result.EValue = currentPSM.GetScoreDbl(MSGFPlusSynFileReader.GetColumnNameByID(MSGFPlusSynFileColumns.EValue), 0);
 
                 result.QValue = qValue;
                 result.DiscriminantValue = qValue;
 
-                result.PepQValue = reader.CurrentPSM.GetScoreDbl(MSGFPlusSynFileReader.DATA_COLUMN_PepQValue, -1);
+                result.PepQValue = currentPSM.GetScoreDbl(MSGFPlusSynFileReader.GetColumnNameByID(MSGFPlusSynFileColumns.PepQValue), -1);
                 if (result.PepQValue < 0)
-                    result.PepQValue = reader.CurrentPSM.GetScoreDbl(MSGFPlusSynFileReader.DATA_COLUMN_PepFDR, 0);
+                    result.PepQValue = currentPSM.GetScoreDbl(MSGFPlusSynFileReader.GetMSGFDBColumnNameByID(MSGFDBSynFileColumns.PepFDR), 0);
 
-                result.IsotopeError = reader.CurrentPSM.GetScoreInt(MSGFPlusSynFileReader.DATA_COLUMN_Isotope_Error, 0);
+                result.IsotopeError = currentPSM.GetScoreInt(MSGFPlusSynFileReader.GetColumnNameByID(MSGFPlusSynFileColumns.IsotopeError), 0);
 
                 results.Add(result);
             }

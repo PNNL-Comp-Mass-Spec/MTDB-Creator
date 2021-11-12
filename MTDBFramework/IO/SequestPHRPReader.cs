@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
+using PHRPReader.Data;
 using PHRPReader.Reader;
 
 namespace MTDBFramework.IO
@@ -22,9 +23,9 @@ namespace MTDBFramework.IO
         }
 
         /// <summary>
-        /// Read and process a Sequest PHRP file
+        /// Read and process a SEQUEST PHRP file
         /// </summary>
-        /// <param name="path">Sequest file to read</param>
+        /// <param name="path">SEQUEST file to read</param>
         /// <returns></returns>
         public override LcmsDataSet Read(string path)
         {
@@ -44,43 +45,45 @@ namespace MTDBFramework.IO
                 if (AbortRequested)
                     break;
 
+                var currentPSM = reader.CurrentPSM;
+
                 // Skip this PSM if it doesn't pass the import filters
-                var xcorr = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_XCorr, 0);
+                var xcorr = currentPSM.GetScoreDbl(SequestSynFileReader.GetColumnNameByID(SequestSynopsisFileColumns.XCorr), 0);
 
                 double specProb = 0;
-                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
-                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecEValue);
+                if (!string.IsNullOrEmpty(currentPSM.MSGFSpecEValue))
+                    specProb = Convert.ToDouble(currentPSM.MSGFSpecEValue);
 
                 if (filter.ShouldFilter(xcorr, specProb))
                     continue;
 
                 reader.FinalizeCurrentPSM();
 
-                if (reader.CurrentPSM.SeqID == 0)
+                if (currentPSM.SeqID == 0)
                     continue;
 
                 var result = new SequestResult
                 {
-                    AnalysisId = reader.CurrentPSM.ResultID
+                    AnalysisId = currentPSM.ResultID
                 };
 
                 StorePsmData(result, reader, specProb);
 
                 StoreDatasetInfo(result, reader, path);
 
-                // Populate items specific to Sequest
-                result.Reference = reader.CurrentPSM.ProteinFirst;
-                result.NumTrypticEnds = reader.CurrentPSM.NumTrypticTermini;
+                // Populate items specific to SEQUEST
+                result.Reference = currentPSM.ProteinFirst;
+                result.NumTrypticEnds = currentPSM.NumTrypticTermini;
 
-                result.DelCn = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_DelCn, 0);
-                result.DelCn2 = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_DelCn2, 0);
+                result.DelCn = currentPSM.GetScoreDbl(SequestSynFileReader.GetColumnNameByID(SequestSynopsisFileColumns.DeltaCn), 0);
+                result.DelCn2 = currentPSM.GetScoreDbl(SequestSynFileReader.GetColumnNameByID(SequestSynopsisFileColumns.DeltaCn2), 0);
 
-                result.RankSp = (short)reader.CurrentPSM.GetScoreInt(SequestSynFileReader.DATA_COLUMN_RankSp, 0);
-                result.RankXc = (short)reader.CurrentPSM.GetScoreInt(SequestSynFileReader.DATA_COLUMN_RankXc, 0);
-                result.Sp = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_Sp, 0);
+                result.RankSp = (short)currentPSM.GetScoreInt(SequestSynFileReader.GetColumnNameByID(SequestSynopsisFileColumns.RankSP), 0);
+                result.RankXc = (short)currentPSM.GetScoreInt(SequestSynFileReader.GetColumnNameByID(SequestSynopsisFileColumns.RankXC), 0);
+                result.Sp = currentPSM.GetScoreDbl(SequestSynFileReader.GetColumnNameByID(SequestSynopsisFileColumns.Sp), 0);
                 result.XCorr = xcorr;
                 result.DiscriminantValue = xcorr;
-                result.XcRatio = reader.CurrentPSM.GetScoreDbl(SequestSynFileReader.DATA_COLUMN_XcRatio, 0);
+                result.XcRatio = currentPSM.GetScoreDbl(SequestSynFileReader.GetColumnNameByID(SequestSynopsisFileColumns.XcRatio), 0);
 
                 result.FScore = SequestResult.CalculatePeptideProphetDiscriminantScore(result);
 

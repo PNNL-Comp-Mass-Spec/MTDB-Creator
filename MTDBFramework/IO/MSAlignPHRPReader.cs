@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using MTDBFramework.Data;
 using MTDBFrameworkBase.Data;
+using PHRPReader.Data;
 using PHRPReader.Reader;
 
 namespace MTDBFramework.IO
@@ -35,24 +36,26 @@ namespace MTDBFramework.IO
                 if (AbortRequested)
                     break;
 
+                var currentPSM = reader.CurrentPSM;
+
                 // Skip this PSM if it doesn't pass the import filters
-                var eValue = reader.CurrentPSM.GetScoreDbl(MSAlignSynFileReader.DATA_COLUMN_EValue, 0);
+                var eValue = currentPSM.GetScoreDbl(MSAlignSynFileReader.GetColumnNameByID(MSAlignSynFileColumns.EValue), 0);
 
                 double specProb = 0;
-                if (!string.IsNullOrEmpty(reader.CurrentPSM.MSGFSpecEValue))
-                    specProb = Convert.ToDouble(reader.CurrentPSM.MSGFSpecEValue);
+                if (!string.IsNullOrEmpty(currentPSM.MSGFSpecEValue))
+                    specProb = Convert.ToDouble(currentPSM.MSGFSpecEValue);
 
                 if (filter.ShouldFilter(eValue, specProb))
                     continue;
 
                 reader.FinalizeCurrentPSM();
 
-                if (reader.CurrentPSM.ResultID == 0)
+                if (currentPSM.ResultID == 0)
                     continue;
 
                 var result = new MsAlignResult
                 {
-                    AnalysisId = reader.CurrentPSM.ResultID
+                    AnalysisId = currentPSM.ResultID
                 };
 
                 StorePsmData(result, reader, specProb);

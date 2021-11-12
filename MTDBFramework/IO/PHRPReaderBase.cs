@@ -218,19 +218,21 @@ namespace MTDBFramework.IO
         /// <param name="specProb"></param>
         protected void StorePsmData(Evidence result, ReaderFactory reader, double specProb)
         {
-            result.Charge = reader.CurrentPSM.Charge;
-            result.CleanPeptide = reader.CurrentPSM.PeptideCleanSequence;
-            result.SeqWithNumericMods = reader.CurrentPSM.PeptideWithNumericMods;
-            result.MonoisotopicMass = reader.CurrentPSM.PeptideMonoisotopicMass;
-            result.ObservedMonoisotopicMass = reader.CurrentPSM.PrecursorNeutralMass;
-            result.MultiProteinCount = (short)reader.CurrentPSM.Proteins.Count;
-            result.Scan = reader.CurrentPSM.ScanNumber;
-            result.Sequence = reader.CurrentPSM.Peptide;
-            result.Mz = mPeptideMassCalculator.ConvoluteMass(reader.CurrentPSM.PrecursorNeutralMass, 0,
-                                                             reader.CurrentPSM.Charge);
+            var currentPSM = reader.CurrentPSM;
+
+            result.Charge = currentPSM.Charge;
+            result.CleanPeptide = currentPSM.PeptideCleanSequence;
+            result.SeqWithNumericMods = currentPSM.PeptideWithNumericMods;
+            result.MonoisotopicMass = currentPSM.PeptideMonoisotopicMass;
+            result.ObservedMonoisotopicMass = currentPSM.PrecursorNeutralMass;
+            result.MultiProteinCount = (short)currentPSM.Proteins.Count;
+            result.Scan = currentPSM.ScanNumber;
+            result.Sequence = currentPSM.Peptide;
+            result.Mz = mPeptideMassCalculator.ConvoluteMass(currentPSM.PrecursorNeutralMass, 0,
+                                                             currentPSM.Charge);
             result.SpecProb = specProb;
-            result.DelM = Convert.ToDouble(reader.CurrentPSM.MassErrorDa);
-            result.ModificationCount = (short)reader.CurrentPSM.ModifiedResidues.Count;
+            result.DelM = Convert.ToDouble(currentPSM.MassErrorDa);
+            result.ModificationCount = (short)currentPSM.ModifiedResidues.Count;
 
             result.PeptideInfo = new TargetPeptideInfo
             {
@@ -239,9 +241,9 @@ namespace MTDBFramework.IO
                 PeptideWithNumericMods = result.SeqWithNumericMods
             };
 
-            if (reader.CurrentPSM.MassErrorPPM.Length != 0)
+            if (currentPSM.MassErrorPPM.Length != 0)
             {
-                result.DelMPpm = Convert.ToDouble(reader.CurrentPSM.MassErrorPPM);
+                result.DelMPpm = Convert.ToDouble(currentPSM.MassErrorPPM);
             }
 
             result.SeqInfoMonoisotopicMass = result.MonoisotopicMass;
@@ -250,7 +252,7 @@ namespace MTDBFramework.IO
 
             if (result.ModificationCount != 0)
             {
-                foreach (var info in reader.CurrentPSM.ModifiedResidues)
+                foreach (var info in currentPSM.ModifiedResidues)
                 {
                     result.ModificationDescription += info.ModDefinition.MassCorrectionTag + ":" + info.ResidueLocInPeptide + " ";
                     var ptm = new PostTranslationalModification
