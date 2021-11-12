@@ -62,7 +62,7 @@ mass spectrometer.
 
 Written by Matthew Monroe, Brian LaMarche, Michael Degan, and Bryson Gibbons for the Department of Energy (PNNL, Richland, WA) \
 E-mail: matthew.monroe@pnnl.gov or proteomics@pnnl.gov \
-Website: https://omics.pnl.gov/ or https://panomics.pnnl.gov/
+Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics
 
 ## License
 

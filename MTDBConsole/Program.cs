@@ -31,10 +31,10 @@ namespace MTDBConsole
             {
                 ProgramInfo = "This program creates an AMT tag database.",
 
-                ContactInfo = "Program written by Michael Degan and Bryson Gibbons for the Department of Energy (PNNL, Richland, WA) in 2014" +
+                ContactInfo = "Program written by Michael Degan and Bryson Gibbons for the Department of Energy (PNNL, Richland, WA)" +
                               Environment.NewLine + Environment.NewLine +
                               "E-mail: proteomics@pnnl.gov" + Environment.NewLine +
-                              "Website: http://panomics.pnnl.gov/ or http://omics.pnl.gov or http://www.sysbio.org/resources/staff/",
+                              "Website: https://github.com/PNNL-Comp-Mass-Spec/ or https://panomics.pnnl.gov/ or https://www.pnnl.gov/integrative-omics",
 
                  UsageExamples = {
                      exeName + "/MzidListPath:MzidInfo.txt /DatabasePath:TestDatabase.mtdb",
