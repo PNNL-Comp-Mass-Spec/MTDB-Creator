@@ -10,6 +10,7 @@ namespace MTDBConsole
 {
     internal class Program
     {
+        // Ignore Spelling: Bryson, Degan
 
         private const string PROGRAM_DATE = "November 11, 2021";
 
