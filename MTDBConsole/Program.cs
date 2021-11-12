@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using MTDBFramework;
 using PRISM;
 
 namespace MTDBConsole
 {
-    class Program
+    internal class Program
     {
-        private const string PROGRAM_DATE = "May 9, 2019";
+
+        private const string PROGRAM_DATE = "November 11, 2021";
 
         public static string GetAppVersion()
         {
-            var version = Assembly.GetExecutingAssembly().GetName().Version + " (" + PROGRAM_DATE + ")";
-
-            return version;
+            return Assembly.GetExecutingAssembly().GetName().Version + " (" + PROGRAM_DATE + ")";
         }
 
         static int Main(string[] args)
@@ -42,12 +42,18 @@ namespace MTDBConsole
                 }
             };
 
-            var parseResults = parser.ParseArgs(args);
-            var options = parseResults.ParsedResults;
+            var result = parser.ParseArgs(args);
+            var options = result.ParsedResults;
 
-            if (!parseResults.Success)
+            if (!result.Success)
             {
-                System.Threading.Thread.Sleep(1500);
+                if (parser.CreateParamFileProvided)
+                {
+                    return 0;
+                }
+
+                // Delay for 1500 msec in case the user double clicked this file from within Windows Explorer (or started the program via a shortcut)
+                Thread.Sleep(1500);
                 return -1;
             }
 
@@ -59,7 +65,7 @@ namespace MTDBConsole
                 ConsoleMsgUtils.ShowWarning("Validation error:");
                 ConsoleMsgUtils.ShowWarning(errorMessage);
 
-                System.Threading.Thread.Sleep(1500);
+                Thread.Sleep(1500);
                 return -1;
             }
 
