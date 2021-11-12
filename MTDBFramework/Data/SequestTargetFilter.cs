@@ -25,7 +25,7 @@ namespace MTDBFramework.Data
         /// Determine whether the given evidence should be filtered out
         /// </summary>
         /// <param name="evidence">Peptide evidence</param>
-        /// /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
+        /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
         public bool ShouldFilter(Evidence evidence)
         {
             var result = evidence as SequestResult;
@@ -42,7 +42,7 @@ namespace MTDBFramework.Data
         /// Determine whether the given evidence should be filtered out
         /// </summary>
         /// <param name="xcorr">Sequest XCorr</param>
-        /// /// <param name="specProb">MSGF+ SpecProb</param>
+        /// <param name="specProb">MSGF+ SpecProb</param>
         /// <returns>True if the evidence should be filtered out (i.e. does not pass filters); false to keep it</returns>
         public bool ShouldFilter(double xcorr, double specProb)
         {
